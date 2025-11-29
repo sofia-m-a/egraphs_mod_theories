@@ -1,0 +1,131 @@
+cabal-version:      2.4
+name:               sofyr
+homepage:           https://github.com/sofia-m-a/sofyr
+bug-reports:        https://github.com/sofia-m-a/sofyr/issues
+version:            0.1.0.0
+license:            MIT
+copyright:          2022 Sofia M.A
+maintainer:         sofia.ma@protonmail.com
+author:             Sofia M.A
+category:           Language
+synopsis:           A program language
+description:
+
+  This project is an attempt to create a modern programming
+  language in Haskell, to determine the strong and weak points
+  of the ecosystem when it comes to language creation.
+
+extra-source-files:
+  LICENSE
+  README.md
+
+executable sofyr
+  build-depends:
+    , array
+    , assoc
+    , base
+    , bifunctors
+    , bytestring
+    , comonad
+    , comonad-extras
+    , containers
+    , data-fix
+    , free
+    -- , functor-combinators
+    , hashable
+    , haskeline
+    , lens
+    , mtl
+    , optparse-applicative
+    , prettyprinter
+    , prettyprinter-ansi-terminal
+    , profunctors
+    , recursion-schemes
+    , relude
+    , semialign
+    , semigroupoids
+    , smash
+    -- , sofialude
+    -- , souffle-haskell
+    , tagged
+    , text
+    , these
+    , time
+    , transformers
+    -- , trifecta
+    , unordered-containers
+    , validation
+    , vector
+    
+  mixins:
+    base hiding (Prelude),
+    relude (Relude as Prelude)
+
+  ghc-options:
+    -Wall -Wincomplete-record-updates -Wincomplete-uni-patterns
+
+  default-extensions:
+    ApplicativeDo
+    BangPatterns
+    BinaryLiterals
+    BlockArguments
+    ConstrainedClassMethods
+    ConstraintKinds
+    DataKinds
+    DefaultSignatures
+    DeriveFoldable
+    DeriveFunctor
+    DeriveGeneric
+    DeriveTraversable
+    DerivingStrategies
+    DerivingVia
+    EmptyCase
+    EmptyDataDecls
+    EmptyDataDeriving
+    ExistentialQuantification
+    ExplicitForAll
+    ExplicitNamespaces
+    FunctionalDependencies
+    GADTs
+    GeneralisedNewtypeDeriving
+    HexFloatLiterals
+    InstanceSigs
+    KindSignatures
+    LambdaCase
+    LiberalTypeSynonyms
+    MonadComprehensions
+    NoMonomorphismRestriction
+    MultiParamTypeClasses
+    MultiWayIf
+    NegativeLiterals
+    NumDecimals
+    NumericUnderscores
+    OverloadedLists
+    OverloadedStrings
+    ParallelListComp
+    PartialTypeSignatures
+    PatternGuards
+    PatternSynonyms
+    PolyKinds
+    RankNTypes
+    ScopedTypeVariables
+    StandaloneDeriving
+    NoStarIsType
+    TupleSections
+    TypeApplications
+    TypeFamilies
+    TypeFamilyDependencies
+    TypeInType
+    TypeOperators
+    UnicodeSyntax
+    ViewPatterns
+
+  main-is:            Main.hs
+  other-modules:      
+  cxx-options:
+    -- -D__EMBEDDED_SOUFFLE__
+    -- -std=c++17
+  cxx-sources:
+    -- src/sema.cpp
+  hs-source-dirs:     app
+  default-language:   Haskell2010
