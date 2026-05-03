@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <div>Annotated bibliography</div>
+    <p>Optimal reduction is a method of normalizing lambda terms that is optimal in a certain technical sense.</p>
+    <div>Annotated bibliography</div>
+    <p>Optimal reduction is a method of normalizing lambda terms that is optimal in a certain technical sense.</p>
+    <p><em>How optimal is it?</em></p>
+    <p>Well, there is no ‘fastest’ normalizer for lambda terms in the usual sense.</p>
+    <div>Annotated bibliography</div>
+    <p>Optimal reduction is a method of normalizing lambda terms that is optimal in a certain technical sense.</p>
+    <p><em>How optimal is it?</em></p>
+    <p>Well, there is no ‘fastest’ normalizer for lambda terms in the usual sense.</p>
+    <p>But, optimal reduction beats most classic methods: call-by-value, call-by-need, compiling to combinators, typical abstract machines, etc.</p>
+    <div>Annotated bibliography</div>
+    <p>Optimal reduction is a method of normalizing lambda terms that is optimal in a certain technical sense.</p>
+    <p><em>How optimal is it?</em></p>
+    <p>Well, there is no ‘fastest’ normalizer for lambda terms in the usual sense.</p>
+    <p>But, optimal reduction beats most classic methods: call-by-value, call-by-need, compiling to combinators, typical abstract machines, etc.</p>
+    <p>At least asymptotically…</p>
+    <div>Annotated bibliography</div>
+    <p>Consider the term</p>
+    <div>Annotated bibliography</div>
+    <p>Consider the term</p>
+    <div>Annotated bibliography</div>
+    <p>Consider the term</p>
+    <p>We will duplicate the redex if we substitute it for</p>
+    <div>Annotated bibliography</div>
+    <p>Consider the term</p>
+    <p>We will duplicate the redex if we substitute it for</p>
+    <p>, and then we’ll have to do the work of reducing it <em>twice</em>.</p>
+    <div>Annotated bibliography</div>
+    <p>Well, make sure we do any work in the arguments <em>before</em> substitution.</p>
+    <p>We only substitute <strong>values</strong>, not potentially-unnormalized terms.</p>
+    <div>Annotated bibliography</div>
+    <p>Well, make sure we do any work in the arguments <em>before</em> substitution.</p>
+    <p>We only substitute <strong>values</strong>, not potentially-unnormalized terms.</p>
+    <p>In practice, usually only <em>weak</em> call-by-value is implemented: we don’t normalize under lambdas.</p>
+    <p>It’s easy to find a case where <em>weak</em> CBV is suboptimal:</p>
+    <div>Annotated bibliography</div>
+    <h4>Sidenote: weak reduction</h4>
+    <p>Reducing under lambdas seems a bit strange if each lambda is going to be turned into a blob of machine code. So, weak reduction has an easier path to machine-level implementation, which is why it’s popular.</p>
+    <div>Annotated bibliography</div>
+    <p>There’s another way call-by-value fails: we might do work we don’t ever need! Here’s a variation on our term from before:</p>
+    <p>is never actually used in the body, so doing any work to reduce the argument is a waste.</p>
+    <div>Annotated bibliography</div>
+    <p>Why not defer reducing the argument until, and <em>if</em>, we need it? This improves on CBV, although the cost of ‘thunking’ arguments can give worse constant factors. This is call-by-need or lazy evaluation; Haskell uses a weak version of this strategy.</p>
+    <div>Annotated bibliography</div>
+    <div>Annotated bibliography</div>
+    <p>Either we duplicate the inner call</p>
+    <p>, or we reduce it first and duplicate</p>
+    <p>, where</p>
+    <p>is going to eventually be substituted with</p>
+    <p>and will have to reduce.</p>
+    <div>Annotated bibliography</div>
+    <p>Either we duplicate the inner call</p>
+    <p>, or we reduce it first and duplicate</p>
+    <p>, where</p>
+    <p>is going to eventually be substituted with</p>
+    <p>and will have to reduce.</p>
+    <p>is called a <em>virtual redex</em>.</p>
+    <div>Annotated bibliography</div>
+    <p>It’s not decidable which redex is best to pick, in the sense of giving the shortest reduction.</p>
+    <div>Annotated bibliography</div>
+    <p>Each potential redex (syntactically) in the term gets its own label. When we reduce a redex, the result is labelled with the concatenation of the input labels. Lévy-optimality: reduce every redex with the same label at once.</p>
+    <div>Annotated bibliography</div>
+    <p>(also Kathail deserves some credit)</p>
+    <p>Step 1: translate your term into Lamping’s graph system</p>
+    <p>Step 2: reduce using the graph reduction rules</p>
+    <p>Step 3: translate it back into lambda-calculus</p>
+    <div>Annotated bibliography</div>
+    <p>Both the body and variable connect to the</p>
+    <div>Annotated bibliography</div>
+    <p>Application</p>
+    <div>Annotated bibliography</div>
+    <p>When we use a variable multiple or zero times, we insert a duplicator/deleter</p>
+    <div>Annotated bibliography</div>
+    <p>When we use a variable multiple or zero times, we insert a duplicator/deleter</p>
+    <div>Annotated bibliography</div>
+    <p>We lazily duplicate the body of the lambda.</p>
+    <p>Follow the arrows: only two arrows meeting (</p>
+    <p>) should be a reduction</p>
+    <p>Any inner redex, even a virtual one, will have its arrows pointing inwards in a way that keeps it shared until the last possible moment</p>
+    <div>Annotated bibliography</div>
+    <p>We don’t just share subterms and subterm reductions, like call-by-need.</p>
+    <p>We share “terms with context”: we can share, for instance,</p>
+    <p>and</p>
+    <p>, as the “term with context”</p>
+    <p>, with the two contexts of</p>
+    <p>being</p>
+    <p>or</p>
+    <div>Annotated bibliography</div>
+    <p>Nesting sharing can lead to exponential levels of sharing.</p>
+    <p>A common case when OR shines: computing with church numerals.</p>
+    <p>Exponentiation on church numerals takes only linearly many beta-steps, but if you want to read back the heavily-shared graph into an ordinary term, you have to do the exponential work of unsharing it all.</p>
+    <div>Annotated bibliography</div>
+    <p>The most complicated bit of the algorithm is keeping track of the exact sharing structure.</p>
+    <p>We need an index on all</p>
+    <p>/@/</p>
+    <p>nodes, and a couple more nodes to shift the indices.</p>
+    <p>This is more or less equivalent to managing de Bruijn indices</p>
+    <p>Dispelling a myth: this is necessary for basic correctness, not just optimality!</p>
+    <div>Annotated bibliography</div>
+    <p>Optimal reduction is provably asymptotically faster than standard methods.</p>
+    <p>Still, the bookkeeping costs can’t be ignored, and there are ways to fiddle with the encoding (essentially,</p>
+    <p>-expansion) so that almost all the work is in the bookkeeping.</p>
+    <p>Sharing isn’t free!</p>
+    <div>Annotated bibliography</div>
+    <p>Optimal reduction is provably asymptotically faster than standard methods.</p>
+    <p>Still, the bookkeeping costs can’t be ignored, and there are ways to fiddle with the encoding (essentially,</p>
+    <p>-expansion) so that almost all the work is in the bookkeeping.</p>
+    <p>Sharing isn’t free!</p>
+    <p>Dispelling a myth: optimal reduction is asymptotically faster, even taking bookkeeping into account.</p>
+    <p>Still, it’s not as great as it might seem if you ignored the bookkeeping part, which is the most complex part of the algorithm to define.</p>
+    <p>(Variables and substitution are always hard to deal with…)</p>
+    <div>Annotated bibliography</div>
+    <p>No:</p>
+    <p>The constant factors are typically bad.</p>
+    <p>There is only a tiny bit of work on implementing this in machine code rather than an interpreter.</p>
+    <p>Most actual programs don’t use the kind of very higher-order terms where optimal reduction shines.</p>
+    <p>(For instance, Church numerals are not used often for good reason…)</p>
+    <div>Annotated bibliography</div>
+    <p>Yes, if you like theory.</p>
+    <p>Higher-order sharing is cool!</p>
+    <p>The closest thing, maybe, to a “canonical” reduction method for the</p>
+    <p>-calculus, at least if you care about the time it takes to reduce.</p>
+    <p>It could inspire better <em>practical</em> techniques for program analysis and compilation.</p>
+    <div>Annotated bibliography</div>
+    <p>There are deep connections to linear logic.</p>
+    <p>The duplicators and some of the bookkeeping amounts to a reduction method for linear logic’s ‘boxes’. The translation is essentially an embedding of intuitionistic logic into linear logic. However, it works even for untyped terms!</p>
+    <p>(The reduction of untyped calculi are closely tied to typed variants, and you can see the untyped</p>
+    <p>-calculus as the typed version plus implicitly-added nodes to give the isomorphism between</p>
+    <p>and</p>
+    <p>)</p>
+    <div>Annotated bibliography</div>
+    <ul>
+      <li>Full/maximal/complete laziness</li>
+      <li>Safe rules</li>
+      <li>EAL-typability</li>
+    </ul>
+    <div>Annotated bibliography</div>
+    <ul>
+      <li>
+        <p><em>About the efficient reduction of lambda terms</em> by <strong>Andrea Asperti</strong></p>
+        <ul>
+          <li>Examines the time complexity issue and dispels some complexity misconceptions</li>
+        </ul>
+      </li>
+      <li>
+        <p><em>Optimal reductions in the lambda-calculus</em> by <strong>Jean Jacques Lévy</strong></p>
+        <ul>
+          <li>Defines Lévy-optimality</li>
+        </ul>
+      </li>
+      <li>
+        <p><em>The Optimal Implementation of Functional Programming Languages</em> by <strong>Asperti and Guerrine</strong></p>
+        <ul>
+          <li>The main source, although rather outdated and incomplete by now</li>
+        </ul>
+      </li>
+      <li>
+        <p><em>An Algorithm for Optimal Lambda Calculus Reduction</em> by <strong>John Lamping</strong></p>
+        <ul>
+          <li>The first known algorithm</li>
+        </ul>
+      </li>
+      <li>
+        <p><em>Optimal interpreters for lambda-calculus based functional languages</em> by <strong>Vinod Kathail</strong></p>
+        <ul>
+          <li>The poor PhD student who got scooped by Lamping</li>
+        </ul>
+      </li>
+      <li>
+        <p><em>Optimality and Inefficiency: What Isn’t a Cost Model of the Lambda Calculus?</em> by <strong>Lawall and Mairson</strong></p>
+        <ul>
+          <li>
+            <p>why counting</p>
+            <p>-steps isn’t a good model of cost</p>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <p><em>Lambdascope: Another optimal implementation of the lambda-calculus</em> by <strong>van Oostrom et al</strong></p>
+        <ul>
+          <li>A conceptually simpler algorithm</li>
+        </ul>
+      </li>
+      <li><em>Maximal Laziness: An Efficient Interpretation Technique for Purely Functional DSLs</em> by Eelco Dolstra</li>
+      <li><em>Complete Laziness: a Natural Semantics</em> by <strong>François-Régis Sinot</strong></li>
+    </ul>
+  </body>
+</html>

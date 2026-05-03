@@ -1,0 +1,54 @@
+\begin{thebibliography}{1}
+
+\bibitem{egglogdemo}
+Alex Fischman, Yihong Zhang, Saul Shanabrook, Oliver Flatt, Max Willsey, Eli
+  Rosenthal, and Haobin Ni.
+\newblock Egglog demo.
+\newblock \url{https://egraphs-good.github.io/egglog-demo}, 2024.
+
+\bibitem{forgy1989rete}
+Charles~L Forgy.
+\newblock Rete: A fast algorithm for the many pattern/many object pattern match
+  problem.
+\newblock In {\em Readings in artificial intelligence and databases}, pages
+  547--559. Elsevier, 1989.
+
+\bibitem{nelson1980fast}
+Greg Nelson and Derek~C Oppen.
+\newblock Fast decision procedures based on congruence closure.
+\newblock {\em Journal of the ACM (JACM)}, 27(2):356--364, 1980.
+
+\bibitem{ngo2018worst}
+Hung~Q Ngo, Ely Porat, Christopher R{\'e}, and Atri Rudra.
+\newblock Worst-case optimal join algorithms.
+\newblock {\em Journal of the ACM (JACM)}, 65(3):1--40, 2018.
+
+\bibitem{selinger2010survey}
+Peter Selinger.
+\newblock A survey of graphical languages for monoidal categories.
+\newblock In {\em New structures for physics}, pages 289--355. Springer, 2010.
+
+\bibitem{wang2023free}
+Yisu~Remy Wang, Max Willsey, and Dan Suciu.
+\newblock Free join: Unifying worst-case optimal and traditional joins.
+\newblock {\em Proceedings of the ACM on Management of Data}, 1(2):1--23, 2023.
+
+\bibitem{willsey2021egg}
+Max Willsey, Chandrakana Nandi, Yisu~Remy Wang, Oliver Flatt, Zachary Tatlock,
+  and Pavel Panchekha.
+\newblock Egg: Fast and extensible equality saturation.
+\newblock {\em Proceedings of the ACM on Programming Languages}, 5(POPL):1--29,
+  2021.
+
+\bibitem{zhang2021relational}
+Yihong Zhang, Yisu~Remy Wang, Max Willsey, and Zachary Tatlock.
+\newblock Relational e-matching.
+\newblock {\em arXiv preprint arXiv:2108.02290}, 2021.
+
+\bibitem{zucker2025omelets}
+Philip Zucker.
+\newblock Omelets need onions: E-graphs modulo theories via bottom-up
+  e-matching.
+\newblock {\em arXiv preprint arXiv:2504.14340}, 2025.
+
+\end{thebibliography}

@@ -1,0 +1,55 @@
+- Introduction
+    - conceptual overview, few technical details
+- Part 1: Background
+    - Algebraic notions
+        - Signature
+        - Equations and equalities terminology
+        - Signature over variables
+        - Quotienting by theories
+        - Common equations: AC, maybe distributivity or others
+    - Relational notions
+        - Relations
+        - Conjunctive queries
+        - Matching as a conjunctive query + flattening
+        - Joins and join algorithm preliminaries
+    - Union-find and transitive closure
+    - E-graphs and congruence closure
+        - The algorithm
+        - Saturation
+        - [if relevant] Tree automata connections
+        - [if relevant] Analyses, extraction, and weighted automata
+        - E-graph size under common equations + saturation
+        - Existing/discarded approaches to manage size:
+            - [existing] Backoff
+            - [discarded] Completion-type methods
+        - Completeness, or lack thereof
+    - AC
+        - Canonization
+        - Reasoning modulo
+    - Joins and matching algorithms
+        - [briefly] naïve methods
+        - [describe in detail only if relevant] Rete's algorithm
+        - [if relevant] AGM bounds
+        - Zucker's bottom-up method
+            - Generalization modulo theories
+- Part 2: Informal semantics of working modulo theories
+    - EqSat as building over the free theory of only variables
+    - Theory composition
+    - Completeness theorem of some kind
+- Part 3: Join plans modulo theories
+    - Diagrammatic formulation of join plans
+    - Semantics of join plans
+    - Cost of join plans
+    - Join plans over term banks
+    - Existing join plans:
+        - Rete as a join plan
+        - Binary joins as a join plan
+        - Zucker bottom-up as a join plan
+        - WCOJ as a join plan
+    - Theory nodes in join plans
+    - Algorithm sketch for AC join plan nodes
+- Part 4: Implementation
+    - Eqsat library for AC description
+    - Dataset
+    - Benchmarks
+- Conclusion

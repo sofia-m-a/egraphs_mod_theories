@@ -20,6 +20,11 @@ extra-source-files:
   README.md
 
 executable sofyr
+  mixins:
+    base hiding (Prelude),
+    relude (Relude as Prelude),
+    relude
+
   build-depends:
     , array
     , assoc
@@ -27,7 +32,7 @@ executable sofyr
     , bifunctors
     , bytestring
     , comonad
-    , comonad-extras
+    -- , comonad-extras -- version issue
     , containers
     , data-fix
     , free
@@ -35,8 +40,10 @@ executable sofyr
     , hashable
     , haskeline
     , lens
+    , megaparsec
     , mtl
     , optparse-applicative
+    , parser-combinators
     , prettyprinter
     , prettyprinter-ansi-terminal
     , profunctors
@@ -44,7 +51,7 @@ executable sofyr
     , relude
     , semialign
     , semigroupoids
-    , smash
+    -- , smash -- bug: won't build for base ≥ 4.17
     -- , sofialude
     -- , souffle-haskell
     , tagged
@@ -56,10 +63,6 @@ executable sofyr
     , unordered-containers
     , validation
     , vector
-    
-  mixins:
-    base hiding (Prelude),
-    relude (Relude as Prelude)
 
   ghc-options:
     -Wall -Wincomplete-record-updates -Wincomplete-uni-patterns
@@ -85,10 +88,13 @@ executable sofyr
     ExistentialQuantification
     ExplicitForAll
     ExplicitNamespaces
+    FlexibleInstances
+    FlexibleContexts
     FunctionalDependencies
     GADTs
     GeneralisedNewtypeDeriving
-    HexFloatLiterals
+    -- HexFloatLiterals
+    ImportQualifiedPost
     InstanceSigs
     KindSignatures
     LambdaCase
@@ -115,17 +121,11 @@ executable sofyr
     TypeApplications
     TypeFamilies
     TypeFamilyDependencies
-    TypeInType
     TypeOperators
     UnicodeSyntax
     ViewPatterns
 
   main-is:            Main.hs
-  other-modules:      
-  cxx-options:
-    -- -D__EMBEDDED_SOUFFLE__
-    -- -std=c++17
-  cxx-sources:
-    -- src/sema.cpp
+  other-modules:      Lude, Parse, Syntax, Interpret, Egraph, UF, TermTrie, Puzzles
   hs-source-dirs:     app
   default-language:   Haskell2010
