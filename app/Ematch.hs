@@ -31,8 +31,14 @@ makeLenses ''AnnEgraph
 aeFind :: EId -> Lens' (AnnEgraph ann enode) EId
 aeFind e = base . efind e
 
-aePropagate :: EId -> EId -> State (AnnEgraph enode ann) EId
-aePropagate a b = do
+aePropagate :: (EId, EId) -> State (AnnEgraph enode ann) [(EId, EId)]
+aePropagate (a, b) = do
+  m <- use annMerge 
   xa <- use (ann . at (a ^. unId))
   xb <- use (ann . at (b ^. unId))
+  ps <- zoom base (epropagate (a, b))
+  ab <- use (base . efind a)
+  ann . at (a ^. unId) .= Nothing
+  ann . at (b ^. unId) .= Nothing
+  ann . at (ab ^. unId) .= m xa xb
   _

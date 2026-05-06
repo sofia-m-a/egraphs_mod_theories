@@ -41,7 +41,7 @@
 
 \usepackage{etoolbox}
 \newtoggle{plannthesis}
-\toggletrue{plannthesis}
+\togglefalse{plannthesis}
 \newtoggle{incltitle}
 \toggletrue{incltitle}
 
@@ -92,22 +92,19 @@ E-graphs are a data structure for equational theorem proving, and which provide 
 
 However, E-graphs struggle with a combinatorial explosion when reasoning about certain theories. A notorious case is that of AC theories, those containing associative and commutative operators: the space complexity of saturation is doubly-exponential in the size of the input in the worst case, as shown in section \ref{acegg}.
 
-Can equality saturation for AC theories be done in a more efficient way? We build on the proposal for \textit{E-graphs Modulo Theories} (EMTs) from \citet{zucker_omelets_2025}, who suggests integrating a \emph{theory-specific} reasoning method for the AC part with a general E-graph in order to efficiently deal with AC theories. The hope is that specific methods for AC theories can avoid the inefficiencies in using the general equality saturation mechanism for the AC identities.
+Can equality saturation for AC theories be done in a more efficient way? There have been several proposals for extending E-graphs to \emph{E-graphs modulo theories} (EMTs) (\citep{zucker_omelets_2025}, \citep{panchekha_lin-graphs_2025}, \citep{shanabrook_custom_2026}).  These proposals suggest integrating a \emph{theory-specific} reasoning method for AC together with the general mechanisms of E-graphs and equality saturation in order to efficiently deal with AC theories. The hope is that specific methods for AC theories can avoid the inefficiencies in using the general equality saturation mechanism for the AC identities.
 
 EMTs are inspired by the success of theory-specific methods in other automated reasoning tasks, such as in \emph{Satisfiability Modulo Theories} solvers (SMT solvers), and the merits of a theory-specific approach in automated reasoning are advocated for in \citet{goos_little_2002} 
 
-We will explore this issue and show that it \emph{is} possible to reason with AC theories and a variety of closely related theories in a way that avoids the worst inefficiencies of plain E-graphs.
+We will develop the idea of EMTs and show that it \emph{is} possible to reason with AC theories and a variety of closely related theories in a way that avoids the worst inefficiencies of plain E-graphs.
 
 In section \ref{coreres}, we also provide a formal definition of EMTs that we hope can provide the basis for future work on integrating other theories in a similar manner.
 
-We then, in section \ref{impl}, discuss an implementation of EMTs and benchmark it against pure E-graph reasoning on a variety of equational reasoning tasks. 
+We then, in section \ref{impl}, discuss an implementation of EMTs and benchmark it against pure E-graph reasoning on a variety of equational reasoning tasks (\ref{evalresults}). 
 
-Central to our notion of a `good' theory for an EMT is the necessity of a solver for the word problem over the theory, which we justify in section \ref{whyword}. This gives us a lower bound on EMTs for AC and polynomial: the word problem in these cases requires in the worst case exponential space and doubly-exponential time. This is an improvement over the doubly-exponential space upper bound for E-graphs, but highlights that concrete efficiency gains derive from the potential for typical problems to be solvable efficiently. Our solver for AC and polynomials is Buchberger's algorithm, which has received significant effort to achieve good common-case performance.
+Central to our notion of a `good' theory for an EMT is the necessity of a solver for the word problem over the theory, which we justify in section \ref{whyword}. This gives us a lower bound on EMTs for AC: the word problem for AC requires in the worst case exponential space and doubly-exponential time. This is an improvement over the doubly-exponential space upper bound for E-graphs, but highlights that concrete efficiency gains derive from the potential for typical problems to be solvable efficiently. Our solver for AC and polynomials is builds upon Buchberger's algorithm, which has received significant effort to achieve good common-case performance.
 
 On the other hand, for the theory ACUN (AC with unit and negation, aka the theory of Abelian groups) or the theory of vector spaces, we have polynomial time bounds: we can use algorithms for Hermite normal form (for Abelian groups) and Gaussian elimination (for vector spaces).
-
-\fxerror{Evaluate intro once the thesis is more final}.
-\fxerror{Introduction now merged with outline. Forward refs need to be added/deleted.}
 
 \section{An introduction to E-graphs and equality saturation} \label{background}
 \subsection{Equational theorem proving} \label{eqthm}
@@ -115,19 +112,17 @@ E-graphs are a data structure to handle \emph{equational theorem proving}: we ar
 
 An equation between terms $s$ and $t$ will be written as $s = t$. An \textbf{identity} is a universally quantified equation: for instance, $\forall x y. x + y = y + x$ is an identity, asserting that the equation $x + y = y + x$ holds universally in $x$ and $y$. To be more precise, an identity represents the set of all of its \emph{ground instances}, which are equations derived from substituting terms for the variables. For instance, if $s$ and $t$ are terms, $s + t = t + s$ is an instance of the previous identity.
 
-We will be concerned with a set of terms generated by some \emph{constants}, $a, b, c, \ldots$, and some \emph{function symbols}, $f, g, h, \ldots$ such that each function symbol has an arity (number of arguments) and, for instance, we can construct the term $f(s, t)$ if $s$ and $t$ are terms and $f$ has arity 2. For a more formal definition, see section \ref{termsig}.
+We will be concerned with a set of terms generated by some \emph{constants}, $a, b, c, \ldots$, and some \emph{function symbols}, $f, g, h, \ldots$ such that each function symbol has an arity (number of arguments) and, for instance, we can construct the term $f(s, t)$ if $s$ and $t$ are terms and $f$ has arity 2. %For a more formal definition, see section \ref{termsig}.
 
 A typical equational theorem proving problem looks like $I, E \vdash s = t$, where $I$ is a set of identities and $E$ is a set of equations, and we need a procedure to determine if the equation $s = t$ follows (indicated by the symbol $\vdash$) from $I$ and $E$.
 
-Equations are easy, in the sense that the congruence-closure algorithm \ref{egraphs} is already enough to solve the problem entirely when we have only equations (and so $I = \{\}$).
+The distinction between equations and identities is important. Equations are easy, in the sense that the congruence-closure algorithm \ref{egraphs} is already enough to solve the problem entirely when we have only equations (and so $I = \{\}$).
 
 Identities are what makes things tricky: given an identity $\forall x_1 \ldots x_n. s = t$, we need to decide which substitutions for $x_1 \ldots x_n$ we want to make in order to apply the identity. Given that there are infinitely many substitutions, deciding which ones to use is difficult, and in general, equational theorem proving with identities is undecidable (\fxerror{citation needed?}).
 
 Still, using equality saturation (\ref{eqsat}), E-graphs provide a framework to tackle the problem: depending on the exact identities used, E-graphs can be used as a decision procedure, a semi-decision procedure, or an incomplete procedure for exploring the space of equalities.
 
 E-graphs have a convenient feature: we don't need to provide the goal $s = t$ up-front! E-graphs will in general take the identities, equations, and possibly some terms of interest, and attempt to find all equations between relevant terms that hold. If equality saturation terminates, all possible equalities between the relevant terms has been discovered.
-
-\fxerror{The prior 3 paragraphs are not great}
 
 \subsection{E-graphs for congruence-closure} \label{egraphs}
 Consider the input set of equations
@@ -140,7 +135,7 @@ g(f(a), b) &= b
 
 The E-graph representing this set of equations is as follows:
 
-\begin{figure}[h!]
+\begin{figure}[ht!]
 	\centering
 	\begin{tikzpicture}[
 			scale=2,
@@ -199,10 +194,11 @@ The algorithm to build the E-graph to represent a set of input equations is know
 \subsection{E-graphs for equality saturation} \label{eqsatinf}
 Suppose instead of the equations $f(a) = a$ in the above example we had the identity $\forall x.\; f(x) = x$. To do equality saturation with this identity, we would \emph{match} the left-hand-side $f(x)$ against our E-graph, which would find the matches $f(f(a))$ and $f(a)$, corresponding to the substitutions $x = f(a)$ and $x = a$ respectively. Then, we apply the same substitution to the right hand side, thus finding the \emph{equations} $f(f(a)) = f(a)$ and $f(a) = a$. Inserting these equations into our E-graph and using congruence closure would then yield the above E-graph. Because equalities are symmetric, we would also have to find every match $t$ for $x$ and add the equation $f(t) = t$.
 
-Equality saturation would terminate with the following graph, as for every match in the E-graph of either side of $\forall x.\; f(x) = x$, the other side is in the graph and in the same E-class.
+Equality saturation would terminate with the E-graph \ref{fig:eqsat1}, as for every match in the E-graph of either side of $\forall x.\; f(x) = x$, the other side is in the E-graph and in the same E-class.
 
-\begin{figure}[h!]
+\begin{figure}[ht!]
 	\centering
+	\label{fig:eqsat1}
 	\begin{tikzpicture}[
 			scale=2,
 			transform shape,
@@ -257,8 +253,9 @@ Equality saturation would terminate with the following graph, as for every match
 \end{figure}
 
 \section{E-graphs and the problems of AC} \label{acegg}
-\fxerror{Rewritten, but the diagrams need redoing}
-\fxerror{Too wordy? I could just remove all the exposition in the first three diagrams...}
+
+\fxerror{Diagrams need redoing. Wordiness fixed by commenting out things, for now.... I'm still unsure if this is the right example to be using for this section}
+
 While equality saturation on E-graphs can work with any set of identities, operators that are associative and commutative lead to a worst-case doubly-exponential explosion in the size of the E-graph when it is saturated. The \textbf{associativity} identity for an operator $f$ is $\forall xyz.\; f(f(x, y), z) = f(x, f(y, z))$, and the \textbf{commutativity} identity is $\forall xy.\; f(x, y) = f(y, x)$.
 
 Even if we do not run to saturation, it is likely that a large number of `useless' associativity/commutativity steps will have been taken.
@@ -317,12 +314,15 @@ As we can see in Figure \ref{egf1}, the E-graph is on the way to discovering thi
     \label{egf1}
 \end{figure}
 
-\section{Handling AC with EMTs}
+\section{Handling AC with EMTs: a first example}
 We will present a pictorial overview of how we might solve the above problem using EMTs rather than E-graphs.
 
-Figure \ref{emte1} begins with the term $f(a) + f(b) + f(c)$. Since we are implictly working with $+$ as an AC function symbol, we don't represent a particular association of it in the E-graph: we just treat the initial term as the addition of three nodes. We also omit the labels of equivalence classes.
+The natural first step is to simply not add any different representations of terms that are equal up to AC; thus, nodes in the E-graph for AC operators will be variadic and we will consider their children unordered. This is the key idea from prior work (\citep{zucker_omelets_2025}, \citep{panchekha_lin-graphs_2025}, \citep{shanabrook_custom_2026}).
 
-\begin{figure}[h!]
+Figure \ref{emte1} begins with the variadic AC-term $f(a) + f(b) + f(c)$.
+We omit the labels of equivalence classes.
+
+\begin{figure}[ht!]
 	\centering
 	\caption{EMT of the term $f(a) + f(b) + f(c)$.}
   \label{emte1}
@@ -405,7 +405,7 @@ Figure \ref{emte1} begins with the term $f(a) + f(b) + f(c)$. Since we are impli
 
 Now, in order to \emph{match} the left-hand side of $f(x) + f(y) = f(x + y) + 1$, we need to do \emph{matching modulo theories}, which will tell us of six matches: $(x, y) \in \{(a, b), (a, c), (b, c), (b, a), (c, a), (c, b)\}$. Then we will add the six substituted forms of $f(x + y) = 1$. Here, we will want to \emph{insert modulo theories}, in a way that keeps the E-graph from representing multiple AC-equivalent terms. The arrows in Figure \ref{emte2} have become crowded, but top E-class now represents the original term, and $f(a + b) + f(c) + 1$ and its variants with $a,b,c$ permuted.
 
-\begin{figure}[h!]
+\begin{figure}[ht!]
 	\centering
 	\caption{EMT of the term $f(a) + f(b) + f(c)$ after some steps.}
   \label{emte2}
@@ -575,7 +575,7 @@ Our last step is to notice that the term $f(a + b + c) + 1 + 1$ has, up to AC, t
 
 The final EMT (Figure \ref{emte3}) is saturated, and has `discovered' our desired equality.
 
-\begin{figure}[h!]
+\begin{figure}[ht!]
 	\centering
 	\caption{EMT of the term $f(a) + f(b) + f(c)$ once saturated, highlighting the desired term.}
   \label{emte3}
@@ -772,6 +772,140 @@ The final EMT (Figure \ref{emte3}) is saturated, and has `discovered' our desire
 	\end{tikzpicture}
 \end{figure}
 
+\section{Challenges for EMTs}
+We have seen the promising aspects of EMTs, but there is a significant flaw in the description of EMTs shown so far, and we need something extra. Consider the equations
+
+\begin{align}
+	a + b &= b \\
+	a + a &= c \\
+	c + b &= d
+\end{align}
+taken modulo associativity of $+$.
+
+We can represent them with an E-graph as follows:
+
+\begin{figure}[h!]
+	\centering
+	\begin{tikzpicture}[
+			scale=2,
+			transform shape,
+			every node/.style={
+					draw,
+					fill=blue!20,
+					text height=1.5ex, % Height above the baseline
+					text depth=0.25ex  % Depth below the baseline
+				}
+		]
+		\node (na) at (0, 0) {$a$};
+		\node (nb) at (1, 0) {$b$};
+		\node (nc) at (2, 0) {$c$};
+		\node (nd) at (3, 0) {$d$};
+		\node (nab) at (1, 1) {$+$};
+		\node (naa) at (2, 1) {$+$};
+		\node (nbc) at (3, 1) {$+$};
+
+		\node[
+			draw=none,
+			fill=none,
+			inner sep=12pt,         % Space between nodes and the box border
+			fit=(nb) (nab),     % Tells TikZ which nodes to enclose
+		] (box1) {};
+
+		\draw[dashed, rounded corners=3pt]
+		(box1.north east) --
+		(box1.north west) node[midway, draw=none, fill=green!10, inner sep=1pt] {\small $e_b$} --
+		(box1.south west) --
+		(box1.south east) -- cycle;
+
+		\node[
+			draw=none,
+			fill=none,
+			inner sep=12pt,         % Space between nodes and the box border
+			fit=(nc) (naa),     % Tells TikZ which nodes to enclose
+		] (box2) {};
+
+		\draw[dashed, rounded corners=3pt]
+		(box2.north east) --
+		(box2.north west) node[midway, draw=none, fill=green!10, inner sep=1pt] {\small $e_c$} --
+		(box2.south west) --
+		(box2.south east) -- cycle;
+		
+		\node[
+			draw=none,
+			fill=none,
+			inner sep=12pt,         % Space between nodes and the box border
+			fit=(nd) (nbc),     % Tells TikZ which nodes to enclose
+		] (box3) {};
+
+		\draw[dashed, rounded corners=3pt]
+		(box3.north east) --
+		(box3.north west) node[midway, draw=none, fill=green!10, inner sep=1pt] {\small $e_d$} --
+		(box3.south west) --
+		(box3.south east) -- cycle;
+		
+		\draw[->, >=stealth, thick] (na.north) to[out=90, in=270, looseness=1] ([xshift=-0.5em]nab.south);
+		\draw[->, >=stealth, thick] (na.north) to[out=90, in=270, looseness=1] ([xshift=-0.5em]naa.south);
+		\draw[->, >=stealth, thick] (na.north) to[out=90, in=270, looseness=1.2] ([xshift=0.5em]naa.south);
+		\draw[->, >=stealth, thick] (box1.north) to[out=90, in=90, looseness=1]
+		([yshift=0.5em]box1.east) to[out=270, in=270, looseness=1] ([xshift=0.5em]nab.south);
+		\draw[->, >=stealth, thick] (box1.north) to[out=90, in=270, looseness=1] ([xshift=-0.5em]nbc.south);
+		\draw[->, >=stealth, thick] (box2.north) to[out=90, in=270, looseness=1] ([xshift=0.5em]nbc.south);
+		
+	\end{tikzpicture}
+\end{figure}
+
+Consider the equation $b = d$, which follows from the simple deduction
+\begin{align*}
+	b = a + b = a + (a + b) = (a + a) + b = c + b = d
+\end{align*}
+
+However, $e_b$ and $e_d$ are two distinct E-classes in the E-graph! Why not?
+
+The central step in the deduction relies on two different associations of the term $a + a + b$. The association $(a + a) + b$ is correctly assigned to class $e_d$, while the association $a + (a + b)$ is correctly assigned to the class $e_b$. However, given that we want to work modulo theories, we need to discover the fact that $e_b = e_d$, or we are throwing out some of the consequences derivable from the theory.
+
+\subsection{How E-graphs handle ordinary critical pairs, but not AC-critical pairs}
+To get a better perspective on this problem, we use ideas from rewriting and in particular the notion of Abstract Congruence Closure (\citep{bachmair_abstract_2000}). We can think of E-graphs as presenting a rewriting system, and the above E-graph as containing the rewrite rules
+
+\begin{align*}
+  b &\rightarrow e_b \\
+  c &\rightarrow e_c \\
+  d &\rightarrow e_d \\
+	a + e_b &\rightarrow e_b \\
+	a + a &\rightarrow e_c \\
+	e_c + e_b &\rightarrow e_d
+\end{align*}
+
+(A distinguished equivalence class for $a$ is omitted to make the diagram easier to follow)
+
+A critical pair for a rewriting system is a term that can be rewritten two different ways\footnote{It is also required to be minimal among such terms, but we gloss over this here}.
+The perspective of Abstract Congruence Closure is that congruence closure, the core algorithm for `rebuilding' E-graphs, constructs a \emph{confluent term rewriting system} on an extended signature. Handling critical pairs is required for confluence, which ensures that a term rewrites into a single result; if we have a term $t$ that rewrites to both $e_a$ and $e_b$, we ought to automatically \emph{deduce} that the E-classes $e_a$ and $e_b$ should be merged.
+
+By introducing new constants $e_1, e_2, \ldots$ as E-ids, we can `flatten' an input term $f(\ldots, g(h(\ldots)), \ldots)$ into just $f(\ldots, e_i, \ldots)$ and then assign it the name $e_k$ for some $k$. 
+
+Now, to ensure the convergence of the rewrite system, we can look at two kinds of cases where a term could rewrite in two ways:
+
+$e_1 \leftarrow f(\ldots e_i \ldots) \rightarrow e_2$ in which case, we ought to deduce that $e_1 = e_2$. This corresponds to merging E-classes which would contain duplicates of the same E-node.
+
+$f(\ldots e_i \ldots) \rightarrow e_1$ and $e_i \rightarrow e_2$, in which case we ought to deduce that \\ $f(\ldots e_2 \ldots) = e_1$. This corresponds to canonizing the E-nodes using the union-find structure.
+
+By fixpoint propagation, resolving these two cases are enough to resolve all cases of critical pairs with overlaps on more deeply nested subterms.
+
+E-graph rebuilding can handle ordinary critical pairs, but this doesn't cover our above example, which is an \emph{AC-critical pair}. 
+
+\subsection{Equality satuation: \\ handling AC-critical pairs by brute force}
+E-graphs (not modulo theories) handle AC-critical pairs the same way as critical pairs for any other theory, with equality saturation: we \emph{ground} the AC identities by matching either side with the E-graph, and adding the equivalent other side (if it is not present) and merging the equivalence classes corresponding to either side.
+
+Why do E-graphs fare poorly with AC? The two identities, (A) $\forall xyz.\; x + (y + z) = (x + y) + z$ and (C) $\forall xy.\; x + y = y + x$, can be semantically characterized as saying that two AC-terms are equal if they are equal as non-empty multisets of their subterms. Equality saturation will handle these identities by eventually deriving that an input term $a_1 + a_2 +  \ldots + a_n$, thought of as the multiset $\{a_1, a_2, \ldots, a_n\}$, is in the same E-class as every E-node of the form $s + t$ where $s$ and $t$ partition the multiset $\{a_1, a_2, \ldots, a_n\}$. There are $2^n - 1$ non-empty multisets $s$ and $t$ which we can partition a starting multiset of size $n$ into\footnote{If the multiset has an element of multiplicity more than 1, some of these will be the same, so this number will be reduced. However, we consider the worst case}, and one E-class will need to be generated for each. So, to reach saturation, we must create $O(2^n)$ E-classes, and it is easy to see that each E-class will, on average, have its own $O(2^n)$ E-nodes to represent every multiset partition of the multiset it represents.
+
+These `redundant' E-nodes and E-classes play a role: any of the $O(2^{2^n})$ AC-subterms of the input could be part of an AC-critical pair, and so equality saturation eagerly assigns new E-classes to them, just in case. Introducing these extra E-classes and E-nodes is seemingly the best we can do in general unless we have a clever way to detect which ground instances of the identities are needed in order to ensure confluence modulo those identities.
+
+In our above example, the associative identity would match against $a + (a + b)$, which is a term represented in our E-graph, and then merge this term (assigned to equivalence class $e_b$) with the corresponding other side of the associativity identity (assigned to equivalence class $e_d$  \emph{if} we have also added the instance of commutativity $c + b = b + c$ to the graph. Otherwise, adding this instance of commutativity later on and then rebuilding will correctly find the need to merge these classes).
+
+\subsection{EMTs: Handling AC-critical pairs less na\"ively}
+We don't need to add all AC-subterms to find critical pairs. It suffices to consider every pair of E-nodes with an AC symbol and check them for `overlap'. In our example, the E-nodes $a + e_b$ and $a + a$ form a potential critical pair $a + a + e_b$ as they overlap on the subterm $a$. We see that this implies the equation $a + e_b = e_c + e_b$, which can be added to the E-graph, which will merge the classes $e_b$ of the LHS and $e_d$ of the RHS.
+
+This procedure always terminates (\citep{bachmair_abstract_2000}). It is, in fact, a special case of Buchberger's algorithm for finding Gr\"obner bases of sets of polynomials (\citep{tiwari_decision_2000}), a well-studied algorithm with a lot of work done in optimizing it to be fast enough in practice.
+
 \chapter{E-graphs in depth}
 \fxerror{This needs a pass to improve the quality. For now, it is something of a dumping ground of `elementary' material}
 
@@ -831,23 +965,16 @@ If we abstract from the contents of the E-nodes, we can just think of each E-nod
 
 We recall some standard notions. Given a set, an \textbf{equivalence relation} over that set is a reflexive, symmetric, and transitive relation. Given an equivalence relation, we can take the \textbf{quotient} of the set by it, a set containing a single element for each \textbf{equivalence class} of elements in the original set.
 
-The \emph{Union-Find} data structure is a very efficient means to represent an equivalence relation over a set, and to update it either by extending the underlying set or by merging two equivalence classes. Union-find avoids any fiddly manipulation with reflexivity, symmetry, and transitivity, and focuses on a \emph{semantic} characterization of equivalence relations: a function $r : A \rightarrow B$ splits the domain $A$ into equivalence classes based on the equality of their images in $B$: define $R$ by $R = \{(a, b) \mid r(a) = r(b)\}$. In this, $B$ \emph{is} just the set of equivalence classes, and $r$ \emph{is} just the quotient.
+The \emph{Union-Find} data structure is an efficient means to represent an equivalence relation over a set, and to update it either by extending the underlying set or by merging two equivalence classes. Union-find avoids any fiddly manipulation with reflexivity, symmetry, and transitivity, and focuses on a \emph{semantic} characterization of equivalence relations: a function $r : A \rightarrow B$ splits the domain $A$ into equivalence classes based on the equality of their images in $B$: define $R$ by $R = \{(a, b) \mid r(a) = r(b)\}$. In this, $B$ \emph{is} just the set of equivalence classes, and $r$ \emph{is} just the quotient.
 
 % an equivalence relation on a set partitions it into disjoint sets of equivalence classes. And an equivalence relation on terms is exactly a model of equality: it is closed under reflexivity, symmetry, and transitivity, so it is an \textbf{equivalence relation} The theory of equality between constants is usually presented with three axiom schemas: reflexivity, $\vdash a = a$, symmetry, $a = b \vdash b = a$, and transitivity, $a = b, b = c \vdash a = c$. However, the standard solution of this problem abandons any fiddly manipulation with these identities and focuses on an entirely \emph{semantic} characterization of equality: an equivalence relation on a set partitions it into disjoint sets of \textbf{equivalence classes}. And an equivalence relation on terms is exactly a model of equality: it is closed under reflexivity, symmetry, and transitivity, so it is an \textbf{equivalence relation} Let's phrase this more symbolically. Take a set of constants $A$, an equivalence relation $R \subseteq A \times A$ is a relation such that for every $a \in A$, $(a, a) \in R$, amd for every $a, b \in A$, $(a, b) \in R$ implies $(b, a) \in R$, and for every $a, b, c \in A$, $(a, b) \in R$ and $(b, c) \in R$ implies $(a, c) \in R$. Then an equivalence class of a particular element $a \in A$ is the set $\{b \mid (a, b) \in R\}$. We denote the set of equivalence classes by $A / R$, and there is a function $r : A \rightarrow A/R$ given by $r(a) = \{b \mid (a, b) \in R\}$. If $r(a) = r(b)$, then $(a, b) \in R$.
 
 Using this fact, we can sketch an implementation that maintains this mapping $r$ from a set of constants to a set of equivalence classes. To start off with, we don't need to represent the codomain $B$ in any fancy way: we just assign a new identifier to each equivalence class. Then, a basic implementation is just an array or table with indexes in $A$ and entries in some set of identifiers for equivalence classes.
 
-However, this representation potentially requires a bit of work to update: if we want to take into account a new equation $a = b$ with an existing $r$, we need to set all things mapping to $r(a)$ and $r(b)$ to the same identifier. The solution is to not store $r$ itself, but a function $q$ such that the fixed point $q^*$ equals $r$. To spell this out, $r(q(a)) = r(a)$ for all $a \in A$, and since $A$ is finite, there will always be some number $n$ such that $r(a) = q^n(a) = q(\ldots(q(a)))$.
-
-The trick is to then use \emph{path compression}: whenever we look up $r(a) = q(\ldots(q(a)))$, we alter some of $a, q(a), q^2(a), \ldots$ to be directly mapped to $r(a)$. This is the essence of the \textbf{Union-Find} data structure for representing equivalence classes, and it is an example of a self-optimizing data structure: each access ensures that the number of iterations required to reach a fixed point of $q$ is reduced on-the-fly.
-
-We won't spell out the exact details of known path-compression techniques here.
-The end result, if the path compression is managed appropriately, is that $n$ operations, if they are either calculating the representative of a term or merging two equivalence classes, takes just $O(n \alpha(n))$, where $\alpha$ is the inverse Ackermann function, a very slow-growing function \fxerror{source}. There are a few variations on the exact method for path compression, but all union-find data structures use the same elegant core idea.
+This representation potentially requires a bit of work to update: if we want to take into account a new equation $a = b$ with an existing $r$, we need to set all things mapping to $r(a)$ and $r(b)$ to the same identifier. It is possible to lazily update the union-find whenever doing a find, effectively storing a function $q$ whose fixed-point is $r$, which makes the running time for $n$ union and find operations be just $O(n \alpha(n))$, where $\alpha$ is the inverse Ackermann function, a very slow-growing function \fxerror{source}.
 
 \section{Congruence relations and Congruence-closure} \label{egraphs2}
-A congruence relation on a set of terms is one that respects the function symbols: for instance, if $f$ is a function symbol of arity 3, and $s_1 = t_1$, $s_2 = t_2$, and $s_3 = t_3$, then $f(s_1, s_2, s_3) = f(t_1, t_2, t_3)$. In general, we get the following axiom schema: for each $n$-ary symbol $f$, $a_1 = b_1, \ldots, a_n = b_n \vdash f(a_1, \ldots, a_n) = f(b_1, \ldots, b_n)$. This is the larger fragment solved by a congruence-closure data structure. 
-
-Comparing with the case of 0-ary function symbols, we seek a semantic characterization of congruence relations, i.e., congruent equivalence relations. However, no existing approach compares in elegance to union-find.
+A congruence relation on a set of terms is one that respects the function symbols: for instance, if $f$ is a function symbol of arity 3, and $s_1 = t_1$, $s_2 = t_2$, and $s_3 = t_3$, then $f(s_1, s_2, s_3) = f(t_1, t_2, t_3)$. In general, we get the following axiom schema: for each $n$-ary symbol $f$, $a_1 = b_1, \ldots, a_n = b_n \vdash f(a_1, \ldots, a_n) = f(b_1, \ldots, b_n)$. This is the larger fragment solved by a congruence-closure data structure.
 
 We keep a union-find storing equivalence classes of \textbf{E-nodes}\footnote{`E' in E-graph, E-node, E-class, etc., stands for equality}: as we have seen, if $s = t$, then we don't need to waste space represent both $f(s)$ and $f(t)$, given that these are identical. So, we restrict ourselves to keeping not a set of terms, but a set of `lifted' terms like $f(e_1)$, if $e_1$ is the name we assign to the class containing $s$ and $t$.
 
@@ -1284,10 +1411,12 @@ However, in some cases applying congruence can cause a chain of merges. This pro
 
 Note the final E-graph has two \emph{cycles}: $f(e_a) = e_a$ and $g(e_a, e_b) = e_b$. In general, we might have cycles going through multiple intermediary nodes: $f(\ldots g(\ldots e_1 \ldots) \ldots) = e_1$. Cycles become very important in the analysis of how theories fare with E-graphs under equality saturation (section \ref{howfare}).
 
-\subsection{A more formal description}
-We will maintain a union-find structure representing a quotient function $r : E \rightarrow E/R$; $E$ is some superset of the constants $A$ that includes an element for every E-node. We will call these \textbf{E-nodes}, and elements of the set $E/R$ \textbf{E-classes}. We introduce, for each $n$-ary function symbol $f$, a mapping $f_r : (E/R)^n \rightarrow E/R$. Unfortunately, we now have two objects to keep in sync if we hope to represent $r$ via the efficient union-find structure from before. In particular, if $r$ is altered to merge two equivalence classes, we then have  to scan through our representation of $f_r$ to see if we encounter a case where two equal tuples are mapped to unequal representatives. In that case, we must merge the representatives according to congruence, and then go back and check if this new merge has any consequences, and so forth.
+For congruence closure, and thus E-graphs, the laziness possible in the union-find seems difficult to make use of, as we need to detect the congruence $f(a_1, \ldots, b, \ldots, a_n) = f(a_1, \ldots, b, \ldots, a_n)$ once $b$ and $c$ have been equated; it is not enough to just `discover' that $b = c$ when calling find on $b$ or $c$ or one of their equivalents, as such a find call is not guaranteed to happen at any particular point before we need to discover the congruence.
 
-This system, where we bounce new equalities between data structures, is rather typical of \textbf{theory combination} \fxerror{add ref to later part}. 
+%\subsection{A more formal description}
+%We will maintain a union-find structure representing a quotient function $r : E \rightarrow E/R$; $E$ is some superset of the constants $A$ that includes an element for every E-node. We will call these \textbf{E-nodes}, and elements of the set $E/R$ \textbf{E-classes}. We introduce, for each $n$-ary function symbol $f$, a mapping $f_r : (E/R)^n \rightarrow E/R$. Unfortunately, we now have two objects to keep in sync if we hope to represent $r$ via the efficient union-find structure from before. In particular, if $r$ is altered to merge two equivalence classes, we then have  to scan through our representation of $f_r$ to see if we encounter a case where two equal tuples are mapped to unequal representatives. In that case, we must merge the representatives according to congruence, and then go back and check if this new merge has any consequences, and so forth.
+
+%This system, where we bounce new equalities between data structures, is rather typical of \textbf{theory combination} \fxerror{add ref to later part}. 
 
 %The resulting combined data structure is known as a \textbf{congruence-closure} data structure \fxerror{source}. We nonetheless will not refer to it as \emph{the} congruence-closure data structure, given that it is far less canonical than the union-find structure. In particular, exactly how newly-congruent items are discovered in each $f_r$ provides an axis of variation. \fxerror{this is a bit mean-spirited. I guess I was a bit annoyed at how formalizing Downey-Sethi-Tarjan is a bit of a slog :)}
 
@@ -1345,52 +1474,52 @@ We can do several matches/insertions/merges in between rebuilding; it is suffici
 
 There are plenty of extensions to the outer loop that include things such as conditional reasoning (along the lines of: if $a = b$, then assert that $c = d$ by merging classes) or E-class analyses (\citep{willsey_egg_2021}).
 
-\section{E-graphs as tree automata} \label{treeauto}
-\fxerror{Things about rational sets, tree automata mod theories? and recognizable vs rational?}
+%\section{E-graphs as tree automata} \label{treeauto}
+%\fxerror{Things about rational sets, tree automata mod theories? and recognizable vs rational?}
 
-\citep{koppel_version_2021} \citep{wang_e-graphs_nodate}
+%\citep{koppel_version_2021} \citep{wang_e-graphs_nodate}
 
-\emph{A much better source: \citep{suciu_semantic_2025}. Actually, I should use this source more often...}
+%\emph{A much better source: \citep{suciu_semantic_2025}. Actually, I should use this source more often...}
 
-\section{Terms, signatures, and theories formalized} \label{termsig}
-\fxerror{Where should this go?}
+% \section{Terms, signatures, and theories formalized} \label{termsig}
+% \fxerror{Where should this go?}
 
-A \textbf{signature} is a set $\Sigma$ of function symbols with an arity given by a function $\alpha : \Sigma \rightarrow \mathbb{N}$. Given a set of constants $A$, a \textbf{term fragment} $\Sigma(A)$ is a pair of an element of $f \in \Sigma$ together with a list of elements of $A$ of length $\alpha(f)$. A \textbf{term} over $A$, denoted by $\Sigma^*(A)$, is defined inductively as either a constant $a \in A$ or a term fragment over $\Sigma^*(A)$.
+% A \textbf{signature} is a set $\Sigma$ of function symbols with an arity given by a function $\alpha : \Sigma \rightarrow \mathbb{N}$. Given a set of constants $A$, a \textbf{term fragment} $\Sigma(A)$ is a pair of an element of $f \in \Sigma$ together with a list of elements of $A$ of length $\alpha(f)$. A \textbf{term} over $A$, denoted by $\Sigma^*(A)$, is defined inductively as either a constant $a \in A$ or a term fragment over $\Sigma^*(A)$.
 
-Given a term in $\Sigma^*(A)$, we can extend it to be over more constants $\Sigma^*(A + B)$ in the obvious way, denoting by $+$ the disjoint union of sets. We will often use auxiliary constants written as $a, b, c$ etc., but these should be distinguished from the notion of a variable in an identity defined below.
+% Given a term in $\Sigma^*(A)$, we can extend it to be over more constants $\Sigma^*(A + B)$ in the obvious way, denoting by $+$ the disjoint union of sets. We will often use auxiliary constants written as $a, b, c$ etc., but these should be distinguished from the notion of a variable in an identity defined below.
 
-An interpretation of a signature $\Sigma$ is a \textit{carrier} set $A$ together with a function $a : \Sigma(A) \rightarrow A$ that interprets term fragments, from which the interpretation of terms in $\Sigma^*(A)$ is given by recursive application of $a$, interpreting from the leaves to the root in the natural way. We will denote this by $\textbf{fold}(a) : \Sigma^*(A) \rightarrow A$.
+% An interpretation of a signature $\Sigma$ is a \textit{carrier} set $A$ together with a function $a : \Sigma(A) \rightarrow A$ that interprets term fragments, from which the interpretation of terms in $\Sigma^*(A)$ is given by recursive application of $a$, interpreting from the leaves to the root in the natural way. We will denote this by $\textbf{fold}(a) : \Sigma^*(A) \rightarrow A$.
 
-Given a signature, there is a standard notion of first-order logic\footnote{given the fragment we will consider in this thesis, there is no actual distinction between classical and intuitionistic first-order logic. [source about Horn(CL) = Horn(I)]} over the terms of $\Sigma^*(A)$. More specifically, we will consider \textbf{theories}, which are conjunctions of identities, where an \textbf{identity} is a proposition of the form $\forall x_1. \dotsi \forall x_i. t_1 = t_2$ where $t_1$ and $t_2$ are terms over $A + \{x_1, \dotsc x_i\}$. Note that the number of quantifiers can also be 0.
-A \textbf{ground instance} of an identity is an equation of the form $\sigma(t_1) = \sigma(t_2)$, where $\sigma$ is a \textbf{substitution} that maps variables in $\{x_1, \dotsc x_i\}$ to terms over $A$. We will generally use \textbf{equation} to mean any equation between terms in the \textbf{ground fragment} $\Sigma^*(A)$, while reserving identity for universally quantified equations.\\
+% Given a signature, there is a standard notion of first-order logic\footnote{given the fragment we will consider in this thesis, there is no actual distinction between classical and intuitionistic first-order logic. [source about Horn(CL) = Horn(I)]} over the terms of $\Sigma^*(A)$. More specifically, we will consider \textbf{theories}, which are conjunctions of identities, where an \textbf{identity} is a proposition of the form $\forall x_1. \dotsi \forall x_i. t_1 = t_2$ where $t_1$ and $t_2$ are terms over $A + \{x_1, \dotsc x_i\}$. Note that the number of quantifiers can also be 0.
+% A \textbf{ground instance} of an identity is an equation of the form $\sigma(t_1) = \sigma(t_2)$, where $\sigma$ is a \textbf{substitution} that maps variables in $\{x_1, \dotsc x_i\}$ to terms over $A$. We will generally use \textbf{equation} to mean any equation between terms in the \textbf{ground fragment} $\Sigma^*(A)$, while reserving identity for universally quantified equations.\\
 
-\begin{ex}
-	Let $\Sigma = \{f, g\}$ and $\alpha(f) = 2, \alpha(g) = 1$. If $A = \{x, y, z\}$, then $f(x, y)$, $g(z)$, and $f(y, y)$ are elements of $\Sigma(A)$. In addition, $x$, $f(f(x, y), g(x))$, and $g(g(g(z)$ are elements of $\Sigma^*(A)$.
+% \begin{ex}
+% 	Let $\Sigma = \{f, g\}$ and $\alpha(f) = 2, \alpha(g) = 1$. If $A = \{x, y, z\}$, then $f(x, y)$, $g(z)$, and $f(y, y)$ are elements of $\Sigma(A)$. In addition, $x$, $f(f(x, y), g(x))$, and $g(g(g(z)$ are elements of $\Sigma^*(A)$.
 
-	If we have the theory $T = (\forall a b. f(a, b) = g(f(a, b))) \wedge (\forall a. g(a) = g(g(a)))$, then we can derive the ground equation $f(x, g(y)) = g(f(x, g(y))$ from $T$ by a substitution in the first identity of $\sigma(a) = x, \sigma(b) = g(y)$.
-\end{ex}
+% 	If we have the theory $T = (\forall a b. f(a, b) = g(f(a, b))) \wedge (\forall a. g(a) = g(g(a)))$, then we can derive the ground equation $f(x, g(y)) = g(f(x, g(y))$ from $T$ by a substitution in the first identity of $\sigma(a) = x, \sigma(b) = g(y)$.
+% \end{ex}
 
-\section{Matching, merging, seeding, and canonicalization formalized}
-\fxerror{To be moved}
-Here we spell out the relevant procedures in some detail, given as they will be central to our generalization to EMTs \ref{coreres}.
+% \section{Matching, merging, seeding, and canonicalization formalized}
+% \fxerror{To be moved}
+% Here we spell out the relevant procedures in some detail, given as they will be central to our generalization to EMTs \ref{coreres}.
 
-A congruence closure structure $(A, E, b : A \rightarrow E, q : E \rightarrow E, c : (f : \Sigma) \rightharpoonup E^{\alpha(f)} \rightarrow E)$ consists of a set of constants $A$, a set of `E-node names' $E$, a name for each constant $b : A \rightarrow E$, a union-find map $q$, and a partial function-symbol map $c$, where $c_f : E^{\alpha(f)} \rightarrow E$ is the function map for a particular symbol $f \in \Sigma$. Particular entries $c_f(e_1 \in E, \ldots, e_n \in E) \mapsto e \in E$ are called \textbf{E-nodes}. Fixed points of the map $q$ are called \textbf{E-classes}.
+% A congruence closure structure $(A, E, b : A \rightarrow E, q : E \rightarrow E, c : (f : \Sigma) \rightharpoonup E^{\alpha(f)} \rightarrow E)$ consists of a set of constants $A$, a set of `E-node names' $E$, a name for each constant $b : A \rightarrow E$, a union-find map $q$, and a partial function-symbol map $c$, where $c_f : E^{\alpha(f)} \rightarrow E$ is the function map for a particular symbol $f \in \Sigma$. Particular entries $c_f(e_1 \in E, \ldots, e_n \in E) \mapsto e \in E$ are called \textbf{E-nodes}. Fixed points of the map $q$ are called \textbf{E-classes}.
 
-We will use the term E-graph both for this abstract structure as well as concrete implementations, for which some auxiliary maps are useful to speed up certain operations.
+% We will use the term E-graph both for this abstract structure as well as concrete implementations, for which some auxiliary maps are useful to speed up certain operations.
 
-The relation $=_q$ is defined as $\{(a, b) \mid q^*(a) = q^*(b)\}$ where $q^*$ is the fixed point of q.
+% The relation $=_q$ is defined as $\{(a, b) \mid q^*(a) = q^*(b)\}$ where $q^*$ is the fixed point of q.
 
-A term fragment $f(e_1, \ldots, e_n) : \Sigma(E)$ is represented by the E-class $e$ in an E-graph if $c_f(e_1, \ldots, e_n)$ maps to some $f$ where $f =_q e$. A term $t \in \Sigma^*(A + E)$ is represented by $e$ if it is simply a node name $f \in E$ such that $f =_q e$, or if it is a constant $a \in A$ and $b(a) =_q e$, or if it is a term fragment $f(t_1, \ldots, t_n)$ such that $t_i$ are represented by $e_i$ and $f(e_1, \ldots, e_n)2$ is represented by $e$.
+% A term fragment $f(e_1, \ldots, e_n) : \Sigma(E)$ is represented by the E-class $e$ in an E-graph if $c_f(e_1, \ldots, e_n)$ maps to some $f$ where $f =_q e$. A term $t \in \Sigma^*(A + E)$ is represented by $e$ if it is simply a node name $f \in E$ such that $f =_q e$, or if it is a constant $a \in A$ and $b(a) =_q e$, or if it is a term fragment $f(t_1, \ldots, t_n)$ such that $t_i$ are represented by $e_i$ and $f(e_1, \ldots, e_n)2$ is represented by $e$.
 
-The matching problem is the following: for a pattern $p \in \Sigma^*(A + S)$, is there a substitution $\sigma : S \rightarrow \Sigma^*(A + E)$ such that the term $p \sigma \in \Sigma^*(A + E)$ is represented by the E-graph?
+% The matching problem is the following: for a pattern $p \in \Sigma^*(A + S)$, is there a substitution $\sigma : S \rightarrow \Sigma^*(A + E)$ such that the term $p \sigma \in \Sigma^*(A + E)$ is represented by the E-graph?
 
-Merging is the process of taking two elements $e_1, e_2 \in E$ and updating $q$ so that $e_1 =_q e_2$ .
+% Merging is the process of taking two elements $e_1, e_2 \in E$ and updating $q$ so that $e_1 =_q e_2$ .
 
-Seeding takes a term $t$ and updates the E-graph so that there is some $e \in E$ such that $e$ represents $t$.
+% Seeding takes a term $t$ and updates the E-graph so that there is some $e \in E$ such that $e$ represents $t$.
 
-Canonicalization updates $q$ and the function-symbol maps $c_f$ to ensure that if $e_1 =_q e_2,  \ldots, e_{n1} =_q e_{n2}$, then $c_f(e_1, \ldots, e_{n1}) =_q c_f(e_2, \ldots, e_{n2})$. In general, this is done by a fixed-point method of finding pairs of tuples such that the corresponding elements are equivalent under $=_q$ while $c_f$ maps them to inequivalent elements, and then merging.
+% Canonicalization updates $q$ and the function-symbol maps $c_f$ to ensure that if $e_1 =_q e_2,  \ldots, e_{n1} =_q e_{n2}$, then $c_f(e_1, \ldots, e_{n1}) =_q c_f(e_2, \ldots, e_{n2})$. In general, this is done by a fixed-point method of finding pairs of tuples such that the corresponding elements are equivalent under $=_q$ while $c_f$ maps them to inequivalent elements, and then merging.
 
-\chapter{Which theories do E-graphs struggle with?}
+\chapter{Which theories do E-graphs struggle with?} \label{howfare}
 AC is a good example of a theory which E-graphs handle poorly. However, this is not necessarily the case for every common theory, so it may not always be worth the extra complexity of using EMTs. We list some common identities which are worth analyzing:
 
 \begin{table}[h!]
@@ -1433,162 +1562,153 @@ AC is a good example of a theory which E-graphs handle poorly. However, this is 
 
 We use the convention of naming combined theories by taking the juxtaposition of the theory names: AC for a function symbol $f$ is the theory with both A and C identities, and so forth.
 
-\fxerror{cut down if some of these don't appear}
-\fxerror{also we don't need the one-sided versions, probably}
+% \fxerror{cut down if some of these don't appear}
+% \fxerror{also we don't need the one-sided versions, probably}
 
-This list of identities covers a wide range of common mathematical structures, such as semigroups, monoids, groups, semirings, rings, modules, semilattices, lattices, Boolean algebras, as well as some less common ones such as bands, quasigroups, loops, and near-semirings.
+% This list of identities covers a wide range of common mathematical structures, such as semigroups, monoids, groups, semirings, rings, modules, semilattices, lattices, Boolean algebras, as well as some less common ones such as bands, quasigroups, loops, and near-semirings.
 
-Note that the condition $x \neq 0$ for $x$ to have an inverse in a field is not formalizable in purely algebraic terms, but this list covers every other field identity. A similar observation applies to vector spaces.
+% Note that the condition $x \neq 0$ for $x$ to have an inverse in a field is not formalizable in purely algebraic terms, but this list covers every other field identity. A similar observation applies to vector spaces.
 
-\subsection{Combinatorics}
+% \subsection{Combinatorics}
 
+% \fxerror{This needs a MASSIVE rewrite}
+% \subsection{How common theories fare with E-graphs} \label{howfare}
+% In general, using theories with equality saturation will lead to a growth in the size of the graph, as more nodes will need to be seeded to ensure that all consequences of the identities are discovered. We will analyze typical theories and how they fare.
 
+% The possibility of cyclic graphs is a core sticking point for how certain theories fare when used in the equality saturation process.
 
+% \subsubsection{Minimally-expansive theories}
+% Given a fixed set $E$ of E-classes, the maximum number of E-nodes in a \emph{canonical} E-graph is $|\Sigma(E)|$. We will focus on the sizes of canonical E-graphs. For the theories C, I, and V, every subterm of one side of the identity is also a subterm of the other, and so no new E-classes  are ever added as a result of these theories; all merges are proper.
 
+% For U and its one-sided subtheories, it is possible the subterm $e$ is not part of the graph and needs to be seeded, but once seeded, the class of $e$ will remain in the graph ensuring that all subsequent merges are proper.
 
+% We will call C, I, U, left-unitality and right-unitality \textbf{minimally expansive}. A formal statement of this property is that for every equation, each subterm of one side is a subterm of the other or a 0-ary function. Any such theory can increase the number of E-classes by at most a constant amount, and expand the number of E-nodes between classes to at most the maximum $|\Sigma(E)|$. In practice, we can get tighter bounds by simply looking at what E-classes/E-nodes can result; see \ref{expanssum}.
 
+% The prime examples of expansivity that we will cover in this thesis are, then, associativity and distributivity.
 
+% \fxerror{Important find: how does this compare to the notion of `Weak term acyclicity' from \citep{suciu_semantic_2025}?}
 
-\fxerror{This needs a MASSIVE rewrite}
-\subsection{How common theories fare with E-graphs} \label{howfare}
-In general, using theories with equality saturation will lead to a growth in the size of the graph, as more nodes will need to be seeded to ensure that all consequences of the identities are discovered. We will analyze typical theories and how they fare.
+% \subsubsection{Inverse}
+% Inverse is something of an interesting case. Given the identity $\forall x. f(i(x), x) = e$, $x$ does not appear at all on the right-hand side. Given that, an E-graph representing $e$ could be extended to contain \emph{any} new term for $x$ as a result of this identity. However, it would seem unproductive to instantiate $x$ with random terms, and indeed we can reason as follows:
 
-The possibility of cyclic graphs is a core sticking point for how certain theories fare when used in the equality saturation process.
+% Consider all the proofs that could involve the use of the identity for inverse in this direction. We show that $f(i(s), s) = e$ is only useful for certain values of $s$:
+% \begin{enumerate}
+% 	\item We could use transitivity via $t = f(i(s), s)$ and $f(i(s), s) = e$. In that case, we require already to establish an equation containing $f(i(s), s)$.
+% 	\item We could use transitivity via $f(i(s), s) = e$ and $e = t$, proving that $f(i(s), s) = t$. The usefulness of this equation can be analyzed by following this argument recursively.
+% 	\item We could use symmetry to establish $e = f(i(s), s)$, but this is again only useful in conjunction with another use of this reversed equality
+% 	\item We could use congruence to establish that, if $i(s) = t_1$ and $s = t_2$, then $f(i(s), s) = f(t_1, t_2)$.
+% \end{enumerate}
 
-\subsubsection{Minimally-expansive theories}
-Given a fixed set $E$ of E-classes, the maximum number of E-nodes in a \emph{canonical} E-graph is $|\Sigma(E)|$. We will focus on the sizes of canonical E-graphs. For the theories C, I, and V, every subterm of one side of the identity is also a subterm of the other, and so no new E-classes  are ever added as a result of these theories; all merges are proper.
+% A similar argument holds for the symmetric identity $\forall x. f(x, i(x)) = e$ in the theory.
 
-For U and its one-sided subtheories, it is possible the subterm $e$ is not part of the graph and needs to be seeded, but once seeded, the class of $e$ will remain in the graph ensuring that all subsequent merges are proper.
+% We can conclude that we can achieve completeness if we seed $f(i(s), s)$ and merge it with $e$ only if $i(s)$ and $s$ are already represented by the E-graph. This doesn't add any new nodes of the form $i(s)$ for any $s$, and so this process terminates.
 
-We will call C, I, U, left-unitality and right-unitality \textbf{minimally expansive}. A formal statement of this property is that for every equation, each subterm of one side is a subterm of the other or a 0-ary function. Any such theory can increase the number of E-classes by at most a constant amount, and expand the number of E-nodes between classes to at most the maximum $|\Sigma(E)|$. In practice, we can get tighter bounds by simply looking at what E-classes/E-nodes can result; see \ref{expanssum}.
+% This form of reasoning about limiting the scope of seeding is rather ad-hoc. Worse, it is not stable under theory combination, as an equation $s = t$ can be an instance of another identity without either $s$ or $t$ being represented by the E-graph, so we must analyze potential `chains' of reasoning in the combined theory.
 
-The prime examples of expansivity that we will cover in this thesis are, then, associativity and distributivity.
+% Our approach to EMTs is a more principled approach that can handle the theory of inverses and similar theories. \fxerror{Remove this if this doesn't end up being true}
 
-\fxerror{Important find: how does this compare to the notion of `Weak term acyclicity' from \citep{suciu_semantic_2025}?}
+% \subsubsection{Summary of simpler theories} \label{expanssum}
+% \begin{itemize}
+% 	\item C: E-classes containing $n$ nodes of the form $f(a_1, a_2)$ must expand to include
+% 	      up to $n$ new nodes $f(a_2, a_1)$.
+% 	\item U: Up to 1 new E-class for $e$. Every E-class $a$ must expand to include up to 2 new E-nodes, $f(e, a)$ and $f(a, e)$.
+% 	\item Left- and right-unitality: The same as above, but only at most one new E-node per E-class.
+% 	\item I: Every E-class $a$ must expand to include up to 1 new E-node, $f(a, a)$.
+% 	\item V: Up to 1 new E-class for $e$. For every E-class $a$ such that $i(a)$ is represented, at most one new E-class must be added with the two E-nodes $f(i(a), a)$ and $f(a, i(a))$
+% \end{itemize}
 
-\subsubsection{Inverse}
-Inverse is something of an interesting case. Given the identity $\forall x. f(i(x), x) = e$, $x$ does not appear at all on the right-hand side. Given that, an E-graph representing $e$ could be extended to contain \emph{any} new term for $x$ as a result of this identity. However, it would seem unproductive to instantiate $x$ with random terms, and indeed we can reason as follows:
+% \fxerror{Other non-expansive theories: CU, CUI, CUV? Can we give a formula for non-expansive combinations?}
 
-Consider all the proofs that could involve the use of the identity for inverse in this direction. We show that $f(i(s), s) = e$ is only useful for certain values of $s$:
-\begin{enumerate}
-	\item We could use transitivity via $t = f(i(s), s)$ and $f(i(s), s) = e$. In that case, we require already to establish an equation containing $f(i(s), s)$.
-	\item We could use transitivity via $f(i(s), s) = e$ and $e = t$, proving that $f(i(s), s) = t$. The usefulness of this equation can be analyzed by following this argument recursively.
-	\item We could use symmetry to establish $e = f(i(s), s)$, but this is again only useful in conjunction with another use of this reversed equality
-	\item We could use congruence to establish that, if $i(s) = t_1$ and $s = t_2$, then $f(i(s), s) = f(t_1, t_2)$.
-\end{enumerate}
+% \subsubsection{A and AU}
+% It is a basic mathematical observation that any term under a function symbol $f$ in the theory A can be rewritten into either a fully left-associated or right-associated term just by treating the A identity as a rewrite rule in one direction. For instance, if we use + as our associative binary operator, $(a + (b + c)) + d \mapsto a + ((b + c) + d) \mapsto a + (b + (c + d))$ if we right-associate everything.
 
-A similar argument holds for the symmetric identity $\forall x. f(x, i(x)) = e$ in the theory.
+% Therefore, we can think of terms up to associativity as a non-empty string of their non-+ leaf nodes. The number of binary trees that yield a string of length $n+1$ is given by the $n$-th Catalan number, which by itself is exponential in $n$. However, due to the sharing of subterms, things are hardly as bad as this. In general, each of the $O(n^2)$ substrings of the input string will be given a single E-class, each containing $O(n)$ E-nodes for the various ways to divide that substring into two parts.
 
-We can conclude that we can achieve completeness if we seed $f(i(s), s)$ and merge it with $e$ only if $i(s)$ and $s$ are already represented by the E-graph. This doesn't add any new nodes of the form $i(s)$ for any $s$, and so this process terminates.
+% If we allow cyclic terms modulo A then the E-graph represents an infinite list of strings, of which there are infinitely many distinct E-classes. The problem can be illustrated by an E-graph representing $a + b = a$, for which every string of leaves $a, ab, \ldots, ab^n$ is part of this E-class. This means that the infinite set of strings $b, \ldots, b^n$ form the leaves of distinct E-classes that a standard equality saturation loop will seed.
 
-This form of reasoning about limiting the scope of seeding is rather ad-hoc. Worse, it is not stable under theory combination, as an equation $s = t$ can be an instance of another identity without either $s$ or $t$ being represented by the E-graph, so we must analyze potential `chains' of reasoning in the combined theory.
+% The most common case this occurs is with the theory AU, where for every term $t$ we have the identity $t = t + 0$ (using 0 as the name for the identity of +). In this case, any finite set of seeded terms such as $0, 0 + 0, (0 + 0) + 0$ will, under a fair strategy, eventually be merged into a single E-class by applying the identity `backwards'. There is unfortunately no direct bound on the intermediate sizes of the E-graph during this process, and it is dependent on the exact sequence of saturation steps taken. There is also the possibility of a cyclic equation of the form $a + b = a$ being created \emph{without} the E-graph having discovered that $b = 0$, for which even an eager strategy of trying to `collapse any 0 we see' is not bounded in the intermediate size.
 
-Our approach to EMTs is a more principled approach that can handle the theory of inverses and similar theories. \fxerror{Remove this if this doesn't end up being true}
+% \subsubsection{Cancellation}
+% An possible workaround is to add the reasoning principle $\forall x y. x + y = x \Rightarrow y = 0$, which is not purely equational but is not too hard to introduce in an ad-hoc way to our saturation outer loop. Such an identity holds in the theories with inverses or cancellation. Unforunately, this is not sufficient: in general, we would need a rule that says ``if $x$ is by some cyclic path in the E-graph equal to $a_1 \ldots + x + \ldots b_n$, then $a_1 + \ldots + b_n = 0$''. (The reason for the form with $\ldots$ is that we hope to apply this early, \emph{without} relying on some number of associativity steps to write this into the semantically equivalent form $a + x + b$). However, the introduced equation $a_1 + \ldots + a_n$ is not enough to reduce the infinite number of subterms modulo associativity: for instance, in the case $a + x + b = x$, we have $a, a + a, a + a + a, \ldots$ as subterms with only $a + b = 0$ as an equation to reduce them. \fxerror{formally check, please. Also motivate better}
 
-\subsubsection{Summary of simpler theories} \label{expanssum}
-\begin{itemize}
-	\item C: E-classes containing $n$ nodes of the form $f(a_1, a_2)$ must expand to include
-	      up to $n$ new nodes $f(a_2, a_1)$.
-	\item U: Up to 1 new E-class for $e$. Every E-class $a$ must expand to include up to 2 new E-nodes, $f(e, a)$ and $f(a, e)$.
-	\item Left- and right-unitality: The same as above, but only at most one new E-node per E-class.
-	\item I: Every E-class $a$ must expand to include up to 1 new E-node, $f(a, a)$.
-	\item V: Up to 1 new E-class for $e$. For every E-class $a$ such that $i(a)$ is represented, at most one new E-class must be added with the two E-nodes $f(i(a), a)$ and $f(a, i(a))$
-\end{itemize}
+% \subsubsection{Commutativity}
+% If we also require (perhaps a limited form of) commutativity, then the infinite number of equivalence classes collapses, as then the infinite set of terms $x, a + x + b, a + a + x + b + b, \ldots$ can be captured by the derived equations $x + 0 = x, a + b = 0$.
 
-\fxerror{Other non-expansive theories: CU, CUI, CUV? Can we give a formula for non-expansive combinations?}
+% However, if we go so far, it is much nicer to simply use the elegant form of E-graphs mod AC developed in \fxerror{forward-ref}.
 
-\subsubsection{A and AU}
-It is a basic mathematical observation that any term under a function symbol $f$ in the theory A can be rewritten into either a fully left-associated or right-associated term just by treating the A identity as a rewrite rule in one direction. For instance, if we use + as our associative binary operator, $(a + (b + c)) + d \mapsto a + ((b + c) + d) \mapsto a + (b + (c + d))$ if we right-associate everything.
+% Unfortunately, E-graphs mod A are not a panacea here due to decidability issues, but can improve things significantly. \fxerror{Expand and forward-ref once more is written}
 
-Therefore, we can think of terms up to associativity as a non-empty string of their non-+ leaf nodes. The number of binary trees that yield a string of length $n+1$ is given by the $n$-th Catalan number, which by itself is exponential in $n$. However, due to the sharing of subterms, things are hardly as bad as this. In general, each of the $O(n^2)$ substrings of the input string will be given a single E-class, each containing $O(n)$ E-nodes for the various ways to divide that substring into two parts.
+% \subsubsection{AC and ACU}
+% Given an AC operator $+$ and a starting term AC-equivalent to $a + b + c + \ldots$, then the equivalence class of the starting term will be rewritten to contain the operator $+$ applied to \emph{all partitions into nonempty sets} of $\{a, b, c, \ldots\}$: all non-empty sets $A$ and $B$ such that $A \cup B = \{a, b, c, \ldots\}$ will be given distinct E-classes to represent their sum, and it is clear this equation can be solved for a nonempty $B$ whenever $A$ is neither $\{\}$ nor $\{a, b, c, \ldots\}$ itself.
 
-If we allow cyclic terms modulo A then the E-graph represents an infinite list of strings, of which there are infinitely many distinct E-classes. The problem can be illustrated by an E-graph representing $a + b = a$, for which every string of leaves $a, ab, \ldots, ab^n$ is part of this E-class. This means that the infinite set of strings $b, \ldots, b^n$ form the leaves of distinct E-classes that a standard equality saturation loop will seed.
+% So, if $|\{a, b, c, \ldots\}| = n$, then to represent AC-equivalence, we will need to seed all $2^n - 1$ E-classes representing all non-empty subsets. And each of these E-classes to represent the subset of size $m$ will have $2^m - 2$ E-nodes, to represent all partitions except for those where either side of the partition is empty.
 
-The most common case this occurs is with the theory AU, where for every term $t$ we have the identity $t = t + 0$ (using 0 as the name for the identity of +). In this case, any finite set of seeded terms such as $0, 0 + 0, (0 + 0) + 0$ will, under a fair strategy, eventually be merged into a single E-class by applying the identity `backwards'. There is unfortunately no direct bound on the intermediate sizes of the E-graph during this process, and it is dependent on the exact sequence of saturation steps taken. There is also the possibility of a cyclic equation of the form $a + b = a$ being created \emph{without} the E-graph having discovered that $b = 0$, for which even an eager strategy of trying to `collapse any 0 we see' is not bounded in the intermediate size.
+% Summing up, we have $\Sigma_{m=1}^{2^n} (2^m - 2)$ E-nodes, which can be reduced using the geometric series formula to $2^{2^n} - 2 - 2 (2^n) = 2^{2^n} - 2^{n+1} - 2$ E-nodes across $2^n - 1$ E-classes.
 
-\subsubsection{Cancellation}
-An possible workaround is to add the reasoning principle $\forall x y. x + y = x \Rightarrow y = 0$, which is not purely equational but is not too hard to introduce in an ad-hoc way to our saturation outer loop. Such an identity holds in the theories with inverses or cancellation. Unforunately, this is not sufficient: in general, we would need a rule that says ``if $x$ is by some cyclic path in the E-graph equal to $a_1 \ldots + x + \ldots b_n$, then $a_1 + \ldots + b_n = 0$''. (The reason for the form with $\ldots$ is that we hope to apply this early, \emph{without} relying on some number of associativity steps to write this into the semantically equivalent form $a + x + b$). However, the introduced equation $a_1 + \ldots + a_n$ is not enough to reduce the infinite number of subterms modulo associativity: for instance, in the case $a + x + b = x$, we have $a, a + a, a + a + a, \ldots$ as subterms with only $a + b = 0$ as an equation to reduce them. \fxerror{formally check, please. Also motivate better}
+% For ACU, we get a similar situation, just dropping the use of `nonempty' above. So we have $2^n$ E-classes and $\Sigma_{m=0}^{2^n} (2^m) = 2^{2^m}$ E-nodes.
 
-\subsubsection{Commutativity}
-If we also require (perhaps a limited form of) commutativity, then the infinite number of equivalence classes collapses, as then the infinite set of terms $x, a + x + b, a + a + x + b + b, \ldots$ can be captured by the derived equations $x + 0 = x, a + b = 0$.
+% \fxerror{Polynomials, D, etc}
 
-However, if we go so far, it is much nicer to simply use the elegant form of E-graphs mod AC developed in \fxerror{forward-ref}.
+% \section{Orphaned sections}
+% \subsection{A couple of bad ways to handle AC}
+% \fxerror{In general, we need a good section on 'hacks' to handle AC and other theories within a pure E-graph framework}
 
-Unfortunately, E-graphs mod A are not a panacea here due to decidability issues, but can improve things significantly. \fxerror{Expand and forward-ref once more is written}
+% \fxerror{This should be moved}
+% The \textsc{Egg} library handles the application of identities with a backoff method, where
+% equations to apply are selected based on their weight, and the weight of an equation decreases when it fires. Any equation that suffers from blowup, like associativity or commutativity, will be fired less and less, in the hopes of finding more `interesting' equalities without having to run to saturation. This method isn't able to properly distinguish between `interesting' and `uninteresting' cases of associativity and commutativity, and it's also of no use when running to saturation.
 
-\subsubsection{AC and ACU}
-Given an AC operator $+$ and a starting term AC-equivalent to $a + b + c + \ldots$, then the equivalence class of the starting term will be rewritten to contain the operator $+$ applied to \emph{all partitions into nonempty sets} of $\{a, b, c, \ldots\}$: all non-empty sets $A$ and $B$ such that $A \cup B = \{a, b, c, \ldots\}$ will be given distinct E-classes to represent their sum, and it is clear this equation can be solved for a nonempty $B$ whenever $A$ is neither $\{\}$ nor $\{a, b, c, \ldots\}$ itself.
+% \fxerror{This is an old example that refers to our example in the section about AC. It motivated matching modulo theories}
+% One could attempt to deal with AC ahead-of-time by automatically generating derived equations like $f(a+b) + (1 + c) = (f(a) + f(b)) + c$ and $1 + f(a+b) = f(a) + f(b)$ from the source equation. This method is not in general complete: in the AC case, we would need infinitely many equations to handle matching at an arbitrary distance, as we can see with the term
+% $f(x+y) + (z_1 + (z_2 + \ldots (z_n + 1) \ldots))$. Here, any pattern that can determine that both $f(x+y)$ and $1$ are subterms, and therefore that there is a match modulo AC, must have $n$ auxiliary variables to capture (and ignore) each $z_n$ that stand between the $f(x+y)$ and the $1$. This gives some idea of the difficulty in simply preprocessing the input theory and set of terms, and motivates considering a modification to the E-graph representation and algorithms themselves.
 
-So, if $|\{a, b, c, \ldots\}| = n$, then to represent AC-equivalence, we will need to seed all $2^n - 1$ E-classes representing all non-empty subsets. And each of these E-classes to represent the subset of size $m$ will have $2^m - 2$ E-nodes, to represent all partitions except for those where either side of the partition is empty.
+% \subsection{Miscellaneous tables}
+% \begin{table}[h!]
+% 	\makebox[1 \textwidth][c]{       %centering table
+% 		\resizebox{1.3 \textwidth}{!}{   %resize table
+% 			\begin{tabular}{||c c c c c||}
+% 				\hline
+% 				Short name          & Common name & Module structure & Algorithm & Notes \\
+% 				\hline \hline
+% 				AC & Commutative semigroup & $\mathbb{N}^+$-``module'' & AC-completion &  \\ \hline
+% 				ACU & Commutative monoid & $\mathbb{N}$-module & ACU-completion &  \\ \hline
+% 				ACUN & Abelian group & $\mathbb{Z}$-module & Hermite normal form calculation &  \\ \hline
+% 				ACUD & & & & \\
+% 				\hline
+% 			\end{tabular}
+% 		}
+% 	}
+% \end{table}
 
-Summing up, we have $\Sigma_{m=1}^{2^n} (2^m - 2)$ E-nodes, which can be reduced using the geometric series formula to $2^{2^n} - 2 - 2 (2^n) = 2^{2^n} - 2^{n+1} - 2$ E-nodes across $2^n - 1$ E-classes.
+% \begin{table}[h!]
+% 	\makebox[1 \textwidth][c]{       %centering table
+% 		\resizebox{1.3 \textwidth}{!}{   %resize table
+% 			\begin{tabular}{||c c c||}
+% 				\hline
+% 				E-graphs & Rewriting & Tree-automata \\
+% 				\hline \hline
+% 				E-graph & Ground rewriting system & Nondeterministic bottom-up tree automata \\ \hline
+% 				Canonical E-graph & Confluent ground rewriting system & Deterministic bottom-up tree automata \\ \hline
+% 				Canonicalization by congruence-closure & Ground Knuth-Bendix completion & \emph{speculative:} $\wedge$-determinization \\ \hline
+% 				Equality saturation with identities & Split Knuth-Bendix completion & ? \\ \hline
+% 				\emph{speculative:} & Knuth-Bendix completion & \emph{speculative:} RTN-tree-automata \\ Non-Ground Congruence-Closure & & \\ Congruence-Closure with Free Variables & & \\ Normaliztion via Rewrite Closure & & \\ \hline
+% 				\emph{this work:} E-graph modulo theories & Rewriting modulo theories & \emph{speculative?:} Tree-automata modulo theories \\
+% 				\hline
+% 			\end{tabular}
+% 		}
+% 	}
+% \end{table}
 
-For ACU, we get a similar situation, just dropping the use of `nonempty' above. So we have $2^n$ E-classes and $\Sigma_{m=0}^{2^n} (2^m) = 2^{2^m}$ E-nodes.
+% \subsection{Miscellaneous notes}
+% Semantic foundations gives the citation "Charles Gregory Nelson. Techniques for Program Verification. PhD thesis, Stanford University, Stanford, CA, USA, 1980. AAI8011683." for E-graphs. \fxerror{Check this}
 
-\fxerror{Polynomials, D, etc}
+% Egglog evaluation is semina\"ive, so it is incremental. Egg is \emph{not} incremental at all! Even if the de Moura paper is. Also I should add de Moura to the citation database.
 
-\section{Orphaned sections}
-\subsection{A couple of bad ways to handle AC}
-\fxerror{In general, we need a good section on 'hacks' to handle AC and other theories within a pure E-graph framework}
-
-\fxerror{This should be moved}
-The \textsc{Egg} library handles the application of identities with a backoff method, where
-equations to apply are selected based on their weight, and the weight of an equation decreases when it fires. Any equation that suffers from blowup, like associativity or commutativity, will be fired less and less, in the hopes of finding more `interesting' equalities without having to run to saturation. This method isn't able to properly distinguish between `interesting' and `uninteresting' cases of associativity and commutativity, and it's also of no use when running to saturation.
-
-\fxerror{This is an old example that refers to our example in the section about AC. It motivated matching modulo theories}
-One could attempt to deal with AC ahead-of-time by automatically generating derived equations like $f(a+b) + (1 + c) = (f(a) + f(b)) + c$ and $1 + f(a+b) = f(a) + f(b)$ from the source equation. This method is not in general complete: in the AC case, we would need infinitely many equations to handle matching at an arbitrary distance, as we can see with the term
-$f(x+y) + (z_1 + (z_2 + \ldots (z_n + 1) \ldots))$. Here, any pattern that can determine that both $f(x+y)$ and $1$ are subterms, and therefore that there is a match modulo AC, must have $n$ auxiliary variables to capture (and ignore) each $z_n$ that stand between the $f(x+y)$ and the $1$. This gives some idea of the difficulty in simply preprocessing the input theory and set of terms, and motivates considering a modification to the E-graph representation and algorithms themselves.
-
-\subsection{Miscellaneous tables}
-\begin{table}[h!]
-	\makebox[1 \textwidth][c]{       %centering table
-		\resizebox{1.3 \textwidth}{!}{   %resize table
-			\begin{tabular}{||c c c c c||}
-				\hline
-				Short name          & Common name & Module structure & Algorithm & Notes \\
-				\hline \hline
-				AC & Commutative semigroup & $\mathbb{N}^+$-``module'' & AC-completion &  \\ \hline
-				ACU & Commutative monoid & $\mathbb{N}$-module & ACU-completion &  \\ \hline
-				ACUN & Abelian group & $\mathbb{Z}$-module & Hermite normal form calculation &  \\ \hline
-				ACUD & & & & \\
-				\hline
-			\end{tabular}
-		}
-	}
-\end{table}
-
-\begin{table}[h!]
-	\makebox[1 \textwidth][c]{       %centering table
-		\resizebox{1.3 \textwidth}{!}{   %resize table
-			\begin{tabular}{||c c c||}
-				\hline
-				E-graphs & Rewriting & Tree-automata \\
-				\hline \hline
-				E-graph & Ground rewriting system & Nondeterministic bottom-up tree automata \\ \hline
-				Canonical E-graph & Confluent ground rewriting system & Deterministic bottom-up tree automata \\ \hline
-				Canonicalization by congruence-closure & Ground Knuth-Bendix completion & \emph{speculative:} $\wedge$-determinization \\ \hline
-				Equality saturation with identities & Split Knuth-Bendix completion & ? \\ \hline
-				\emph{speculative:} & Knuth-Bendix completion & \emph{speculative:} RTN-tree-automata \\ Non-Ground Congruence-Closure & & \\ Congruence-Closure with Free Variables & & \\ Normaliztion via Rewrite Closure & & \\ \hline
-				\emph{this work:} E-graph modulo theories & Rewriting modulo theories & \emph{speculative?:} Tree-automata modulo theories \\
-				\hline
-			\end{tabular}
-		}
-	}
-\end{table}
-
-\subsection{Miscellaneous notes}
-Semantic foundations gives the citation "Charles Gregory Nelson. Techniques for Program Verification. PhD thesis, Stanford University, Stanford, CA, USA, 1980. AAI8011683." for E-graphs. \fxerror{Check this}
-
-Egglog evaluation is semina\"ive, so it is incremental. Egg is \emph{not} incremental at all! Even if the de Moura paper is. Also I should add de Moura to the citation database.
-
-Everyone cites Kozen 77 for the NP-completeness of E-matching, but I should make a picture of the actual SAT embedding.
+% Everyone cites Kozen 77 for the NP-completeness of E-matching, but I should make a picture of the actual SAT embedding.
 
 \chapter{E-graphs modulo theories} \label{modtheor}
-\fxerror{Nelson-Oppen and Shostak. Does our approach require stable-infiniteness etc?. Discussion of completeness in theory combination? Equality propagation?}
+% \fxerror{Nelson-Oppen and Shostak. Does our approach require stable-infiniteness etc?. Discussion of completeness in theory combination? Equality propagation?}
 
-To deal with problematic theories such as AC, we will define the notion of \emph{E-graph modulo theory}. As we have seen \fxerror{check that we have}, E-graphs deal with AC by explicitly generating every term that is AC-equivalent to some input term, which is always a finite but worst-case doubly-exponential-sized set.
-
-\fxerror{Undefined notions incoming}
+To deal with problematic theories such as AC, we will define the notion of \emph{E-graph modulo theory}. As we have seen, E-graphs deal with AC by explicitly generating every term that is AC-equivalent to some input term, which is always a finite but worst-case doubly-exponential-sized set.
 
 To build up to the notion of EMTs, we consider \emph{critical pairs}, a notion from term rewriting. If we have a rewriting relation $\rightarrow_\mathcal{R}$, then a \textbf{peak} is a trio of terms $s_1, s_2$ and $t$ such that $s_1 \leftarrow_\mathcal{R} t \rightarrow_\mathcal{R} s_2$. A \textbf{critical pair} is a peak that cannot be obtained as a non-trivial substitution instance of another.
 
@@ -1606,10 +1726,8 @@ Based on this, we can diagnose the problems of E-graphs on AC as the E-graph spe
 
 So, while E-graphs are built around presenting a confluent ground rewriting system, the notion of EMT over a theory $T$ suggests moving to the notion of confluent ground $T$-rewriting system in the natural way, in which case we need to pay special attention to critical pairs, which need to be resolved to maintain confluence.
 
-\fxerror{Some editing seams likely to appear in the next few subsections}
-
 \section{EMTs: prior attempts}
-That \emph{some} notion of EMT ought to exist has been stated multiple times before (\citep{zucker_omelets_2025}, \fxerror{blog post citations}). The hope is to be able to use theory-specific knowledge to integrate certain identities directly into the procedures, rather than having to time-consumingly match, seed, and merge as directed by the identities. We will briefly go over the key intutition behind these proposals, and show that they fail to take into account the $T$-critical pair idea we outlined above.
+That \emph{some} notion of EMT ought to exist has been stated multiple times before (\citep{zucker_omelets_2025}, \citep{panchekha_lin-graphs_2025}, \citep{shanabrook_custom_2026}). The hope is to be able to use theory-specific knowledge to integrate certain identities directly into the procedures, rather than having to time-consumingly match, seed, and merge as directed by the identities. We will briefly go over the key intutition behind these proposals, and show that they fail to take into account the $T$-critical pair idea we outlined above.
 
 \subsection{Intuition 1: Canonizers}
 \citet{zucker_omelets_2025} notes that we have \emph{canonizers} for many theories, which provide a way to solve the problem of ground equality modulo theories. A canonizer for a theory $T$ is just some function on terms $c$ such that, if $t_1 =_T t_2$, then $c(t_1) = c(t_2)$: that is, it shifts the problem from equality modulo $T$ to just ordinary term equality.
@@ -1709,21 +1827,19 @@ There are some cases where canonizers or containers avoid this problem: for inst
 \subsection{The problem of matching modulo theories}
 Still, even with a canonizer or container, there is the problem that E-graph matching becomes matching modulo theories.
 
-\fxerror{Expand this. Also, how hard is it, in practice? For theories where a canonizer works/solves the word problem, is Zucker's bottom-up idea sufficient?}
+\fxerror{Expand this. For theories where a canonizer works/solves the word problem, is Zucker's bottom-up idea sufficient?}
 
 \section{E-graphs modulo theorie} \label{coreres}
-\fxerror{prior contents: C, A, A revisited, AC, ACU}
-
-\fxerror{Some more credit for prior work on EMTs: https://pavpanchekha.com/blog/lin-graphs.html, https://uwplse.org/2026/02/24/egglog-containers.html}
-
 \subsection{Defining EMTs}
-Our general setup will be similar to E-graphs: \fxerror{TODO: the formal definition of E-graphs should be lifted from the orphaned section to somewhere before this} we will maintain a set of equivalence classes, which will contain E-nodes/term fragments over equivalence classes.
+Our general setup will be similar to E-graphs: we will maintain a set of equivalence classes, which will contain E-nodes/term fragments over equivalence classes.
 
 For a theory $T$, the $T$-part of the E-graph is the set of E-nodes that use a function symbol that appears in an identity in $T$.
 
 For instance, if we have the E-class $e_1 = \{e_2 + e_3, f(e2), e_3 + e_4\}$, then the $T$-part of this, taking $T$ to include only the $+$ symbol, is $e_1 = \{e_2 + e_3, e_3 + e_4\}$. An E-class that has no $T$-nodes still will appear in the form of $e_2 = \{\}$, recording that $e_2$ is \emph{$T$-atomic}.
 
 Our definition of EMTs will require a \emph{decision procedure for the $T$-word problem}. That is, we need a procedure that, given the union of $T$ and a set of equations, determines if another arbitrary equation follows from $T$ and the equations.
+
+\fxerror{Change to include weak EMTs for A etc}
 
 \subsubsection{Necessity of the word problem 1} We might imagine that we could restrict to the problem of determining if $e_i = e_j$ for equivalence classes $e_i, e_j$ that actually appear in the E-graph. However, this restriction does not make anything easier: given an arbitrary equation $s = t$, we can insert $s$ and $t$ into the E-graph and then ask if the resulting equivalence classes are equal.
 
@@ -1735,11 +1851,11 @@ Unfortunately, this rules out EM(A) and EM(AU), given that the relevant word pro
 
 Also, we need to extend matching to the more general matching modulo $T$, given that the $T$-part now won't necessarily represent all terms up to $T$ in a `direct' way. (The hope of being able to represent E-graphs under $T$ in less space than standard E-graphs is, of course, the motivation for EMTs to begin with.)
 
-\fxerror{Once I have re-homed the orphaned formalization pieces, finish this with a formalization of EMTs}
+% \fxerror{Once I have re-homed the orphaned formalization pieces, finish this with a formalization of EMTs}
 
-\emph{A sketch of the formalization: The solver maintains its own view of the $T$-part of the EMT. When nodes are merged via congruence-closure canonicalization/an explicit merging, that generates an event asking the solver to merge the $T$-part of the relevant equivalence classes. The solver can, in turn, send a discovered equality between two equivalence classes back to the E-graph section.}
+% \emph{A sketch of the formalization: The solver maintains its own view of the $T$-part of the EMT. When nodes are merged via congruence-closure canonicalization/an explicit merging, that generates an event asking the solver to merge the $T$-part of the relevant equivalence classes. The solver can, in turn, send a discovered equality between two equivalence classes back to the E-graph section.}
 
-\emph{When nodes are seeded, if they are headed by a function symbol mention in $T$, then the solver gets a relevant seed event, of course. When given an input term, the solver acts as a canonizer to rewrite the term into a canonical form, which can be tested for equality or seeded. The lack of critical pairs in the rewriting step is what makes a solver good. I need to go over nelson-oppen theory combination here probably}
+% \emph{When nodes are seeded, if they are headed by a function symbol mention in $T$, then the solver gets a relevant seed event, of course. When given an input term, the solver acts as a canonizer to rewrite the term into a canonical form, which can be tested for equality or seeded. The lack of critical pairs in the rewriting step is what makes a solver good. I need to go over nelson-oppen theory combination here probably}
 
 \chapter{E-graphs modulo AC}
 \fxerror{Make sure we have cited `congruence closure mod AC' by Bachmair and the Cochon paper as very relevant prior work. Tiwari also}
@@ -1768,8 +1884,8 @@ $I(E)$ is an ideal in the set of polynomials
 
 \section{Matching modulo AC}
 
-\chapter{Relational queries} \label{relq}
-\fxerror{Section commented out for now, as it this section is very WIP and has taken a back-seat to other issues}
+%\chapter{Relational queries} \label{relq}
+%\fxerror{Section commented out for now, as it this section is very WIP and has taken a back-seat to other issues}
 
 \begin{comment}
 \subsection{Relations}
@@ -1891,11 +2007,16 @@ With equality, composition, and product, we can represent the relational join:
 
 \chapter{An implementation} \label{impl}
 
+\chapter{Evaluation} \label{evalresults}
+
 \chapter{Prior work} \label{litreview}
 
 \chapter{Conclusion and future work} \label{conclu}
 
+\iftoggle{plannthesis}
+{
 \chapter{Plan}
+Outdated...
 
 \section{Theoretical developments and literature review}
 Mostly complete
@@ -1971,6 +2092,7 @@ In discussion with Zucker, I have now determined that the `theory factor' notion
 
 \subsubsection{EMT(A)}
 For a while, I was convinced that EMT(A) was decidable based on an incorrect connection to the decidable unification-mod-A problem. However, I now believe this is not decidable. I intend to see to what extent this lack of decidability can be mitigated.
+}{}
 
 \printbibliography
 

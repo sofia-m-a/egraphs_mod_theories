@@ -10,6 +10,7 @@ module Egraph
     Signature (..),
     Egraph,
     efind,
+    epropagate,
   )
 where
 
@@ -255,7 +256,7 @@ epropagate (a', b') = do
       eatomT newRoot <>= one newChild <> old
       -- repoint all to new root
       for_ old (\e -> efind e .= newRoot)
-      -- if there is an rule (a, b) -> newChild, turn it into (a, b) -> newRoot
+      -- if there is a rule (a, b) -> newChild, turn it into (a, b) -> newRoot
       use (egPair . ipmR newChild)
         >>= traverse_ (\(a, b) -> egPair . at (a, b) ?= newRoot)
       -- if we have any rules either of the form (newChild, b) -> c or (a, newChild) -> c,
