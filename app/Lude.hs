@@ -5,15 +5,17 @@ module Lude
     module Control.Applicative.Combinators,
     module Data.Semialign,
     module Data.These,
-    module Data.Traversable
+    module Data.Traversable,
+    module Witherable,
   )
 where
 
 import Control.Applicative.Combinators (choice)
-import Relude hiding (zipWith, repeat, zip, unzip, uncons)
-import Data.Semialign (Semialign(..), Zip(..), Align(..), Repeat(..), Unzip(..), unzipDefault)
-import Data.These (These(..), these, mergeThese)
+import Data.Semialign (Align (..), Repeat (..), Semialign (..), Unzip (..), Zip (..), unzipDefault)
+import Data.These (These (..), mergeThese, these)
 import Data.Traversable (for)
+import Relude hiding (catMaybes, filter, mapMaybe, repeat, uncons, unzip, zip, zipWith)
+import Witherable (Filterable (..), Witherable (..))
 
 -- Note: very old custom prelude, here for future reference for myself as to things I
 -- 'commonly' use
