@@ -41,6 +41,7 @@ executable sofyr
     , haskeline
     , lens
     , megaparsec
+    , monoidal-containers
     , mtl
     , optparse-applicative
     , parser-combinators
@@ -52,7 +53,6 @@ executable sofyr
     , semialign
     , semigroupoids
     -- , smash -- bug: won't build for base ≥ 4.17
-    -- , sofialude
     -- , souffle-haskell
     , tagged
     , text
@@ -127,6 +127,6 @@ executable sofyr
     ViewPatterns
 
   main-is:            Main.hs
-  other-modules:      Lude, Egraph, Ematch
+  other-modules:      Lude, Egraph, Ematch, Fixpoint
   hs-source-dirs:     app
   default-language:   Haskell2010
