@@ -7,6 +7,8 @@ module Lude
     module Data.These,
     module Data.Traversable,
     module Witherable,
+    extendingState,
+    extendingState',
   )
 where
 
@@ -16,6 +18,16 @@ import Data.These (These (..), mergeThese, these)
 import Data.Traversable (for)
 import Relude hiding (catMaybes, filter, mapMaybe, repeat, uncons, unzip, zip, zipWith)
 import Witherable (Filterable (..), Witherable (..))
+
+extendingState :: a -> State (s, a) b -> State s (b, a)
+extendingState a u = do
+  s <- get
+  let (b, (s', a')) = runState u (s, a)
+  put s'
+  pure (b, a')
+
+extendingState' :: a -> State (s, a) () -> State s a
+extendingState' a u = fmap snd (extendingState a u)
 
 -- Note: very old custom prelude, here for future reference for myself as to things I
 -- 'commonly' use

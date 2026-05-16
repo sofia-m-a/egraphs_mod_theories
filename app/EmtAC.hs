@@ -1,13 +1,14 @@
 {-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE NoImplicitPrelude #-}
 
 module EmtAC where
 
 import Control.Lens
-import Data.IntMap qualified as IntMap
-import Egraph (EId, Egraph (..), unId)
-import Lude
 import Data.Foldable (minimum)
-import Data.IntMap.Merge.Strict (mergeA, dropMissing, traverseMissing, mapMissing, zipWithMatched, merge)
+import Data.IntMap qualified as IntMap
+import Data.IntMap.Merge.Strict (dropMissing, mapMissing, merge, mergeA, preserveMissing, traverseMissing, zipWithAMatched, zipWithMatched)
+import Egraph (EId, Egraph, unId)
+import Lude
 
 -- Map from EIds to exponent
 type Monomial = IntMap Int
@@ -26,23 +27,64 @@ makeLenses ''EMTAC
 -- Naive, non-incremental
 handleMerge :: EId -> EId -> State (EMTAC f ann) ()
 handleMerge a b = do
+  let updExponents m =
+        let (old, m') = m & exponentAt a <<.~ 0
+         in m' & exponentAt b +~ old
   oldRW <- acRW <<.= mempty
-  ifor_ oldRW \l r -> do
-    -- Uses simple ordering on EIds
-    let (l', r') = if l < r then (l, r) else (r, l)
-    use acRW >>= itraverse_ \l2 r2 -> do
-      handleCritical (l', r') (l2, r2)
-    _
+  let ts = itoList oldRW <&> bimap updExponents updExponents
+  -- should run until the list is empty
+  _ <- extendingState' ts rebuild
+  pass
 
-data IntInf = Finite Int | Infinite
-  deriving (Eq, Ord)
-  
-infDiv :: Int -> Int -> IntInf
-infDiv a 0 = Infinite
-infDiv a b = Finite (div a b)
+rebuild :: State (EMTAC f ann, [(Monomial, Monomial)]) ()
+rebuild =
+  use _2 >>= \case
+    [] -> pass
+    ((l, r) : rest) -> do
+      -- TODO: handle case when l and r are trivial (one entry) by deferring back
+      -- to the Egraph
+      _2 .= rest
+      when (l /= r) do
+        reducedL <- use (_1 . acRW) <&> ifoldl' (\l2 acc r2 -> snd $ reduceMon acc (l2, r2)) l
+        reducedR <- use (_1 . acRW) <&> ifoldl' (\l2 acc r2 -> snd $ reduceMon acc (l2, r2)) r
+        -- orient
+        case compare reducedL reducedR of
+          EQ -> pass
+          LT -> handleCritical (reducedL, reducedR)
+          GT -> handleCritical (reducedR, reducedL)
 
-reduceMon :: Monomial -> (Monomial, Monomial) -> Monomial
-reduceMon x (l, r) = _
+-- l1 and r1 is reduced WRT all the monomials in acRW
+-- We need to see if any of them are reducible WRT it
+-- and find critical pairs.
+-- Note: if we have l2 → r2 reducible by l1 → r1,
+-- then this is a critical pair between l1 and l2 that is simply l2 itself
+-- So the extra case to handle is that r2 is reducible by l1
+handleCritical :: (Monomial, Monomial) -> State (EMTAC f ann, [(Monomial, Monomial)]) ()
+handleCritical (l1, r1) = do
+  use (_1 . acRW) >>= itraverse_ \l2 r2 -> do
+    let (didReduce, r2') = reduceMon r2 (l1, r1)
+    when didReduce do
+      _1 . acRW . at l2 ?= r2'
+    let crit = criticalPair l1 l2
+    whenJust crit \crit' -> do
+      let (_, crit1) = reduceMon crit' (l1, r1)
+      let (_, crit2) = reduceMon crit' (l2, r2)
+      _2 <|= (crit1, crit2)
+    _1 . acRW . at l2 ?= r1
+
+criticalPair :: Monomial -> Monomial -> Maybe Monomial
+criticalPair a b =
+  let (anyNonTrivial, criticalTerm) =
+        mergeA
+          (traverseMissing (\_ ia -> (Any False, ia)))
+          (traverseMissing (\_ ib -> (Any False, ib)))
+          (zipWithAMatched (\_ ia ib -> (Any True, max ia ib)))
+          a
+          b
+   in if getAny anyNonTrivial then Just criticalTerm else Nothing
+
+reduceMon :: Monomial -> (Monomial, Monomial) -> (Bool, Monomial)
+reduceMon x (l, r) =
   -- Step 1. Find the maximum k such that x is divisible by l^k
   -- x^i in r1, x^0 in l2 → no constraints on k
   -- x^i in r1, x^j in l2 → k can be at most div i j
@@ -61,17 +103,10 @@ reduceMon x (l, r) = _
         -- The rewrite rule 1 → r for some r is a bit ill-behaved,
         -- theoretically we 'should' rewrite x to x r^infinity
         -- But we will just pretend nothing happened and hope this case never occurs
-        Nothing -> x
-        Just k -> if k == 0 then x else _
-
-handleCritical :: (Monomial, Monomial) -> (Monomial, Monomial) -> State (EMTAC f ann) ()
-handleCritical (l1, r1) (l2, r2) = do
-  -- cases to handle:
-  -- x^i in r1, x^0 (Nothing) in l2 → x^i is reducible by l2 (div i 0 is morally infinity: can reduce r1 by l2 as many times as necessary)
-  -- x^0 (Nothing) in r1, x^i in l2 → can't reduce r1 by l2
-  -- x^i in r1, x^j in l2 → can reduce r1 by at most div i j powers of l2
-  let reducedR1 = mergeA dropMissing (traverseMissing \_ _ -> Nothing) _ r1 l2
-  let multiplier = minimum r1
-  let r1' = if multiplier > 0 then IntMap.unionWith () else _
-
-  _
+        Nothing -> (False, x)
+        Just k ->
+          if k == 0
+            then (False, x)
+            else
+              let x_div_l_k = merge preserveMissing dropMissing (zipWithMatched \_ a b -> a - k * b) x l
+               in (True, filter (> 0) $ IntMap.unionWith (+) x_div_l_k (fmap (* k) r))

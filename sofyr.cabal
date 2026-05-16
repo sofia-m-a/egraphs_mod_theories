@@ -127,6 +127,6 @@ executable sofyr
     ViewPatterns
 
   main-is:            Main.hs
-  other-modules:      Lude, Egraph, Ematch, Fixpoint
+  other-modules:      Lude, Egraph, Ematch, EmtAC
   hs-source-dirs:     app
   default-language:   Haskell2010

@@ -11,6 +11,7 @@ module Egraph
     eunion,
     Ex1 (..),
     Use (..),
+    CSL(..),
   )
 where
 
