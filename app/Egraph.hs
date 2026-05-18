@@ -12,6 +12,12 @@ module Egraph
     Ex1 (..),
     Use (..),
     CSL(..),
+    edebug,
+    eempty,
+    einsert,
+    eannotate,
+    example1Alg,
+    prettyEx
   )
 where
 
