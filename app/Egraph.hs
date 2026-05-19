@@ -3,34 +3,42 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 
 module Egraph
-  ( EId (..),
-    unId,
-    Signature (..),
-    Egraph,
+  ( Egraph,
+    eempty,
     efind,
     eunion,
-    Ex1 (..),
-    Use (..),
-    CSL(..),
-    edebug,
-    eempty,
+    elookup,
+    elookupAC,
     einsert,
-    eannotate,
-    example1Alg,
-    prettyEx
+    einsertAC,
+    einsertFix,
+    einsertACFix,
+    einsertFree,
+    einsertACFree,
+    edebug,
+    eannotation,
+    ereannotate,
+    prettyId,
+    EId (..),
+    unId,
+    Signature (..),
   )
 where
 
 import Control.Lens hiding (para)
 import Control.Monad.Free (Free (..), iter)
-import Data.Fix (Fix (Fix))
-import Data.Foldable (foldrM)
+import Data.Fix (Fix)
 import Data.Functor.Foldable (cata)
-import Data.IntMap qualified as IntMap
-import Data.Map.Merge.Lazy (mergeA, traverseMissing, zipWithAMatched)
+import Data.IntMap.Merge.Strict qualified as IntMapMerge
+import Data.IntMap.Monoidal.Strict (getMonoidalIntMap)
+import Data.IntMap.Strict qualified as IntMap
+import Data.IntSet qualified as IntSet
+import Data.IntSet.Lens qualified as IntSet
+import Data.Map.Merge.Strict qualified as MapMerge
 import Data.Map.Monoidal (MonoidalMap (..))
 import Data.Map.Strict qualified as Map
 import Data.Set qualified as Set
+-- import Egraph (EId (..), Signature (..), Use (..), unId)
 import Lude
 import Prettyprinter (Doc, indent, line, list, viaShow, vsep, (<+>))
 
@@ -75,536 +83,419 @@ data Use c
   | RightUse c
   deriving (Eq, Ord, Show)
 
--- 'Computational semilattice'
--- Probably could do with a better name
-class (Monoid (Delta d)) => CSL d where
-  type Delta d
-  cslBottom :: d
-  cslIsBottom :: d -> Bool
-  cslIsBottom d = cslDeltaIsZero (Proxy @d) . fst $ cslMerge d cslBottom
+atId :: (At m, Index m ~ Int) => EId -> Lens' m (Maybe (IxValue m))
+atId e = at (e ^. unId)
 
-  -- Note: the second part of the result tuple is just from a commutative
-  -- semilattice operation, but
-  -- the delta is asymmetric: it expected that we have some monoidal action
-  -- apply such that apply (fst (cslMerge a b)) a = b
-  cslMerge :: d -> d -> (Delta d, d)
+-- Map from EIds to exponent
+type Monomial = IntMap Int
 
-  -- Proxy is needed because of annoyances in type inference
-  cslDeltaIsZero :: Proxy d -> Delta d -> Bool
-
-instance CSL () where
-  type Delta () = ()
-  cslBottom = ()
-  cslIsBottom _ = True
-  cslMerge _ _ = ((), ())
-  cslDeltaIsZero _ _ = True
-
-instance (CSL a, CSL b) => CSL (a, b) where
-  type Delta (a, b) = (Delta a, Delta b)
-  cslBottom = (cslBottom, cslBottom)
-  cslIsBottom (a, b) = cslIsBottom a && cslIsBottom b
-  cslMerge (a, b) (c, d) =
-    let (x1, r1) = cslMerge a c
-        (x2, r2) = cslMerge b d
-     in ((x1, x2), (r1, r2))
-  cslDeltaIsZero _ (a, b) = cslDeltaIsZero (Proxy @a) a && cslDeltaIsZero (Proxy @b) b
-
--- Pointwise CSL
-instance (Ord b, CSL d) => CSL (Map b d) where
-  -- The right monoid instance instance comes from MonoidalMap
-  -- (pointwise, using the monoid on Delta)
-  type Delta (Map b d) = MonoidalMap b (Delta d)
-  cslBottom = Map.empty
-  cslIsBottom = all cslIsBottom
-  cslMerge =
-    mergeA
-      (traverseMissing (const (mempty,)))
-      (traverseMissing (const (mempty,)))
-      ( zipWithAMatched
-          ( \b x y ->
-              let (d, o) = cslMerge x y in ([(b, d)], o)
-          )
-      )
-  cslDeltaIsZero _ = all (cslDeltaIsZero (Proxy @d))
-
--- I should probably do a newtype for the case Delta a = a ....
-instance (Ord b) => CSL (Set b) where
-  type Delta (Set b) = Set b
-  cslBottom = Set.empty
-  cslIsBottom = Set.null
-  cslMerge a b = (Set.difference a b, Set.union a b)
-  cslDeltaIsZero _ = Set.null
-
--- non-lazy union find
-data Eqrel v
-  = EqrelC
-  { _erRoot :: Map v v,
-    _erBack :: Map v (Set v)
-  }
-  deriving (Show)
-
-makeLenses ''Eqrel
-
-findEqrel :: (Ord v) => Eqrel v -> v -> v
-findEqrel e v = e ^. erRoot . at v . non v
-
-unionEqrel :: (Ord v) => v -> v -> Eqrel v -> (Bool, Eqrel v)
-unionEqrel a b = runState do
-  rb <- use (erRoot . at b . non b)
-  ra <- erRoot . at a . non a <<.= rb
-  if ra /= rb
-    then do
-      sa <- erBack . at ra . anon Set.empty Set.null <<.= Set.empty
-      for_ sa (\y -> erRoot . at y ?= rb)
-      erBack . at ra .= Nothing
-      erBack . at rb . anon Set.empty Set.null <>= one ra <> sa
-      pure True
-    else pure False
-
-unionEqrel' :: (Ord v) => v -> v -> Eqrel v -> Eqrel v
-unionEqrel' a b e = snd (unionEqrel a b e)
-
-type DeltaF d = d -> (Delta d, d)
-
-unionEqrelD :: (Ord v) => v -> v -> DeltaF (Eqrel v)
-unionEqrelD a b e = let (d, e') = unionEqrel a b e in ([(a, b) | d], e')
-
-unionAllEqrelD :: (Ord v) => [v] -> DeltaF (Eqrel v)
-unionAllEqrelD [] er = pure er
-unionAllEqrelD (i : is) er = foldrM (unionEqrelD i) er is
-
-instance (Ord v) => Semigroup (Eqrel v) where
-  (<>) :: (Ord v) => Eqrel v -> Eqrel v -> Eqrel v
-  a <> b = snd (cslMerge a b)
-
-instance (Ord v) => Monoid (Eqrel v) where
-  mempty = cslBottom
-
--- Equivalence relations are CSLs
-instance (Ord v) => CSL (Eqrel v) where
-  -- question: should this be [(v, v)]? Is the resulting Delta 'nice' enough
-  -- as a normal Eqrel?
-  type Delta (Eqrel v) = [(v, v)]
-  cslBottom = EqrelC Map.empty Map.empty
-  cslIsBottom (EqrelC m _) = Map.null m
-  cslMerge m1 m2 = executingState ([], m2) do
-    ifor (m1 ^. erRoot) \c r -> do
-      -- did we have to update m2? If so, it is an equivalence in m1 that is not
-      -- in m2
-      b <- _2 %%= unionEqrel c r
-      when b (_1 <|= (c, r))
-  cslDeltaIsZero _ = null
-
-class (CSL s) => WithEqrel v s where
-  equate :: (v, v) -> s -> (Delta s, s)
-
-instance (Ord v, CSL b) => WithEqrel v (Map v b) where
-  equate (a, b) m = case m ^. at a of
-    Nothing -> (mempty, m)
-    Just va ->
-      let vb = fromMaybe cslBottom (m ^. at b)
-          (d, v) = cslMerge va vb
-       in (fromList [(b, d)], m & at a .~ Nothing & at b ?~ v)
-
--- A kind of dependent product or semidirect product of Eqrel v and Map v a
-data AnnEqrel v a
-  = AnnEqrelC
-  { _eqrel :: Eqrel v,
-    _annotations :: Map v a
-  }
-  deriving (Show)
-
-makeLenses ''AnnEqrel
-
-annotationOf :: (CSL a, Ord v) => v -> Lens' (AnnEqrel v a) a
-annotationOf c = annotations . at c . anon cslBottom cslIsBottom
-
-updateAnnotation :: (CSL a, Ord v) => v -> a -> DeltaF (AnnEqrel v a)
-updateAnnotation v a ae =
-  let v' = findEqrel (ae ^. eqrel) v
-      (d, ae') = ae & annotationOf v' %%~ cslMerge a
-   in ((mempty, [(v', d)]), ae')
-
-unionAllAnnEqrelD :: (CSL a, Ord v) => ([v], a) -> DeltaF (AnnEqrel v a)
-unionAllAnnEqrelD ([], _) ae = pure ae
-unionAllAnnEqrelD (i : is, a) ae = do
-  ae' <- first (,mempty) $ ae & eqrel %%~ unionAllEqrelD (i : is)
-  updateAnnotation i a ae'
-
-instance (Ord v, CSL a) => CSL (AnnEqrel v a) where
-  type Delta (AnnEqrel v a) = (Delta (Eqrel v), MonoidalMap v (Delta a))
-  cslBottom = AnnEqrelC cslBottom cslBottom
-  cslIsBottom (AnnEqrelC er an) = cslIsBottom er && cslIsBottom an
-  cslMerge e1 e2 =
-    let (changedE, newE) = cslMerge (e1 ^. eqrel) (e2 ^. eqrel)
-     in -- start with e2's annotations, see what has changed
-        executingState (mempty, AnnEqrelC newE (e2 ^. annotations)) do
-          for_ changedE \(a, c) -> do
-            oldA <- _2 . annotationOf a <<.= cslBottom
-            d <- _2 %%= updateAnnotation c oldA
-            _1 <>= d
-          ifor_ (e1 ^. annotations) \a ann -> do
-            d <- _2 %%= updateAnnotation a ann
-            _1 <>= d
-  cslDeltaIsZero _ (d, m) = cslDeltaIsZero (Proxy @(Eqrel v)) d && cslDeltaIsZero (Proxy @(Map v a)) m
-
--- merge over empty, f(empty), ... f^i(empty), etc
-cslFixpoint :: forall a. (CSL a) => DeltaF a -> a
-cslFixpoint f = go cslBottom
+grevlex :: Monomial -> Monomial -> Ordering
+grevlex t u = comparing cmp t u
   where
-    go a = let (d, a') = f a in if cslDeltaIsZero (Proxy @a) d then a' else go a'
+    cmp r = (sum r, map negate (degrees r)) -- grevlex order
+    vars = sort (IntMap.keys t ++ IntMap.keys u)
+    degrees r = [IntMap.findWithDefault 0 x r | x <- vars]
 
-cslFixpointM :: forall a m. (Monad m, CSL a) => (a -> m (Delta a, a)) -> m a
-cslFixpointM f = go cslBottom
-  where
-    go a = do
-      (d, a') <- f a
-      if cslDeltaIsZero (Proxy @a) d then pure a' else go a'
+exponentAt :: EId -> Lens' Monomial Int
+exponentAt e = atId e . non 0
 
--- Convention: we left-associate
--- f(a, b, c) = ((CurrySymbol f `CurryApp` a) `CurryApp` b) `CurryApp` c
-data Currified f a
-  = CurryApp a a
-  | CurrySymbol (Symbol f)
-  deriving (Functor, Foldable, Traversable)
+reduceMon :: Monomial -> (Monomial, Monomial) -> (Bool, Monomial)
+reduceMon x (l, r) =
+  -- Step 1. Find the maximum k such that x is divisible by l^k
+  -- x^i in r1, x^0 in l2 → no constraints on k
+  -- x^i in r1, x^j in l2 → k can be at most div i j
+  -- x^0 in r1, x^j in l2 → k can be at most 0 (special case of the above)
+  -- (technically, the first case is also a special case if we consider the partially ordered set N union infinity)
+  -- Q: could be optimized by mergeA (make the third case go to Nothing, to shortcut
+  -- when one monomial is not divisible by the other)
+  let maxKMap = IntMapMerge.merge IntMapMerge.dropMissing (IntMapMerge.mapMissing \_ _ -> 0) (IntMapMerge.zipWithMatched \_ a b -> div a b) x l
+      -- the maximum k is bounded by each of the divisors above... just to say yes,
+      -- this is supposed to be the minimum
+      maxK = minimumOf folded maxKMap -- if null maxKMap then Nothing else Just $ minimum maxKMap
+   in case maxK of
+        -- Example of this case: x = x_1 x_2, l = 1
+        -- Clearly, x is always divisible by l^k no matter the k
+        -- In fact, this case only happens when l is 1.
+        -- The rewrite rule 1 → r for some r is a bit ill-behaved,
+        -- theoretically we 'should' rewrite x to x r^infinity
+        -- But we will just pretend nothing happened and hope this case never occurs
+        Nothing -> (False, x)
+        Just k ->
+          if k == 0
+            then (False, x)
+            else
+              let x_div_l_k = IntMapMerge.merge IntMapMerge.preserveMissing IntMapMerge.dropMissing (IntMapMerge.zipWithMatched \_ a b -> a - k * b) x l
+               in (True, filter (> 0) $ IntMap.unionWith (+) x_div_l_k (fmap (* k) r))
 
-currify :: (Signature f) => f a -> Free (Currified f) a
-currify f = foldl' (\a b -> Free (CurryApp a (Pure b))) (Free $ CurrySymbol $ symbolOf f) (toList f)
+reduceMons :: Monomial -> Map Monomial Monomial -> (Bool, Monomial)
+reduceMons x ms =
+  foldl'
+    (\(b, x') m -> first (b ||) (reduceMon x' m))
+    (False, x)
+    (itoList ms)
 
-deriving instance (Eq a, Signature f) => Eq (Currified f a)
+createMon :: [EId] -> Monomial
+createMon = coerce . getMonoidalIntMap . foldMap (\e -> fromList [(e ^. unId, Sum @Int 1)])
 
-deriving instance (Ord a, Signature f) => Ord (Currified f a)
-
-instance (Signature f) => Signature (Currified f) where
-  type Symbol (Currified f) = Maybe (Symbol f)
-  symbolOf :: (Signature f) => Currified f a -> Symbol (Currified f)
-  symbolOf (CurryApp _ _) = Nothing
-  symbolOf (CurrySymbol s) = Just s
-
-  arity :: (Signature f) => Currified f a -> Int
-  arity (CurryApp _ _) = 2
-  arity (CurrySymbol s) = arity' (Proxy @f) s
-
-  arity' _ Nothing = 2
-  arity' _ (Just s) = arity' (Proxy @f) s
-
-  reconstruct (Just s) [] = CurrySymbol s
-  reconstruct Nothing [a, b] = CurryApp a b
-  reconstruct _ _ = error "arity issue"
-
--- given an analysis of shape f a -> a,
--- we want to build one of shape Currified f (CurryAnalysis a) -> CurryAnalysis a
--- we can't just use a as the carrier, as having seen e.g. ((f a) b), we haven't yet
--- seen a c to 'fire' the corresponding analysis on f(a, b, c)
-
--- unfortunately, it seems rather hard to encode into the type system the
--- invariant that the analysis is always 'arity-correct'. So the instances are not
--- entirely lawful. Really, we ought to have a type of sorts and have enodes be
--- sort-indexed, and then we can define type Sort (Currified f a) etc...
-data CurryAnalysis s a
-  = CurryDone a
-  | CurryPartial s Int [a]
-  deriving (Functor, Foldable, Traversable)
-
-instance (Semigroup a) => Semigroup (CurryAnalysis f a) where
-  CurryDone a <> CurryDone b = CurryDone (a <> b)
-  CurryPartial s i as <> CurryPartial _ _ bs = CurryPartial s i (zipWith (<>) as bs)
-  _ <> _ = error "arity mismatch"
-
-instance (Monoid a) => Monoid (CurryAnalysis f a) where
-  mempty = CurryDone mempty
-
-instance (CSL a) => CSL (CurryAnalysis s a) where
-  type Delta (CurryAnalysis s a) = CurryAnalysis () (Delta a)
-  cslBottom = CurryDone cslBottom
-  cslIsBottom (CurryDone a) = cslIsBottom a
-  cslIsBottom (CurryPartial _ _ as) = all cslIsBottom as
-
-  cslMerge (CurryDone a) (CurryDone b) = let (d, c) = cslMerge a b in (CurryDone d, CurryDone c)
-  cslMerge (CurryPartial s i as) (CurryPartial _ _ bs) =
-    let (ds, cs) = unzip (zipWith cslMerge as bs) in (CurryPartial () i ds, CurryPartial s i cs)
-  cslMerge _ _ = error "arity mismatch"
-
-  cslDeltaIsZero _ (CurryDone d) = cslDeltaIsZero (Proxy @a) d
-  cslDeltaIsZero _ (CurryPartial _ _ as) = all (cslDeltaIsZero (Proxy @a)) as
-
-curryAnalysis :: forall f a. (Signature f, CSL a) => (f a -> a) -> Currified f (CurryAnalysis (Symbol f) a) -> CurryAnalysis (Symbol f) a
-curryAnalysis ann (CurrySymbol s) = curryCheckComplete ann (CurryPartial s 0 [])
-curryAnalysis ann (CurryApp a b) = case a of
-  CurryDone _ -> error "arity issue"
-  CurryPartial s n as -> case b of
-    CurryPartial {} -> a
-    CurryDone b' -> curryCheckComplete ann (CurryPartial s (n - 1) (b' : as))
-
-curryCheckComplete :: (Signature enode) => (enode a -> a) -> CurryAnalysis (Symbol enode) a -> CurryAnalysis (Symbol enode) a
-curryCheckComplete ann (CurryPartial s 0 as) = CurryDone (ann (reconstruct s (reverse as)))
-curryCheckComplete _ c = c
+prettyMon :: Monomial -> Doc ann
+prettyMon m | null m = "1"
+prettyMon m = list . fmap (\(x, i) -> if i == 1 then viaShow x else viaShow x <> "^" <> viaShow i) . itoList $ m
 
 data Egraph f ann
-  = Egraph
-  { _ann :: AnnEqrel EId ann,
-    _eto :: Map (f EId) EId,
-    _eback :: IntMap (Set (Use (f EId))),
-    _enext :: EId
+  = EgraphC
+  { _egUFRoot :: IntMap EId,
+    _egUFBack :: IntMap IntSet,
+    _egAnn :: IntMap ann,
+    _egTo :: Map (f EId) EId,
+    _egBack :: IntMap (Set (Use (f EId))),
+    _egNext :: EId,
+    _egAC :: Map (Symbol f) (Map Monomial Monomial),
+    _egBaseEqs :: [(EId, EId)],
+    _egMonoEqs :: Seq (Symbol f, Monomial, Monomial),
+    _egChangedAnn :: IntSet,
+    _egBottom :: ann,
+    _egMerge :: ann -> ann -> (Bool, ann),
+    _egAlg :: f ann -> ann
   }
-
-deriving instance (Show ann, Show (f EId)) => Show (Egraph f ann)
 
 makeLenses ''Egraph
 
+eempty :: ann -> (ann -> ann -> (Bool, ann)) -> (f ann -> ann) -> Egraph f ann
+eempty =
+  EgraphC
+    IntMap.empty
+    IntMap.empty
+    IntMap.empty
+    Map.empty
+    IntMap.empty
+    (Id 0)
+    Map.empty
+    []
+    []
+    IntSet.empty
+
 efind :: EId -> State (Egraph f ann) EId
-efind e = use (ann . eqrel) <&> flip findEqrel e
+efind e = use (egUFRoot . atId e . non e)
+
+-- Internal
+euses :: EId -> Lens' (Egraph f ann) (Set (Use (f EId)))
+euses e = egBack . atId e . anon Set.empty Set.null
+
+-- Internal
+emono :: (Signature f) => Symbol f -> Lens' (Egraph f ann) (Map Monomial Monomial)
+emono s = egAC . at s . anon Map.empty Map.null
+
+eannotation :: EId -> State (Egraph f ann) ann
+eannotation e = use (egAnn . atId e) >>= maybe (use egBottom) pure
 
 elookup :: (Signature f) => f EId -> State (Egraph f ann) (Maybe EId)
 elookup f = do
   f' <- traverse efind f
-  use (eto . at f')
+  use (egTo . at f')
 
-euses :: EId -> Lens' (Egraph f ann) (Set (Use (f EId)))
-euses e = eback . at (e ^. unId) . anon Set.empty Set.null
+elookupAC :: (Signature f) => f EId -> State (Egraph f ann) (Maybe EId)
+elookupAC f = do
+  let s = symbolOf f
+  f' <- traverse efind (toList f)
+  rws <- use (emono s)
+  let reduced = snd (reduceMons (createMon f') rws)
+  case itoList reduced of
+    [(x, 1)] -> pure (Just $ Id x)
+    _ -> pure Nothing
 
-einsert' :: (Signature f) => f EId -> State (Egraph f ann) EId
-einsert' f = do
+einsert :: (Signature f) => f EId -> State (Egraph f ann) EId
+einsert f = do
   f' <- traverse efind f
-  use (eto . at f') >>= \case
+  use (egTo . at f') >>= \case
     Just i -> pure i
     Nothing -> do
-      i <- enext <<%= (unId +~ 1)
-      eto . at f' ?= i
+      i <- egNext <<%= (unId +~ 1)
+      egTo . at f' ?= i
       euses i . contains (RightUse f') .= True
       for_ f' \j -> euses j . contains (LeftUse f') .= True
+
+      fa <- traverse (efind >=> eannotation) f'
+      m <- use egAlg
+      egAnn . atId i ?= m fa
+
       pure i
 
-einsert :: (Signature f, CSL ann) => (f ann -> ann) -> f EId -> State (Egraph f ann) EId
-einsert anno f = do
-  i <- einsert' f
-  fa <- traverse (efind >=> \e -> use (ann . annotationOf e)) f
-  let newA = anno fa
-  eannotate anno i newA
-  pure i
+einsertFix :: (Signature f) => Fix f -> State (Egraph f ann) EId
+einsertFix = cata (sequence >=> einsert)
 
--- internal: does only union and merging annotations,
--- no application of f ann -> ann algebra
--- keeps state fields to track deltas
--- needs the deltas to also be looped...
-eunion' :: (Signature f, CSL ann) => EId -> EId -> State (Egraph f ann, [(EId, EId)], MonoidalMap EId (Delta ann)) EId
-eunion' a b = do
-  a' <- zoom _1 (efind a)
-  b' <- zoom _1 (efind b)
+einsertFree :: (Signature f) => Free f EId -> State (Egraph f ann) EId
+einsertFree = iter (sequence >=> einsert) . fmap pure
+
+einsertAC :: (Signature f) => f EId -> State (Egraph f ann) EId
+einsertAC f = do
+  let s = symbolOf f
+  f' <- traverse efind f
+  rws <- use (emono s)
+  let reduced = snd (reduceMons (createMon (toList f')) rws)
+  case itoList reduced of
+    [(x, 1)] -> pure (Id x)
+    _ -> do
+      i <- egNext <<%= (unId +~ 1)
+      emono s . at reduced ?= fromList [(i ^. unId, 1)]
+
+      fa <- traverse (efind >=> eannotation) f'
+      m <- use egAlg
+      egAnn . atId i ?= m fa
+
+      erebuildAC
+      pure i
+
+einsertACFix :: (Signature f) => Fix f -> State (Egraph f ann) EId
+einsertACFix = cata (sequence >=> einsertAC)
+
+einsertACFree :: (Signature f) => Free f EId -> State (Egraph f ann) EId
+einsertACFree = iter (sequence >=> einsertAC) . fmap pure
+
+-- Internal
+epropagateBase :: (Signature f) => State (Egraph f ann) ()
+epropagateBase =
+  use egBaseEqs >>= \case
+    [] -> pass
+    ((a, b) : rs) -> do
+      egBaseEqs .= rs
+      void (eunionInternal a b)
+      epropagateBase
+
+-- Internal
+epropagateAnns :: (Signature f) => State (Egraph f ann) ()
+epropagateAnns =
+  use egChangedAnn >>= \m -> case IntSet.minView m of
+    Nothing -> pass
+    Just (i, m') -> do
+      egChangedAnn .= m'
+      i' <- efind (Id i)
+      use (euses i') >>= traverse_ \case
+        LeftUse en -> do
+          en' <- traverse efind en
+          r <- use (egTo . at en')
+          whenJust r \r' -> do
+            fa <- traverse (efind >=> eannotation) en'
+            alg <- use egAlg
+            eupdateAnnotation r' (alg fa)
+        RightUse _ -> pass
+
+-- Internal
+eupdateAnnotation :: EId -> ann -> State (Egraph f ann) ()
+eupdateAnnotation e a = do
+  oldAnn <- eannotation e
+  m <- use egMerge
+  let (didChangeAnn, newAnn) = m oldAnn a
+  egAnn . atId e ?= newAnn
+  -- for later propagation
+  when didChangeAnn (egChangedAnn . atId e ?= ())
+
+ereannotate :: (Signature f) => EId -> ann -> State (Egraph f ann) ()
+ereannotate e a = eupdateAnnotation e a <* epropagateAnns
+
+-- Internal
+erebuildMon :: Monomial -> State (Egraph f ann) Monomial
+erebuildMon m = do
+  m' <- traverse (\(i, k) -> (,k) <$> efind (Id i)) (itoList m)
+  pure (coerce . getMonoidalIntMap . foldMap (\(i, k) -> fromList [(i ^. unId, Sum k)]) $ m')
+
+-- Internal
+erebuildAC :: (Signature f) => State (Egraph f ann) ()
+erebuildAC = do
+  use egAC >>= itraverse_ \s m -> do
+    m' <-
+      traverse
+        (\(l, r) -> (,) <$> erebuildMon l <*> erebuildMon r)
+        (itoList m)
+    egAC . at s ?= Map.empty
+    egMonoEqs <>= fromList (fmap (\(l, r) -> (s, l, r)) m')
+
+epropagateAC :: (Signature f) => State (Egraph f ann) ()
+epropagateAC =
+  use egMonoEqs >>= \eqs -> case uncons eqs of
+    Nothing -> pass
+    Just ((s, l, r), es) -> do
+      egMonoEqs .= es
+      cps <- zoom (egAC . at s . anon Map.empty Map.null) (einsertACRW l r)
+      -- handle case when l and r are trivial (one entry) by deferring back
+      -- to the Egraph
+      for_ cps \(l', r') -> case (itoList l', itoList r') of
+        ([(x, 1)], [(y, 1)]) -> do
+          eunionInternal (Id x) (Id y)
+          epropagateBase
+          epropagateAnns
+        _ -> do
+          egMonoEqs <|= (s, l', r')
+      epropagateAC
+
+einsertACRW :: Monomial -> Monomial -> State (Map Monomial Monomial) [(Monomial, Monomial)]
+einsertACRW l r = do
+  reducedL <- get <&> ifoldl' (\l2 acc r2 -> snd $ reduceMon acc (l2, r2)) l
+  reducedR <- get <&> ifoldl' (\l2 acc r2 -> snd $ reduceMon acc (l2, r2)) r
+  if reducedL /= reducedR
+    then case grevlex reducedL reducedR of
+      EQ -> pure []
+      GT -> extendingState' [] (handleCritical (reducedL, reducedR))
+      LT -> extendingState' [] (handleCritical (reducedR, reducedL))
+    else pure []
+
+criticalPair :: Monomial -> Monomial -> Maybe Monomial
+criticalPair a b =
+  let (anyNonTrivial, criticalTerm) =
+        IntMapMerge.mergeA
+          (IntMapMerge.traverseMissing (\_ ia -> (Any False, ia)))
+          (IntMapMerge.traverseMissing (\_ ib -> (Any False, ib)))
+          (IntMapMerge.zipWithAMatched (\_ ia ib -> (Any True, max ia ib)))
+          a
+          b
+   in if getAny anyNonTrivial then Just criticalTerm else Nothing
+
+handleCritical :: (Monomial, Monomial) -> State (Map Monomial Monomial, [(Monomial, Monomial)]) ()
+handleCritical (l1, r1) = do
+  use _1 >>= itraverse_ \l2 r2 -> do
+    let (didReduce, r2') = reduceMon r2 (l1, r1)
+    when didReduce do
+      _1 . at l2 ?= r2'
+    let crit = criticalPair l1 l2
+    whenJust crit \crit' -> do
+      let (_, crit1) = reduceMon crit' (l1, r1)
+      let (_, crit2) = reduceMon crit' (l2, r2)
+      _2 <|= (crit1, crit2)
+  _1 . at l1 ?= r1
+
+-- Internal
+eunionInternal :: (Signature f) => EId -> EId -> State (Egraph f ann) EId
+eunionInternal a b = do
+  a' <- efind a
+  b' <- efind b
   if a' == b'
     then pure a'
     else do
-      usesA <- use (_1 . euses a')
-      usesB <- use (_1 . euses b')
-      let (newRoot, newChild, usesRoot, usesChild) =
+      usesA <- use (euses a')
+      usesB <- use (euses b')
+      let (newRoot, newChild, _usesRoot, usesChild) =
             if length usesA < length usesB
               then (b', a', usesB, usesA)
               else (a', b', usesA, usesB)
-      _1 . ann . eqrel %= unionEqrel' newChild newRoot
-      -- d': annotations delta
-      d' <- _1 . ann . annotations %%= equate (newChild, newRoot)
-      -- we may as well recanonicalize the uses
 
-      -- The invariant is that LeftUses in the uses list
-      -- can be noncanonical, but the forward index (eto) is always canonical.
-      -- Therefore, when merging a and b, we need to look for things
-      -- f(c1, ..., a, ...) and f(c1, ..., b, ...) where c1... are canonical
-      -- RightUses in the uses list are canonical!
+      -- recanonicalizing the UF
+      sc <- egUFBack . atId newChild . anon IntSet.empty IntSet.null <<.= IntSet.empty
+      forOf_ IntSet.members sc \y -> egUFRoot . at y ?= newRoot
+      egUFBack . atId newRoot . anon IntSet.empty IntSet.null <>= one (newChild ^. unId) <> sc
+
+      -- Updating annotations
+      oldCAnn <- eannotation newChild
+      egAnn . atId newChild .= Nothing
+      eupdateAnnotation newRoot oldCAnn
+
       usesChild' <-
         fromList <$> for (toList usesChild) \case
           LeftUse en -> do
-            -- canonicalize everything but newChild
-            enOld <- traverse (\e -> if e == newChild then pure e else zoom _1 (efind e)) en
+            enOld <- traverse (\e -> if e == newChild then pure e else efind e) en
             let enNew = fmap (\e -> if e == newChild then newRoot else e) enOld
-            rA <- use (_1 . eto . at enOld)
-            rB <- use (_1 . eto . at en)
+            rA <- use (egTo . at enOld)
+            rB <- use (egTo . at en)
             whenJust rA \s -> do
-              _1 . eto . at enOld .= Nothing
-              _1 . euses s . contains (RightUse enOld) .= False
-              _1 . eto . at enNew ?= s
-              _1 . euses s . contains (RightUse enNew) .= True
+              egTo . at enOld .= Nothing
+              euses s . contains (RightUse enOld) .= False
+              egTo . at enNew ?= s
+              euses s . contains (RightUse enNew) .= True
               -- could call recursively...
-              whenJust rB $ \t -> when (s /= t) $ _2 <|= (s, t)
+              whenJust rB $ \t -> when (s /= t) $ egBaseEqs <|= (s, t)
             pure (LeftUse enNew)
           RightUse en -> do
-            en' <- traverse (zoom _1 . efind) en
+            en' <- traverse efind en
             -- this handles the case where we update a cycle: f(...a...) -> a
-            _1 . eto . at en .= Nothing
-            _1 . eto . at en' ?= newRoot
+            egTo . at en .= Nothing
+            egTo . at en' ?= newRoot
             pure (RightUse en')
-      _1 . euses newChild .= Set.empty
-      _1 . euses newRoot .= usesChild' <> usesRoot
-      _2 <|= (newChild, newRoot)
-      _3 <>= d'
+
+      euses newChild .= Set.empty
+      euses newRoot <>= usesChild'
+
       pure newRoot
 
-eunion :: (Signature f, CSL ann) => (f ann -> ann) -> EId -> EId -> State (Egraph f ann) EId
-eunion anno a b = do
-  eg <- get
-  let (out, (eg', us, ds)) = runState (eunion' a b) (eg, [], mempty)
-  put eg'
-  epropagate anno us ds
-  pure out
+eunion :: (Signature f) => EId -> EId -> State (Egraph f ann) EId
+eunion a b = do
+  c <- eunionInternal a b
+  epropagateBase
+  erebuildAC
+  epropagateAnns
+  pure c
 
-eannotate :: (Signature f, CSL ann) => (f ann -> ann) -> EId -> ann -> State (Egraph f ann) ()
-eannotate anno v a = do
-  v' <- efind v
-  d <- ann . annotationOf v %%= cslMerge a
-  epropagate anno [] (fromList [(v', d)])
-
-epropagate :: (CSL ann, Signature f) => (f ann -> ann) -> [(EId, EId)] -> MonoidalMap EId (Delta ann) -> StateT (Egraph f ann) Identity ()
-epropagate anno us ds = do
-  eg <- get
-  put (evalState go (eg, us, ds))
-  where
-    go = do
-      us <- use _2
-      case us of
-        ((c, d) : us') -> do
-          _2 .= us'
-          _ <- eunion' c d
-          go
-        [] -> do
-          m <- use (_3 . _Wrapped')
-          case Map.minViewWithKey m of
-            Nothing -> use _1
-            (Just ((i, _), m')) -> do
-              _3 . _Wrapped' .= m'
-              -- EId i has been updated with delta da, which we won't actually
-              -- use... unless we had an incremental thing
-              -- df :: f (Delta a) × a -> a
-              i' <- zoom _1 (efind i)
-              use (_1 . euses i') >>= traverse_ \case
-                LeftUse en -> do
-                  en' <- traverse (zoom _1 . efind) en
-                  fa <- traverse (\e -> use (_1 . ann . annotationOf e)) en'
-                  let newA = anno fa
-                  r <- use (_1 . eto . at en')
-                  whenJust r \r' -> do
-                    d <- _1 . ann . annotationOf r' %%= cslMerge newA
-                    _3 <>= fromList [(r', d)]
-                RightUse _ -> pass
-              go
-
-eqreldebug :: (a -> Doc ann) -> AnnEqrel EId a -> Doc ann
-eqreldebug showAnn ae =
-  vsep
-    [ vsep $ fmap (\(a, c) -> prettyId a <+> "→" <+> prettyId c) $ itoList $ ae ^. eqrel . erRoot,
-      vsep $ fmap (\(c, as) -> prettyId c <+> "←" <+> list (prettyId <$> toList as)) $ itoList $ ae ^. eqrel . erBack,
-      vsep $ fmap (\(c, ann) -> prettyId c <+> "has annotation" <+> showAnn ann) $ itoList $ ae ^. annotations
-    ]
-
-edebug :: (a -> Doc ann) -> (f EId -> Doc ann) -> Egraph f a -> Doc ann
-edebug showAnn showNode eg =
+edebug :: (Symbol f -> Doc a) -> (ann -> Doc a) -> (f EId -> Doc a) -> Egraph f ann -> Doc a
+edebug showSym showAnn showNode eg =
   "Egraph with"
-    <+> prettyId (eg ^. enext)
+    <+> prettyId (eg ^. egNext)
     <+> "ids"
       <> line
       <> indent
         2
         ( vsep
-            [ "ann"
+            [ "egUFRoot"
                 <+> indent
                   2
-                  (eqreldebug showAnn (eg ^. ann)),
-              "egForward"
+                  (vsep (fmap (\(i, j) -> viaShow i <+> "→" <+> prettyId j) (itoList (eg ^. egUFRoot)))),
+              "egUFBack"
                 <+> indent
                   2
-                  (vsep ((\(lhs, rhs) -> showNode lhs <+> "→" <+> prettyId rhs) <$> itoList (eg ^. eto))),
+                  (vsep (fmap (\(j, is) -> viaShow j <+> "←" <+> list (fmap viaShow (toListOf IntSet.members is))) (itoList (eg ^. egUFBack)))),
               "egAnn"
                 <+> indent
                   2
+                  (vsep (fmap (\(i, a) -> viaShow i <+> "has annotation" <+> showAnn a) (itoList (eg ^. egAnn)))),
+              "egTo"
+                <+> indent
+                  2
+                  (vsep ((\(lhs, rhs) -> showNode lhs <+> "→" <+> prettyId rhs) <$> itoList (eg ^. egTo))),
+              "egBack"
+                <+> indent
+                  2
                   ( vsep
-                      ( ( \(i, u) ->
-                            viaShow i
-                              <+> "is used in"
-                                <> line
-                                <> indent
-                                  2
-                                  ( vsep
-                                      ( ( \case
-                                            LeftUse en -> "on the left in a rule (with noncanonical form)" <+> showNode en <+> "→ ?"
-                                            RightUse en -> "on the right in the rule" <+> showNode en <+> "→" <+> viaShow i
+                      ( fmap
+                          ( \(i, us) ->
+                              viaShow i
+                                <+> "is used in:"
+                                  <> indent
+                                    2
+                                    ( vsep
+                                        ( fmap
+                                            ( \case
+                                                LeftUse en -> "some rule" <+> showNode en <+> "→" <+> "?"
+                                                RightUse en -> "the rule" <+> showNode en <+> "→" <+> viaShow i
+                                            )
+                                            (toList us)
                                         )
-                                          <$> toList u
-                                      )
-                                  )
-                        )
-                          <$> itoList
-                            (eg ^. eback)
+                                    )
+                          )
+                          (itoList (eg ^. egBack))
                       )
-                  )
+                  ),
+              "egAC"
+                <+> indent
+                  2
+                  ( vsep
+                      ( fmap
+                          ( \(s, acs) ->
+                              "the symbol"
+                                <+> showSym s
+                                <+> "has AC-system"
+                                  <> vsep
+                                    ( fmap
+                                        (\(l, r) -> prettyMon l <+> "→" <+> prettyMon r)
+                                        (itoList acs)
+                                    )
+                          )
+                          (itoList (eg ^. egAC))
+                      )
+                  ),
+              "egBaseEqs"
+                <+> indent 2 (vsep (fmap (\(a, b) -> prettyId a <+> "≟" <+> prettyId b) (eg ^. egBaseEqs))),
+              "egMonoEqs"
+                <+> indent 2 (vsep (fmap (\(s, a, b) -> showSym s <> ":" <+> prettyMon a <+> "≟" <+> prettyMon b) (toList (eg ^. egMonoEqs)))),
+              "egChangedAnn"
+                <+> indent 2 (list (fmap viaShow (toListOf IntSet.members (eg ^. egChangedAnn))))
             ]
         )
 
 prettyId :: EId -> Doc ann
 prettyId i = viaShow (i ^. unId)
-
---
-
-einsertFix :: (Signature f, CSL ann) => (f ann -> ann) -> Fix f -> State (Egraph f ann) EId
-einsertFix anno = cata (sequence >=> einsert anno)
-
-einsertFree :: (Signature f, CSL ann) => (f ann -> ann) -> Free f EId -> State (Egraph f ann) EId
-einsertFree anno = iter (sequence >=> einsert anno) . fmap pure
-
-eempty :: (CSL ann) => Egraph enode ann
-eempty = Egraph cslBottom Map.empty IntMap.empty (Id 0)
-
-data Ex1 a
-  = F a a
-  | G a
-  | H Int
-  deriving (Eq, Ord, Show, Functor, Foldable, Traversable)
-
-instance Signature Ex1 where
-  type Symbol Ex1 = Ex1 ()
-
-instance CSL Int where
-  type Delta Int = Sum Int
-  cslBottom = 0
-  cslMerge a b = let z = max a b in (Sum (z - min a b), z)
-  cslIsBottom = (0 ==)
-  cslDeltaIsZero _ = (0 ==)
-
-example1 :: Egraph Ex1 Int
-example1 = executingState (Egraph cslBottom Map.empty IntMap.empty (Id 0)) do
-  h1 <- einsert example1Alg (H 3)
-  h2 <- einsert example1Alg (H 4)
-  _ <- eunion example1Alg h1 h2
-  f1 <- einsert example1Alg (F h1 h2)
-  f2 <- einsert example1Alg (F h1 h1)
-  eannotate example1Alg f2 5
-  pass
-
-example1Alg :: Ex1 Int -> Int
-example1Alg (H i) = i
-example1Alg (F i j) = i + j
-example1Alg (G z) = -z
-
-prettyEx :: Ex1 EId -> Doc ann
-prettyEx (F a b) = "(F" <+> prettyId a <+> prettyId b <> ")"
-prettyEx (G a) = "(G" <+> prettyId a <> ""
-prettyEx (H i) = "(H" <+> viaShow i <> ")"
-
--- example1 :: Egraph Ex1 (Proxy Ex1)
--- example1 = executingState eempty do
---   a <- einsert (H 3)
---   b <- einsert (H 4)
---   c <- einsertFix $ Fix (F (Fix $ H 3) (Fix $ G (Fix $ H 4)))
---   d <- einsertFix $ Fix (F (Fix $ H 4) (Fix $ H 5))
---   eunion a b
---   e <- einsert (H 5)
---   f <- einsertFree (Free $ G (Pure e))
---   eunion e f
---   pass
-
--- example4 :: Map (Ex1 Int) [Int]
--- example4 =
---   fromList
---     [ (H 1, [2, 3]),
---       (F 1 2, [4]),
---       (F 1 3, [5]),
---       (G 4, [6]),
---       (G 5, [5])
---     ]
