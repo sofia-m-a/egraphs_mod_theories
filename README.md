@@ -1,1 +1,1 @@
-# Sofyr
+# E-graphs modulo theories

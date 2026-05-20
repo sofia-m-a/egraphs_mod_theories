@@ -118,30 +118,30 @@ indexMergeP (c, r) = do
         tiDiscoveredEqs <|= (i1, i2)
       for_ dps indexMergeP
 
-indexMergeE :: (EId, EId) -> State (TermIndex f) ()
-indexMergeE (c, r) = do
-  usesC <- use (indexUses c)
-  newUses <- for (toList usesC) \p -> do
-    p' <- findPartial p
-    pr <- use (tiSortedPred . at p')
-    case pr of
-      Nothing -> do
-        updateUse (c, r) p
-        pure p'
-      Just e -> do
-        -- o --e→ o --c→ o --...→
-        --          --r→ o
-        -- e ≤ c,
-        -- c ≤ ...,
-        -- e ≤ r
-        nc <- use (indexStep p' . termFurther)
-        let (mergeIntoR, mergeBeforeR) = Map.spanAntitone (<= r) nc
-        _
-  indexUses r <>= fromList newUses
+-- indexMergeE :: (EId, EId) -> State (TermIndex f) ()
+-- indexMergeE (c, r) = do
+--   usesC <- use (indexUses c)
+--   newUses <- for (toList usesC) \p -> do
+--     p' <- findPartial p
+--     pr <- use (tiSortedPred . at p')
+--     case pr of
+--       Nothing -> do
+--         updateUse (c, r) p
+--         pure p'
+--       Just e -> do
+--         -- o --e→ o --c→ o --...→
+--         --          --r→ o
+--         -- e ≤ c,
+--         -- c ≤ ...,
+--         -- e ≤ r
+--         nc <- use (indexStep p' . termFurther)
+--         let (mergeIntoR, mergeBeforeR) = Map.spanAntitone (<= r) nc
+--         _
+--   indexUses r <>= fromList newUses
 
-indexSortSymbol :: (Signature f) => Symbol f -> State (TermIndex f) ()
-indexSortSymbol sym = do
-  s <- use (tiBegin . at sym)
-  whenJust s go
-  where
-    go p = _
+-- indexSortSymbol :: (Signature f) => Symbol f -> State (TermIndex f) ()
+-- indexSortSymbol sym = do
+--   s <- use (tiBegin . at sym)
+--   whenJust s go
+--   where
+--     go p = _

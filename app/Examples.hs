@@ -1,6 +1,7 @@
 module Examples where
 
-import Egraph (EId (..), Egraph, Signature (..), eempty, einsert, ereannotate, eunion, prettyId)
+import Control.Monad.Free (Free (..))
+import Egraph (EId (..), Egraph, Signature (..), eempty, einsert, einsertFree, ereannotate, eunion, prettyId)
 import Prettyprinter
 
 data Ex1 a
@@ -11,6 +12,7 @@ data Ex1 a
 
 instance Signature Ex1 where
   type Symbol Ex1 = Ex1 ()
+  type ACSymbol Ex1 = Void
 
 example1 :: Egraph Ex1 Int
 example1 = executingState
@@ -33,6 +35,43 @@ prettyEx :: Ex1 EId -> Doc ann
 prettyEx (F a b) = "(F" <+> prettyId a <+> prettyId b <> ")"
 prettyEx (G a) = "(G" <+> prettyId a <> ""
 prettyEx (H i) = "(H" <+> viaShow i <> ")"
+
+data Ex2 a = Ex2 [a] | Ex2C Int
+  deriving (Eq, Ord, Show, Functor, Foldable, Traversable)
+
+instance Signature Ex2 where
+  type Symbol Ex2 = Either Int Int
+  type ACSymbol Ex2 = ()
+
+  symbolOf (Ex2 as) = Right (length as)
+  symbolOf (Ex2C i) = Left i
+
+  acSymbolOf (Ex2 _) = Just ()
+  acSymbolOf (Ex2C _) = Nothing
+
+  arity (Ex2 as) = length as
+  arity (Ex2C _) = 0
+
+  arity' _ = fromRight 0
+
+  reconstruct (Right _) = Ex2
+  reconstruct (Left i) = const (Ex2C i)
+
+var2 :: Int -> Free Ex2 EId
+var2 = Free . Ex2C
+
+list2 :: [Free Ex2 EId] -> Free Ex2 EId
+list2 = Free . Ex2
+
+example10 :: Egraph Ex2 ()
+example10 =
+  executingState
+    (eempty () (\_ _ -> (False, ())) (const ()))
+    do
+      a1 <- einsertFree (list2 [var2 0, var2 1, var2 2])
+      a2 <- einsertFree (list2 [var2 1, var2 1])
+      a3 <- einsertFree (list2 [var2 0, var2 0, var2 1, var2 1])
+      eunion a1 a2
 
 -- Old AC example. TODO
 -- example1AC :: EMTAC Ex1 Int

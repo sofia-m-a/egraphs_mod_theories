@@ -8,13 +8,9 @@ module Egraph
     efind,
     eunion,
     elookup,
-    elookupAC,
     einsert,
-    einsertAC,
     einsertFix,
-    einsertACFix,
     einsertFree,
-    einsertACFree,
     edebug,
     eannotation,
     ereannotate,
@@ -53,12 +49,18 @@ instance Bounded EId where
 
 makeLenses ''EId
 
-class (Ord (Symbol enode), Ord (enode EId), Traversable enode) => Signature enode where
+class (Ord (ACSymbol enode), Ord (Symbol enode), Ord (enode EId), Traversable enode) => Signature enode where
   type Symbol enode
 
   symbolOf :: enode a -> Symbol enode
   default symbolOf :: (Symbol enode ~ enode ()) => enode a -> Symbol enode
   symbolOf = void
+
+  type ACSymbol enode
+
+  acSymbolOf :: enode a -> Maybe (ACSymbol enode)
+  default acSymbolOf :: (ACSymbol enode ~ Void) => enode a -> Maybe (ACSymbol enode)
+  acSymbolOf _ = Nothing
 
   arity :: enode a -> Int
   default arity :: (Symbol enode ~ enode ()) => enode a -> Int
@@ -68,6 +70,10 @@ class (Ord (Symbol enode), Ord (enode EId), Traversable enode) => Signature enod
   arity' :: Proxy enode -> Symbol enode -> Int
   default arity' :: (Symbol enode ~ enode ()) => Proxy enode -> Symbol enode -> Int
   arity' _ = length
+
+  -- arityAC :: Proxy enode -> ACSymbol enode -> Int
+  -- default arityAC :: (ACSymbol enode ~ Void) => Proxy enode -> ACSymbol enode -> Int
+  -- arityAC _ = absurd
 
   -- it has to be partial in certain cases...
   reconstruct :: Symbol enode -> [a] -> enode a
@@ -149,9 +155,9 @@ data Egraph f ann
     _egTo :: Map (f EId) EId,
     _egBack :: IntMap (Set (Use (f EId))),
     _egNext :: EId,
-    _egAC :: Map (Symbol f) (Map Monomial Monomial),
+    _egAC :: Map (ACSymbol f) (Map Monomial Monomial),
     _egBaseEqs :: [(EId, EId)],
-    _egMonoEqs :: Seq (Symbol f, Monomial, Monomial),
+    _egMonoEqs :: Seq (ACSymbol f, Monomial, Monomial),
     _egChangedAnn :: IntSet,
     _egBottom :: ann,
     _egMerge :: ann -> ann -> (Bool, ann),
@@ -182,7 +188,7 @@ euses :: EId -> Lens' (Egraph f ann) (Set (Use (f EId)))
 euses e = egBack . atId e . anon Set.empty Set.null
 
 -- Internal
-emono :: (Signature f) => Symbol f -> Lens' (Egraph f ann) (Map Monomial Monomial)
+emono :: (Signature f) => ACSymbol f -> Lens' (Egraph f ann) (Map Monomial Monomial)
 emono s = egAC . at s . anon Map.empty Map.null
 
 eannotation :: EId -> State (Egraph f ann) ann
@@ -191,20 +197,17 @@ eannotation e = use (egAnn . atId e) >>= maybe (use egBottom) pure
 elookup :: (Signature f) => f EId -> State (Egraph f ann) (Maybe EId)
 elookup f = do
   f' <- traverse efind f
-  use (egTo . at f')
+  case acSymbolOf f' of
+    Just s -> do
+      rws <- use (emono s)
+      let reduced = snd (reduceMons (createMon (toList f')) rws)
+      case itoList reduced of
+        [(x, 1)] -> pure (Just $ Id x)
+        _ -> pure Nothing
+    Nothing -> use (egTo . at f')
 
-elookupAC :: (Signature f) => f EId -> State (Egraph f ann) (Maybe EId)
-elookupAC f = do
-  let s = symbolOf f
-  f' <- traverse efind (toList f)
-  rws <- use (emono s)
-  let reduced = snd (reduceMons (createMon f') rws)
-  case itoList reduced of
-    [(x, 1)] -> pure (Just $ Id x)
-    _ -> pure Nothing
-
-einsert :: (Signature f) => f EId -> State (Egraph f ann) EId
-einsert f = do
+einsertInternal :: (Signature f) => f EId -> State (Egraph f ann) EId
+einsertInternal f = do
   f' <- traverse efind f
   use (egTo . at f') >>= \case
     Just i -> pure i
@@ -220,15 +223,8 @@ einsert f = do
 
       pure i
 
-einsertFix :: (Signature f) => Fix f -> State (Egraph f ann) EId
-einsertFix = cata (sequence >=> einsert)
-
-einsertFree :: (Signature f) => Free f EId -> State (Egraph f ann) EId
-einsertFree = iter (sequence >=> einsert) . fmap pure
-
-einsertAC :: (Signature f) => f EId -> State (Egraph f ann) EId
-einsertAC f = do
-  let s = symbolOf f
+einsertACInternal :: (Signature f) => ACSymbol f -> f EId -> State (Egraph f ann) EId
+einsertACInternal s f = do
   f' <- traverse efind f
   rws <- use (emono s)
   let reduced = snd (reduceMons (createMon (toList f')) rws)
@@ -245,11 +241,16 @@ einsertAC f = do
       erebuildAC
       pure i
 
-einsertACFix :: (Signature f) => Fix f -> State (Egraph f ann) EId
-einsertACFix = cata (sequence >=> einsertAC)
+einsert :: (Signature f) => f EId -> State (Egraph f ann) EId
+einsert f = case acSymbolOf f of
+  Just s -> einsertACInternal s f
+  Nothing -> einsertInternal f
 
-einsertACFree :: (Signature f) => Free f EId -> State (Egraph f ann) EId
-einsertACFree = iter (sequence >=> einsertAC) . fmap pure
+einsertFix :: (Signature f) => Fix f -> State (Egraph f ann) EId
+einsertFix = cata (sequence >=> einsert)
+
+einsertFree :: (Signature f) => Free f EId -> State (Egraph f ann) EId
+einsertFree = iter (sequence >=> einsert) . fmap pure
 
 -- Internal
 epropagateBase :: (Signature f) => State (Egraph f ann) ()
@@ -301,6 +302,7 @@ erebuildMon m = do
 -- Internal
 erebuildAC :: (Signature f) => State (Egraph f ann) ()
 erebuildAC = do
+  -- empty the existing system... very non-incremental!
   use egAC >>= itraverse_ \s m -> do
     m' <-
       traverse
@@ -308,6 +310,7 @@ erebuildAC = do
         (itoList m)
     egAC . at s ?= Map.empty
     egMonoEqs <>= fromList (fmap (\(l, r) -> (s, l, r)) m')
+  epropagateAC
 
 epropagateAC :: (Signature f) => State (Egraph f ann) ()
 epropagateAC =
@@ -355,6 +358,12 @@ handleCritical (l1, r1) = do
     let (didReduce, r2') = reduceMon r2 (l1, r1)
     when didReduce do
       _1 . at l2 ?= r2'
+    
+    let (didReduce2, l2') = reduceMon l2 (l1, r1)
+    when didReduce2 do
+      _1 . at l2 .= Nothing
+      -- The following code will add (l2, r2) to the worklist
+      -- since if l2 is reducible by l1, then l2 is a critical term already
     let crit = criticalPair l1 l2
     whenJust crit \crit' -> do
       let (_, crit1) = reduceMon crit' (l1, r1)
@@ -379,6 +388,7 @@ eunionInternal a b = do
 
       -- recanonicalizing the UF
       sc <- egUFBack . atId newChild . anon IntSet.empty IntSet.null <<.= IntSet.empty
+      egUFRoot . atId newChild ?= newRoot
       forOf_ IntSet.members sc \y -> egUFRoot . at y ?= newRoot
       egUFBack . atId newRoot . anon IntSet.empty IntSet.null <>= one (newChild ^. unId) <> sc
 
@@ -422,8 +432,8 @@ eunion a b = do
   epropagateAnns
   pure c
 
-edebug :: (Symbol f -> Doc a) -> (ann -> Doc a) -> (f EId -> Doc a) -> Egraph f ann -> Doc a
-edebug showSym showAnn showNode eg =
+edebug :: (ACSymbol f -> Doc a) -> (Symbol f -> Doc a) -> (ann -> Doc a) -> (f EId -> Doc a) -> Egraph f ann -> Doc a
+edebug showACSym showSym showAnn showNode eg =
   "Egraph with"
     <+> prettyId (eg ^. egNext)
     <+> "ids"
@@ -455,6 +465,7 @@ edebug showSym showAnn showNode eg =
                           ( \(i, us) ->
                               viaShow i
                                 <+> "is used in:"
+                                  <> line
                                   <> indent
                                     2
                                     ( vsep
@@ -477,8 +488,9 @@ edebug showSym showAnn showNode eg =
                       ( fmap
                           ( \(s, acs) ->
                               "the symbol"
-                                <+> showSym s
-                                <+> "has AC-system"
+                                <+> showACSym s
+                                <+> "has AC-system:"
+                                  <> line
                                   <> vsep
                                     ( fmap
                                         (\(l, r) -> prettyMon l <+> "→" <+> prettyMon r)
@@ -491,7 +503,7 @@ edebug showSym showAnn showNode eg =
               "egBaseEqs"
                 <+> indent 2 (vsep (fmap (\(a, b) -> prettyId a <+> "≟" <+> prettyId b) (eg ^. egBaseEqs))),
               "egMonoEqs"
-                <+> indent 2 (vsep (fmap (\(s, a, b) -> showSym s <> ":" <+> prettyMon a <+> "≟" <+> prettyMon b) (toList (eg ^. egMonoEqs)))),
+                <+> indent 2 (vsep (fmap (\(s, a, b) -> showACSym s <> ":" <+> prettyMon a <+> "≟" <+> prettyMon b) (toList (eg ^. egMonoEqs)))),
               "egChangedAnn"
                 <+> indent 2 (list (fmap viaShow (toListOf IntSet.members (eg ^. egChangedAnn))))
             ]

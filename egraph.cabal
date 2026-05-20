@@ -1,25 +1,20 @@
 cabal-version:      2.4
-name:               sofyr
-homepage:           https://github.com/sofia-m-a/sofyr
-bug-reports:        https://github.com/sofia-m-a/sofyr/issues
+name:               egraphs-modulo-theories
 version:            0.1.0.0
 license:            MIT
-copyright:          2022 Sofia M.A
+copyright:          2026 Sofia B.
 maintainer:         sofia.ma@protonmail.com
-author:             Sofia M.A
-category:           Language
-synopsis:           A program language
+author:             Sofia B.
+synopsis:           E-graphs modulo theories
 description:
 
-  This project is an attempt to create a modern programming
-  language in Haskell, to determine the strong and weak points
-  of the ecosystem when it comes to language creation.
+  A thesis project
 
 extra-source-files:
   LICENSE
   README.md
 
-executable sofyr
+executable egraphs-modulo-theories
   mixins:
     base hiding (Prelude),
     relude (Relude as Prelude),
@@ -38,7 +33,6 @@ executable sofyr
     , free
     -- , functor-combinators
     , hashable
-    , haskeline
     , lens
     , megaparsec
     , monoidal-containers
@@ -53,16 +47,11 @@ executable sofyr
     , semialign
     , semigroupoids
     -- , smash -- bug: won't build for base ≥ 4.17
-    -- , souffle-haskell
     , tagged
     , text
     , these
-    , time
     , transformers
-    -- , trifecta
     , unordered-containers
-    , validation
-    , vector
     , witherable
 
   ghc-options:
@@ -127,6 +116,6 @@ executable sofyr
     ViewPatterns
 
   main-is:            Main.hs
-  other-modules:      Lude, Egraph, Ematch, EmtAC
+  other-modules:      Lude, Egraph, Ematch, TermIndex, Examples
   hs-source-dirs:     app
   default-language:   Haskell2010

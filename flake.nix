@@ -1,5 +1,5 @@
 {
-  description = "sofyr";
+  description = "egraphs-modulo-theories";
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     flake-utils.url = "github:numtide/flake-utils";
@@ -13,7 +13,7 @@
         project = returnShellEnv:
           pkgs.haskell.packages.ghc912.developPackage {
             inherit returnShellEnv;
-            name = "sofyr";
+            name = "egraphs-modulo-theories";
             root = ./.;
             withHoogle = false;
             overrides = self: super: with pkgs.haskell.lib; {
