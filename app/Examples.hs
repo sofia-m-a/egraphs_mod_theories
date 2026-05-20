@@ -1,11 +1,12 @@
 module Examples where
 
 import Control.Monad.Free (Free (..))
+import Data.GraphViz (GraphvizCanvas (Xlib), runGraphvizCanvas')
 import Data.GraphViz.Types.Generalised (DotGraph)
+import Data.Text qualified as Text
 import Egraph (EId (..), Egraph, Signature (..), eempty, einsert, einsertFree, ereannotate, eunion, prettyId)
 import GraphDrawing
 import Prettyprinter
-import Data.GraphViz (runGraphvizCanvas', GraphvizCanvas (Gtk, Xlib))
 
 data Ex1 a
   = F a a
@@ -71,6 +72,8 @@ instance Signature Ex2 where
   reconstruct (Right _) = Ex2
   reconstruct (Left i) = const (Ex2C i)
 
+  reconstructAC _ = Ex2
+
 var2 :: Int -> Free Ex2 EId
 var2 = Free . Ex2C
 
@@ -86,6 +89,16 @@ example10 =
       a2 <- einsertFree (list2 [var2 1, var2 1])
       a3 <- einsertFree (list2 [var2 0, var2 0, var2 1, var2 1])
       eunion a1 a2
+
+example10Dot :: DotGraph Text
+example10Dot = toDot Nothing example10Show example10
+
+example10Viz :: IO ()
+example10Viz = runGraphvizCanvas' example10Dot Xlib
+
+example10Show :: Ex2 EId -> Text
+example10Show (Ex2 as) = "+(" <> Text.intercalate ", " (fmap (\(Id i) -> show i) as) <> ")"
+example10Show (Ex2C i) = "C_" <> show i
 
 -- Old AC example. TODO
 -- example1AC :: EMTAC Ex1 Int

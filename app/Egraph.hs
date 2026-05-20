@@ -81,6 +81,10 @@ class (Ord (ACSymbol enode), Ord (Symbol enode), Ord (enode EId), Traversable en
   default reconstruct :: (Symbol enode ~ enode ()) => Symbol enode -> [a] -> enode a
   reconstruct s as = s & unsafePartsOf traverse .~ as
 
+  reconstructAC :: ACSymbol enode -> [a] -> enode a
+  default reconstructAC :: (ACSymbol enode ~ Void) => ACSymbol enode -> [a] -> enode a
+  reconstructAC = absurd
+
 -- reconstruct :: Symbol enode -> [a] -> Maybe (enode a)
 -- default reconstruct :: (Symbol enode ~ enode ()) => Symbol enode -> [a] -> Maybe (enode a)
 -- reconstruct s as = sequence . (partsOf traverse .~ fmap Just as) . (Nothing <$) $ s
@@ -105,6 +109,8 @@ grevlex t u = comparing cmp t u
 
 exponentAt :: EId -> Lens' Monomial Int
 exponentAt e = atId e . non 0
+
+-- TODO: isPureMon/pureMon/allocId to cleanup code
 
 reduceMon :: Monomial -> (Monomial, Monomial) -> (Bool, Monomial)
 reduceMon x (l, r) =
@@ -143,6 +149,9 @@ reduceMons x ms =
 
 createMon :: [EId] -> Monomial
 createMon = coerce . getMonoidalIntMap . foldMap (\e -> fromList [(e ^. unId, Sum @Int 1)])
+
+unMon :: Monomial -> [EId]
+unMon = ifoldMap (\e k -> replicate k (Id e))
 
 prettyMon :: Monomial -> Doc ann
 prettyMon m | null m = "1"
@@ -433,21 +442,40 @@ eunion a b = do
   epropagateAnns
   pure c
 
-econcretize :: Egraph f ann -> [(EId, [f EId], ann)]
+-- Internal
+-- Prepares for concretization by putting all the AC stuff in the normal E-graph
+-- since we don't care about the distinction if we are just showing the E-graph
+epurifyAC :: (Signature f) => State (Egraph f ann) ()
+epurifyAC =
+  use egAC
+    >>= itraverse_
+      ( \s -> itraverse_ \l r -> do
+          il <- case itoList l of
+             [(x, 1)] -> pure $ Id x
+             _ -> einsertInternal (reconstructAC s (unMon l))
+          ir <- case itoList r of
+             [(x, 1)] -> pure $ Id x
+             _ -> einsertInternal (reconstructAC s (unMon r))
+          _ <- eunion il ir
+          pass
+      )
+
+econcretize :: (Signature f) => Egraph f ann -> [(EId, [f EId], ann)]
 econcretize eg =
-  fmap
-    ( \(a, us) ->
-        ( Id a,
-          mapMaybe
-            ( \case
-                LeftUse _ -> Nothing
-                RightUse en -> Just en
+  let eg' = executingState eg epurifyAC
+   in toList $ imap
+        ( \a us ->
+            ( Id a,
+              mapMaybe
+                ( \case
+                    LeftUse _ -> Nothing
+                    RightUse en -> Just en
+                )
+                (toList us),
+              fromMaybe (eg' ^. egBottom) (eg' ^. egAnn . at a)
             )
-            (toList us),
-          fromMaybe (eg ^. egBottom) (eg ^. egAnn . at a)
         )
-    )
-    (itoList (eg ^. egBack))
+        (eg' ^. egBack)
 
 edebug :: (ACSymbol f -> Doc a) -> (ann -> Doc a) -> (f EId -> Doc a) -> Egraph f ann -> Doc a
 edebug showACSym showAnn showNode eg =

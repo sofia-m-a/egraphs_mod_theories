@@ -9,9 +9,11 @@ module Lude
     module Witherable,
     extendingState,
     extendingState',
+    focusingState,
   )
 where
 
+import Control.Lens (Lens', (^.), (.=))
 import Control.Applicative.Combinators (choice)
 import Data.Semialign (Align (..), Repeat (..), Semialign (..), Unzip (..), Zip (..), unzipDefault)
 import Data.These (These (..), mergeThese, these)
@@ -28,6 +30,15 @@ extendingState a u = do
 
 extendingState' :: a -> State (s, a) () -> State s a
 extendingState' a u = fmap snd (extendingState a u)
+
+-- Somewhat unprincipled...
+focusingState :: Lens' s a -> State (s, a) b -> State s b
+focusingState l m = do
+  s <- get
+  let (b, (s', a)) = runState m (s, s ^. l)
+  id .= s'
+  l .= a
+  pure b
 
 -- Note: very old custom prelude, here for future reference for myself as to things I
 -- 'commonly' use
