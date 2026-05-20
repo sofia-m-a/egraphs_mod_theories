@@ -1,8 +1,11 @@
 module Examples where
 
 import Control.Monad.Free (Free (..))
+import Data.GraphViz.Types.Generalised (DotGraph)
 import Egraph (EId (..), Egraph, Signature (..), eempty, einsert, einsertFree, ereannotate, eunion, prettyId)
+import GraphDrawing
 import Prettyprinter
+import Data.GraphViz (runGraphvizCanvas', GraphvizCanvas (Gtk, Xlib))
 
 data Ex1 a
   = F a a
@@ -25,6 +28,17 @@ example1 = executingState
     f2 <- einsert (F h1 h1)
     ereannotate f2 5
     pass
+
+example1Dot :: DotGraph Text
+example1Dot = toDot (Just show) example1Show example1
+
+example1Viz :: IO ()
+example1Viz = runGraphvizCanvas' example1Dot Xlib
+
+example1Show :: Ex1 EId -> Text
+example1Show (H i) = "H_" <> show i
+example1Show (F (Id i) (Id j)) = "F(" <> show i <> ", " <> show j <> ")"
+example1Show (G (Id i)) = "G(" <> show i <> ")"
 
 example1Alg :: Ex1 Int -> Int
 example1Alg (H i) = i

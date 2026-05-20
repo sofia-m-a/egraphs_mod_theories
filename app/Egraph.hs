@@ -11,6 +11,7 @@ module Egraph
     einsert,
     einsertFix,
     einsertFree,
+    econcretize,
     edebug,
     eannotation,
     ereannotate,
@@ -358,12 +359,12 @@ handleCritical (l1, r1) = do
     let (didReduce, r2') = reduceMon r2 (l1, r1)
     when didReduce do
       _1 . at l2 ?= r2'
-    
+
     let (didReduce2, l2') = reduceMon l2 (l1, r1)
     when didReduce2 do
       _1 . at l2 .= Nothing
-      -- The following code will add (l2, r2) to the worklist
-      -- since if l2 is reducible by l1, then l2 is a critical term already
+    -- The following code will add (l2, r2) to the worklist
+    -- since if l2 is reducible by l1, then l2 is a critical term already
     let crit = criticalPair l1 l2
     whenJust crit \crit' -> do
       let (_, crit1) = reduceMon crit' (l1, r1)
@@ -432,8 +433,24 @@ eunion a b = do
   epropagateAnns
   pure c
 
-edebug :: (ACSymbol f -> Doc a) -> (Symbol f -> Doc a) -> (ann -> Doc a) -> (f EId -> Doc a) -> Egraph f ann -> Doc a
-edebug showACSym showSym showAnn showNode eg =
+econcretize :: Egraph f ann -> [(EId, [f EId], ann)]
+econcretize eg =
+  fmap
+    ( \(a, us) ->
+        ( Id a,
+          mapMaybe
+            ( \case
+                LeftUse _ -> Nothing
+                RightUse en -> Just en
+            )
+            (toList us),
+          fromMaybe (eg ^. egBottom) (eg ^. egAnn . at a)
+        )
+    )
+    (itoList (eg ^. egBack))
+
+edebug :: (ACSymbol f -> Doc a) -> (ann -> Doc a) -> (f EId -> Doc a) -> Egraph f ann -> Doc a
+edebug showACSym showAnn showNode eg =
   "Egraph with"
     <+> prettyId (eg ^. egNext)
     <+> "ids"

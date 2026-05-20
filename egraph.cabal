@@ -32,6 +32,7 @@ executable egraphs-modulo-theories
     , data-fix
     , free
     -- , functor-combinators
+    , graphviz
     , hashable
     , lens
     , megaparsec
