@@ -1,68 +1,43 @@
-\contentsline {chapter}{\numberline {1}Overview}{3}{chapter.1}%
-\contentsline {section}{\numberline {1.1}Introduction}{3}{section.1.1}%
-\contentsline {section}{\numberline {1.2}An introduction to E-graphs and equality saturation}{4}{section.1.2}%
-\contentsline {subsection}{\numberline {1.2.1}Equational theorem proving}{4}{subsection.1.2.1}%
-\contentsline {subsection}{\numberline {1.2.2}E-graphs for congruence-closure}{5}{subsection.1.2.2}%
-\contentsline {subsection}{\numberline {1.2.3}E-graphs for equality saturation}{6}{subsection.1.2.3}%
-\contentsline {section}{\numberline {1.3}E-graphs and the problems of AC}{6}{section.1.3}%
-\contentsline {section}{\numberline {1.4}Handling AC with EMTs}{9}{section.1.4}%
-\contentsline {chapter}{\numberline {2}E-graphs in depth}{13}{chapter.2}%
-\contentsline {section}{\numberline {2.1}Equivalence relations and Union-find}{13}{section.2.1}%
-\contentsline {section}{\numberline {2.2}Congruence relations and Congruence-closure}{14}{section.2.2}%
-\contentsline {subsection}{\numberline {2.2.1}A more formal description}{17}{subsection.2.2.1}%
-\contentsline {subsection}{\numberline {2.2.2}Congruence closure builds a rewrite system}{18}{subsection.2.2.2}%
-\contentsline {section}{\numberline {2.3}Equality saturation}{19}{section.2.3}%
-\contentsline {subsection}{\numberline {2.3.1}A few variations}{21}{subsection.2.3.1}%
-\contentsline {section}{\numberline {2.4}E-graphs as tree automata}{21}{section.2.4}%
-\contentsline {section}{\numberline {2.5}Terms, signatures, and theories formalized}{21}{section.2.5}%
-\contentsline {section}{\numberline {2.6}Matching, merging, seeding, and canonicalization formalized}{22}{section.2.6}%
-\contentsline {chapter}{\numberline {3}Which theories do E-graphs struggle with?}{24}{chapter.3}%
-\contentsline {subsection}{\numberline {3.0.1}Combinatorics}{25}{subsection.3.0.1}%
-\contentsline {subsection}{\numberline {3.0.2}How common theories fare with E-graphs}{25}{subsection.3.0.2}%
-\contentsline {subsubsection}{Minimally-expansive theories}{25}{section*.2}%
-\contentsline {subsubsection}{Inverse}{26}{section*.3}%
-\contentsline {subsubsection}{Summary of simpler theories}{27}{section*.4}%
-\contentsline {subsubsection}{A and AU}{27}{section*.5}%
-\contentsline {subsubsection}{Cancellation}{28}{section*.6}%
-\contentsline {subsubsection}{Commutativity}{28}{section*.7}%
-\contentsline {subsubsection}{AC and ACU}{28}{section*.8}%
-\contentsline {section}{\numberline {3.1}Orphaned sections}{29}{section.3.1}%
-\contentsline {subsection}{\numberline {3.1.1}A couple of bad ways to handle AC}{29}{subsection.3.1.1}%
-\contentsline {subsection}{\numberline {3.1.2}Miscellaneous tables}{29}{subsection.3.1.2}%
-\contentsline {subsection}{\numberline {3.1.3}Miscellaneous notes}{30}{subsection.3.1.3}%
-\contentsline {chapter}{\numberline {4}E-graphs modulo theories}{31}{chapter.4}%
-\contentsline {section}{\numberline {4.1}EMTs: prior attempts}{32}{section.4.1}%
-\contentsline {subsection}{\numberline {4.1.1}Intuition 1: Canonizers}{32}{subsection.4.1.1}%
-\contentsline {subsection}{\numberline {4.1.2}Intutition 2: Containers}{33}{subsection.4.1.2}%
-\contentsline {subsection}{\numberline {4.1.3}Canonizers and containers and the problem of flattening}{33}{subsection.4.1.3}%
-\contentsline {section}{\numberline {4.2}EMTs and the word problem}{36}{section.4.2}%
-\contentsline {subsection}{\numberline {4.2.1}The problem of matching modulo theories}{36}{subsection.4.2.1}%
-\contentsline {section}{\numberline {4.3}E-graphs modulo theorie}{36}{section.4.3}%
-\contentsline {subsection}{\numberline {4.3.1}Defining EMTs}{36}{subsection.4.3.1}%
-\contentsline {subsubsection}{Necessity of the word problem 1}{36}{section*.9}%
-\contentsline {subsubsection}{Necessity of the word problem 2}{37}{section*.10}%
-\contentsline {chapter}{\numberline {5}E-graphs modulo AC}{38}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Solving the word problem modulo AC}{38}{section.5.1}%
-\contentsline {subsection}{\numberline {5.1.1}Polynomial ideals and the AC embedding}{38}{subsection.5.1.1}%
-\contentsline {subsection}{\numberline {5.1.2}Gr\"obner bases for ideals}{39}{subsection.5.1.2}%
-\contentsline {subsection}{\numberline {5.1.3}Computing Gr\"bner bases via Buchberger's algorithm}{39}{subsection.5.1.3}%
-\contentsline {section}{\numberline {5.2}Matching modulo AC}{39}{section.5.2}%
-\contentsline {chapter}{\numberline {6}Relational queries}{40}{chapter.6}%
-\contentsline {chapter}{\numberline {7}An implementation}{41}{chapter.7}%
-\contentsline {chapter}{\numberline {8}Prior work}{42}{chapter.8}%
-\contentsline {chapter}{\numberline {9}Conclusion and future work}{43}{chapter.9}%
-\contentsline {chapter}{\numberline {10}Plan}{44}{chapter.10}%
-\contentsline {section}{\numberline {10.1}Theoretical developments and literature review}{44}{section.10.1}%
-\contentsline {subsection}{\numberline {10.1.1}Implementation}{44}{subsection.10.1.1}%
-\contentsline {subsubsection}{Implement the infrastructure of the E-graph library: joins, join plans, the E-graph structure, and a saturation loop}{44}{section*.11}%
-\contentsline {subsubsection}{Implement the modulo-theory algorithm into the library}{44}{section*.12}%
-\contentsline {subsection}{\numberline {10.1.2}Benchmarking}{44}{subsection.10.1.2}%
-\contentsline {subsection}{\numberline {10.1.3}Collect a benchmark suite of problems}{44}{subsection.10.1.3}%
-\contentsline {subsection}{\numberline {10.1.4}Run benchmarks}{45}{subsection.10.1.4}%
-\contentsline {subsection}{\numberline {10.1.5}Finishing the report and giving the presentation}{45}{subsection.10.1.5}%
-\contentsline {section}{\numberline {10.2}Limitations of the plan}{45}{section.10.2}%
-\contentsline {subsection}{\numberline {10.2.1}Detailed microbenchmarking}{45}{subsection.10.2.1}%
-\contentsline {subsection}{\numberline {10.2.2}Flaws in various prior versions of the proposal and plan}{45}{subsection.10.2.2}%
-\contentsline {subsubsection}{Asymptotics of A/C}{45}{section*.13}%
-\contentsline {subsubsection}{Zucker's proposal}{46}{section*.14}%
-\contentsline {subsubsection}{EMT(A)}{46}{section*.15}%
+\contentsline {chapter}{\numberline {1}Abstract}{3}{chapter.1}%
+\contentsline {chapter}{\numberline {2}Introduction to E-graphs}{5}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Equational theorem proving}{5}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Union-find, congruence closure, and equality saturation}{6}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}E-graphs for congruence-closure}{8}{subsection.2.2.1}%
+\contentsline {subsubsection}{Equality saturation}{15}{section*.2}%
+\contentsline {chapter}{\numberline {3}Egraphs modulo AC}{17}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Handling AC with EMTs: a first example}{19}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Challenges for EMT(AC)}{21}{section.3.2}%
+\contentsline {section}{\numberline {3.3}Filling the gap}{24}{section.3.3}%
+\contentsline {section}{\numberline {3.4}Prospects for EMT(AC)}{24}{section.3.4}%
+\contentsline {chapter}{\numberline {4}E-graphs, EMTs, and rewriting}{26}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Equivalence relations and Union-find}{26}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Congruence relations and Congruence-closure}{27}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Congruence closure builds a rewrite system}{31}{subsection.4.2.1}%
+\contentsline {section}{\numberline {4.3}Equality saturation}{31}{section.4.3}%
+\contentsline {subsection}{\numberline {4.3.1}A few variations}{33}{subsection.4.3.1}%
+\contentsline {subsection}{\numberline {4.3.2}How E-graphs handle ordinary critical pairs, but not AC-critical pairs}{33}{subsection.4.3.2}%
+\contentsline {subsection}{\numberline {4.3.3}Equality satuation: \\ handling AC-critical pairs by brute force}{34}{subsection.4.3.3}%
+\contentsline {subsection}{\numberline {4.3.4}EMTs: Handling AC-critical pairs less na\"ively}{35}{subsection.4.3.4}%
+\contentsline {chapter}{\numberline {5}OLD dumping ground}{36}{chapter.5}%
+\contentsline {chapter}{\numberline {6}EMT with other theories}{37}{chapter.6}%
+\contentsline {chapter}{\numberline {7}E-graphs modulo theories}{38}{chapter.7}%
+\contentsline {section}{\numberline {7.1}EMTs: prior attempts}{39}{section.7.1}%
+\contentsline {subsection}{\numberline {7.1.1}Intuition 1: Canonizers}{39}{subsection.7.1.1}%
+\contentsline {subsection}{\numberline {7.1.2}Intutition 2: Containers}{39}{subsection.7.1.2}%
+\contentsline {subsection}{\numberline {7.1.3}Canonizers and containers and the problem of flattening}{40}{subsection.7.1.3}%
+\contentsline {section}{\numberline {7.2}EMTs and the word problem}{43}{section.7.2}%
+\contentsline {subsection}{\numberline {7.2.1}The problem of matching modulo theories}{43}{subsection.7.2.1}%
+\contentsline {section}{\numberline {7.3}E-graphs modulo theorie}{43}{section.7.3}%
+\contentsline {subsection}{\numberline {7.3.1}Defining EMTs}{43}{subsection.7.3.1}%
+\contentsline {subsubsection}{Necessity of the word problem 1}{43}{section*.3}%
+\contentsline {subsubsection}{Necessity of the word problem 2}{43}{section*.4}%
+\contentsline {chapter}{\numberline {8}E-graphs modulo AC}{45}{chapter.8}%
+\contentsline {section}{\numberline {8.1}Solving the word problem modulo AC}{45}{section.8.1}%
+\contentsline {subsection}{\numberline {8.1.1}Polynomial ideals and the AC embedding}{45}{subsection.8.1.1}%
+\contentsline {subsection}{\numberline {8.1.2}Gr\"obner bases for ideals}{46}{subsection.8.1.2}%
+\contentsline {subsection}{\numberline {8.1.3}Computing Gr\"obner bases via Buchberger's algorithm}{46}{subsection.8.1.3}%
+\contentsline {section}{\numberline {8.2}Matching modulo AC}{46}{section.8.2}%
+\contentsline {chapter}{\numberline {9}An implementation}{47}{chapter.9}%
+\contentsline {chapter}{\numberline {10}Evaluation}{48}{chapter.10}%
+\contentsline {chapter}{\numberline {11}Prior work}{49}{chapter.11}%
+\contentsline {chapter}{\numberline {12}Conclusion and future work}{50}{chapter.12}%

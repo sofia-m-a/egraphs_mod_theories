@@ -15,121 +15,223 @@
 = E-graphs modulo theories
 presented by Sofia Brookie
 
-== E-graph refresher: congruence closure
-
-#figure(
-  image("slides1.png", width: 50%),
-  caption: [
-    $
-      f(a) = a \
-      g(f(f(a)), b) = g(a, g(a, b)) \
-      g(f(a), b) = b
-    $
-  ],
+== E-graphs overview
+#set align(center)
+#diagram(
+  node-stroke: luma(90%),
+  edge-corner-radius: none,
+  
+  // Nodes
+  node((0, 0), [*Equality saturation*], name: <eqsat>),
+  edge("<|-"),
+  node((0, 1), [*Congruence closure*], name: <cc>),
+  edge("<|-"),
+  node((0, 2), [*Union-find*], name: <cc>),
 )
 
-== E-graph refresher: computing congruence closure
+== E-graphs overview
+#set align(center)
+#diagram(
+  node-stroke: luma(90%),
+  edge-corner-radius: none,
+  
+  // Nodes
+  node((0, 0), [
+    *Equality saturation*
+    
+    Handles non-ground equations (identities): $forall x. f(x) = g(x, x)$], name: <eqsat>),
+  edge("<|-"),
+  node((0, 1), [
+    *Congruence closure*
+    
+    Handles ground non-atomic equations: $f(e_1, e_2) = e_3$
+    ], name: <cc>),
+  edge("<|-"),
+  node((0, 2), [
+    *Union-find*
+    
+    Handles ground atomic equations: $e_1 = e_2$
+    ], name: <cc>),
+)
 
-- Keep track of equivalence classes (E-classes) with a union-find
+// == E-graph refresher: congruence closure
 
-#pause
+// #figure(
+//   image("slides1.png", width: 50%),
+//   caption: [
+//     $
+//       f(a) = a \
+//       g(f(f(a)), b) = g(a, g(a, b)) \
+//       g(f(a), b) = b
+//     $
+//   ],
+// )
 
-- Rather than representing terms, represent E-nodes (e.g. $f(e_1, e_2)$)
+// == E-graph refresher: computing congruence closure
 
-== E-graph refresher: computing congruence closure
+// - Keep track of equivalence classes (E-classes) with a union-find
 
-To insert a term: flatten it leaf-to-root, looking up or inserting an equivalence class
-for each E-node
+// #pause
 
-== E-graph refresher: computing congruence closure
+// - Rather than representing terms, represent E-nodes (e.g. $f(e_1, e_2)$)
 
-To merge terms: call union() on the union-find
+// == E-graph refresher: computing congruence closure
 
-== E-graph refresher: computing congruence closure
+// To insert a term: flatten it leaf-to-root, looking up or inserting an equivalence class
+// for each E-node
 
-To compute the congruence closure, we have to do rebuild()
+// == E-graph refresher: computing congruence closure
 
-#pause
+// To merge terms: call union() on the union-find
 
-1. For every E-node $f(e_1, e_2, ...)$, update it to $f("find"(e_1), "find"(e_2))$
+// == E-graph refresher: computing congruence closure
 
-#pause
+// To compute the congruence closure, we have to do rebuild()
 
-2. Whenever we have $f(e_1, e_2, ...) in e_j$ and also $in e_k$, call union($e_j, e_k$)
+// #pause
 
-#pause
+// 1. For every E-node $f(e_1, e_2, ...)$, update it to $f("find"(e_1), "find"(e_2))$
 
-A bit slow (maybe). But we can defer rebuilding and/or use Downey-Sethi-Tarjan (aka binarizing the function symbols)
+// #pause
 
-== E-graph refresher: equality saturation
+// 2. Whenever we have $f(e_1, e_2, ...) in e_j$ and also $in e_k$, call union($e_j, e_k$)
 
-Congruence closure decides the theory of ground equations. What about identities?
+// #pause
 
-== E-graph refresher: equality saturation
+// A bit slow (maybe). But we can defer rebuilding and/or use Downey-Sethi-Tarjan (aka binarizing the function symbols)
 
-Idea: if we have $forall x ..., t = s$, try instantiating the quantifier with known E-classes.
+// == E-graph refresher: equality saturation
 
-_Surely_ if we have some equational proof we want to find, it will involve identities instantiated at ground terms in this obvious way.
+// Congruence closure decides the theory of ground equations. What about identities?
 
-#pause
+// == E-graph refresher: equality saturation
 
-The truth is a little more subtle, but I will gloss over this.
+// Idea: if we have $forall x ..., t = s$, try instantiating the quantifier with known E-classes.
 
-== Equality saturation
+// _Surely_ if we have some equational proof we want to find, it will involve identities instantiated at ground terms in this obvious way.
 
-After instantiation, we have a ground equation $t' = s'$.
+// #pause
 
-We can just insert this into the graph and run congruence closure/rebuilding.
+// The truth is a little more subtle, but I will gloss over this.
 
-== Equality saturation
+// == Equality saturation
 
-Is this complete? Not always. Another complicated story...
+// After instantiation, we have a ground equation $t' = s'$.
 
-#pause
+// We can just insert this into the graph and run congruence closure/rebuilding.
 
-But a key takeaway here is that if $t'$ and $s'$ are already represented, equating them _shrinks_ the E-graph.
-But inserting new things can grow the E-graph arbitrarily.
+// == Equality saturation
+
+// Is this complete? Not always. Another complicated story...
+
+// #pause
+
+// But a key takeaway here is that if $t'$ and $s'$ are already represented, equating them _shrinks_ the E-graph.
+// But inserting new things can grow the E-graph arbitrarily.
+// 
+// 
 
 == E-graphs vs AC
+A: associativity
 
+$f(x, f(y, z)) = f(f(x, y), z)$
+
+C: commutativity
+
+$f(x, y) = f(y, x)$
+
+AC: both
+
+== E-graphs vs AC
 The bane of equality saturation is operators that are AC or similar (ACU, abelian groups, etc.).
 
 For simplicity, we will use '+' as a generic name for an AC operator.
 
 == E-graphs vs AC
 #figure(
-  image("addxz.png", width: 30%),
+  image("blowup2.svg", width: 30%),
   caption: [
-    Size 2 (saturation)
+    Size 2
   ],
 )
 
 == E-graphs vs AC
 #figure(
-  image("addxyz.png", width: 50%),
+  image("blowup3.svg", width: 50%),
   caption: [
-    Size 3 (saturation)
+    Size 3
   ],
 )
 
 == E-graphs vs AC
 #figure(
-  image("add.png", width: 50%),
+  image("blowup4.svg", width: 70%),
   caption: [
-    Size 4 (timeout)
+    Size 4
   ],
 )
 
+== E-graphs vs AC
+#figure(
+  image("blowup5.svg", width: 110%),
+  caption: [
+    Size 5
+  ],
+)
+
+== E-graphs vs AC
+#figure(
+  image("blowup8subset.png", width: 110%),
+  caption: [
+    Size 8 (a small window)
+  ],
+)
+
+
+// == E-graphs vs AC
+// #figure(
+//   image("addxz.png", width: 30%),
+//   caption: [
+//     Size 2 (saturation)
+//   ],
+// )
+
+// == E-graphs vs AC
+// #figure(
+//   image("addxyz.png", width: 50%),
+//   caption: [
+//     Size 3 (saturation)
+//   ],
+// )
+
+// == E-graphs vs AC
+// #figure(
+//   image("add.png", width: 50%),
+//   caption: [
+//     Size 4 (timeout)
+//   ],
+// )
+
+#set align(left)
 == E-graphs vs AC
 
 Blindly saturating with A and C gives $O(2^n)$ E-classes if you have a starting term with $n$ +s ($a + b + c + ...$),
 and each E-class has $O(2^n)$ E-nodes in it! So, *doubly exponential*.
 
-== What about just A?
+== Sidenote: What about just A?
 A is 'only' cubic if you have no 'loops'. Otherwise, it is $O(infinity)$.
 But making progress here is hard, given that A is fundamentally undecidable.
 
-== E-graphs vs AC: AC + other stuff
+== (Non)-solution
+Backoff methods: fire rules less and less if they are used too many times
+
+#pause
+
+Issues:
+- Doesn't help if you run to saturation
+- Can slow down finding the equations you want to find
+
+== Non-solution
 Consider an affine function $f$ with identity
 
 $
@@ -250,11 +352,6 @@ What are we doing in AC equality saturation? Well, any of the $O(2^n)$ AC-subter
 We are eagerly giving new E-classes to them. Just in case. After all,
 equality saturation only works by grounding identities: we have not given a mechanism to ground something only when it's actually needed.
 
-== EMTs and the word problem
-Any mechanism to automatically resolve all $T$-critical pairs is a solver for the $T$-word problem.
-
-(Resolving critical pairs = scanning for implied equalities)
-
 == EMTs, prehistorically
 Existing suggestions for EM(T)s fall along two very similar lines:
 
@@ -275,7 +372,8 @@ The intuition:
 Yes, _but_
 
 You need some method of finding $T$-critical pairs, and to make a complete algorithm, you must _eventually_ resolve every pair.
-And also match modulo $T$ to instantiate identities.
+
+And also match modulo $T$ to instantiate identities for equality saturation.
 
 == Counterexamples to prehistoric EMTs
 $
@@ -299,8 +397,16 @@ a + b = e \
 e + c = f
 $
 
+These equations are individually canonical, but they don't include the consequence
+$d = a + (b + c) = (a + b) + c = e + c = f$
+
 Prehistoric methods might canonize, but this means they don't scan for implied equalities among a set of (canonized!) equations.
 Actually...
+
+== EMTs and the word problem
+Scanning for implied equalities is exactly the same thing as resolving all $T$-critical pairs
+
+Any mechanism to automatically resolve all $T$-critical pairs is a solver for the $T$-word problem.
 
 == A and AC
 Finding A-critical pairs, and matching modulo A, is quite feasible. Still, there is not 'packaged' solution possible:
@@ -308,19 +414,43 @@ the A-word problem is undecidable. So, the best we can do is just provide a list
 to choose to resolve (or not)
 
 AC is better: the word problem is decidable (Mayr-Meyer). It's ESPACE-complete...
-Sounds bad, but E-graphs are EESPACE space here, but more importantly: we can solve common cases of
+Sounds bad, but E-graphs are EESPACE here, but more importantly: we can solve common cases of
 the AC word problem faster than ESPACE (hopefully), whereas E-graphs _must_ chug along to saturation to be _certain_
 (as they have no smart way of knowing if some AC-subterm is relevant to the critical pair problem)
 
 == The AC word problem, a la Bachmair et al.
 
-Given $a_1 + a_2 + ... arrow.r e_1$ and $b_1 + b_2 + ... arrow.r e_2$, construct
+Given $a_1 + a_2 + ... arrow.r e_1$ and $b_1 + b_2 + ... arrow.r e_2$, construct the potential
+critical pair
 
 $
 e_1 + ... = a_1 + a_2 + ... + b_1 + b_2 = ... + e_2
 $
 
-Orient it by some (multiset) ordering and add it as a rule.
+Reduce it by existing rules, orient it by some (multiset) ordering
+and add it as a rule if it is non-trivial.
+
+#pause
+
+Very similar to Buchberger's algorithm (see later). Note: we use + in our examples,
+but this will be written as × when we embed our terms into polynomials!
+
+== The AC word problem, brief example
+#figure(
+  image("buchexample.svg", width: 100%),
+  caption: [
+    Starting graph
+  ],
+)
+
+== The AC word problem, brief example
+#figure(
+  image("buchexamplecomplete.svg", width: 100%),
+  caption: [
+    AC-completed graph
+  ],
+)
+
 
 == The AC word problem, the polynomial encoding
 If $a b c = d e f$, encode this as a polynomial equation $x_a x_b x_c - x_d x_e x_f = 0$.
@@ -365,75 +495,120 @@ How to integrate their term-ordering fiddlyness with our flattened E-class syste
 
 Well, Tiwari solved it in his dissertation sections on congruence closure mod AC.
 
-It turns out E-graphs have yet to fully absorb all the insights of the term-rewriting world.
+(It isn't that hard)
 
-We still need AC-matching, though.
+It turns out E-graphs have yet to fully absorb all the insights of the term-rewriting world.
 
 == Buchberger again
 
-We can solve not just AC, but rings, polynomials, ACU, etc, with the same techniques. So, even if there is a purely "term"-based approach
-(Buchberger and Tiwari, _Congruence Closure modulo AC_)
+We can solve not just AC, but rings, polynomials, ACU, etc, with the same techniques.
+
+//So, even if there is a purely "term"-based approach
+// (Bachmair and Tiwari, _Congruence Closure modulo AC_)
 
 == Better than Buchberger
 Abelian groups (aka ACUN) can be solved with Hermite normal form. Polynomial time!
 Vector spaces over a field can be solved with Gaussian elimination, which is $O(n^(2."something"))$
 
-== Matching modulo AC: semantics
-There is the delicate matter that *what* is considered an $A C$-match could affect completeness.
+== Matching modulo AC
+I have ideas, but you will probably have to wait until EGRAPHS 2026 for the full story :)
 
-For instance, if we have the pattern $x + f(x)$, should we consider just the substitutions
-$x := t$ where $t + f(t)$ is in the E-graph, or do we have to broaden to consider this when
-$t$ and $f(t)$, but not $t + f(t)$, are in the E-graph?
+== Integrating theories and E-graphs: design choices
+There are two ways to think about adding an AC-solver to an E-graph.
 
-== Matching modulo AC and Gröbner bases
-Our actual representation of AC-terms to match against is not even in the form of a bunch of E-classes and E-nodes, but some
-incrementally-updated Gröbner basis system, which affects what "in the E-graph" means.
+1. 'Integrated': Treat +-nodes as any other E-graph node, and scan for critical pairs between them
+2. 'Side-table': Don't store +-nodes in the normal E-graph at all. Instead, have a side table of AC-rewriting rules.
+  - When you add e.g. $e_1 + e_2$ to the E-graph, create a new rewrite $e_1 + e_2 → e_3$ for some fresh $e_3$
+  - Whenever we discover a rewrite $e_j → e_k$ in the AC-solver, feed it back to the original E-graph
 
-The important limitation: we will only find matches where the original E-graph with AC identities would.
+== Integrating theories and E-graphs
+I chose option 2 for my current implementation. Indeed, I didn't even think too hard about the tradeoff,
+as it seemed obvious that these are equivalent in some sense.
 
-So, there is a fairly reasonable definition of matches even for this.
+== Not entirely equivalent methods
+However, there is one advantage of the 'side-table' approach that might be accidentally missed in the integrated approach.
 
-== Loose ends 1: group UF
-There is a notion of group union find: instead of representing a bunch of equations
-$a = b = c$, we can represent $a = g b = h^(-1) c$. The group structure corresponds to reflexivity, symmetry, and transitivity.
+In the side-table approach, if we build the rewrite $e_1 + e_2 → e_3$ and we have an existing rule
+$e_1 + e_2 + e_2 → e_4$, we can compress the existing rule down to $e_2 + e_3 → e_4$.
 
-This is also some form of "EMT" although a very different thing.
+This is a standard step in textbook Buchberger's algorithm.
 
-Some extensions to the group UF have been recently proposed, and a unifying version is still needed.
+== Not entirely equivalent methods
+Just finding critical pairs is _semantically_ correct, but misses this compression opportunity if you aren't paying attention.
 
-== Loose ends 2: functorial UF
-My proposal, that a 'weighted UF' is a functor from a thin groupoid to (a subgroupoid of) some other category, hasn't been widely accepted :P
+To make the integrated method equivalent, we need to keep some ordering between $+$-nodes in the same class
+and do some destructive rewriting of the E-graph.
 
-I ought to write the details down sometime to make it more convincing.
+== See my thesis...
+I hope to go a bit more into depth about this design choice in my thesis.
 
-== Loose ends 3: frontiers in E-graphs
-- Abstract interpretation (AI), Galois connections, and E-graphs (AI is the perspective taken in the most recent reference for weighted UFs)
-- SSA and E-graphs: coinduction vs induction, sea-of-nodes, representing control flow
-- E-graphs all the way down in compilers. We can do register allocation directly on SSA, why not directly on E-graphs? The dream
-  is some integer-linear-program approximate solver for extracting programs quickly from E-graphs, and an exact solver for the -O4 usecase.
-- Coloured E-graphs and conditional rewriting. Coloured E-graphs ought to be a monotonic function from a poset to the equivalence relation.
-- Slotted E-graphs and binding
-- Non-ground rewriting. Find better identities directly rather than slogging through proving their consequences on ground terms. Maybe if we keep a provenance of
-  why ground terms are equal, we can automatically find interesting non-ground identities.
-- Formalizing extraction as weighted automata
-- Formalizing E-class analyses (ought to be not too hard)
-- E-graphs for monoidal categories
-- E-graphs for regular languages (they are non-algebraically-axiomatizable, in some sense)
+== Important sources
+*Decision Procedures in Automated Deduction*: Ashish Tiwari's disseration
 
-== Loose ends 4: decision procedures
-- 'Fulls seldom differ' (decision procedure)
-- Presburger arithmetic (it's just cool)
-- Mixed boolean arithmetic and automata for deciding the linear fragment (!!)
-- Bitvectors and arrays and other stuff from SMT-land
-- Pointer reasoning?
-- Inequality and disequality reasoning?
-- Quantifier elimination, the decision procedure for the reals
-- Integer linear programming, Graver or Hilbert bases
-- Gosper's algorithm, aka A=B
-- Risch's algorithm 
+*A Modular Associative Commutative (AC)  Congruence Closure Algorithm*: Deepak Kapur
 
-== Loose ends 5: scribbles
-Various things I would like to think more about
+*MODULARITY AND COMBINATION OF ASSOCIATIVE COMMUTATIVE CONGRUENCE CLOSURE ALGORITHMS ENRICHED WITH SEMANTIC PROPERTIES*: Deepak Kapur
 
-Automata, automatic groups, other solvable $T$s for EM(T), other decision procedures, quantifier instantiation, faster
-indexing for WCOJs...
+*Congruence Closure Modulo Associativity and Commutativity*: L. Bachmair, I. V. Ramakrishnan, A. Tiwari, and L. Vigneron
+
+*The complexity of the word problems for commutative semigroups and polynomial ideals*: Mayr and Meyer
+
+// == Matching modulo AC: semantics
+// There is the delicate matter that *what* is considered an $A C$-match could affect completeness.
+
+// For instance, if we have the pattern $x + f(x)$, should we consider just the substitutions
+// $x := t$ where $t + f(t)$ is in the E-graph, or do we have to broaden to consider this when
+// $t$ and $f(t)$, but not $t + f(t)$, are in the E-graph?
+
+// == Matching modulo AC and Gröbner bases
+// Our actual representation of AC-terms to match against is not even in the form of a bunch of E-classes and E-nodes, but some
+// incrementally-updated Gröbner basis system, which affects what "in the E-graph" means.
+
+// The important limitation: we will only find matches where the original E-graph with AC identities would.
+
+// So, there is a fairly reasonable definition of matches even for this.
+
+// == Loose ends 1: group UF
+// There is a notion of group union find: instead of representing a bunch of equations
+// $a = b = c$, we can represent $a = g b = h^(-1) c$. The group structure corresponds to reflexivity, symmetry, and transitivity.
+
+// This is also some form of "EMT" although a very different thing.
+
+// Some extensions to the group UF have been recently proposed, and a unifying version is still needed.
+
+// == Loose ends 2: functorial UF
+// My proposal, that a 'weighted UF' is a functor from a thin groupoid to (a subgroupoid of) some other category, hasn't been widely accepted :P
+
+// I ought to write the details down sometime to make it more convincing.
+
+// == Loose ends 3: frontiers in E-graphs
+// - Abstract interpretation (AI), Galois connections, and E-graphs (AI is the perspective taken in the most recent reference for weighted UFs)
+// - SSA and E-graphs: coinduction vs induction, sea-of-nodes, representing control flow
+// - E-graphs all the way down in compilers. We can do register allocation directly on SSA, why not directly on E-graphs? The dream
+//   is some integer-linear-program approximate solver for extracting programs quickly from E-graphs, and an exact solver for the -O4 usecase.
+// - Coloured E-graphs and conditional rewriting. Coloured E-graphs ought to be a monotonic function from a poset to the equivalence relation.
+// - Slotted E-graphs and binding
+// - Non-ground rewriting. Find better identities directly rather than slogging through proving their consequences on ground terms. Maybe if we keep a provenance of
+//   why ground terms are equal, we can automatically find interesting non-ground identities.
+// - Formalizing extraction as weighted automata
+// - Formalizing E-class analyses (ought to be not too hard)
+// - E-graphs for monoidal categories
+// - E-graphs for regular languages (they are non-algebraically-axiomatizable, in some sense)
+
+// == Loose ends 4: decision procedures
+// - 'Fulls seldom differ' (decision procedure)
+// - Presburger arithmetic (it's just cool)
+// - Mixed boolean arithmetic and automata for deciding the linear fragment (!!)
+// - Bitvectors and arrays and other stuff from SMT-land
+// - Pointer reasoning?
+// - Inequality and disequality reasoning?
+// - Quantifier elimination, the decision procedure for the reals
+// - Integer linear programming, Graver or Hilbert bases
+// - Gosper's algorithm, aka A=B
+// - Risch's algorithm 
+
+// == Loose ends 5: scribbles
+// Various things I would like to think more about
+
+// Automata, automatic groups, other solvable $T$s for EM(T), other decision procedures, quantifier instantiation, faster
+// indexing for WCOJs...

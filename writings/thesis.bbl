@@ -19,58 +19,63 @@
 
 \refsection{0}
   \datalist[entry]{nty/global//global/global/global}
-    \entry{koppel_version_2021}{misc}{}{}
-      \name{author}{1}{}{%
-        {{hash=6129ab632b5e6a2aa55ff5b364eb7fe8}{%
-           family={Koppel},
-           familyi={K\bibinitperiod},
-           given={James},
-           giveni={J\bibinitperiod}}}%
+    \entry{bachmair_abstract_2000}{inproceedings}{}{}
+      \name{author}{2}{}{%
+        {{hash=3774293b060a55daa4e4db1f71df13f8}{%
+           family={Bachmair},
+           familyi={B\bibinitperiod},
+           given={Leo},
+           giveni={L\bibinitperiod}}}%
+        {{hash=c280b85bda019adea24be030ef9c1e3d}{%
+           family={Tiwari},
+           familyi={T\bibinitperiod},
+           given={Ashish},
+           giveni={A\bibinitperiod}}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=09a4af5c985fc9a46727803f19cd8272}{%
+           family={{McAllester}},
+           familyi={M\bibinitperiod},
+           given={David},
+           giveni={D\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Berlin, Heidelberg}%
       }
       \list{publisher}{1}{%
-        {arXiv}%
+        {Springer}%
       }
-      \strng{namehash}{6129ab632b5e6a2aa55ff5b364eb7fe8}
-      \strng{fullhash}{6129ab632b5e6a2aa55ff5b364eb7fe8}
-      \strng{fullhashraw}{6129ab632b5e6a2aa55ff5b364eb7fe8}
-      \strng{bibnamehash}{6129ab632b5e6a2aa55ff5b364eb7fe8}
-      \strng{authorbibnamehash}{6129ab632b5e6a2aa55ff5b364eb7fe8}
-      \strng{authornamehash}{6129ab632b5e6a2aa55ff5b364eb7fe8}
-      \strng{authorfullhash}{6129ab632b5e6a2aa55ff5b364eb7fe8}
-      \strng{authorfullhashraw}{6129ab632b5e6a2aa55ff5b364eb7fe8}
-      \field{sortinit}{K}
-      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \strng{namehash}{f074cac101886ec3b48d3d2fd4d5aa5c}
+      \strng{fullhash}{f074cac101886ec3b48d3d2fd4d5aa5c}
+      \strng{fullhashraw}{f074cac101886ec3b48d3d2fd4d5aa5c}
+      \strng{bibnamehash}{f074cac101886ec3b48d3d2fd4d5aa5c}
+      \strng{authorbibnamehash}{f074cac101886ec3b48d3d2fd4d5aa5c}
+      \strng{authornamehash}{f074cac101886ec3b48d3d2fd4d5aa5c}
+      \strng{authorfullhash}{f074cac101886ec3b48d3d2fd4d5aa5c}
+      \strng{authorfullhashraw}{f074cac101886ec3b48d3d2fd4d5aa5c}
+      \strng{editorbibnamehash}{09a4af5c985fc9a46727803f19cd8272}
+      \strng{editornamehash}{09a4af5c985fc9a46727803f19cd8272}
+      \strng{editorfullhash}{09a4af5c985fc9a46727803f19cd8272}
+      \strng{editorfullhashraw}{09a4af5c985fc9a46727803f19cd8272}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{abstract}{Version space algebras are ways of representing spaces of programs which can be combined using union, intersection, and cross-product/``join" operators. In their reified form as {ASTs} with explicit union and join nodes, they have the ability to compactly represent exponentially-large spaces of programs, owing to which they have become become the most popular approach to enumerative program synthesis since the introduction of {FlashFill} in 2010. We present a linear-time semantics-preserving constructive embedding from version space algebras into nondeterministic finite tree automata, showing that the former are but a special case of the latter. Combined with recent results finding a correspondence between e-graphs and minimal deterministic tree automata, this shows that tree automata are strict generalizations of all recent major approaches to efficiently representing large spaces of programs by sharing.}
-      \field{day}{27}
-      \field{eprinttype}{arxiv}
+      \field{abstract}{We use the uniform framework of abstract congruence closure to study the congruence closure algorithms described by Nelson and Oppen [9], Downey, Sethi and Tarjan [7], and Shostak [11]. The descriptions thus obtained abstract from certain implementation details while still allowing for comparison between these different algorithms. Experimental results are presented to illustrate the relative efficiency and explain differences in performance of these three algorithms. The transition rules for computation of abstract congruence closure are obtained from rules for standard completion enhanced with an extension rule that enlarges a given signature by new constants.}
+      \field{booktitle}{Automated Deduction - {CADE}-17}
+      \field{isbn}{978-3-540-45101-3}
       \field{langid}{english}
-      \field{month}{7}
-      \field{number}{{arXiv}:2107.12568}
-      \field{title}{Version Space Algebras are Acyclic Tree Automata}
-      \field{urlday}{14}
-      \field{urlmonth}{4}
-      \field{urlyear}{2025}
-      \field{year}{2021}
+      \field{title}{Abstract Congruence Closure and Specializations}
+      \field{year}{2000}
       \field{dateera}{ce}
-      \field{urldateera}{ce}
+      \field{pages}{64\bibrangedash 78}
+      \range{pages}{15}
       \verb{doi}
-      \verb 10.48550/arXiv.2107.12568
-      \endverb
-      \verb{eprint}
-      \verb 2107.12568 [cs]
+      \verb 10.1007/10721959_5
       \endverb
       \verb{file}
-      \verb PDF:/home/pree/Zotero/storage/YL622NSJ/Koppel - 2021 - Version Space Algebras are Acyclic Tree Automata.pdf:application/pdf
+      \verb Full Text PDF:/home/pree/Zotero/storage/C6A8T2J7/Bachmair and Tiwari - 2000 - Abstract Congruence Closure and Specializations.pdf:application/pdf
       \endverb
-      \verb{urlraw}
-      \verb http://arxiv.org/abs/2107.12568
-      \endverb
-      \verb{url}
-      \verb http://arxiv.org/abs/2107.12568
-      \endverb
-      \keyw{Computer Science - Programming Languages}
     \endentry
     \entry{mayr_complexity_1982}{article}{}{}
       \name{author}{2}{}{%
@@ -125,6 +130,74 @@
       \endverb
       \verb{url}
       \verb https://www.sciencedirect.com/science/article/pii/0001870882900482
+      \endverb
+    \endentry
+    \entry{panchekha_lin-graphs_2025}{online}{}{}
+      \name{author}{1}{}{%
+        {{hash=7929fea15fadf227450de2b313089cc0}{%
+           family={Panchekha},
+           familyi={P\bibinitperiod},
+           given={Pavel},
+           giveni={P\bibinitperiod}}}%
+      }
+      \strng{namehash}{7929fea15fadf227450de2b313089cc0}
+      \strng{fullhash}{7929fea15fadf227450de2b313089cc0}
+      \strng{fullhashraw}{7929fea15fadf227450de2b313089cc0}
+      \strng{bibnamehash}{7929fea15fadf227450de2b313089cc0}
+      \strng{authorbibnamehash}{7929fea15fadf227450de2b313089cc0}
+      \strng{authornamehash}{7929fea15fadf227450de2b313089cc0}
+      \strng{authorfullhash}{7929fea15fadf227450de2b313089cc0}
+      \strng{authorfullhashraw}{7929fea15fadf227450de2b313089cc0}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{23}
+      \field{langid}{english}
+      \field{month}{5}
+      \field{title}{{LIN}-graphs, an Egraph modulo T}
+      \field{titleaddon}{Pavel's Blog}
+      \field{year}{2025}
+      \field{dateera}{ce}
+      \verb{urlraw}
+      \verb https://pavpanchekha.com/blog/lin-graphs.html
+      \endverb
+      \verb{url}
+      \verb https://pavpanchekha.com/blog/lin-graphs.html
+      \endverb
+    \endentry
+    \entry{shanabrook_custom_2026}{online}{}{}
+      \name{author}{1}{}{%
+        {{hash=6ab7e6e1d7f608b1726c2e4e884a6419}{%
+           family={Shanabrook},
+           familyi={S\bibinitperiod},
+           given={Saul},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{6ab7e6e1d7f608b1726c2e4e884a6419}
+      \strng{fullhash}{6ab7e6e1d7f608b1726c2e4e884a6419}
+      \strng{fullhashraw}{6ab7e6e1d7f608b1726c2e4e884a6419}
+      \strng{bibnamehash}{6ab7e6e1d7f608b1726c2e4e884a6419}
+      \strng{authorbibnamehash}{6ab7e6e1d7f608b1726c2e4e884a6419}
+      \strng{authornamehash}{6ab7e6e1d7f608b1726c2e4e884a6419}
+      \strng{authorfullhash}{6ab7e6e1d7f608b1726c2e4e884a6419}
+      \strng{authorfullhashraw}{6ab7e6e1d7f608b1726c2e4e884a6419}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{24}
+      \field{langid}{english}
+      \field{month}{2}
+      \field{title}{Custom Data Structures in E-Graphs}
+      \field{titleaddon}{{PLSE} Blog}
+      \field{year}{2026}
+      \field{dateera}{ce}
+      \verb{urlraw}
+      \verb https://uwplse.org/2026/02/24/egglog-containers.html
+      \endverb
+      \verb{url}
+      \verb https://uwplse.org/2026/02/24/egglog-containers.html
       \endverb
     \endentry
     \entry{goos_little_2002}{incollection}{}{}
@@ -280,51 +353,44 @@
       \endverb
       \keyw{Computer Science - Databases,Computer Science - Programming Languages}
     \endentry
-    \entry{wang_e-graphs_nodate}{misc}{}{}
-      \name{author}{4}{}{%
-        {{hash=cf03d27f5054d00e304e8ab0690c6471}{%
-           family={Wang},
-           familyi={W\bibinitperiod},
-           given={Yisu\bibnamedelima Remy},
-           giveni={Y\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
-        {{hash=6129ab632b5e6a2aa55ff5b364eb7fe8}{%
-           family={Koppel},
-           familyi={K\bibinitperiod},
-           given={James},
-           giveni={J\bibinitperiod}}}%
-        {{hash=7dff18728cf17e1502aacf82fbfbec2d}{%
-           family={Haan},
-           familyi={H\bibinitperiod},
-           given={Altan},
+    \entry{tiwari_decision_2000}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=c280b85bda019adea24be030ef9c1e3d}{%
+           family={Tiwari},
+           familyi={T\bibinitperiod},
+           given={Ashish},
            giveni={A\bibinitperiod}}}%
-        {{hash=1f8253d21abec5b893dfa0257e2bb089}{%
-           family={Pollock},
-           familyi={P\bibinitperiod},
-           given={Josh},
-           giveni={J\bibinitperiod}}}%
       }
-      \strng{namehash}{de58d07247813e3f8c3ef8b9e0359aa8}
-      \strng{fullhash}{1d20555ff247ca63364fa19e6cd1742b}
-      \strng{fullhashraw}{1d20555ff247ca63364fa19e6cd1742b}
-      \strng{bibnamehash}{de58d07247813e3f8c3ef8b9e0359aa8}
-      \strng{authorbibnamehash}{de58d07247813e3f8c3ef8b9e0359aa8}
-      \strng{authornamehash}{de58d07247813e3f8c3ef8b9e0359aa8}
-      \strng{authorfullhash}{1d20555ff247ca63364fa19e6cd1742b}
-      \strng{authorfullhashraw}{1d20555ff247ca63364fa19e6cd1742b}
-      \field{sortinit}{W}
-      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \list{publisher}{1}{%
+        {State University of New York at Stony Brook}%
+      }
+      \strng{namehash}{c280b85bda019adea24be030ef9c1e3d}
+      \strng{fullhash}{c280b85bda019adea24be030ef9c1e3d}
+      \strng{fullhashraw}{c280b85bda019adea24be030ef9c1e3d}
+      \strng{bibnamehash}{c280b85bda019adea24be030ef9c1e3d}
+      \strng{authorbibnamehash}{c280b85bda019adea24be030ef9c1e3d}
+      \strng{authornamehash}{c280b85bda019adea24be030ef9c1e3d}
+      \strng{authorfullhash}{c280b85bda019adea24be030ef9c1e3d}
+      \strng{authorfullhashraw}{c280b85bda019adea24be030ef9c1e3d}
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{langid}{english}
-      \field{title}{E-Graphs, {VSAs}, and Tree Automata: a Rosetta Stone}
+      \field{title}{Decision procedures in automated deduction}
+      \field{urlday}{18}
+      \field{urlmonth}{3}
+      \field{urlyear}{2026}
+      \field{year}{2000}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
       \verb{file}
-      \verb PDF:/home/pree/Zotero/storage/6ZHJLV5S/Wang et al. - E-Graphs, VSAs, and Tree Automata a Rosetta Stone.pdf:application/pdf
+      \verb Available Version (via Google Scholar):/home/pree/Zotero/storage/8JMX8M3N/Tiwari - 2000 - Decision procedures in automated deduction.pdf:application/pdf;thesis.pdf:/home/pree/Zotero/storage/YCJKRAZS/thesis.pdf:application/pdf
       \endverb
       \verb{urlraw}
-      \verb https://remy.wang/reports/dfta.pdf
+      \verb https://search.proquest.com/openview/30046982652b13cadc7b85d653cdf547/1?pq-origsite=gscholar&cbl=18750&diss=y
       \endverb
       \verb{url}
-      \verb https://remy.wang/reports/dfta.pdf
+      \verb https://search.proquest.com/openview/30046982652b13cadc7b85d653cdf547/1?pq-origsite=gscholar&cbl=18750&diss=y
       \endverb
     \endentry
     \entry{willsey_egg_2021}{article}{}{}

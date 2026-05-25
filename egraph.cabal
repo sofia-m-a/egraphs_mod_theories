@@ -30,6 +30,7 @@ executable egraphs-modulo-theories
     -- , comonad-extras -- version issue
     , containers
     , data-fix
+    , deriving-compat
     , free
     -- , functor-combinators
     , graphviz

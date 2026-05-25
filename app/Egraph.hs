@@ -7,6 +7,8 @@ module Egraph
     eempty,
     efind,
     eunion,
+    -- for examples: non-propagating union
+    eunionInternal,
     elookup,
     einsert,
     einsertFix,
@@ -382,6 +384,47 @@ handleCritical (l1, r1) = do
   _1 . at l1 ?= r1
 
 -- Internal
+-- remove f(a, b, c) → d, and update the relevant reverse indices. Return d
+eremoveRewrite :: Signature f => f EId -> State (Egraph f ann) (Maybe EId)
+eremoveRewrite en = use (egTo . at en) >>= traverse \d -> do
+  egTo . at en .= Nothing
+  euses d . contains (RightUse en) .= False
+  for_ en \e -> euses e . contains (LeftUse en) .= False
+  pure d
+
+-- Internal
+-- add f(a, b, c) → d, and update the relevant reverse indices.
+eaddRewrite :: Signature f => f EId -> EId -> State (Egraph f ann) (Maybe EId)
+eaddRewrite en d = use (egTo . at en) >>= \clash -> do
+  egTo . at en ?= d
+  euses d . contains (RightUse en) .= True
+  for_ en \e -> euses e . contains (LeftUse en) .= True
+  pure clash
+
+-- If we update a → b, then:
+-- If we have LeftUse f(a, ...) → d, remove it and replace it with f(b, ...) → d
+-- 'Left update'
+-- If we have RightUse f(...) → a, remove it and replace it with f(...) → b
+-- 'Right update'
+-- Left update:
+--   f(a, ...) → Nothing
+--   remove f(a...) from RightUse(d)
+--   remove f(a...) from LeftUse(a)
+--   for e in ..., remove f(a...) from LeftUse(e)
+--   f(b, ...) → d
+--   add f(b...) to RightUse(d)
+--   add f(b...) to LeftUse(b)
+--   for e in ..., add f(b...) to LeftUse(e)
+-- Right update:
+--   f(...) → Nothing
+--   remove f(...) from RightUse(a)
+--   1> for e in ..., remove f(...) from LeftUse(e)
+--   f(...) → b
+--   add f(...) to RightUse(b)
+--   2> for e in ..., add f(...) to LeftUse(e)
+-- Note: 1> and 2> together are a no-op
+
+-- Internal
 eunionInternal :: (Signature f) => EId -> EId -> State (Egraph f ann) EId
 eunionInternal a b = do
   a' <- efind a
@@ -409,26 +452,36 @@ eunionInternal a b = do
 
       usesChild' <-
         fromList <$> for (toList usesChild) \case
-          LeftUse en -> do
-            enOld <- traverse (\e -> if e == newChild then pure e else efind e) en
+          LeftUse enOld -> do
             let enNew = fmap (\e -> if e == newChild then newRoot else e) enOld
-            rA <- use (egTo . at enOld)
-            rB <- use (egTo . at en)
+            rA <- eremoveRewrite enOld
             whenJust rA \s -> do
-              egTo . at enOld .= Nothing
-              euses s . contains (RightUse enOld) .= False
-              egTo . at enNew ?= s
-              euses s . contains (RightUse enNew) .= True
+              rB <- eaddRewrite enNew s
               -- could call recursively...
-              whenJust rB $ \t -> when (s /= t) $ egBaseEqs <|= (s, t)
+              whenJust rB \t -> when (s /= t) $ egBaseEqs <|= (s, t)
+
+            -- Handled in bulk by the two lines below **
+            -- euses newChild . contains (LeftUse en) .= False
+            -- euses newRoot . contains (LeftUse en') .= True
+
+            -- Old code, probably buggy
+            -- rA <- use (egTo . at enOld)
+            -- rB <- use (egTo . at en)
+            -- whenJust rA \s -> do
+            --   egTo . at enOld .= Nothing
+            --   euses s . contains (RightUse enOld) .= False
+            --   egTo . at enNew ?= s
+            --   euses s . contains (RightUse enNew) .= True
+            --   whenJust rB $ \t -> when (s /= t) $ egBaseEqs <|= (s, t)
             pure (LeftUse enNew)
           RightUse en -> do
-            en' <- traverse efind en
-            -- this handles the case where we update a cycle: f(...a...) -> a
-            egTo . at en .= Nothing
-            egTo . at en' ?= newRoot
-            pure (RightUse en')
+            egTo . at en ?= newRoot
+            -- Handled in bulk by the two lines below **
+            -- euses newChild . contains (RightUse en) .= False
+            -- euses newRoot . contains (RightUse en') .= True
+            pure (RightUse en)
 
+      -- ** Handled here
       euses newChild .= Set.empty
       euses newRoot <>= usesChild'
 
