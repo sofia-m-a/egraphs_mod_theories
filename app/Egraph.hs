@@ -2,11 +2,15 @@
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE NoImplicitPrelude #-}
 
+{- HLINT ignore "Redundant $" -}
+
 module Egraph
   ( Egraph,
     eempty,
+    eemptyWithMatcher,
     efind,
     eunion,
+    efindMatches,
     -- for examples: non-propagating union
     eunionInternal,
     elookup,
@@ -37,59 +41,10 @@ import Data.Map.Merge.Strict qualified as MapMerge
 import Data.Map.Monoidal (MonoidalMap (..))
 import Data.Map.Strict qualified as Map
 import Data.Set qualified as Set
--- import Egraph (EId (..), Signature (..), Use (..), unId)
+import Ematch (MatchState, Matcher, MatcherAnn, matcherEmpty, matcherFinal, matcherStart, mergeEmatcher, stepEmatcher)
 import Lude
 import Prettyprinter (Doc, indent, line, list, viaShow, vsep, (<+>))
-
-newtype EId = Id {_unId :: Int}
-  deriving (Eq, Ord, Hashable, Show, Read, Generic)
-
-makeWrapped ''EId
-
-instance Bounded EId where
-  minBound = Id 0
-  maxBound = Id maxBound
-
-makeLenses ''EId
-
-class (Ord (ACSymbol enode), Ord (Symbol enode), Ord (enode EId), Traversable enode) => Signature enode where
-  type Symbol enode
-
-  symbolOf :: enode a -> Symbol enode
-  default symbolOf :: (Symbol enode ~ enode ()) => enode a -> Symbol enode
-  symbolOf = void
-
-  type ACSymbol enode
-
-  acSymbolOf :: enode a -> Maybe (ACSymbol enode)
-  default acSymbolOf :: (ACSymbol enode ~ Void) => enode a -> Maybe (ACSymbol enode)
-  acSymbolOf _ = Nothing
-
-  arity :: enode a -> Int
-  default arity :: (Symbol enode ~ enode ()) => enode a -> Int
-  arity = length
-
-  -- Who doesn't love ambiguity?
-  arity' :: Proxy enode -> Symbol enode -> Int
-  default arity' :: (Symbol enode ~ enode ()) => Proxy enode -> Symbol enode -> Int
-  arity' _ = length
-
-  -- arityAC :: Proxy enode -> ACSymbol enode -> Int
-  -- default arityAC :: (ACSymbol enode ~ Void) => Proxy enode -> ACSymbol enode -> Int
-  -- arityAC _ = absurd
-
-  -- it has to be partial in certain cases...
-  reconstruct :: Symbol enode -> [a] -> enode a
-  default reconstruct :: (Symbol enode ~ enode ()) => Symbol enode -> [a] -> enode a
-  reconstruct s as = s & unsafePartsOf traverse .~ as
-
-  reconstructAC :: ACSymbol enode -> [a] -> enode a
-  default reconstructAC :: (ACSymbol enode ~ Void) => ACSymbol enode -> [a] -> enode a
-  reconstructAC = absurd
-
--- reconstruct :: Symbol enode -> [a] -> Maybe (enode a)
--- default reconstruct :: (Symbol enode ~ enode ()) => Symbol enode -> [a] -> Maybe (enode a)
--- reconstruct s as = sequence . (partsOf traverse .~ fmap Just as) . (Nothing <$) $ s
+import Signature
 
 data Use c
   = LeftUse c
@@ -171,6 +126,8 @@ data Egraph f ann
     _egBaseEqs :: [(EId, EId)],
     _egMonoEqs :: Seq (ACSymbol f, Monomial, Monomial),
     _egChangedAnn :: IntSet,
+    _egMatcherAnn :: IntMap MatcherAnn,
+    _egMatcher :: Matcher f,
     _egBottom :: ann,
     _egMerge :: ann -> ann -> (Bool, ann),
     _egAlg :: f ann -> ann
@@ -179,7 +136,10 @@ data Egraph f ann
 makeLenses ''Egraph
 
 eempty :: ann -> (ann -> ann -> (Bool, ann)) -> (f ann -> ann) -> Egraph f ann
-eempty =
+eempty = eemptyWithMatcher matcherEmpty
+
+eemptyWithMatcher :: Matcher f -> ann -> (ann -> ann -> (Bool, ann)) -> (f ann -> ann) -> Egraph f ann
+eemptyWithMatcher =
   EgraphC
     IntMap.empty
     IntMap.empty
@@ -191,6 +151,7 @@ eempty =
     []
     []
     IntSet.empty
+    IntMap.empty
 
 efind :: EId -> State (Egraph f ann) EId
 efind e = use (egUFRoot . atId e . non e)
@@ -205,6 +166,9 @@ emono s = egAC . at s . anon Map.empty Map.null
 
 eannotation :: EId -> State (Egraph f ann) ann
 eannotation e = use (egAnn . atId e) >>= maybe (use egBottom) pure
+
+ematchAnnotation :: EId -> Lens' (Egraph f ann) MatcherAnn
+ematchAnnotation e = egMatcherAnn . atId e . anon IntMap.empty IntMap.null
 
 elookup :: (Signature f) => f EId -> State (Egraph f ann) (Maybe EId)
 elookup f = do
@@ -232,6 +196,11 @@ einsertInternal f = do
       fa <- traverse (efind >=> eannotation) f'
       m <- use egAlg
       egAnn . atId i ?= m fa
+      --
+      mat <- use egMatcher
+      egMatcherAnn . atId i ?= fromList ((\subs -> [subs $> i]) <<$>> (toList $ (mat ^. matcherStart)))
+      fma <- traverse (efind >=> use . ematchAnnotation) f'
+      _ <- zoom (ematchAnnotation i) $ stepEmatcher mat fma
 
       pure i
 
@@ -290,6 +259,11 @@ epropagateAnns =
             fa <- traverse (efind >=> eannotation) en'
             alg <- use egAlg
             eupdateAnnotation r' (alg fa)
+            --
+            mat <- use egMatcher
+            fma <- traverse (efind >=> use . ematchAnnotation) en'
+            didChangeMatch <- zoom (ematchAnnotation r') $ stepEmatcher mat fma
+            when didChangeMatch (egChangedAnn . atId r' ?= ())
         RightUse _ -> pass
 
 -- Internal
@@ -385,21 +359,23 @@ handleCritical (l1, r1) = do
 
 -- Internal
 -- remove f(a, b, c) → d, and update the relevant reverse indices. Return d
-eremoveRewrite :: Signature f => f EId -> State (Egraph f ann) (Maybe EId)
-eremoveRewrite en = use (egTo . at en) >>= traverse \d -> do
-  egTo . at en .= Nothing
-  euses d . contains (RightUse en) .= False
-  for_ en \e -> euses e . contains (LeftUse en) .= False
-  pure d
+eremoveRewrite :: (Signature f) => f EId -> State (Egraph f ann) (Maybe EId)
+eremoveRewrite en =
+  use (egTo . at en) >>= traverse \d -> do
+    egTo . at en .= Nothing
+    euses d . contains (RightUse en) .= False
+    for_ en \e -> euses e . contains (LeftUse en) .= False
+    pure d
 
 -- Internal
 -- add f(a, b, c) → d, and update the relevant reverse indices.
-eaddRewrite :: Signature f => f EId -> EId -> State (Egraph f ann) (Maybe EId)
-eaddRewrite en d = use (egTo . at en) >>= \clash -> do
-  egTo . at en ?= d
-  euses d . contains (RightUse en) .= True
-  for_ en \e -> euses e . contains (LeftUse en) .= True
-  pure clash
+eaddRewrite :: (Signature f) => f EId -> EId -> State (Egraph f ann) (Maybe EId)
+eaddRewrite en d =
+  use (egTo . at en) >>= \clash -> do
+    egTo . at en ?= d
+    euses d . contains (RightUse en) .= True
+    for_ en \e -> euses e . contains (LeftUse en) .= True
+    pure clash
 
 -- If we update a → b, then:
 -- If we have LeftUse f(a, ...) → d, remove it and replace it with f(b, ...) → d
@@ -449,6 +425,12 @@ eunionInternal a b = do
       oldCAnn <- eannotation newChild
       egAnn . atId newChild .= Nothing
       eupdateAnnotation newRoot oldCAnn
+      -- Updating matches. TODO: make eupdateMatchAnnotation
+      oldCMAnn <- use (ematchAnnotation newChild)
+      egMatcherAnn . atId newChild .= Nothing
+      mat <- use egMatcher
+      didMatchChange <- zoom (ematchAnnotation newRoot) (state $ mergeEmatcher mat oldCMAnn)
+      when didMatchChange (egChangedAnn . atId newRoot ?= ())
 
       usesChild' <-
         fromList <$> for (toList usesChild) \case
@@ -481,7 +463,7 @@ eunionInternal a b = do
             -- euses newRoot . contains (RightUse en') .= True
             pure (RightUse en)
 
-      -- ** Handled here
+      -- \** Handled here
       euses newChild .= Set.empty
       euses newRoot <>= usesChild'
 
@@ -504,11 +486,11 @@ epurifyAC =
     >>= itraverse_
       ( \s -> itraverse_ \l r -> do
           il <- case itoList l of
-             [(x, 1)] -> pure $ Id x
-             _ -> einsertInternal (reconstructAC s (unMon l))
+            [(x, 1)] -> pure $ Id x
+            _ -> einsertInternal (reconstructAC s (unMon l))
           ir <- case itoList r of
-             [(x, 1)] -> pure $ Id x
-             _ -> einsertInternal (reconstructAC s (unMon r))
+            [(x, 1)] -> pure $ Id x
+            _ -> einsertInternal (reconstructAC s (unMon r))
           _ <- eunion il ir
           pass
       )
@@ -516,19 +498,30 @@ epurifyAC =
 econcretize :: (Signature f) => Egraph f ann -> [(EId, [f EId], ann)]
 econcretize eg =
   let eg' = executingState eg epurifyAC
-   in toList $ imap
-        ( \a us ->
-            ( Id a,
-              mapMaybe
-                ( \case
-                    LeftUse _ -> Nothing
-                    RightUse en -> Just en
-                )
-                (toList us),
-              fromMaybe (eg' ^. egBottom) (eg' ^. egAnn . at a)
-            )
-        )
-        (eg' ^. egBack)
+   in toList
+        $ imap
+          ( \a us ->
+              ( Id a,
+                mapMaybe
+                  ( \case
+                      LeftUse _ -> Nothing
+                      RightUse en -> Just en
+                  )
+                  (toList us),
+                fromMaybe (eg' ^. egBottom) (eg' ^. egAnn . at a)
+              )
+          )
+          (eg' ^. egBack)
+
+efindMatches :: State (Egraph f ann) [(MatchState, EId, IntMap EId)]
+efindMatches =
+  use egMatcherAnn >>= \ma -> do
+    finals <- use (egMatcher . matcherFinal)
+    -- Outer list: for each EId,
+    -- Middle list: for each state,
+    -- Inner list: for each subst in that state,
+    let z = imap (\rt ss -> fmap (\(s, subs) -> (s,Id rt,) <$> subs) (itoList $ IntMap.restrictKeys ss finals)) (toList ma)
+    pure $ concat (concat z)
 
 edebug :: (ACSymbol f -> Doc a) -> (ann -> Doc a) -> (f EId -> Doc a) -> Egraph f ann -> Doc a
 edebug showACSym showAnn showNode eg =

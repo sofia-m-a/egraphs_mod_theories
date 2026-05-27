@@ -118,6 +118,6 @@ executable egraphs-modulo-theories
     ViewPatterns
 
   main-is:            Main.hs
-  other-modules:      Lude, Egraph, Ematch, TermIndex, Examples
+  other-modules:      Lude, Egraph, Ematch, TermIndex, Examples, Signature
   hs-source-dirs:     app
   default-language:   Haskell2010

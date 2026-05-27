@@ -2,13 +2,15 @@
 
 module Examples where
 
+import Control.Lens
 import Control.Monad.Free (Free (..))
 import Data.Functor.Classes (Eq1, Show1)
 import Data.GraphViz (GraphvizCanvas (Xlib), GraphvizOutput (Png, Svg, XDot), runGraphviz, runGraphvizCanvas')
 import Data.GraphViz.Types.Generalised (DotGraph)
 import Data.Text qualified as Text
 import Data.Traversable (for)
-import Egraph (EId (..), Egraph, Signature (..), eempty, einsert, einsertFree, ereannotate, eunion, eunionInternal, prettyId)
+import Egraph (EId (..), Egraph, Signature (..), edebug, eempty, eemptyWithMatcher, efindMatches, einsert, einsertFree, ereannotate, eunion, eunionInternal, prettyId)
+import Ematch (compilePatterns, convert, mdebug)
 import GHC.Generics (Generic1, Generically, Generically1 (..))
 import GraphDrawing
 import Prettyprinter
@@ -295,3 +297,54 @@ example4Gen = do
   let examples = zip [1 ..] [example40, example405, example41, example42, example435, example43, example44]
   for_ examples \(i, e) -> do
     runGraphviz (toDot Nothing example4Show e) Svg ("writings/" ++ "exampleBasic" ++ show i ++ ".svg")
+
+debugMatches :: [(Int, EId, IntMap EId)] -> Doc ann
+debugMatches ms =
+  "Matches"
+    <> line
+    <> vsep
+      ( fmap
+          ( \(s, rt, subs) ->
+              "Final state"
+                <+> viaShow s
+                <> line
+                <> "Root node"
+                <+> prettyId rt
+                <> line
+                <+> "Substitution"
+                <> line
+                <> indent 2 (vsep (fmap (\(pv, i) -> viaShow pv <+> "→" <+> prettyId i) (itoList subs)))
+          )
+          ms
+      )
+
+example5' :: Doc ann
+example5' = (\(a, b) -> vsep [a, b]) $ bimap debugMatches (edebug viaShow viaShow viaShow) example5
+
+example5'' :: Doc ann
+example5'' = mdebug viaShow $
+  compilePatterns
+    [ g4f (pure 0),
+      f4f (pure 0) (pure 0),
+      f4f (pure 0) (f4f (pure 1) (pure 2))
+    ]
+
+example5 :: ([(Int, EId, IntMap EId)], Egraph Ex4 ())
+example5 =
+  let mat =
+        convert $
+          compilePatterns
+            [ g4f (pure 0),
+              f4f (pure 0) (pure 0),
+              f4f (pure 0) (f4f (pure 1) (pure 2))
+            ]
+   in usingState (eemptyWithMatcher mat () (\_ _ -> (False, ())) (const ())) do
+        x1 <- einsertFree (f4f a4 b4)
+        ae <- einsertFree a4
+        be <- einsertFree b4
+        x2 <- einsertFree (g4f b4)
+        x3 <- einsertFree (g4f c4)
+        x4 <- einsertFree (f4f a4 (pure x1))
+        _ <- eunion be x4
+        eunion ae x1
+        efindMatches
