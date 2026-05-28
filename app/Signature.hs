@@ -28,14 +28,14 @@ class (Ord (ACSymbol enode), Ord (Symbol enode), Ord (enode EId), Traversable en
   default acSymbolOf :: (ACSymbol enode ~ Void) => enode a -> Maybe (ACSymbol enode)
   acSymbolOf _ = Nothing
 
-  arity :: enode a -> Int
-  default arity :: (Symbol enode ~ enode ()) => enode a -> Int
-  arity = length
+  -- arity :: enode a -> Int
+  -- default arity :: (Symbol enode ~ enode ()) => enode a -> Int
+  -- arity = length
 
-  -- Who doesn't love ambiguity?
-  arity' :: Proxy enode -> Symbol enode -> Int
-  default arity' :: (Symbol enode ~ enode ()) => Proxy enode -> Symbol enode -> Int
-  arity' _ = length
+  -- -- Who doesn't love ambiguity?
+  -- arity' :: Proxy enode -> Symbol enode -> Int
+  -- default arity' :: (Symbol enode ~ enode ()) => Proxy enode -> Symbol enode -> Int
+  -- arity' _ = length
 
   -- arityAC :: Proxy enode -> ACSymbol enode -> Int
   -- default arityAC :: (ACSymbol enode ~ Void) => Proxy enode -> ACSymbol enode -> Int
