@@ -1,101 +1,267 @@
-\documentclass{report}
+\documentclass[12pt,a4paper,twoside,openright]{report}
 
-\usepackage[utf8]{inputenc}
+\usepackage{moreverb}								% List settings
+\usepackage{textcomp}								% Fonts, symbols etc.
+\usepackage{lmodern}								% Latin modern font
+\usepackage{helvet}									% Enables font switching
+\usepackage[T1]{fontenc}							% Output settings
+\usepackage[english]{babel}							% Language settings
+\usepackage[utf8]{inputenc}							% Input settings
+\usepackage{amsmath}								% Mathematical expressions (American mathematical society)
+\usepackage{amssymb}								% Mathematical symbols (American mathematical society)
+\usepackage{graphicx}								% Figures
+\usepackage{subfig}									% Enables subfigures
+\numberwithin{equation}{chapter}					% Numbering order for equations
+\numberwithin{figure}{chapter}						% Numbering order for figures
+\numberwithin{table}{chapter}						% Numbering order for tables
+\usepackage{minted}						    		% Enables source code listings
+%\usepackage{chemfig}								% Chemical structures
+\usepackage[top=3cm, bottom=3cm,
+			inner=3cm, outer=3cm]{geometry}			% Page margin lengths			
+\usepackage{eso-pic}								% Create cover page background
+\newcommand{\backgroundpic}[3]{
+	\put(#1,#2){
+	\parbox[b][\paperheight]{\paperwidth}{
+	\centering
+	\includegraphics[width=\paperwidth,height=\paperheight,keepaspectratio]{#3}}}}
+\usepackage{float} 									% Enables object position enforcement using [H]
+\usepackage{parskip}								% Enables vertical spaces correctly 
+\usepackage{datetime2} % date formatting tools - ISO-date YYYY-MM-DD
+\usepackage{microtype} % Microtypography - improves readability and appearance of text.
 
-\usepackage[
+% Allows clickable links for references, in table of content, autoref, etc.  	
+\usepackage{hyperref}								
+\hypersetup{colorlinks, citecolor=black,
+   		 	filecolor=black, linkcolor=black,
+    		urlcolor=black}
+
+%% Bibliography https://www.overleaf.com/learn/latex/Bibliography_management_with_biblatex
+\usepackage[style=ieee,
     backend=biber,
-    natbib=true
-]{biblatex}
-\addbibresource{thesis.bib} %Import the bibliography file
+    natbib=true]{biblatex} % style=apa also possible
+\addbibresource{thesis.bib}
 
-\usepackage{hyperref}
-\hypersetup{
-    colorlinks=true,
-}
 
-\usepackage[pdf]{graphviz}
-\usepackage{graphicx}
-\usepackage{amsmath}
+% OPTIONAL SETTINGS (DELETE OR COMMENT TO SUPRESS)
+
+
+		 
+
+% Define the number of section levels to be included in the t.o.c. and numbered	(3 is default)	
+\setcounter{tocdepth}{5}							
+\setcounter{secnumdepth}{5}	
+
+
+% Chapter title settings
+\usepackage{titlesec}		
+\titleformat{\chapter}[display]
+  {\Huge\bfseries\filcenter}
+  {{\fontsize{50pt}{1em}\vspace{-4.2ex}\selectfont \textnormal{\thechapter}}}{1ex}{}[]
+
+
+% Header and footer settings (Select TWOSIDE or ONESIDE layout below)
+\usepackage{fancyhdr}								
+\pagestyle{fancy}  
+\renewcommand{\chaptermark}[1]{\markboth{\thechapter.\space#1}{}} 
+
+
+% Select one-sided (1) or two-sided (2) page numbering
+\def\layout{2}	% Choose 1 for one-sided or 2 for two-sided layout
+% Conditional expression based on the layout choice
+\ifnum\layout=2	% Two-sided
+    \fancyhf{}			 						
+	\fancyhead[LE,RO]{\nouppercase{ \leftmark}}
+	\fancyfoot[LE,RO]{\thepage}
+	\fancypagestyle{plain}{			% Redefine the plain page style
+	\fancyhf{}
+	\renewcommand{\headrulewidth}{0pt} 		
+	\fancyfoot[LE,RO]{\thepage}}	
+\else			% One-sided  	
+  	\fancyhf{}					
+	\fancyhead[C]{\nouppercase{ \leftmark}}
+	\fancyfoot[C]{\thepage}
+\fi
+
+
+% Enable To-do notes
+\usepackage[textsize=tiny]{todonotes}   % Include the option "disable" to hide all notes
+\setlength{\marginparwidth}{2.5cm} 
+
+
+% Supress warning from Texmaker about headheight
+\setlength{\headheight}{15pt}		
+
+
+
+
+
+
+
+
+
+
+
+
+%\usepackage[pdf]{graphviz}
 \usepackage{amsthm}
-\usepackage{amssymb}
-\usepackage{tikz}
-\usepackage{freetikz}
-\usetikzlibrary{shapes.geometric}
-\usetikzlibrary{calc}
-\usetikzlibrary{arrows, decorations.markings, shapes, positioning}
 \usepackage[x11names, svgnames, rgb]{xcolor}
-\usetikzlibrary{fit}
-\usepackage{string-diagrams}
 \usepackage{comment}
 \usepackage{tabularx}
 \usepackage[status=draft,layout=inline]{fixme}
 \fxusetheme{color}
-\usepackage{parskip}
-\setlength{\parskip}{10pt} 
-\usepackage{chngcntr}
-\counterwithout{figure}{section}
-\usepackage[normalem]{ulem}
-\usepackage{listings}
+\usepackage{csquotes}
+
+\usepackage{tikz}
+\usepackage{freetikz}
+\usetikzlibrary{shapes.geometric, calc, fit, 
+	arrows, decorations.markings, shapes, positioning}
 \usepackage{makecell}
 \usepackage{changepage}
 \usepackage{stmaryrd}
-\usepackage{minted}
+
+% Old header stuff, seems unneeded?
+%\usepackage{etoolbox}
+%\setlength{\parskip}{10pt} 
+%\usepackage{chngcntr}
+%\counterwithout{figure}{section}
+%\usepackage[normalem]{ulem}
+%\usepackage{listings}
+
 
 \theoremstyle{definition}
 \newtheorem*{ex}{Example}
-
-\usepackage{etoolbox}
-\newtoggle{plannthesis}
-\togglefalse{plannthesis}
-\newtoggle{incltitle}
-\toggletrue{incltitle}
 
 % E-graph typesetting constants
 \definecolor{lightgrey}{RGB}{211,211,211}
 \def \globalscale {1.000000}
 
+
+\newcommand{\oneLineTitle}{E-graphs modulo theories}
+\newcommand{\multiLineTitle}[1]{E-graphs modulo theories}
+% The term [#1] indicates that there will be 1 rowbreak to split the title into two pieces, first part before \\[#1] and second part after. If you have a very long title and need to split it up into 3 rows, just use \\[#1] multiple times.
+
+\newcommand{\oneLineSubtitle}{with applications to AC}
+
 \begin{document}
 
-\iftoggle{incltitle}{
-	\begin{titlepage}
+\pagenumbering{roman}
 
-		\centering
+{ %% Scoped to not change parskip outside the titlepage
+\begin{titlepage}
+\newgeometry{top=3cm, bottom=3cm,
+			left=2.25 cm, right=2.25cm}	% Temporarily change margins		
+			
+% Cover page background 
+\AddToShipoutPicture*{\backgroundpic{-4}{56.7}{frontpage_gu_eng_vec_m2.pdf}}
+\addtolength{\voffset}{2cm}
 
-		{\scshape \iftoggle{plannthesis}{\large Master's thesis living draft}{\LARGE Master's thesis} \\}
+% Cover picture (replace with your own or delete)		
+%\begin{figure}[H]
+%\centering
+%\vspace{1cm}	% Adjust vertical spacing here
+%\includegraphics[width=0.9\linewidth]{figure/somepicture}
+%\end{figure}
 
-		\vspace{0.5cm}
+% Cover text
+\mbox{}
+\vfill
+\renewcommand{\familydefault}{\sfdefault} \normalfont % Set cover page font
 
-		{\huge\bfseries E-graphs modulo theories\\}
+\textbf{\Huge \multiLineTitle{0.2cm}} 
+\\[0.5cm]
 
-		{\LARGE with applications to AC\\}
+{\Large \oneLineSubtitle}\\[0.5cm]
 
-		\vspace{2cm}
+%{\Large A Subtitle that can be Very Much Longer if Necessary}\\[0.5cm]
 
-		{\Large Sofia Brookie \\ \href{mailto:sofia.ma@protonmail.com}{sofia.ma@protonmail.com} \\}
+Master's thesis in Computer science and engineering \setlength{\parskip}{1cm}
 
-		\vspace{1.0cm}
+{\Large Sofia Brookie} \setlength{\parskip}{2.9cm}
 
-		{\large Supervisor: Nicholas Smallbone\\}
-		{\large Examiner: David Sands\\}
+Department of Computer Science and Engineering \\
+\textsc{Chalmers University of Technology} \\
+\textsc{University of Gothenburg} \\
+Gothenburg, Sweden \the\year
 
-		\vfill
+\renewcommand{\familydefault}{\rmdefault} \normalfont % Reset standard font
+\end{titlepage}
 
-		\vfill
 
-		{\large \today\\}
-
-	\end{titlepage}
-}{}
-
-\tableofcontents
-
+% BACK OF COVER PAGE (BLANK PAGE)
 \newpage
+\restoregeometry
+\thispagestyle{empty}
+\mbox{}
 
-\chapter{Abstract}
-\iftoggle{plannthesis}{
-	\emph{This is the `planning', aka `living draft' version of this document. This contains notes, planning, and halftime report content besides the eventual thesis content.}
-}{}
 
+% TITLE PAGE
+\newpage
+\thispagestyle{empty}
+\begin{center}
+	\textsc{\large Master's thesis \the\year}\\[4cm]		% Report number is currently not in use
+	\textbf{\Large \multiLineTitle{0.2cm}} \\[1cm]
+	{\large \oneLineSubtitle}\\[1cm]
+	{\large Sofia Brookie}
+	
+	\vfill	
+	% Logotype on titlepage	
+	\begin{figure}[H]
+	\centering
+	% Remove the following line to remove the titlepage logotype
+	\includegraphics[width=0.25\pdfpagewidth]{ChGULogoHog.pdf}
+	\end{figure}	\vspace{5mm}	
+	
+	Department of Computer Science and Engineering\\
+	%\emph{Division of Division name}\\
+	%Name of research group (if applicable)\\
+	\textsc{Chalmers University of Technology} \\
+	\textsc{University of Gothenburg} \\
+	Gothenburg, Sweden \the\year \\
+\end{center}
+
+
+% IMPRINT PAGE (BACK OF TITLE PAGE)
+\newpage
+\thispagestyle{plain}
+\vspace*{4.5cm}
+\oneLineTitle\\
+\oneLineSubtitle\\
+Sofia Brookie \setlength{\parskip}{1cm}
+
+\copyright ~ Sofia Brookie, \the\year. \setlength{\parskip}{1cm}
+
+Supervisor: Nicholas Smallbone, Department of Computer Science and Engineering\\
+Examiner: David Sands, Department of Computer Science and Engineering \setlength{\parskip}{1cm}
+
+Master's Thesis \the\year\\	% Report number currently not in use 
+Department of Computer Science and Engineering\\
+%Division of Division name\\
+%Name of research group (if applicable)\\
+Chalmers University of Technology and University of Gothenburg\\
+SE-412 96 Gothenburg\\
+Telephone +46 31 772 1000 \setlength{\parskip}{0.5cm}
+
+\vfill
+% Caption for cover page figure if used, possibly with reference to further information in the report
+Cover: Description of the picture on the cover page (if applicable)
+
+
+Typeset in \LaTeX \\
+%Printed by [Name of printing company]\\
+Gothenburg, Sweden \the\year
+
+}
+
+% ABSTRACT
+\newpage
+\oneLineTitle\\
+\oneLineSubtitle\\
+Sofia Brookie\\
+Department of Computer Science and Engineering\\
+Chalmers University of Technology and University of Gothenburg
+
+\thispagestyle{plain}			% Supress header 
+\section*{Abstract}
 E-graphs are a data structure for equational theorem proving, and which provide the basis for \emph{equality saturation} (section \fxerror{TODO}), a method to automatically derive equational consequences from a starting set of terms, equations, and identities. E-graphs have generated a lot of interest since the publication of the \textsc{Egg} library developed by Willsey et al. and their corresponding paper (\citep{willsey_egg_2021}).
 
 However, E-graphs struggle with a combinatorial explosion when reasoning about certain theories. A notorious case is that of AC theories, those containing associative and commutative operators: the space complexity of saturation is doubly-exponential in the size of the input in the worst case, as shown in section \ref{acegg}.
@@ -113,6 +279,50 @@ We then, in section \ref{impl}, discuss an implementation of EMTs and benchmark 
 Central to our notion of a `good' theory for an EMT is the necessity of a solver for the word problem over the theory, which we justify in section \fxerror{TODO}. This gives us a lower bound on EMTs for AC: the word problem for AC requires in the worst case exponential space and doubly-exponential time. This is an improvement over the doubly-exponential space upper bound for E-graphs, but highlights that concrete efficiency gains derive from the potential for typical problems to be solvable efficiently. Our solver for AC and polynomials is builds upon Buchberger's algorithm, which has received significant effort to achieve good common-case performance.
 
 On the other hand, for the theory ACUN (AC with unit and negation, aka the theory of Abelian groups) or the theory of vector spaces, we have polynomial time bounds: we can use algorithms for Hermite normal form (for Abelian groups) and Gaussian elimination (for vector spaces).
+
+% KEYWORDS (MAXIMUM 10 WORDS)
+\vfill
+Keywords: E-graphs, AC, associativity, commutativity, Buchberger's algorithm, rewriting, thesis.
+
+\newpage				% Create empty back of side
+\thispagestyle{empty}
+\mbox{}
+
+% ACKNOWLEDGEMENTS
+\newpage
+\thispagestyle{plain}			% Supress header
+\section*{Acknowledgements}
+Here, you can say thank you to your supervisor(s), company advisors and other people that supported you during your project.
+
+\vspace{1.5cm}
+\hfill
+Sofia Brookie, Gothenburg, \today
+
+\newpage				% Create empty back of side
+\thispagestyle{empty}
+\mbox{}
+
+% TABLE OF CONTENTS
+\newpage
+\tableofcontents
+
+% OTHER FRONTMATTER
+% List of figures (add to table of contents)
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{chapter}{\listfigurename} 
+\listoffigures
+% List of tables (add to table of contents)
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{chapter}{\listtablename}  
+\listoftables
+
+% START OF MAIN DOCUMENT
+\cleardoublepage
+\setcounter{page}{1}
+\pagenumbering{arabic}			% Arabic numbering starting from 1 (one)
+
 
 \chapter{Introduction to E-graphs}
 \section{Equational theorem proving}
@@ -1452,7 +1662,7 @@ We can do several matches/insertions/merges in between rebuilding; it is suffici
 
 There are plenty of extensions to the outer loop that include things such as conditional reasoning (along the lines of: if $a = b$, then assert that $c = d$ by merging classes) or E-class analyses (\citep{willsey_egg_2021}).
 
-\chapter{Egraphs modulo AC} \label{acegg}
+\chapter{E-graphs modulo AC} \label{acegg}
 One common pair of identities we want to work with is associativity
 
 \begin{equation}
@@ -1469,7 +1679,9 @@ We refer to this combination as AC
 
 A common AC operator is +, and we will use that as a generic name for an AC operator.
 
+\section{AC and equality saturation}
 Unfortunately, equality saturation handles these identities rather poorly. Consider as a simple case the terms of length $n$ over some constant terms $k_n$ $t_n = a + (b + (...k_n))$. Then we can see that there is a significant blowup in the size of the saturated graph as we increase $n$:
+
 
 \begin{center}
 	\begin{tikzpicture}[y=1cm, x=1cm, yscale=\globalscale,xscale=\globalscale, every node/.append style={scale=\globalscale}, inner sep=0pt, outer sep=0pt]
@@ -2235,7 +2447,7 @@ Unfortunately, equality saturation handles these identities rather poorly. Consi
 \end{center}
 
 \begin{center}
-\begin{adjustwidth}{-100pt}{-100pt}
+\begin{adjustwidth}{-60pt}{-60pt}
 	\includegraphics[scale=0.25]{blowup5.png}
 \end{adjustwidth}
 	\label{blowup5}
@@ -2244,7 +2456,7 @@ Unfortunately, equality saturation handles these identities rather poorly. Consi
 It's relatively easy to see why: the top E-class has $2^n-1$ E-nodes, one for each way to partition the set of atoms into 2 nonempty parts, so the E-nodes in the top class already have $2^n-1$ E-classes as children. And then each child E-class representing the sum of $k$ atoms has its own $2^k$ enodes, etc. So, there are $O(2^n)$ E-nodes for each of $O(2^n)$ E-classes, giving a doubly-exponentially $O(2^{2^n})$ sized E-graph.
 
 \section{Handling AC with EMTs: a first example}
-The difficult with plain E-graphs motivates developing a notion of \emph{E-graphs modulo theories}, where we work modulo AC (the theory we will focus on now)
+The poor handling of AC by plain E-graphs with equality saturation motivates developing a notion of \emph{E-graphs modulo theories}. In this case, we want to work `modulo AC' in some way. Developing a method for working modulo AC is the central goal of this thesis.
 
 We will use an example problem: besides the AC operator $+$, we introduce a function symbol $f$ and the identity $\forall xy.\; f(x + y) + 1 = f(x) + f(y)$. We also allow integer constants $k_i$, and treat integer arithmetic as an identity: $\forall xy.\; k_i + k_j = k_{i+j}$. Indeed, we will write integer constants directly.
 
@@ -2846,6 +3058,8 @@ However, there are two key advantages:
 \end{itemize}
 
 \chapter{E-graphs, EMTs, and rewriting}
+In order to more precisely specify EMTs for AC, we introduce some ideas from term rewriting theory. In particular, both E-graphs and EMTs can be seen as representations of certain systems of rewrites, and the algorithms and correctness proofs can be described in terms of these rewrite systems.
+
 \section{E-graphs present a rewriting system}
 Consider the E-graph
 
@@ -4177,7 +4391,18 @@ Buchberger's algorithm has the $F_4$ and $F_5$ variants and an extensive literat
 
 As mentioned in Section \ref{panacea}, adding constraints to patterns for matching could significantly cut down the search space for matching modulo theories when the full space of matches, which includes a lot of redundant symmetries, is not needed.
 
+
+% REFERENCES / BIBLIOGRAPHY
+\cleardoublepage
+\phantomsection % So hyperref does not link to the section above
+\addcontentsline{toc}{chapter}{Bibliography}
 \printbibliography
+
+% APPENDICES
+%\cleardoublepage
+%\appendix
+%\setcounter{page}{1}
+%\pagenumbering{Roman}			% Capitalized roman numbering starting from I (one)
 
 \end{document}
 
