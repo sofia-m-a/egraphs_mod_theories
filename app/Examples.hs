@@ -1,26 +1,35 @@
 {-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE NoImplicitPrelude #-}
 
 module Examples where
 
+import Control.DeepSeq (NFData1)
 import Control.Lens
-import Control.Monad.Free (Free (..))
-import Data.Functor.Classes (Eq1, Show1)
-import Data.GraphViz (GraphvizCanvas (Xlib), GraphvizOutput (Png, Svg, XDot), runGraphviz, runGraphvizCanvas')
+import Control.Monad.Free (Free (..), iter)
+import Control.Monad.ST (ST)
+import Data.Fix (Fix (..))
+import Data.Foldable1 (foldr1)
+import Data.Functor.Classes (Show1)
+import Data.GraphViz (GraphvizCanvas (Xlib), GraphvizOutput (Png, Svg), runGraphviz, runGraphvizCanvas')
 import Data.GraphViz.Types.Generalised (DotGraph)
 import Data.Text qualified as Text
 import Data.Traversable (for)
 import Egraph (EId (..), Egraph, Signature (..), edebug, eempty, eemptyWithMatcher, efindMatches, einsert, einsertFree, ereannotate, eunion, eunionInternal, prettyId)
-import Ematch (compilePatterns, convert, mdebug)
+import Ematch (MatchState, Matcher, Pattern, PatternVar, compilePatterns, convert, mdebug)
 import GHC.Generics (Generic1, Generically, Generically1 (..))
 import GraphDrawing
+import Lude
 import Prettyprinter
+import Relude.Unsafe qualified
+import Signature (NFSig)
+import Test.QuickCheck
 import Text.Show.Deriving
 
 data Ex1 a
   = F a a
   | G a
   | H Int
-  deriving (Eq, Ord, Show, Functor, Foldable, Traversable)
+  deriving (Eq, Ord, Show, Functor, Foldable, Traversable, Generic)
 
 instance Signature Ex1 where
   type Symbol Ex1 = Ex1 ()
@@ -60,7 +69,7 @@ prettyEx (G a) = "(G" <+> prettyId a <> ""
 prettyEx (H i) = "(H" <+> viaShow i <> ")"
 
 data Ex2 a = Ex2 [a] | Ex2C Text
-  deriving (Eq, Ord, Show, Functor, Foldable, Traversable)
+  deriving (Eq, Ord, Show, Functor, Foldable, Traversable, Generic)
 
 instance Signature Ex2 where
   type Symbol Ex2 = Either Text Int
@@ -71,11 +80,6 @@ instance Signature Ex2 where
 
   acSymbolOf (Ex2 _) = Just ()
   acSymbolOf (Ex2C _) = Nothing
-
-  arity (Ex2 as) = length as
-  arity (Ex2C _) = 0
-
-  arity' _ = fromRight 0
 
   reconstruct (Right _) = Ex2
   reconstruct (Left i) = const (Ex2C i)
@@ -159,7 +163,7 @@ instance Signature Ex3 where
   type ACSymbol Ex3 = Void
 
 commonVars :: [Text]
-commonVars = [fromList [c] | c <- ['a' .. 'z']]
+commonVars = [ fromList [c] | c <- ['a' .. 'z']]
 
 associationsOf :: [a] -> [Free Ex3 a]
 associationsOf [] = []
@@ -167,11 +171,11 @@ associationsOf [x] = [Pure x]
 associationsOf (x : xs) = associationsOf xs >>= graft x
   where
     graft :: a -> Free Ex3 a -> [Free Ex3 a]
-    graft x t = Free (Ex3Op (Pure x) t) : [Free (Ex3Op s z) | Free (Ex3Op y z) <- [t], s <- graft x y]
+    graft x t = Free (Ex3Op (Pure x) t) : [ Free (Ex3Op s z) | Free (Ex3Op y z) <- [t], s <- graft x y]
 
 -- sanity check
 catalanNumbers :: [Int]
-catalanNumbers = [length (associationsOf [1 .. i]) | i <- [1 .. 10]] :: [Int]
+catalanNumbers = [ length (associationsOf [1 .. i]) | i <- [1 .. 10]] :: [Int]
 
 exampleACNaive :: Int -> Egraph Ex3 ()
 exampleACNaive n = executingState trivialEmpty do
@@ -295,7 +299,7 @@ example4Viz i = runGraphvizCanvas' (toDot Nothing example4Show i) Xlib
 example4Gen :: IO ()
 example4Gen = do
   let examples = zip [1 ..] [example40, example405, example41, example42, example435, example43, example44]
-  for_ examples \(i, e) -> do
+  for_ @[] examples \(i, e) -> do
     runGraphviz (toDot Nothing example4Show e) Svg ("writings/" ++ "exampleBasic" ++ show i ++ ".svg")
 
 debugMatches :: [(Int, EId, IntMap EId)] -> Doc ann
@@ -322,21 +326,26 @@ example5' :: Doc ann
 example5' = (\(a, b) -> vsep [a, b]) $ bimap debugMatches (edebug viaShow viaShow viaShow) example5
 
 example5'' :: Doc ann
-example5'' = mdebug viaShow $
-  compilePatterns
-    [ g4f (pure 0),
-      f4f (pure 0) (pure 0),
-      f4f (pure 0) (f4f (pure 1) (pure 2))
-    ]
+example5'' =
+  mdebug viaShow
+    $ fst
+    $ compilePatterns
+    $ fromList
+      [ (0, g4f (pure 0)),
+        (1, f4f (pure 0) (pure 0)),
+        (2, f4f (pure 0) (f4f (pure 1) (pure 2)))
+      ]
 
 example5 :: ([(Int, EId, IntMap EId)], Egraph Ex4 ())
 example5 =
   let mat =
-        convert $
-          compilePatterns
-            [ g4f (pure 0),
-              f4f (pure 0) (pure 0),
-              f4f (pure 0) (f4f (pure 1) (pure 2))
+        convert
+          $ fst
+          $ compilePatterns
+          $ fromList
+            [ (0, g4f (pure 0)),
+              (1, f4f (pure 0) (pure 0)),
+              (2, f4f (pure 0) (f4f (pure 1) (pure 2)))
             ]
    in usingState (eemptyWithMatcher mat () (\_ _ -> (False, ())) (const ())) do
         x1 <- einsertFree (f4f a4 b4)
@@ -348,3 +357,155 @@ example5 =
         _ <- eunion be x4
         eunion ae x1
         efindMatches
+
+type SymNo = Int
+
+type SymArity = Int
+
+data ExampleBench a
+  = BenchAC SymNo [a]
+  | BenchSatAC SymNo a a
+  | BenchF SymNo [a]
+  | BenchConst Int
+  deriving (Eq, Ord, Show, Functor, Foldable, Traversable, Generic, Generic1)
+
+deriveShow1 ''ExampleBench
+
+instance (NFData a) => NFData (ExampleBench a)
+
+instance NFData1 ExampleBench
+
+instance NFSig ExampleBench
+
+instance Signature ExampleBench where
+  type Symbol ExampleBench = ExampleBench ()
+  type ACSymbol ExampleBench = Int
+
+  acSymbolOf (BenchAC i _) = Just i
+  acSymbolOf _ = Nothing
+
+  reconstructAC = BenchAC
+
+exampleBenchShow :: ExampleBench EId -> Text
+exampleBenchShow = \case
+  BenchAC i _ -> "+_" <> show i
+  BenchSatAC i _ _ -> "+_" <> show i
+  BenchF i _ -> if 0 <= i && i < 26 then fromString [toEnum (fromEnum 'a' + i)] else "f_" <> show i
+  BenchConst i -> show i
+
+replicateNE :: Int -> a -> NonEmpty a
+replicateNE n a = a :| replicate n a
+
+replicateNEM :: (Monad m) => Int -> m a -> m (NonEmpty a)
+replicateNEM n ma = sequence (replicateNE n ma)
+
+smallerScale :: Int -> Gen a -> Gen a
+smallerScale m a = do
+  s <- getSize
+  resize (if s < m then 0 else s - m) a
+
+genTerm :: [(SymNo, SymArity)] -> Gen (Free ExampleBench Int)
+genTerm i =
+  if null i
+    then Pure <$> chooseEnum (0, 3)
+    else do
+      (sn, sa) <- Test.QuickCheck.elements i
+      s <- getSize
+      Free . BenchF sn <$> replicateM sa (frequency [(4, Pure <$> chooseEnum (0, 3)), (min 1 s, smallerScale 1 (genTerm i))])
+
+genACTerm :: SymNo -> [(SymNo, SymArity)] -> Gen (Free ExampleBench Int, Free ExampleBench Int)
+genACTerm numACOps i = do
+  size <- getSize
+  acSym <- chooseEnum (0, numACOps - 1)
+  len <- frequency [(4 + if size < 3 then 3 else 0, pure 2), (2, pure 3), (1, pure 4)]
+  ts <- replicateNEM len (smallerScale 2 $ genTerm i)
+  pure (foldr1 (\x y -> Free (BenchSatAC acSym x y)) ts, Free $ BenchAC acSym (toList ts))
+
+data RwIndex
+  = SatA SymNo
+  | SatC SymNo
+  | RandomRW Int
+  deriving (Eq, Ord, Show)
+
+type BenchTheory = (SymNo, [(SymNo, SymArity)], Matcher ExampleBench, MatchState -> IntMap EId -> Maybe (Free ExampleBench EId))
+
+genBenchTheory :: Gen (BenchTheory, BenchTheory)
+genBenchTheory = do
+  numSyms <- chooseInt (0, 3)
+  arities <- for [0 .. numSyms - 1] (\s -> (s,) <$> chooseInt (0, 3))
+
+  numACOps <- chooseInt (1, 2)
+  let acOps :: [(RwIndex, Pattern ExampleBench, Pattern ExampleBench)] =
+        let x = Pure 0
+            y = Pure 1
+            z = Pure 2
+         in concatMap @[]
+              ( \i ->
+                  [ ( SatA i,
+                      Free (BenchSatAC i x (Free (BenchSatAC i y z))),
+                      Free (BenchSatAC i (Free (BenchSatAC i x y)) z)
+                    ),
+                    ( SatC i,
+                      Free (BenchSatAC i x y),
+                      Free (BenchSatAC i y x)
+                    )
+                  ]
+              )
+              [0 .. numACOps - 1]
+
+  numNonACOps <- if numSyms == 0 then pure 0 else chooseInt (0, 5)
+  nonACOps <- for [0 .. numNonACOps - 1] \i -> do
+    lhs <- genTerm arities
+    rhs <- genTerm arities
+    pure (RandomRW i, lhs, rhs)
+
+  let finalAC1 =
+        let ops = acOps ++ nonACOps
+            (mb, stateMap) = compilePatterns (fromList (fmap (\(k, lhs, _rhs) -> (k, lhs)) ops))
+            rhss = fromList @(Map _ _) $ fmap (\(k, _lhs, rhs) -> (k, rhs)) ops
+            onMatch finalState finalSubs =
+              stateMap
+                ^. at finalState >>= \patK ->
+                  rhss
+                    ^. at patK >>= \rhs ->
+                      traverse (\v -> finalSubs ^. at v) rhs
+         in (numACOps, arities, convert mb, onMatch)
+
+  let finalAC2 =
+        let ops = nonACOps
+            (mb, stateMap) = compilePatterns (fromList (fmap (\(k, lhs, _rhs) -> (k, lhs)) ops))
+            rhss = fromList @(Map _ _) $ fmap (\(k, _lhs, rhs) -> (k, rhs)) ops
+            onMatch finalState finalSubs =
+              stateMap
+                ^. at finalState >>= \patK ->
+                  rhss
+                    ^. at patK >>= \rhs ->
+                      traverse (\v -> finalSubs ^. at v) rhs
+         in (numACOps, arities, convert mb, onMatch)
+
+  pure
+    (finalAC1, finalAC2)
+
+type InitialClasses = [NonEmpty (Fix ExampleBench)]
+
+genInitialClasses :: SymNo -> [(SymNo, SymArity)] -> Gen (InitialClasses, InitialClasses)
+genInitialClasses numACOps ars = do
+  size <- getSize
+  (nonACN, acN) <-
+    if null ars
+      then pure (0, size)
+      else do
+        spl <- chooseInt (0, size)
+        pure (size - spl, spl)
+  nonACs <-
+    replicateM nonACN $ do
+      chooseInt (0, min 3 size) >>= \i -> smallerScale i $ replicateNEM i do
+        t <- genTerm ars
+        pure (iter Fix $ fmap (Fix . BenchConst) t)
+  (acs1, acs2) <-
+    fmap (unzip . fmap unzip) (replicateM acN
+      $ chooseInt (0, min 3 size)
+      >>= \i -> smallerScale i $ replicateNEM i do
+        (t1, t2) <- genACTerm numACOps ars
+        pure (iter Fix $ fmap (Fix . BenchConst) t1, iter Fix $ fmap (Fix . BenchConst) t2))
+  pure (nonACs ++ acs1, nonACs ++ acs2)

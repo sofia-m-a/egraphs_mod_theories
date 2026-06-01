@@ -6,6 +6,7 @@ import Control.Lens
 
 newtype EId = Id {_unId :: Int}
   deriving (Eq, Ord, Hashable, Show, Read, Generic)
+  deriving newtype (NFData)
 
 makeWrapped ''EId
 
@@ -53,3 +54,5 @@ class (Ord (ACSymbol enode), Ord (Symbol enode), Ord (enode EId), Traversable en
 -- reconstruct :: Symbol enode -> [a] -> Maybe (enode a)
 -- default reconstruct :: (Symbol enode ~ enode ()) => Symbol enode -> [a] -> Maybe (enode a)
 -- reconstruct s as = sequence . (partsOf traverse .~ fmap Just as) . (Nothing <$) $ s
+
+class (Signature f, NFData (f Int), NFData (ACSymbol f)) => NFSig f

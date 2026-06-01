@@ -2380,22 +2380,31 @@
     <bcf:citekey order="5" intorder="1">goos_little_2002</bcf:citekey>
     <bcf:citekey order="6" intorder="1">goos_little_2002</bcf:citekey>
     <bcf:citekey order="7" intorder="1">willsey_egg_2021</bcf:citekey>
-    <bcf:citekey order="8" intorder="1">zucker_omelets_2025</bcf:citekey>
-    <bcf:citekey order="9" intorder="1">panchekha_lin-graphs_2025</bcf:citekey>
-    <bcf:citekey order="10" intorder="1">shanabrook_custom_2026</bcf:citekey>
-    <bcf:citekey order="11" intorder="1">suciu_semantic_2025</bcf:citekey>
-    <bcf:citekey order="12" intorder="1">willsey_egg_2021</bcf:citekey>
-    <bcf:citekey order="13" intorder="1">willsey_egg_2021</bcf:citekey>
+    <bcf:citekey order="8" intorder="1">suciu_semantic_2025</bcf:citekey>
+    <bcf:citekey order="9" intorder="1">willsey_egg_2021</bcf:citekey>
+    <bcf:citekey order="10" intorder="1">willsey_egg_2021</bcf:citekey>
+    <bcf:citekey order="11" intorder="1">zucker_omelets_2025</bcf:citekey>
+    <bcf:citekey order="12" intorder="1">panchekha_lin-graphs_2025</bcf:citekey>
+    <bcf:citekey order="13" intorder="1">shanabrook_custom_2026</bcf:citekey>
     <bcf:citekey order="14" intorder="1">bachmair_abstract_2000</bcf:citekey>
     <bcf:citekey order="15" intorder="1">bachmair_abstract_2000</bcf:citekey>
     <bcf:citekey order="16" intorder="1">tiwari_decision_2000</bcf:citekey>
-    <bcf:citekey order="17" intorder="1">zucker_omelets_2025</bcf:citekey>
-    <bcf:citekey order="18" intorder="1">panchekha_lin-graphs_2025</bcf:citekey>
-    <bcf:citekey order="19" intorder="1">shanabrook_custom_2026</bcf:citekey>
-    <bcf:citekey order="20" intorder="1">zucker_omelets_2025</bcf:citekey>
-    <bcf:citekey order="21" intorder="1">zucker_omelets_2025</bcf:citekey>
+    <bcf:citekey order="17" intorder="1">downey_variations_1980</bcf:citekey>
+    <bcf:citekey order="18" intorder="1">nelson_fast_1980</bcf:citekey>
+    <bcf:citekey order="19" intorder="1">willsey_egg_2021</bcf:citekey>
+    <bcf:citekey order="20" intorder="1">suciu_semantic_2025</bcf:citekey>
+    <bcf:citekey order="21" intorder="1">nyberg-brodda_g_2024</bcf:citekey>
     <bcf:citekey order="22" intorder="1">mayr_complexity_1982</bcf:citekey>
-    <bcf:citekey order="23" intorder="1">mayr_complexity_1982</bcf:citekey>
+    <bcf:citekey order="23" intorder="1">zucker_omelets_2025</bcf:citekey>
+    <bcf:citekey order="24" intorder="1">panchekha_lin-graphs_2025</bcf:citekey>
+    <bcf:citekey order="25" intorder="1">shanabrook_custom_2026</bcf:citekey>
+    <bcf:citekey order="26" intorder="1">zucker_omelets_2025</bcf:citekey>
+    <bcf:citekey order="27" intorder="1">zucker_omelets_2025</bcf:citekey>
+    <bcf:citekey order="28" intorder="1">goos_congruence_2000</bcf:citekey>
+    <bcf:citekey order="29" intorder="1">tiwari_decision_2000</bcf:citekey>
+    <bcf:citekey order="30" intorder="1">kapur_modular_2021</bcf:citekey>
+    <bcf:citekey order="31" intorder="1">kapur_modularity_2023</bcf:citekey>
+    <bcf:citekey order="32" intorder="1">conchon_ccx_2008</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="nty">

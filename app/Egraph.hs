@@ -25,6 +25,12 @@ module Egraph
     EId (..),
     unId,
     Signature (..),
+    esize,
+    EgraphStats,
+    egsEclasses,
+    egsEnodes,
+    egsACnodes,
+    egsACTotalSize,
   )
 where
 
@@ -37,8 +43,6 @@ import Data.IntMap.Monoidal.Strict (getMonoidalIntMap)
 import Data.IntMap.Strict qualified as IntMap
 import Data.IntSet qualified as IntSet
 import Data.IntSet.Lens qualified as IntSet
-import Data.Map.Merge.Strict qualified as MapMerge
-import Data.Map.Monoidal (MonoidalMap (..))
 import Data.Map.Strict qualified as Map
 import Data.Set qualified as Set
 import Ematch (MatchState, Matcher, MatcherAnn, matcherEmpty, matcherFinal, matcherStart, mergeEmatcher, stepEmatcher)
@@ -49,7 +53,9 @@ import Signature
 data Use c
   = LeftUse c
   | RightUse c
-  deriving (Eq, Ord, Show)
+  deriving (Eq, Ord, Show, Generic)
+
+instance (NFData c) => NFData (Use c)
 
 atId :: (At m, Index m ~ Int) => EId -> Lens' m (Maybe (IxValue m))
 atId e = at (e ^. unId)
@@ -132,8 +138,11 @@ data Egraph f ann
     _egMerge :: ann -> ann -> (Bool, ann),
     _egAlg :: f ann -> ann
   }
+  deriving (Generic)
 
 makeLenses ''Egraph
+
+instance (NFSig f, NFData (f EId), NFData ann) => NFData (Egraph f ann)
 
 eempty :: ann -> (ann -> ann -> (Bool, ann)) -> (f ann -> ann) -> Egraph f ann
 eempty = eemptyWithMatcher matcherEmpty
@@ -198,7 +207,7 @@ einsertInternal f = do
       egAnn . atId i ?= m fa
       --
       mat <- use egMatcher
-      egMatcherAnn . atId i ?= fromList ((\subs -> [subs $> i]) <<$>> (toList $ (mat ^. matcherStart)))
+      egMatcherAnn . atId i ?= fromList ((\subs -> [(subs $> i, True)]) <<$>> (toList $ (mat ^. matcherStart)))
       fma <- traverse (efind >=> use . ematchAnnotation) f'
       _ <- zoom (ematchAnnotation i) $ stepEmatcher mat fma
 
@@ -514,14 +523,35 @@ econcretize eg =
           (eg' ^. egBack)
 
 efindMatches :: State (Egraph f ann) [(MatchState, EId, IntMap EId)]
-efindMatches =
-  use egMatcherAnn >>= \ma -> do
-    finals <- use (egMatcher . matcherFinal)
-    -- Outer list: for each EId,
-    -- Middle list: for each state,
-    -- Inner list: for each subst in that state,
-    let z = imap (\rt ss -> fmap (\(s, subs) -> (s,Id rt,) <$> subs) (itoList $ IntMap.restrictKeys ss finals)) (toList ma)
-    pure $ concat (concat z)
+efindMatches = do
+  finals <- use (egMatcher . matcherFinal)
+  egMatcherAnn
+    . ( itraversed -- for each EId
+          <.> ( itraversed -- for each MatchState
+                  . indices (\k -> finals ^. contains k) -- filter to final matchStates
+              )
+      )
+    <. traversed -- for each substitution
+    %%@= \(rt, s) (subs, isNew) -> (if isNew then [(s, Id rt, subs)] else [], (subs, False))
+
+-- Outer list: for each EId,
+-- Middle list: for each state,
+-- Inner list: for each subst in that state,
+-- ma <- use egMatcherAnn
+-- let z =
+--       imap
+--         ( \rt ss ->
+--             fmap
+--               ( \(s, subs) ->
+--                   (s,Id rt,)
+--                     <$> mapMaybe
+--                       (\(z, b) -> if b then Just z else Nothing)
+--                       subs
+--               )
+--               (itoList $ IntMap.restrictKeys ss finals)
+--         )
+--         (toList ma)
+-- pure $ concat (concat z)
 
 edebug :: (ACSymbol f -> Doc a) -> (ann -> Doc a) -> (f EId -> Doc a) -> Egraph f ann -> Doc a
 edebug showACSym showAnn showNode eg =
@@ -602,3 +632,24 @@ edebug showACSym showAnn showNode eg =
 
 prettyId :: EId -> Doc ann
 prettyId i = viaShow (i ^. unId)
+
+data EgraphStats
+  = EgraphStatsC
+  { _egsEclasses :: Int,
+    _egsEnodes :: Int,
+    _egsACnodes :: Int,
+    _egsACTotalSize :: Int
+  }
+  deriving stock (Eq, Show, Generic)
+
+instance NFData EgraphStats
+
+makeLenses ''EgraphStats
+
+esize :: Egraph f ann -> EgraphStats
+esize eg =
+  EgraphStatsC
+    (eg ^. egBack . to length)
+    (eg ^. egTo . to length)
+    (getSum (foldMap (Sum . length) (eg ^. egAC)))
+    (getSum (foldMap (ifoldMap (\a b -> Sum $ sum a + sum b)) (eg ^. egAC)))

@@ -1,7 +1,22 @@
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE NoImplicitPrelude #-}
 
-module Ematch (Matcher, mdebug, matcherEmpty, matcherFinal, MatchState, matcherStart, MatcherAnn, stepEmatcher, mergeEmatcher, compilePatterns, convert) where
+module Ematch
+  ( Pattern,
+    Matcher,
+    mdebug,
+    matcherEmpty,
+    matcherFinal,
+    MatchState,
+    matcherStart,
+    MatcherAnn,
+    stepEmatcher,
+    mergeEmatcher,
+    compilePatterns,
+    convert,
+    PatternVar,
+  )
+where
 
 import Control.Lens
 import Control.Monad.Free (Free (..), foldFree, iterA)
@@ -42,6 +57,9 @@ data Matcher f
     _matcherStep :: Map (f MatchState) MatchState,
     _matcherFinal :: IntSet
   }
+  deriving (Generic)
+
+instance (NFSig f) => NFData (Matcher f)
 
 makeLenses ''Matcher
 
@@ -55,27 +73,28 @@ convert m =
     (m ^. matcherBStep)
     (m ^. matcherBFinal)
 
-compilePatterns :: (Signature f, Ord (f Int)) => [Pattern f] -> MatcherBuilder f
-compilePatterns pats = executingState (MatcherBuilderC 0 Map.empty Map.empty IntSet.empty) $ for_ pats \pat -> do
+compilePatterns :: (Signature f, Ord k, Ord (f Int)) => Map k (Pattern f) -> (MatcherBuilder f, Map MatchState k)
+compilePatterns pats = executingState (MatcherBuilderC 0 Map.empty Map.empty IntSet.empty, Map.empty) $ ifor_ pats \k pat -> do
   outState <-
     pat
       -- Assign states to variable captures
       & traverse
         ( \pv ->
-            use (matcherBStart . at pv) >>= flip whenNothing do
-              i <- matcherBNextState <<+= 1
-              matcherBStart . at pv ?= i
+            use (_1 . matcherBStart . at pv) >>= flip whenNothing do
+              i <- _1 . matcherBNextState <<+= 1
+              _1 . matcherBStart . at pv ?= i
               pure i
         )
         -- Traverse the pattern as a tree, assigning steps/states
         >>= iterA
           ( \f -> do
               f' <- sequence f
-              i <- matcherBNextState <<+= 1
-              matcherBStep . at f' ?= i
+              i <- _1 . matcherBNextState <<+= 1
+              _1 . matcherBStep . at f' ?= i
               pure i
           )
-  matcherBFinal . contains outState .= True
+  _1 . matcherBFinal . contains outState .= True
+  _2 . at outState ?= k
 
 mdebug :: (f MatchState -> Doc ann) -> MatcherBuilder f -> Doc ann
 mdebug showNode m =
@@ -120,25 +139,29 @@ joinSubs =
     )
     (pure IntMap.empty)
 
-mergeSubsLists :: [IntMap EId] -> State [IntMap EId] Bool
+mergeSubsLists :: [(IntMap EId, Bool)] -> State [(IntMap EId, Bool)] Bool
 mergeSubsLists ss = do
-  old <- fromList @(Set _) <$> get
-  let added = executingState (False, old) $ for_ ss \s ->
-        use (_2 . contains s) >>= \b -> unless b do
-          _2 . contains s .= True
-          _1 .= True
-  put (toList $ snd added)
+  old <- fromList @(Map _ _) <$> get
+  let added = executingState (False, old) $ for_ ss \(s, isNew) ->
+        whenNothingM_
+          (use (_2 . at s))
+          ( do
+              _2 . at s ?= isNew
+              _1 .= True
+          )
+  put (itoList $ snd added)
   pure (fst added)
 
-type MatcherAnn = IntMap [IntMap EId]
+-- The bool is to keep track of whether the match is 'new'
+type MatcherAnn = IntMap [(IntMap EId, Bool)]
 
 stepEmatcher :: (Signature f) => Matcher f -> f MatcherAnn -> State MatcherAnn Bool
 stepEmatcher m en = do
   l <- for (itoList (m ^. matcherStep)) \(sig, s) -> do
     if symbolOf sig == symbolOf en
       then for (zipWithM (\s ss -> ss ^. at s) (toList sig) (toList en)) \subs -> do
-        let prod = mapMaybe joinSubs $ sequence subs
-        zoom (at s . anon [] null) (mergeSubsLists prod)
+        let prod = mapMaybe joinSubs $ traverse (fmap fst) subs
+        zoom (at s . anon [] null) (mergeSubsLists (fmap (,True) prod))
       else pure Nothing
   pure (Just True `elem` l)
 

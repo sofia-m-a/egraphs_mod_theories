@@ -1,0 +1,6 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{k+kr}{data}\PYG{+w}{ }\PYG{k+kt}{TermF}\PYG{+w}{ }\PYG{n}{a}
+\PYG{+w}{	}\PYG{o+ow}{=}\PYG{+w}{ }\PYG{k+kt}{Fs}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{Multiset}\PYG{+w}{ }\PYG{n}{a}\PYG{p}{)}
+\PYG{+w}{	}\PYG{o}{|}\PYG{+w}{ }\PYG{k+kt}{G}\PYG{+w}{ }\PYG{n}{a}\PYG{+w}{ }\PYG{n}{a}\PYG{+w}{ }\PYG{n}{a}
+\PYG{+w}{	}\PYG{o}{|}\PYG{+w}{ }\PYG{k+kt}{H}\PYG{+w}{ }\PYG{n}{a}
+\end{MintedVerbatim}

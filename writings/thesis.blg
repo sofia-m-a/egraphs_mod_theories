@@ -1,17 +1,18 @@
 [0] Config.pm:324> INFO - This is Biber 2.21 (beta)
 [0] Config.pm:327> INFO - Logfile is 'thesis.blg'
-[26] biber:342> INFO - === Mon May 25, 2026, 11:03:12
-[42] Biber.pm:421> INFO - Reading 'thesis.bcf'
-[68] Biber.pm:1002> INFO - Found 9 citekeys in bib section 0
-[74] Biber.pm:4487> INFO - Processing section 0
-[80] Biber.pm:4678> INFO - Looking for bibtex file 'thesis.bib' for section 0
-[85] bibtex.pm:1713> INFO - LaTeX decoding ...
-[198] bibtex.pm:1519> INFO - Found BibTeX data source 'thesis.bib'
-[276] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[276] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[276] Biber.pm:4307> INFO - Sorting list 'nty/global//global/global/global' of type 'entry' with template 'nty' and locale 'en-US'
-[276] Biber.pm:4313> INFO - No sort tailoring available for locale 'en-US'
-[287] bbl.pm:676> INFO - Writing 'thesis.bbl' with encoding 'UTF-8'
-[289] bbl.pm:779> INFO - Output to thesis.bbl
-[289] Biber.pm:132> WARN - ISBN '978-3-540-43928-8 978-3-540-45614-8' in entry 'goos_little_2002' is invalid - run biber with '--validate_datamodel' for details.
-[289] Biber.pm:134> INFO - WARNINGS: 1
+[25] biber:342> INFO - === Fri May 29, 2026, 00:55:16
+[33] Biber.pm:421> INFO - Reading 'thesis.bcf'
+[59] Biber.pm:1002> INFO - Found 16 citekeys in bib section 0
+[65] Biber.pm:4487> INFO - Processing section 0
+[69] Biber.pm:4678> INFO - Looking for bibtex file 'thesis.bib' for section 0
+[74] bibtex.pm:1713> INFO - LaTeX decoding ...
+[189] bibtex.pm:1519> INFO - Found BibTeX data source 'thesis.bib'
+[266] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[266] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[266] Biber.pm:4307> INFO - Sorting list 'nty/global//global/global/global' of type 'entry' with template 'nty' and locale 'en-US'
+[266] Biber.pm:4313> INFO - No sort tailoring available for locale 'en-US'
+[275] bbl.pm:676> INFO - Writing 'thesis.bbl' with encoding 'UTF-8'
+[279] bbl.pm:779> INFO - Output to thesis.bbl
+[279] Biber.pm:132> WARN - ISBN '978-3-540-43928-8 978-3-540-45614-8' in entry 'goos_little_2002' is invalid - run biber with '--validate_datamodel' for details.
+[279] Biber.pm:132> WARN - ISBN '978-3-540-67281-4 978-3-540-46421-1' in entry 'goos_congruence_2000' is invalid - run biber with '--validate_datamodel' for details.
+[279] Biber.pm:134> INFO - WARNINGS: 2

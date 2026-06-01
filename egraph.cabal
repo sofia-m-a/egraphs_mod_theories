@@ -29,8 +29,10 @@ executable egraphs-modulo-theories
     , comonad
     -- , comonad-extras -- version issue
     , containers
+    , criterion
     , data-fix
     , deriving-compat
+    , deepseq
     , free
     -- , functor-combinators
     , graphviz
@@ -44,6 +46,7 @@ executable egraphs-modulo-theories
     , prettyprinter
     , prettyprinter-ansi-terminal
     , profunctors
+    , QuickCheck
     , recursion-schemes
     , relude
     , semialign

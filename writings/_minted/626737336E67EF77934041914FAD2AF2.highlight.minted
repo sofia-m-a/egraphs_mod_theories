@@ -1,0 +1,26 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{+w}{	}\PYG{k+kr}{data}\PYG{+w}{ }\PYG{k+kt}{MyENode}\PYG{+w}{ }\PYG{n}{a}
+\PYG{+w}{		}\PYG{o+ow}{=}\PYG{+w}{ }\PYG{k+kt}{F}\PYG{+w}{ }\PYG{n}{a}
+\PYG{+w}{		}\PYG{o}{|}\PYG{+w}{ }\PYG{k+kt}{G}\PYG{+w}{ }\PYG{n}{a}\PYG{+w}{ }\PYG{n}{a}
+\PYG{+w}{		}\PYG{o}{|}\PYG{+w}{ }\PYG{k+kt}{Constant}\PYG{+w}{ }\PYG{k+kt}{Int}
+\PYG{+w}{		}\PYG{o}{|}\PYG{+w}{ }\PYG{k+kt}{Plus}\PYG{+w}{ }\PYG{p}{[}\PYG{n}{a}\PYG{p}{]}
+\PYG{+w}{		}\PYG{o}{|}\PYG{+w}{ }\PYG{k+kt}{Times}\PYG{+w}{ }\PYG{p}{[}\PYG{n}{a}\PYG{p}{]}
+\PYG{+w}{		}\PYG{k+kr}{deriving}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{Eq}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{Ord}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{Show}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{Functor}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{Foldable}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{Traversable}\PYG{p}{)}
+\PYG{+w}{		}
+\PYG{+w}{	}\PYG{k+kr}{data}\PYG{+w}{ }\PYG{k+kt}{ACSym}\PYG{+w}{ }\PYG{o+ow}{=}\PYG{+w}{ }\PYG{k+kt}{PlusSym}\PYG{+w}{ }\PYG{o}{|}\PYG{+w}{ }\PYG{k+kt}{TimesSym}
+\PYG{+w}{		}
+\PYG{+w}{	}\PYG{k+kr}{instance}\PYG{+w}{ }\PYG{k+kt}{Signature}\PYG{+w}{ }\PYG{k+kt}{MyENode}\PYG{+w}{ }\PYG{k+kr}{where}
+\PYG{+w}{	  }\PYG{k+kr}{type}\PYG{+w}{ }\PYG{k+kt}{Symbol}\PYG{+w}{ }\PYG{k+kt}{MyENode}\PYG{+w}{ }\PYG{o+ow}{=}\PYG{+w}{ }\PYG{k+kt}{MyENode}\PYG{+w}{ }\PYG{n+nb}{()}
+\PYG{+w}{	  }\PYG{k+kr}{type}\PYG{+w}{ }\PYG{k+kt}{ACSymbol}\PYG{+w}{ }\PYG{k+kt}{MyENode}\PYG{+w}{ }\PYG{o+ow}{=}\PYG{+w}{ }\PYG{k+kt}{ACSym}
+\PYG{+w}{	}
+\PYG{+w}{	  }\PYG{c+c1}{\PYGZhy{}\PYGZhy{} symbolOf: default definition is fine}
+\PYG{+w}{	}
+\PYG{+w}{	  }\PYG{n}{acSymbolOf}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{Plus}\PYG{+w}{ }\PYG{k+kr}{\PYGZus{}}\PYG{p}{)}\PYG{+w}{ }\PYG{o+ow}{=}\PYG{+w}{ }\PYG{k+kt}{Just}\PYG{+w}{ }\PYG{k+kt}{PlusSym}
+\PYG{+w}{	  }\PYG{n}{acSymbolOf}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{Times}\PYG{+w}{ }\PYG{k+kr}{\PYGZus{}}\PYG{p}{)}\PYG{+w}{ }\PYG{o+ow}{=}\PYG{+w}{ }\PYG{k+kt}{Just}\PYG{+w}{ }\PYG{k+kt}{TimesSym}
+\PYG{+w}{	  }\PYG{n}{acSymbolOf}\PYG{+w}{ }\PYG{k+kr}{\PYGZus{}}\PYG{+w}{ }\PYG{o+ow}{=}\PYG{+w}{ }\PYG{k+kt}{Nothing}
+\PYG{+w}{	}
+\PYG{+w}{	  }\PYG{c+c1}{\PYGZhy{}\PYGZhy{} reconstruct: default definition is fine}
+\PYG{+w}{	}
+\PYG{+w}{	  }\PYG{n}{reconstructAC}\PYG{+w}{ }\PYG{k+kt}{PlusSym}\PYG{+w}{ }\PYG{n}{as}\PYG{+w}{ }\PYG{o+ow}{=}\PYG{+w}{ }\PYG{k+kt}{Plus}\PYG{+w}{ }\PYG{n}{as}
+\PYG{+w}{	  }\PYG{n}{reconstructAC}\PYG{+w}{ }\PYG{k+kt}{TimesSym}\PYG{+w}{ }\PYG{n}{as}\PYG{+w}{ }\PYG{o+ow}{=}\PYG{+w}{ }\PYG{k+kt}{Times}\PYG{+w}{ }\PYG{n}{as}
+\end{MintedVerbatim}

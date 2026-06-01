@@ -1,0 +1,30 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{k+kr}{class}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{Ord}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{ACSymbol}\PYG{+w}{ }\PYG{n}{enode}\PYG{p}{),}
+\PYG{+w}{	}\PYG{k+kt}{Ord}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{Symbol}\PYG{+w}{ }\PYG{n}{enode}\PYG{p}{),}
+\PYG{+w}{	}\PYG{k+kt}{Ord}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{enode}\PYG{+w}{ }\PYG{k+kt}{EId}\PYG{p}{),}
+\PYG{+w}{	}\PYG{k+kt}{Traversable}\PYG{+w}{ }\PYG{n}{enode}\PYG{p}{)}\PYG{+w}{ }\PYG{o+ow}{=\PYGZgt{}}\PYG{+w}{ }\PYG{k+kt}{Signature}\PYG{+w}{ }\PYG{n}{enode}\PYG{+w}{ }\PYG{k+kr}{where}
+\PYG{+w}{		}
+\PYG{+w}{  }\PYG{k+kr}{type}\PYG{+w}{ }\PYG{k+kt}{Symbol}\PYG{+w}{ }\PYG{n}{enode}
+
+\PYG{+w}{  }\PYG{n}{symbolOf}\PYG{+w}{ }\PYG{o+ow}{::}\PYG{+w}{ }\PYG{n}{enode}\PYG{+w}{ }\PYG{n}{a}\PYG{+w}{ }\PYG{o+ow}{\PYGZhy{}\PYGZgt{}}\PYG{+w}{ }\PYG{k+kt}{Symbol}\PYG{+w}{ }\PYG{n}{enode}
+\PYG{+w}{  }\PYG{k+kr}{default}\PYG{+w}{ }\PYG{n}{symbolOf}\PYG{+w}{ }\PYG{o+ow}{::}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{Symbol}\PYG{+w}{ }\PYG{n}{enode}\PYG{+w}{ }\PYG{o}{\PYGZti{}}\PYG{+w}{ }\PYG{n}{enode}\PYG{+w}{ }\PYG{n+nb}{()}\PYG{p}{)}\PYG{+w}{ }\PYG{o+ow}{=\PYGZgt{}}
+\PYG{+w}{  		}\PYG{n}{enode}\PYG{+w}{ }\PYG{n}{a}\PYG{+w}{ }\PYG{o+ow}{\PYGZhy{}\PYGZgt{}}\PYG{+w}{ }\PYG{k+kt}{Symbol}\PYG{+w}{ }\PYG{n}{enode}
+\PYG{+w}{  }\PYG{n}{symbolOf}\PYG{+w}{ }\PYG{o+ow}{=}\PYG{+w}{ }\PYG{n}{void}
+
+\PYG{+w}{  }\PYG{k+kr}{type}\PYG{+w}{ }\PYG{k+kt}{ACSymbol}\PYG{+w}{ }\PYG{n}{enode}
+
+\PYG{+w}{  }\PYG{n}{acSymbolOf}\PYG{+w}{ }\PYG{o+ow}{::}\PYG{+w}{ }\PYG{n}{enode}\PYG{+w}{ }\PYG{n}{a}\PYG{+w}{ }\PYG{o+ow}{\PYGZhy{}\PYGZgt{}}\PYG{+w}{ }\PYG{k+kt}{Maybe}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{ACSymbol}\PYG{+w}{ }\PYG{n}{enode}\PYG{p}{)}
+\PYG{+w}{  }\PYG{k+kr}{default}\PYG{+w}{ }\PYG{n}{acSymbolOf}\PYG{+w}{ }\PYG{o+ow}{::}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{ACSymbol}\PYG{+w}{ }\PYG{n}{enode}\PYG{+w}{ }\PYG{o}{\PYGZti{}}\PYG{+w}{ }\PYG{k+kt}{Void}\PYG{p}{)}\PYG{+w}{ }\PYG{o+ow}{=\PYGZgt{}}
+\PYG{+w}{  		}\PYG{n}{enode}\PYG{+w}{ }\PYG{n}{a}\PYG{+w}{ }\PYG{o+ow}{\PYGZhy{}\PYGZgt{}}\PYG{+w}{ }\PYG{k+kt}{Maybe}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{ACSymbol}\PYG{+w}{ }\PYG{n}{enode}\PYG{p}{)}
+\PYG{+w}{  }\PYG{n}{acSymbolOf}\PYG{+w}{ }\PYG{k+kr}{\PYGZus{}}\PYG{+w}{ }\PYG{o+ow}{=}\PYG{+w}{ }\PYG{k+kt}{Nothing}
+
+\PYG{+w}{  }\PYG{n}{reconstruct}\PYG{+w}{ }\PYG{o+ow}{::}\PYG{+w}{ }\PYG{k+kt}{Symbol}\PYG{+w}{ }\PYG{n}{enode}\PYG{+w}{ }\PYG{o+ow}{\PYGZhy{}\PYGZgt{}}\PYG{+w}{ }\PYG{p}{[}\PYG{n}{a}\PYG{p}{]}\PYG{+w}{ }\PYG{o+ow}{\PYGZhy{}\PYGZgt{}}\PYG{+w}{ }\PYG{n}{enode}\PYG{+w}{ }\PYG{n}{a}
+\PYG{+w}{  }\PYG{k+kr}{default}\PYG{+w}{ }\PYG{n}{reconstruct}\PYG{+w}{ }\PYG{o+ow}{::}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{Symbol}\PYG{+w}{ }\PYG{n}{enode}\PYG{+w}{ }\PYG{o}{\PYGZti{}}\PYG{+w}{ }\PYG{n}{enode}\PYG{+w}{ }\PYG{n+nb}{()}\PYG{p}{)}\PYG{+w}{ }\PYG{o+ow}{=\PYGZgt{}}
+\PYG{+w}{  		}\PYG{k+kt}{Symbol}\PYG{+w}{ }\PYG{n}{enode}\PYG{+w}{ }\PYG{o+ow}{\PYGZhy{}\PYGZgt{}}\PYG{+w}{ }\PYG{p}{[}\PYG{n}{a}\PYG{p}{]}\PYG{+w}{ }\PYG{o+ow}{\PYGZhy{}\PYGZgt{}}\PYG{+w}{ }\PYG{n}{enode}\PYG{+w}{ }\PYG{n}{a}
+\PYG{+w}{  }\PYG{n}{reconstruct}\PYG{+w}{ }\PYG{n}{s}\PYG{+w}{ }\PYG{n}{as}\PYG{+w}{ }\PYG{o+ow}{=}\PYG{+w}{ }\PYG{n}{s}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{+w}{ }\PYG{n}{unsafePartsOf}\PYG{+w}{ }\PYG{n}{traverse}\PYG{+w}{ }\PYG{o}{.\PYGZti{}}\PYG{+w}{ }\PYG{n}{as}
+
+\PYG{+w}{  }\PYG{n}{reconstructAC}\PYG{+w}{ }\PYG{o+ow}{::}\PYG{+w}{ }\PYG{k+kt}{ACSymbol}\PYG{+w}{ }\PYG{n}{enode}\PYG{+w}{ }\PYG{o+ow}{\PYGZhy{}\PYGZgt{}}\PYG{+w}{ }\PYG{p}{[}\PYG{n}{a}\PYG{p}{]}\PYG{+w}{ }\PYG{o+ow}{\PYGZhy{}\PYGZgt{}}\PYG{+w}{ }\PYG{n}{enode}\PYG{+w}{ }\PYG{n}{a}
+\PYG{+w}{  }\PYG{k+kr}{default}\PYG{+w}{ }\PYG{n}{reconstructAC}\PYG{+w}{ }\PYG{o+ow}{::}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{ACSymbol}\PYG{+w}{ }\PYG{n}{enode}\PYG{+w}{ }\PYG{o}{\PYGZti{}}\PYG{+w}{ }\PYG{k+kt}{Void}\PYG{p}{)}\PYG{+w}{ }\PYG{o+ow}{=\PYGZgt{}}
+\PYG{+w}{  		}\PYG{k+kt}{ACSymbol}\PYG{+w}{ }\PYG{n}{enode}\PYG{+w}{ }\PYG{o+ow}{\PYGZhy{}\PYGZgt{}}\PYG{+w}{ }\PYG{p}{[}\PYG{n}{a}\PYG{p}{]}\PYG{+w}{ }\PYG{o+ow}{\PYGZhy{}\PYGZgt{}}\PYG{+w}{ }\PYG{n}{enode}\PYG{+w}{ }\PYG{n}{a}
+\PYG{+w}{  }\PYG{n}{reconstructAC}\PYG{+w}{ }\PYG{o+ow}{=}\PYG{+w}{ }\PYG{n}{absurd}
+\end{MintedVerbatim}

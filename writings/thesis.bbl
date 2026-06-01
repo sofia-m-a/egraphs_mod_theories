@@ -19,6 +19,111 @@
 
 \refsection{0}
   \datalist[entry]{nty/global//global/global/global}
+    \entry{goos_congruence_2000}{incollection}{}{}
+      \name{author}{4}{}{%
+        {{hash=032dd44affa42e6b1c1a2104a9b3f195}{%
+           family={Bachmair},
+           familyi={B\bibinitperiod},
+           given={L.},
+           giveni={L\bibinitperiod}}}%
+        {{hash=bd0b49aac8ddccb3f3b7a996853f9eb2}{%
+           family={Ramakrishnan},
+           familyi={R\bibinitperiod},
+           given={I.\bibnamedelimi V.},
+           giveni={I\bibinitperiod\bibinitdelim V\bibinitperiod}}}%
+        {{hash=516ec4cdda714084320f33af8812af05}{%
+           family={Tiwari},
+           familyi={T\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod}}}%
+        {{hash=3ebb5daee20abd773f548bfefe2674e0}{%
+           family={Vigneron},
+           familyi={V\bibinitperiod},
+           given={L.},
+           giveni={L\bibinitperiod}}}%
+      }
+      \name{editor}{2}{}{%
+        {{hash=925a724ffbc50775aabf8c1b349a0c79}{%
+           family={Kirchner},
+           familyi={K\bibinitperiod},
+           given={Hélène},
+           giveni={H\bibinitperiod}}}%
+        {{hash=88d01cce79c59e7d8356b4d75f182d16}{%
+           family={Ringeissen},
+           familyi={R\bibinitperiod},
+           given={Christophe},
+           giveni={C\bibinitperiod}}}%
+      }
+      \name{editorb}{3}{}{%
+        {{hash=97b8779c08da200ee2eb194bdc10ae4f}{%
+           family={Goos},
+           familyi={G\bibinitperiod},
+           given={Gerhard},
+           giveni={G\bibinitperiod}}}%
+        {{hash=84d4ea2bd3ec736effccd97ee64d09ef}{%
+           family={Hartmanis},
+           familyi={H\bibinitperiod},
+           given={Juris},
+           giveni={J\bibinitperiod}}}%
+        {{hash=4e6d4340bf56539a33dcad95ee6e8fc5}{%
+           family={Van\bibnamedelima Leeuwen},
+           familyi={V\bibinitperiod\bibinitdelim L\bibinitperiod},
+           given={Jan},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Berlin, Heidelberg}%
+      }
+      \list{publisher}{1}{%
+        {Springer Berlin Heidelberg}%
+      }
+      \strng{namehash}{2447d7830878a59a2c68e8b7c54e967a}
+      \strng{fullhash}{01096c7e1d9efe661d3a081cb9b24146}
+      \strng{fullhashraw}{01096c7e1d9efe661d3a081cb9b24146}
+      \strng{bibnamehash}{2447d7830878a59a2c68e8b7c54e967a}
+      \strng{authorbibnamehash}{2447d7830878a59a2c68e8b7c54e967a}
+      \strng{authornamehash}{2447d7830878a59a2c68e8b7c54e967a}
+      \strng{authorfullhash}{01096c7e1d9efe661d3a081cb9b24146}
+      \strng{authorfullhashraw}{01096c7e1d9efe661d3a081cb9b24146}
+      \strng{editorbibnamehash}{9b25c13c3e788f175f8ad15f7d64ce7d}
+      \strng{editornamehash}{9b25c13c3e788f175f8ad15f7d64ce7d}
+      \strng{editorfullhash}{9b25c13c3e788f175f8ad15f7d64ce7d}
+      \strng{editorfullhashraw}{9b25c13c3e788f175f8ad15f7d64ce7d}
+      \strng{editorbbibnamehash}{3dfcf72b5841d3fc75d0df4fe9034b68}
+      \strng{editorbnamehash}{3dfcf72b5841d3fc75d0df4fe9034b68}
+      \strng{editorbfullhash}{3dfcf72b5841d3fc75d0df4fe9034b68}
+      \strng{editorbfullhashraw}{3dfcf72b5841d3fc75d0df4fe9034b68}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Frontiers of Combining Systems}
+      \field{editorbtype}{redactor}
+      \field{isbn}{978-3-540-67281-4 978-3-540-46421-1}
+      \field{note}{Series Title: Lecture Notes in Computer Science}
+      \field{title}{Congruence Closure Modulo Associativity and Commutativity}
+      \field{urlday}{24}
+      \field{urlmonth}{2}
+      \field{urlyear}{2026}
+      \field{volume}{1794}
+      \field{year}{2000}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{245\bibrangedash 259}
+      \range{pages}{15}
+      \verb{doi}
+      \verb 10.1007/10720084_16
+      \endverb
+      \verb{file}
+      \verb PDF:/home/pree/Zotero/storage/VBZCP2YK/Bachmair et al. - 2000 - Congruence Closure Modulo Associativity and Commutativity.pdf:application/pdf
+      \endverb
+      \verb{urlraw}
+      \verb http://link.springer.com/10.1007/10720084_16
+      \endverb
+      \verb{url}
+      \verb http://link.springer.com/10.1007/10720084_16
+      \endverb
+    \endentry
     \entry{bachmair_abstract_2000}{inproceedings}{}{}
       \name{author}{2}{}{%
         {{hash=3774293b060a55daa4e4db1f71df13f8}{%
@@ -77,6 +182,247 @@
       \verb Full Text PDF:/home/pree/Zotero/storage/C6A8T2J7/Bachmair and Tiwari - 2000 - Abstract Congruence Closure and Specializations.pdf:application/pdf
       \endverb
     \endentry
+    \entry{conchon_ccx_2008}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=03404ca4745770d1ff700eb97ff6dda1}{%
+           family={Conchon},
+           familyi={C\bibinitperiod},
+           given={Sylvain},
+           giveni={S\bibinitperiod}}}%
+        {{hash=dda3f50595ad924aedff6d6f1b51f27e}{%
+           family={Contejean},
+           familyi={C\bibinitperiod},
+           given={Evelyne},
+           giveni={E\bibinitperiod}}}%
+        {{hash=f38030100155acfe28c10e4a1d6be69b}{%
+           family={Kanig},
+           familyi={K\bibinitperiod},
+           given={Johannes},
+           giveni={J\bibinitperiod}}}%
+        {{hash=14630f2aacb0f3588349e84692f925b3}{%
+           family={Lescuyer},
+           familyi={L\bibinitperiod},
+           given={Stéphane},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{444cf7356b9b81271d219d7610d49583}
+      \strng{fullhash}{59530dd1175201cb103dbf98b7cfecab}
+      \strng{fullhashraw}{59530dd1175201cb103dbf98b7cfecab}
+      \strng{bibnamehash}{444cf7356b9b81271d219d7610d49583}
+      \strng{authorbibnamehash}{444cf7356b9b81271d219d7610d49583}
+      \strng{authornamehash}{444cf7356b9b81271d219d7610d49583}
+      \strng{authorfullhash}{59530dd1175201cb103dbf98b7cfecab}
+      \strng{authorfullhashraw}{59530dd1175201cb103dbf98b7cfecab}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{We present a generic congruence closure algorithm for deciding ground formulas in the combination of the theory of equality with uninterpreted symbols and an arbitrary built-in solvable theory X. Our algorithm {CC}(X) is reminiscent of Shostak combination: it maintains a union-find data-structure modulo X from which maximal information about implied equalities can be directly used for congruence closure. {CC}(X) diverges from Shostak's approach by the use of semantic values for class representatives instead of canonized terms. Using semantic values truly reflects the actual implementation of the decision procedure for X. It also enforces to entirely rebuild the algorithm since global canonization, which is at the heart of Shostak combination, is no longer feasible with semantic values. {CC}(X) has been implemented in Ocaml and is at the core of Ergo, a new automated theorem prover dedicated to program verification.}
+      \field{day}{6}
+      \field{issn}{1571-0661}
+      \field{journaltitle}{Electronic Notes in Theoretical Computer Science}
+      \field{month}{5}
+      \field{number}{2}
+      \field{series}{Proceedings of the 5th International Workshop on Satisfiability Modulo Theories ({SMT} 2007)}
+      \field{shortjournal}{Electronic Notes in Theoretical Computer Science}
+      \field{shorttitle}{{CC}(X)}
+      \field{title}{{CC}(X): Semantic Combination of Congruence Closure with Solvable Theories}
+      \field{urlday}{8}
+      \field{urlmonth}{2}
+      \field{urlyear}{2026}
+      \field{volume}{198}
+      \field{year}{2008}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{51\bibrangedash 69}
+      \range{pages}{19}
+      \verb{doi}
+      \verb 10.1016/j.entcs.2008.04.080
+      \endverb
+      \verb{file}
+      \verb ScienceDirect Full Text PDF:/home/pree/Zotero/storage/TRVIC9NN/Conchon et al. - 2008 - CC(X) Semantic Combination of Congruence Closure with Solvable Theories.pdf:application/pdf;ScienceDirect Snapshot:/home/pree/Zotero/storage/BME44ZP9/S1571066108002958.html:text/html
+      \endverb
+      \verb{urlraw}
+      \verb https://www.sciencedirect.com/science/article/pii/S1571066108002958
+      \endverb
+      \verb{url}
+      \verb https://www.sciencedirect.com/science/article/pii/S1571066108002958
+      \endverb
+      \keyw{congruence closure,decision procedures,equality theory,verification}
+    \endentry
+    \entry{downey_variations_1980}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=671e5ede727e653069c62a55e3a7aacc}{%
+           family={Downey},
+           familyi={D\bibinitperiod},
+           given={Peter\bibnamedelima J.},
+           giveni={P\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=b0e677112f976b0ff780553fcb888351}{%
+           family={Sethi},
+           familyi={S\bibinitperiod},
+           given={Ravi},
+           giveni={R\bibinitperiod}}}%
+        {{hash=09f1ee63063ed5ad11c3baa87f800eb7}{%
+           family={Tarjan},
+           familyi={T\bibinitperiod},
+           given={Robert\bibnamedelima Endre},
+           giveni={R\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+      }
+      \strng{namehash}{118bfb49815105ec8f59dd16c3147536}
+      \strng{fullhash}{118bfb49815105ec8f59dd16c3147536}
+      \strng{fullhashraw}{118bfb49815105ec8f59dd16c3147536}
+      \strng{bibnamehash}{118bfb49815105ec8f59dd16c3147536}
+      \strng{authorbibnamehash}{118bfb49815105ec8f59dd16c3147536}
+      \strng{authornamehash}{118bfb49815105ec8f59dd16c3147536}
+      \strng{authorfullhash}{118bfb49815105ec8f59dd16c3147536}
+      \strng{authorfullhashraw}{118bfb49815105ec8f59dd16c3147536}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0004-5411, 1557-735X}
+      \field{journaltitle}{Journal of the {ACM}}
+      \field{langid}{english}
+      \field{month}{10}
+      \field{number}{4}
+      \field{shortjournal}{J. {ACM}}
+      \field{title}{Variations on the Common Subexpression Problem}
+      \field{urlday}{8}
+      \field{urlmonth}{2}
+      \field{urlyear}{2026}
+      \field{volume}{27}
+      \field{year}{1980}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{758\bibrangedash 771}
+      \range{pages}{14}
+      \verb{doi}
+      \verb 10.1145/322217.322228
+      \endverb
+      \verb{file}
+      \verb Full Text:/home/pree/Zotero/storage/NZ3BLIRS/Downey et al. - 1980 - Variations on the Common Subexpression Problem.pdf:application/pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://dl.acm.org/doi/10.1145/322217.322228
+      \endverb
+      \verb{url}
+      \verb https://dl.acm.org/doi/10.1145/322217.322228
+      \endverb
+    \endentry
+    \entry{kapur_modular_2021}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=79ae193c185dc98fb2b7f4ece0ec1fb4}{%
+           family={Kapur},
+           familyi={K\bibinitperiod},
+           given={Deepak},
+           giveni={D\bibinitperiod}}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=f22f6e9ad2379a5e5de8a329e3c0e010}{%
+           family={Kobayashi},
+           familyi={K\bibinitperiod},
+           given={Naoki},
+           giveni={N\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Schloss Dagstuhl – Leibniz-Zentrum für Informatik}%
+      }
+      \strng{namehash}{79ae193c185dc98fb2b7f4ece0ec1fb4}
+      \strng{fullhash}{79ae193c185dc98fb2b7f4ece0ec1fb4}
+      \strng{fullhashraw}{79ae193c185dc98fb2b7f4ece0ec1fb4}
+      \strng{bibnamehash}{79ae193c185dc98fb2b7f4ece0ec1fb4}
+      \strng{authorbibnamehash}{79ae193c185dc98fb2b7f4ece0ec1fb4}
+      \strng{authornamehash}{79ae193c185dc98fb2b7f4ece0ec1fb4}
+      \strng{authorfullhash}{79ae193c185dc98fb2b7f4ece0ec1fb4}
+      \strng{authorfullhashraw}{79ae193c185dc98fb2b7f4ece0ec1fb4}
+      \strng{editorbibnamehash}{f22f6e9ad2379a5e5de8a329e3c0e010}
+      \strng{editornamehash}{f22f6e9ad2379a5e5de8a329e3c0e010}
+      \strng{editorfullhash}{f22f6e9ad2379a5e5de8a329e3c0e010}
+      \strng{editorfullhashraw}{f22f6e9ad2379a5e5de8a329e3c0e010}
+      \field{extraname}{1}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Algorithms for computing congruence closure of ground equations over uninterpreted symbols and interpreted symbols satisfying associativity and commutativity ({AC}) properties are proposed. The algorithms are based on a framework for computing the congruence closure by abstracting nonflat terms by constants as proposed first in Kapur’s congruence closure algorithm ({RTA}97). The framework is general, flexible, and has been extended also to develop congruence closure algorithms for the cases when associative-commutative function symbols can have additional properties including idempotency, nilpotency and/or have identities, as well as their various combinations. The algorithms are modular; their correctness and termination proofs are simple, exploiting modularity. Unlike earlier algorithms, the proposed algorithms neither rely on complex {AC} compatible well-founded orderings on nonvariable terms nor need to use the associative-commutative unification and extension rules in completion for generating canonical rewrite systems for congruence closures. They are particularly suited for integrating into Satisfiability modulo Theories ({SMT}) solvers.}
+      \field{issn}{1868-8969}
+      \field{journaltitle}{{LIPIcs}, Volume 195, {FSCD} 2021}
+      \field{langid}{english}
+      \field{note}{Artwork Size: 21 pages, 711938 bytes {ISBN}: 9783959771917 Medium: application/pdf}
+      \field{title}{A Modular Associative Commutative ({AC}) Congruence Closure Algorithm}
+      \field{urlday}{17}
+      \field{urlmonth}{3}
+      \field{urlyear}{2026}
+      \field{volume}{195}
+      \field{year}{2021}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{15:1\bibrangedash 15:21}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.4230/LIPICS.FSCD.2021.15
+      \endverb
+      \verb{file}
+      \verb PDF:/home/pree/Zotero/storage/EGVMLAPQ/Kapur - 2021 - A Modular Associative Commutative (AC) Congruence Closure Algorithm.pdf:application/pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.FSCD.2021.15
+      \endverb
+      \verb{url}
+      \verb https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.FSCD.2021.15
+      \endverb
+      \keyw{Associative and Commutative,Congruence Closure,Equational Theories,Finitely Presented Algebras,Mathematics of computing,Software and its engineering,Theory of computation,Word Problems}
+    \endentry
+    \entry{kapur_modularity_2023}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=79ae193c185dc98fb2b7f4ece0ec1fb4}{%
+           family={Kapur},
+           familyi={K\bibinitperiod},
+           given={Deepak},
+           giveni={D\bibinitperiod}}}%
+      }
+      \strng{namehash}{79ae193c185dc98fb2b7f4ece0ec1fb4}
+      \strng{fullhash}{79ae193c185dc98fb2b7f4ece0ec1fb4}
+      \strng{fullhashraw}{79ae193c185dc98fb2b7f4ece0ec1fb4}
+      \strng{bibnamehash}{79ae193c185dc98fb2b7f4ece0ec1fb4}
+      \strng{authorbibnamehash}{79ae193c185dc98fb2b7f4ece0ec1fb4}
+      \strng{authornamehash}{79ae193c185dc98fb2b7f4ece0ec1fb4}
+      \strng{authorfullhash}{79ae193c185dc98fb2b7f4ece0ec1fb4}
+      \strng{authorfullhashraw}{79ae193c185dc98fb2b7f4ece0ec1fb4}
+      \field{extraname}{2}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Algorithms for computing congruence closure of ground equations over uninterpreted symbols and interpreted symbols satisfying associativity and commutativity ({AC}) properties are proposed. The algorithms are based on a framework for computing a congruence closure as a canonical ground rewrite system in which nonﬂat terms are abstracted by new constants as proposed ﬁrst in Kapur’s congruence closure algorithm ({RTA}97). The framework is general, ﬂexible, and has been extended also to develop congruence closure algorithms for the cases when associative-commutative function symbols can have additional properties including idempotency, nilpotency, identities, cancelativity and group properties as well as their various combinations. Algorithms are modular; their correctness and termination proofs are simple, exploiting modularity. Unlike earlier algorithms, the proposed algorithms neither rely on complex {AC} compatible well-founded orderings on nonvariable terms nor need to use the associative-commutative uniﬁcation and extension rules in completion for generating canonical rewrite systems for congruence closures. They are particularly suited for integrating into the Satisﬁability modulo Theories ({SMT}) solvers. It is shown that a Gr¨obner basis algorithm for polynomial ideals with integer coeﬃcients can be formulated as a combination algorithm for the congruence closure over an Abelian group with + and the congruence closure over the {AC} symbol ∗ with the identity 1, linked using the distributivity property of ∗ over +.}
+      \field{day}{14}
+      \field{issn}{1860-5974}
+      \field{journaltitle}{Logical Methods in Computer Science}
+      \field{langid}{english}
+      \field{month}{3}
+      \field{title}{Modularity and Combination of Associative Commutative Congruence Closure Algorithms enriched with Semantic Properties}
+      \field{urlday}{24}
+      \field{urlmonth}{2}
+      \field{urlyear}{2026}
+      \field{volume}{Volume 19, Issue 1}
+      \field{year}{2023}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{8693}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.46298/lmcs-19(1:19)2023
+      \endverb
+      \verb{file}
+      \verb PDF:/home/pree/Zotero/storage/CCSPDR5T/Kapur - 2023 - Modularity and Combination of Associative Commutative Congruence Closure Algorithms enriched with Se.pdf:application/pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://lmcs.episciences.org/8693
+      \endverb
+      \verb{url}
+      \verb https://lmcs.episciences.org/8693
+      \endverb
+    \endentry
     \entry{mayr_complexity_1982}{article}{}{}
       \name{author}{2}{}{%
         {{hash=6191001c704a15f11454348698fc2663}{%
@@ -131,6 +477,114 @@
       \verb{url}
       \verb https://www.sciencedirect.com/science/article/pii/0001870882900482
       \endverb
+    \endentry
+    \entry{nelson_fast_1980}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=bfef9452b99ce3105cda6ab534f7efd3}{%
+           family={Nelson},
+           familyi={N\bibinitperiod},
+           given={Greg},
+           giveni={G\bibinitperiod}}}%
+        {{hash=9516bfae80f7ff2eabe7e28d5148f4ab}{%
+           family={Oppen},
+           familyi={O\bibinitperiod},
+           given={Derek\bibnamedelima C.},
+           giveni={D\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+      }
+      \strng{namehash}{43aab228a70bb149f983e5382bf69bf1}
+      \strng{fullhash}{43aab228a70bb149f983e5382bf69bf1}
+      \strng{fullhashraw}{43aab228a70bb149f983e5382bf69bf1}
+      \strng{bibnamehash}{43aab228a70bb149f983e5382bf69bf1}
+      \strng{authorbibnamehash}{43aab228a70bb149f983e5382bf69bf1}
+      \strng{authornamehash}{43aab228a70bb149f983e5382bf69bf1}
+      \strng{authorfullhash}{43aab228a70bb149f983e5382bf69bf1}
+      \strng{authorfullhashraw}{43aab228a70bb149f983e5382bf69bf1}
+      \field{sortinit}{N}
+      \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{The notion of the congruence closure of a relation on a graph is defined and several algorithms for computing it are surveyed. A simple proof is given that the congruence closure algorithm provides a decision procedure for the quantifier-free theory of equality. A decision procedure is then given for the quantifier-free theory of {LISP} list structure based on the congruence closure algorithm. Both decision procedures determine the satisfiability of a conjunction of literals of length n in average time O ( n log n ) using the fastest known congruence closure algorithm. It is also shown that if the axiomatization of the theory of list structure is changed slightly, the problem of determining the satisfiability of a conjunction of literals becomes {NP}-complete. The decision procedures have been implemented in the authors' simplifier for the Stanford Pascal Verifier.}
+      \field{issn}{0004-5411, 1557-735X}
+      \field{journaltitle}{Journal of the {ACM}}
+      \field{langid}{english}
+      \field{month}{4}
+      \field{number}{2}
+      \field{shortjournal}{J. {ACM}}
+      \field{title}{Fast Decision Procedures Based on Congruence Closure}
+      \field{urlday}{8}
+      \field{urlmonth}{2}
+      \field{urlyear}{2026}
+      \field{volume}{27}
+      \field{year}{1980}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{356\bibrangedash 364}
+      \range{pages}{9}
+      \verb{doi}
+      \verb 10.1145/322186.322198
+      \endverb
+      \verb{file}
+      \verb Available Version (via Google Scholar):/home/pree/Zotero/storage/VH6T7XIY/Nelson and Oppen - 1980 - Fast Decision Procedures Based on Congruence Closure.pdf:application/pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://dl.acm.org/doi/10.1145/322186.322198
+      \endverb
+      \verb{url}
+      \verb https://dl.acm.org/doi/10.1145/322186.322198
+      \endverb
+    \endentry
+    \entry{nyberg-brodda_g_2024}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=fc8bec012f201886a113f1b43728aca6}{%
+           family={Nyberg-Brodda},
+           familyi={N\bibinithyphendelim B\bibinitperiod},
+           given={Carl-Fredrik},
+           giveni={C\bibinithyphendelim F\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {arXiv}%
+      }
+      \strng{namehash}{fc8bec012f201886a113f1b43728aca6}
+      \strng{fullhash}{fc8bec012f201886a113f1b43728aca6}
+      \strng{fullhashraw}{fc8bec012f201886a113f1b43728aca6}
+      \strng{bibnamehash}{fc8bec012f201886a113f1b43728aca6}
+      \strng{authorbibnamehash}{fc8bec012f201886a113f1b43728aca6}
+      \strng{authornamehash}{fc8bec012f201886a113f1b43728aca6}
+      \strng{authorfullhash}{fc8bec012f201886a113f1b43728aca6}
+      \strng{authorfullhashraw}{fc8bec012f201886a113f1b43728aca6}
+      \field{sortinit}{N}
+      \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{We give an introduction to the ideas behind G. S. Tseytin’s 1958 construction of a seven-relation semigroup with undecidable word problem. We give a history of the ideas leading up to its construction, some intuition for the proof, and provide an overview of some subsequent results and developments which stem from this remarkable semigroup. An English translation of Tseytin’s article [73] by the author of the present article is supplemented at the end of the article (the Russian original was published in Trudy Mat. Inst. Steklov 52 (1958), pp. 172–189).}
+      \field{day}{22}
+      \field{eprinttype}{arxiv}
+      \field{langid}{english}
+      \field{month}{1}
+      \field{number}{{arXiv}:2401.11757}
+      \field{title}{G. S. Tseytin's seven-relation semigroup with undecidable word problem}
+      \field{urlday}{27}
+      \field{urlmonth}{2}
+      \field{urlyear}{2026}
+      \field{year}{2024}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \verb{doi}
+      \verb 10.48550/arXiv.2401.11757
+      \endverb
+      \verb{eprint}
+      \verb 2401.11757 [math]
+      \endverb
+      \verb{file}
+      \verb PDF:/home/pree/Zotero/storage/QKWGFQLX/Nyberg-Brodda - 2024 - G. S. Tseytin's seven-relation semigroup with undecidable word problem.pdf:application/pdf
+      \endverb
+      \verb{urlraw}
+      \verb http://arxiv.org/abs/2401.11757
+      \endverb
+      \verb{url}
+      \verb http://arxiv.org/abs/2401.11757
+      \endverb
+      \keyw{Mathematics - History and Overview,Mathematics - Group Theory}
     \endentry
     \entry{panchekha_lin-graphs_2025}{online}{}{}
       \name{author}{1}{}{%
