@@ -163,7 +163,7 @@ instance Signature Ex3 where
   type ACSymbol Ex3 = Void
 
 commonVars :: [Text]
-commonVars = [ fromList [c] | c <- ['a' .. 'z']]
+commonVars = [fromList [c] | c <- ['a' .. 'z']]
 
 associationsOf :: [a] -> [Free Ex3 a]
 associationsOf [] = []
@@ -171,11 +171,11 @@ associationsOf [x] = [Pure x]
 associationsOf (x : xs) = associationsOf xs >>= graft x
   where
     graft :: a -> Free Ex3 a -> [Free Ex3 a]
-    graft x t = Free (Ex3Op (Pure x) t) : [ Free (Ex3Op s z) | Free (Ex3Op y z) <- [t], s <- graft x y]
+    graft x t = Free (Ex3Op (Pure x) t) : [Free (Ex3Op s z) | Free (Ex3Op y z) <- [t], s <- graft x y]
 
 -- sanity check
 catalanNumbers :: [Int]
-catalanNumbers = [ length (associationsOf [1 .. i]) | i <- [1 .. 10]] :: [Int]
+catalanNumbers = [length (associationsOf [1 .. i]) | i <- [1 .. 10]] :: [Int]
 
 exampleACNaive :: Int -> Egraph Ex3 ()
 exampleACNaive n = executingState trivialEmpty do
@@ -199,6 +199,23 @@ exampleACNaiveGen i j = for_ ([i .. j] :: [Int]) \k -> do
 exampleACNaiveGenPng :: Int -> Int -> IO ()
 exampleACNaiveGenPng i j = for_ ([i .. j] :: [Int]) \k -> do
   runGraphviz (toDot Nothing example3Show $ exampleACNaive k) Png ("writings/blowup" ++ show k ++ ".png")
+
+exampleNonWord :: Egraph Ex3 ()
+exampleNonWord = executingState trivialEmpty do
+  ea <- einsertFree (Free $ Ex3Var "a")
+  eb <- einsertFree (Free $ Ex3Var "b")
+  ec <- einsertFree (Free $ Ex3Var "c")
+  ed <- einsertFree (Free $ Ex3Var "d")
+  eab <- einsertFree (Free $ Ex3Op (Pure ea) (Pure eb))
+  eaa <- einsertFree (Free $ Ex3Op (Pure ea) (Pure ea))
+  ecb <- einsertFree (Free $ Ex3Op (Pure ec) (Pure eb))
+  _ <- eunion eab eb
+  _ <- eunion eaa ec
+  _ <- eunion ecb ed
+  pass
+
+exampleNonWordGen :: IO ()
+exampleNonWordGen = void $ runGraphviz (toDot Nothing example3Show exampleNonWord) Svg "writings/exampleNonWord.svg"
 
 data Ex4 a
   = F4 a a
@@ -503,9 +520,12 @@ genInitialClasses numACOps ars = do
         t <- genTerm ars
         pure (iter Fix $ fmap (Fix . BenchConst) t)
   (acs1, acs2) <-
-    fmap (unzip . fmap unzip) (replicateM acN
-      $ chooseInt (0, min 3 size)
-      >>= \i -> smallerScale i $ replicateNEM i do
-        (t1, t2) <- genACTerm numACOps ars
-        pure (iter Fix $ fmap (Fix . BenchConst) t1, iter Fix $ fmap (Fix . BenchConst) t2))
+    fmap
+      (unzip . fmap unzip)
+      ( replicateM acN
+          $ chooseInt (0, min 3 size)
+          >>= \i -> smallerScale i $ replicateNEM i do
+            (t1, t2) <- genACTerm numACOps ars
+            pure (iter Fix $ fmap (Fix . BenchConst) t1, iter Fix $ fmap (Fix . BenchConst) t2)
+      )
   pure (nonACs ++ acs1, nonACs ++ acs2)

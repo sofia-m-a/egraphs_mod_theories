@@ -15,19 +15,30 @@
 = E-graphs modulo theories
 presented by Sofia Brookie
 
-== E-graphs overview
-#set align(center)
-#diagram(
-  node-stroke: luma(90%),
-  edge-corner-radius: none,
+== E-graphs
+A useful method for equational reasoning
+
+#pause
+
+Applications:
+  - compilers & optimization
+  - program synthesis
+  - hardware design
+  - (_...many more_)
+
+// == E-graphs overview
+// #set align(center)
+// #diagram(
+//   node-stroke: luma(90%),
+//   edge-corner-radius: none,
   
-  // Nodes
-  node((0, 0), [*Equality saturation*], name: <eqsat>),
-  edge("<|-"),
-  node((0, 1), [*Congruence closure*], name: <cc>),
-  edge("<|-"),
-  node((0, 2), [*Union-find*], name: <cc>),
-)
+//   // Nodes
+//   node((0, 0), [*Equality saturation*], name: <eqsat>),
+//   edge("<|-"),
+//   node((0, 1), [*Congruence closure*], name: <cc>),
+//   edge("<|-"),
+//   node((0, 2), [*Union-find*], name: <cc>),
+// )
 
 == E-graphs overview
 #set align(center)
@@ -39,20 +50,109 @@ presented by Sofia Brookie
   node((0, 0), [
     *Equality saturation*
     
-    Handles non-ground equations (identities): $forall x. f(x) = g(x, x)$], name: <eqsat>),
+    Handles non-ground equations (*identities*): $forall x. f(x) = g(x, x)$], name: <eqsat>),
   edge("<|-"),
   node((0, 1), [
     *Congruence closure*
     
-    Handles ground non-atomic equations: $f(e_1, e_2) = e_3$
+    Handles *ground* non-atomic equations: $f(e_1, e_2) = e_3$
     ], name: <cc>),
   edge("<|-"),
   node((0, 2), [
     *Union-find*
     
-    Handles ground atomic equations: $e_1 = e_2$
+    Handles *ground atomic* equations: $e_1 = e_2$
     ], name: <cc>),
 )
+
+== E-graphs basics, part 1: flattening
+#slide(composer: (auto, 1fr))[
+  Let's represent \
+  the term $h(a, g(b))$
+
+][
+#figure(
+  image("exampleBasic1.svg", width: 40%),
+)
+]
+
+== E-graph basics, part 2: sharing
+#slide(composer: (auto, 1fr))[
+  Let's add \
+  the term $f(g(a), c)$
+][
+  #figure(
+    image("exampleBasic2.svg", width: 47%),
+  )
+]
+
+== E-graph basics, part 3: equations
+#slide(composer: (auto, 1fr))[
+  Let's add \
+  the *equation* \
+  $h(a, g(b)) = f(g(a), c)$
+][
+  #figure(
+    image("exampleBasic3.svg", width: 71%),
+  )
+]
+
+== E-graph basics, part 4: more sharing
+#slide(composer: (auto, 1fr))[
+  Let's add \
+  another equation \
+  $h(g(c), b) = h(a, g(c))$
+][
+  #figure(
+    image("exampleBasic4.svg", width: 66%),
+  )
+]
+
+== E-graph basics, part 5: contraction
+#slide(composer: (auto, 1fr))[
+  Let's add \
+  another equation \
+  $g(b) = g(c)$
+  
+  Existing E-classes \
+  are merged
+][
+  #figure(
+    image("exampleBasic5.svg", width: 71%),
+  )
+]
+
+== E-graph basics, part 6: congruence
+#slide(composer: (auto, 1fr))[
+  Now, $h(a, g(b))$ \
+  and $h(a, g(c))$ \
+  are both in \
+  the E-graph.
+
+  They ought to \
+  be equal, since \
+  $g(b) = g(c)$
+][
+  #figure(
+    image("exampleBasic5.svg", width: 65%),
+  )
+]
+
+== E-graph basics, part 6: propagation
+#slide(composer: (auto, 1fr))[
+  We need to \
+  detect when two \
+  E-nodes have the \
+  same symbol and \
+  same children.
+
+  Then, we merge \
+  the E-classes:
+][
+  #figure(
+    image("exampleBasic6.svg", width: 60%),
+  )
+]
 
 // == E-graph refresher: congruence closure
 
@@ -100,13 +200,37 @@ presented by Sofia Brookie
 
 // A bit slow (maybe). But we can defer rebuilding and/or use Downey-Sethi-Tarjan (aka binarizing the function symbols)
 
+== E-graphs: adding equality saturation
+
+Congruence closure decides the theory of ground equations. What about identities?
+
+== Equality saturation
+If we have $forall x ..., t = s$, try looking for *instances* of this in
+the E-graph.
+
+If we find an instance, we might have to add the other side into the E-graph, if it 
+is not yet present. Then, we merge the corresponding E-classes.
+
+#set align(left)
+== Equality saturation
+Loop:
+- E-match
+- Insert (if needed)
+- Merge
+
+== Equality saturation
+This doesn't always terminate
+
+Congruence closure only ever shrinks the E-graph, by bringing together E-classes
+
+Insertion will grow the E-graph
+
+== Equality saturation
+Still, it terminates in many cases, or we can use heuristics to decide when to stop
+
 // == E-graph refresher: equality saturation
 
-// Congruence closure decides the theory of ground equations. What about identities?
-
-// == E-graph refresher: equality saturation
-
-// Idea: if we have $forall x ..., t = s$, try instantiating the quantifier with known E-classes.
+// Idea: if we have , try instantiating the quantifier with known E-classes.
 
 // _Surely_ if we have some equational proof we want to find, it will involve identities instantiated at ground terms in this obvious way.
 
@@ -128,9 +252,9 @@ presented by Sofia Brookie
 
 // But a key takeaway here is that if $t'$ and $s'$ are already represented, equating them _shrinks_ the E-graph.
 // But inserting new things can grow the E-graph arbitrarily.
-// 
-// 
 
+
+#set align(center)
 == E-graphs vs AC
 A: associativity
 
@@ -187,51 +311,26 @@ For simplicity, we will use '+' as a generic name for an AC operator.
   ],
 )
 
-
-// == E-graphs vs AC
-// #figure(
-//   image("addxz.png", width: 30%),
-//   caption: [
-//     Size 2 (saturation)
-//   ],
-// )
-
-// == E-graphs vs AC
-// #figure(
-//   image("addxyz.png", width: 50%),
-//   caption: [
-//     Size 3 (saturation)
-//   ],
-// )
-
-// == E-graphs vs AC
-// #figure(
-//   image("add.png", width: 50%),
-//   caption: [
-//     Size 4 (timeout)
-//   ],
-// )
-
 #set align(left)
 == E-graphs vs AC
 
-Blindly saturating with A and C gives $O(2^n)$ E-classes if you have a starting term with $n$ +s ($a + b + c + ...$),
+Simply saturating with A and C gives $O(2^n)$ E-classes if you have a starting term with $n$ +s ($a + b + c + ...$),
 and each E-class has $O(2^n)$ E-nodes in it! So, *doubly exponential*.
 
-== Sidenote: What about just A?
-A is 'only' cubic if you have no 'loops'. Otherwise, it is $O(infinity)$.
-But making progress here is hard, given that A is fundamentally undecidable.
+// == Sidenote: What about just A?
+// A is 'only' cubic if you have no 'loops'. Otherwise, it is $O(infinity)$.
+// But making progress here is hard, given that A is fundamentally undecidable.
 
-== (Non)-solution
-Backoff methods: fire rules less and less if they are used too many times
+// == (Non)-solution
+// Backoff methods: fire rules less and less if they are used too many times
 
-#pause
+// #pause
 
-Issues:
-- Doesn't help if you run to saturation
-- Can slow down finding the equations you want to find
+// Issues:
+// - Doesn't help if you run to saturation
+// - Can slow down finding the equations you want to find
 
-== Non-solution
+== AC problems, an example
 Consider an affine function $f$ with identity
 
 $
@@ -242,10 +341,12 @@ and the starting term $f(a) + f(b) + f(c)$. We can to rewrite this to
 $f(a + b + c) + 2$
 
 == E-graphs vs AC
+Using the online Egglog demo:
+
 #figure(
-  image("addf1xyz.png", width: 50%),
+  image("addf1xyz.png", width: 60%),
   caption: [
-    Size 4 (timeout)
+    E-graph at timeout
   ],
 )
 
@@ -256,8 +357,10 @@ Why can't we handle AC in a specific way, rather than relying on equality satura
 
 #pause
 
-EMTs seems to be an idea thrown around for a while, in the hope that someone will eventually make this natural thing work.
-Unfortunately, it is not as easy as has been suggested.
+This is a natural idea, that has been thrown around for a while.
+
+// EMTs seems to be an idea thrown around for a while, in the hope that someone will eventually make this natural thing work.
+// Unfortunately, it is not as easy as has been suggested.
 
 == EMT example
 #figure(
@@ -284,274 +387,575 @@ Unfortunately, it is not as easy as has been suggested.
   ],
 )
 
-== E-graphs as rewrite systems
-E-graphs connect very closely to the theory of *rewriting*.
+== Gaps
+#slide(composer: (auto, 1fr))[
+  $
+    a + b = b \
+    a + a = c \
+    c + b = d
+  $
+][
+  #figure(
+    image("exampleNonWord.svg", width: 65%),
+  )
+]
 
-The 'Abstract Congruence Closure' perspective is that E-graphs are building a
-_convergent term rewriting system_ on an extended signature.
+== Gaps
+#slide(composer: (auto, 1fr))[
+  $
+    (a + b = b) \
+    (a + a = c) \
+    (c + b = d) \
 
-Congruence closure is very similar to 'ground Knuth-Bendix completion' from rewriting.
+    b \
+    = a + b \
+    = a + (a + b) \
+    = (a + a) + b \
+    = c + b \
+    = d
+  $
+][
+  #figure(
+    image("exampleNonWord.svg", width: 65%),
+  )
+]
 
-(Equality saturation is a bit of a stranger animal but still vaguely completion-flavoured)
+== The problem
+Just making nodes work "up to AC" has lost the equational reasoning
+required to properly handle AC.
 
-== E-graphs as tree automata
-E-graphs are reachable deterministic bottom-up tree automata
+We have an E-graph closed under congruence, but it's missing the desired equation.
 
-- Reachable: every E-class is inhabited by some E-node
-- Deterministic: if $f(s_1, s_2) arrow.r s_3$ and $f(s_1, s_2) arrow.r s_4$ then $s_3 = s_4$
-- Bottom-up: there is a notion of top-down deterministic tree automata but it is weaker than deterministic bottom-up (compare the string automata case, where left-to-right and right-to-left are equivalent)
+We could add back saturation on the AC identities, but that unsolves the problem we
+were trying to solve in the first place.
 
-== Inspirations for adding the "mod T"
-Rewriting modulo theories
 
-Algebraic automata (that is, tree automata on non-free theories)
-
-== The neat thing about E-graphs
-...is that they add a new symbol for everything.
-$f(e_1)$? Well, if we haven't seen that before, give it a new E-class/tree-automata state
-
-== Confluence
-If we have a term that is 'in multiple E-classes', we ought to merge the E-classes.
-
-This is what rebuilding does:
-
-$e_1 arrow.r e_2$ and $f(... e_1 ...) arrow.r e_3$ ('parent-child overlap')
-
-$f(... e_1 ...) arrow.r e_3$ and $f(... e_1 ...) arrow.r e_4$ ('self-overlap')
-
-The new symbols for E-classes means we can handle granchild overlap, etc, by iterating these basic steps.
-
-== ...which is how they simplify confluence
-If we have a critical pair of terms, they must have some relevant 'overlap' between rules.
-Any overlap must be a case of subterm containment. Every subterm gets a new symbol, so we only have to check for a few cases:
-
-$e_1 arrow.r e_2$ and $f(... e_1 ...) arrow.r e_3$ ('parent-child overlap')
-
-$f(... e_1 ...) arrow.r e_3$ and $f(... e_1 ...) arrow.r e_4$ ('self-overlap')
-
-Grandchild overlap, etc, is handled by fixpoint propagation.
-
-== Key notion: critical pairs
-A critical pair is some minimal term that can rewrite in two ways/is in two E-classes. To do congruence closure
-(modulo $T$) properly, we need to find critical pairs and resolve them, by merging the E-classes.
-
-// == ...which is less neat for AC
-== AC-critical pairs
-$
-(a + b) + c = e_1 \
-b + (c + d) = e_2
-$
-
-$b + c$ is the _overlap_ of an AC-critical pair:
-
-$
-e_1 + d =_(A C) a + b + c + d =_(A C) a + e_2
-$
-
-What are we doing in AC equality saturation? Well, any of the $O(2^n)$ AC-subterms _could_ become an AC-critical pair.
-We are eagerly giving new E-classes to them. Just in case. After all,
-equality saturation only works by grounding identities: we have not given a mechanism to ground something only when it's actually needed.
-
-== EMTs, prehistorically
-Existing suggestions for EM(T)s fall along two very similar lines:
-
-- Canonize the $T$ parts of the E-graph, and work mod $T$ in some way
-- Treat E-nodes as 'containers' (of E-class names), and move from fixed-arity function symbols to lists, multisets/bags, etc
-
-Either way is an attempt to bake the theories in:
-
-- A(U) = semigroups = lists = associate to the right
-- AC(U) = commutative semigroups = multisets/bags = sort ascending and associate to the right
-
-== EMTs, the end of prehistory
-
-The intuition:
-
-'Why do we need all these AC-equivalent nodes? Can't we just pick an AC-representative?'
-
-Yes, _but_
-
-You need some method of finding $T$-critical pairs, and to make a complete algorithm, you must _eventually_ resolve every pair.
-
-And also match modulo $T$ to instantiate identities for equality saturation.
-
-== Counterexamples to prehistoric EMTs
-$
-a + b = a
-$
-
-Modulo A, we ought to generate the *infinite* set of implied subterms $b, b + b, ...$. So, prehistoric methods fail when E-graphs are *not flat terms*.
-
-== Counterexamples to prehistoric EMTs
-$
-b + a + c = a
-$
-
-The infinite set of equivalent terms modulo A is now $n b + a + n c$. We can no longer recognize the
-set of all re-associations of this, or the set of canonized forms of this, with a tree automata.
-
-== Counterexamples to prehistoric EMTs
-$
-a + (b + c) = d \
-a + b = e \
-e + c = f
-$
-
-These equations are individually canonical, but they don't include the consequence
-$d = a + (b + c) = (a + b) + c = e + c = f$
-
-Prehistoric methods might canonize, but this means they don't scan for implied equalities among a set of (canonized!) equations.
-Actually...
-
-== EMTs and the word problem
-Scanning for implied equalities is exactly the same thing as resolving all $T$-critical pairs
-
-Any mechanism to automatically resolve all $T$-critical pairs is a solver for the $T$-word problem.
-
-== A and AC
-Finding A-critical pairs, and matching modulo A, is quite feasible. Still, there is not 'packaged' solution possible:
-the A-word problem is undecidable. So, the best we can do is just provide a list of critical pairs for the 'outer loop' of equality saturation
-to choose to resolve (or not)
-
-AC is better: the word problem is decidable (Mayr-Meyer). It's ESPACE-complete...
-Sounds bad, but E-graphs are EESPACE here, but more importantly: we can solve common cases of
-the AC word problem faster than ESPACE (hopefully), whereas E-graphs _must_ chug along to saturation to be _certain_
-(as they have no smart way of knowing if some AC-subterm is relevant to the critical pair problem)
-
-== The AC word problem, a la Bachmair et al.
-
-Given $a_1 + a_2 + ... arrow.r e_1$ and $b_1 + b_2 + ... arrow.r e_2$, construct the potential
-critical pair
-
-$
-e_1 + ... = a_1 + a_2 + ... + b_1 + b_2 = ... + e_2
-$
-
-Reduce it by existing rules, orient it by some (multiset) ordering
-and add it as a rule if it is non-trivial.
-
-#pause
-
-Very similar to Buchberger's algorithm (see later). Note: we use + in our examples,
-but this will be written as × when we embed our terms into polynomials!
-
-== The AC word problem, brief example
-#figure(
-  image("buchexample.svg", width: 100%),
-  caption: [
-    Starting graph
-  ],
+== Making EMTs work: our contribution
+#set align(center)
+#diagram(
+  node-stroke: luma(90%),
+  edge-corner-radius: none,
+  
+  // Nodes
+  node(
+    (0, 0),
+    [
+      Equality saturation],
+    name: <eqsat>,
+  ),
+  edge("<|-"),
+  node(
+    (0, 1),
+    [
+      *AC closure*
+    ],
+    name: <cc>,
+  ),
+  edge("<|-"),
+  node(
+    (0, 2),
+    [
+      Congruence closure
+    ],
+    name: <cc>,
+  ),
+  edge("<|-"),
+  node(
+    (0, 3),
+    [
+      Union-find
+    ],
+    name: <cc>,
+  ),
 )
 
-== The AC word problem, brief example
+== Some insights from rewriting
+E-graphs are just certain kinds of rewrite systems
+
+== E-graphs as a rewrite system
+#slide(composer: (1fr, auto))[
+  #figure(
+    image("exampleBasic5.svg", width: 65%),
+  )
+][
+  $
+    a → e_a \
+    b → e_b \
+    c → e_c \
+    g(e_a) → e_1 \
+    g(e_b) → e_2 \
+    g(e_c) → e_2 \
+    ...
+  $
+]
+
+== E-graphs as a rewrite system
+#slide(composer: (1fr, auto))[
+  #figure(
+    image("exampleBasic5.svg", width: 65%),
+  )
+][
+  $
+    f(e_1, e_c) → e_3 \
+    h(e_a, e_2) → e_3 \
+    h(e_a, e_2) → e_4 \
+    h(e_2, e_b) → e_4
+  $
+]
+
+== What congruence closure is doing
+$e_3 ← h(e_a, e_2) → e_4$
+
+When we can rewrite in two different ways, we call it a *critical pair*.
+
+*Resolve* critical pairs by merging: in this case, $e_3$ and $e_4$
+
+== AC closure
+We need to find AC-critical pairs
+
+$c + b ← (a+a)+b =_{A C} a+(a+b) → a + b$
+
+So, we learn that $c + b = a + b$
+
+#set align(left)
+== AC closure
+Loop:
+- Find an AC-critical pair $t_1 ← s → t_2$
+- Take the equation $t_1 = t_2$ and *orient* it into a new AC-rewrite rule $t_1 → t_2$ or $t_2 → t_1$
+- Interreduce the new rule with the old ones
+
+== Why this terminates
+Consider the AC-term $a + a + b$ that is on the left hand side of some AC-rewrite rule.
+
+We can think of it as $2a + b$
+
+Any new term $k_1 a + k_2 b + ...$ with $k_1 ≥ 2, k_2 ≥ 1$ will reduce by this one.
+
+== Why this terminates
+Every rewrite rule means we won't make new rewrite rules that *dominate* it, by having an LHS greater than its LHS in every term: those would get reduced by it.
+
+You can only add so many rewrite rules that aren't dominated by previous ones
+
+#set align(center)
+
+== Visual proof
+#cetz.canvas({
+  import cetz.draw: *
+  for i in range(0, 10) {
+    for j in range(0, 1) {
+      rect((i, j), (i + 1, j + 1))
+    }
+  }
+
+  line((10, 0), (11, 0))
+  mark((11, 0), (12, 0), symbol: ">>", anchor: "base", scale: 4, fill: black)
+})
+
+== Visual proof
+#cetz.canvas({
+  import cetz.draw: *
+  for i in range(0, 10) {
+    for j in range(0, 1) {
+       if i > 3 {
+         set-style(fill: red)
+       } else {
+         set-style(fill: white)
+       }
+      rect((i, j), (i + 1, j + 1))
+    }
+  }
+
+  line((10, 0), (11, 0))
+  mark((11, 0), (12, 0), symbol: ">>", anchor: "base", scale: 4, fill: black)
+})
+
+== Visual proof
+#cetz.canvas({
+  import cetz.draw: *
+  for i in range(0, 10) {
+    for j in range(0, 1) {
+      if i > 3 {
+        set-style(fill: red)
+      } else if i > 1 {
+        set-style(fill: blue)
+      } else {
+        set-style(fill: white)
+      }
+      rect((i, j), (i + 1, j + 1))
+    }
+  }
+
+  line((10, 0), (11, 0))
+  mark((11, 0), (12, 0), symbol: ">>", anchor: "base", scale: 4, fill: black)
+})
+
+== Visual proof
+#cetz.canvas({
+  import cetz.draw: *
+  for i in range(0, 9) {
+    for j in range(0, 9) {
+      rect((i, j), (i+1, j+1))
+    }
+  }
+
+  line((9, 0), (10, 0))
+  mark((10, 0), (11, 0), symbol: ">>", anchor: "base", scale: 4, fill: black)
+  
+  line((0, 9), (0, 10))
+  mark((0, 10), (0, 11), symbol: ">>", anchor: "base", scale: 4, fill: black)
+})
+
+== Visual proof
+#cetz.canvas({
+  import cetz.draw: *
+  for i in range(0, 9) {
+    for j in range(0, 9) {
+      if i > 3 and j > 4 {
+        set-style(fill:red)
+      } else {
+        set-style(fill:white)
+      }
+      rect((i, j), (i + 1, j + 1))
+    }
+  }
+
+  line((9, 0), (10, 0))
+  mark((10, 0), (11, 0), symbol: ">>", anchor: "base", scale: 4, fill: black)
+  
+  line((0, 9), (0, 10))
+  mark((0, 10), (0, 11), symbol: ">>", anchor: "base", scale: 4, fill: black)
+})
+
+== Visual proof
+#cetz.canvas({
+  import cetz.draw: *
+  for i in range(0, 9) {
+    for j in range(0, 9) {
+      if i > 3 and j > 4 {
+        set-style(fill: red)
+      } else {
+        set-style(fill: white)
+      }
+      rect((i, j), (i + 1, j + 1))
+    }
+  }
+  
+  line((9, 0), (10, 0))
+  mark((10, 0), (11, 0), symbol: ">>", anchor: "base", scale: 4, fill: black)
+  
+  line((0, 9), (0, 10))
+  mark((0, 10), (0, 11), symbol: ">>", anchor: "base", scale: 4, fill: black)
+
+  for i in range(0, 4) {
+    line((i + 0.5, 0.25), (i + 0.5, 8.5), stroke: gray)
+    mark((i + 0.5, 8.5), (i + 0.5, 9), symbol: ">>", anchor: "base", scale: 2, stroke: gray, fill: gray)
+  }
+  for j in range(0, 5) {
+    line((0.25, j + 0.5), (8.5, j + 0.5), stroke: gray)
+    mark((8.5, j + 0.5), (9, j + 0.5), symbol: ">>", anchor: "base", scale: 2, stroke: gray, fill: gray)
+  }
+})
+
+== Results
+Generate a bunch of random identities (e.g. $f(x) = h(x, f(x))$) and random initial equations.
+
+Run to saturation, handling AC either via EMTs or via saturating on the AC identities
+
+Measure the final size (size of everything, essentially)
+
+== Result
 #figure(
-  image("buchexamplecomplete.svg", width: 100%),
-  caption: [
-    AC-completed graph
-  ],
+  image("res2.svg", width: 75%),
 )
 
+== AC-closure and the wider world
+AC-closure is just a form of *Buchberger's algorithm*, a well-known algorithm in algebra.
 
-== The AC word problem, the polynomial encoding
-If $a b c = d e f$, encode this as a polynomial equation $x_a x_b x_c - x_d x_e x_f = 0$.
+Lots of work has been done to optimize it.
 
-This is not overkill, since we have the ESPACE lower bound...
+Still, the problem is fundamentally ESPACE-complete.
 
-#pause
+== EMTs for any T
+Filling the "gap" is exactly equivalent to a well-known problem, the *word problem*
 
-A set of AC equations form a _polynomial ideal_, and finding a reduced _basis_ for this ideal solves the word problem. And this is also what algebraists
-have been doing for a long time: Buchberger's algorithm and Gröbner bases are standard tools
+For just associativity, the word problem is undecidable!
+So, we couldn't just run "A-closure": we would have to allow the option to run it up to some number of steps, with no
+guarantees it will ever be done.
 
-== AC word problem example, as an ideal
-$
-(a + b) + c = e_1 \
-b + (c + d) = e_2 \
-"translate" => \
-a b c - e_1 = 0 \
-b c d - e_2 = 0 \
-=> \
-a b c d - d(a b c - e_1) = -e_1 d \
-a b c d - a(b c d - e_2) = -e_2 a \
-$
+Some word problems are much better than ESPACE:
+- Abelian groups/ACUN: polynomial time
+- Fields, vector spaces, etc: $O(n^(2.#text[something]))$
 
-== AC word problem example, as an ideal
-$
-e_1 d - e_2 a = 0
-$
+For AC + other identities (semirings, rings, modules, ...), often a variant of Buchberger's algorithm suffices.
 
-Final basis:
+// == E-graphs as rewrite systems
+// E-graphs connect very closely to the theory of *rewriting*.
 
-$
-a b c - e_1 = 0 \
-b c d - e_2 = 0 \
-e_1 d - e_2 a = 0
-$
+// The 'Abstract Congruence Closure' perspective is that E-graphs are building a
+// _convergent term rewriting system_ on an extended signature.
 
-== Buchberger etc
+// Congruence closure is very similar to 'ground Knuth-Bendix completion' from rewriting.
 
-Buchberger's algorithm, and the refined $F_4$ and $F_5$ variants, are what we would like to use.
+// (Equality saturation is a bit of a stranger animal but still vaguely completion-flavoured)
 
-How to integrate their term-ordering fiddlyness with our flattened E-class system?
+// == E-graphs as tree automata
+// E-graphs are reachable deterministic bottom-up tree automata
 
-Well, Tiwari solved it in his dissertation sections on congruence closure mod AC.
+// - Reachable: every E-class is inhabited by some E-node
+// - Deterministic: if $f(s_1, s_2) arrow.r s_3$ and $f(s_1, s_2) arrow.r s_4$ then $s_3 = s_4$
+// - Bottom-up: there is a notion of top-down deterministic tree automata but it is weaker than deterministic bottom-up (compare the string automata case, where left-to-right and right-to-left are equivalent)
 
-(It isn't that hard)
+// == Inspirations for adding the "mod T"
+// Rewriting modulo theories
 
-It turns out E-graphs have yet to fully absorb all the insights of the term-rewriting world.
+// Algebraic automata (that is, tree automata on non-free theories)
 
-== Buchberger again
+// == The neat thing about E-graphs
+// ...is that they add a new symbol for everything.
+// $f(e_1)$? Well, if we haven't seen that before, give it a new E-class/tree-automata state
 
-We can solve not just AC, but rings, polynomials, ACU, etc, with the same techniques.
+// == Confluence
+// If we have a term that is 'in multiple E-classes', we ought to merge the E-classes.
 
-//So, even if there is a purely "term"-based approach
-// (Bachmair and Tiwari, _Congruence Closure modulo AC_)
+// This is what rebuilding does:
 
-== Better than Buchberger
-Abelian groups (aka ACUN) can be solved with Hermite normal form. Polynomial time!
-Vector spaces over a field can be solved with Gaussian elimination, which is $O(n^(2."something"))$
+// $e_1 arrow.r e_2$ and $f(... e_1 ...) arrow.r e_3$ ('parent-child overlap')
 
-== Matching modulo AC
-I have ideas, but you will probably have to wait until EGRAPHS 2026 for the full story :)
+// $f(... e_1 ...) arrow.r e_3$ and $f(... e_1 ...) arrow.r e_4$ ('self-overlap')
 
-== Integrating theories and E-graphs: design choices
-There are two ways to think about adding an AC-solver to an E-graph.
+// The new symbols for E-classes means we can handle granchild overlap, etc, by iterating these basic steps.
 
-1. 'Integrated': Treat +-nodes as any other E-graph node, and scan for critical pairs between them
-2. 'Side-table': Don't store +-nodes in the normal E-graph at all. Instead, have a side table of AC-rewriting rules.
-  - When you add e.g. $e_1 + e_2$ to the E-graph, create a new rewrite $e_1 + e_2 → e_3$ for some fresh $e_3$
-  - Whenever we discover a rewrite $e_j → e_k$ in the AC-solver, feed it back to the original E-graph
+// == ...which is how they simplify confluence
+// If we have a critical pair of terms, they must have some relevant 'overlap' between rules.
+// Any overlap must be a case of subterm containment. Every subterm gets a new symbol, so we only have to check for a few cases:
 
-== Integrating theories and E-graphs
-I chose option 2 for my current implementation. Indeed, I didn't even think too hard about the tradeoff,
-as it seemed obvious that these are equivalent in some sense.
+// $e_1 arrow.r e_2$ and $f(... e_1 ...) arrow.r e_3$ ('parent-child overlap')
 
-== Not entirely equivalent methods
-However, there is one advantage of the 'side-table' approach that might be accidentally missed in the integrated approach.
+// $f(... e_1 ...) arrow.r e_3$ and $f(... e_1 ...) arrow.r e_4$ ('self-overlap')
 
-In the side-table approach, if we build the rewrite $e_1 + e_2 → e_3$ and we have an existing rule
-$e_1 + e_2 + e_2 → e_4$, we can compress the existing rule down to $e_2 + e_3 → e_4$.
+// Grandchild overlap, etc, is handled by fixpoint propagation.
 
-This is a standard step in textbook Buchberger's algorithm.
+// == Key notion: critical pairs
+// A critical pair is some minimal term that can rewrite in two ways/is in two E-classes. To do congruence closure
+// (modulo $T$) properly, we need to find critical pairs and resolve them, by merging the E-classes.
 
-== Not entirely equivalent methods
-Just finding critical pairs is _semantically_ correct, but misses this compression opportunity if you aren't paying attention.
+// // == ...which is less neat for AC
+// == AC-critical pairs
+// $
+// (a + b) + c = e_1 \
+// b + (c + d) = e_2
+// $
 
-To make the integrated method equivalent, we need to keep some ordering between $+$-nodes in the same class
-and do some destructive rewriting of the E-graph.
+// $b + c$ is the _overlap_ of an AC-critical pair:
 
-== See my thesis...
-I hope to go a bit more into depth about this design choice in my thesis.
+// $
+// e_1 + d =_(A C) a + b + c + d =_(A C) a + e_2
+// $
 
-== Important sources
-*Decision Procedures in Automated Deduction*: Ashish Tiwari's disseration
+// What are we doing in AC equality saturation? Well, any of the $O(2^n)$ AC-subterms _could_ become an AC-critical pair.
+// We are eagerly giving new E-classes to them. Just in case. After all,
+// equality saturation only works by grounding identities: we have not given a mechanism to ground something only when it's actually needed.
 
-*A Modular Associative Commutative (AC)  Congruence Closure Algorithm*: Deepak Kapur
+// == EMTs, prehistorically
+// Existing suggestions for EM(T)s fall along two very similar lines:
 
-*MODULARITY AND COMBINATION OF ASSOCIATIVE COMMUTATIVE CONGRUENCE CLOSURE ALGORITHMS ENRICHED WITH SEMANTIC PROPERTIES*: Deepak Kapur
+// - Canonize the $T$ parts of the E-graph, and work mod $T$ in some way
+// - Treat E-nodes as 'containers' (of E-class names), and move from fixed-arity function symbols to lists, multisets/bags, etc
 
-*Congruence Closure Modulo Associativity and Commutativity*: L. Bachmair, I. V. Ramakrishnan, A. Tiwari, and L. Vigneron
+// Either way is an attempt to bake the theories in:
 
-*The complexity of the word problems for commutative semigroups and polynomial ideals*: Mayr and Meyer
+// - A(U) = semigroups = lists = associate to the right
+// - AC(U) = commutative semigroups = multisets/bags = sort ascending and associate to the right
+
+// == EMTs, the end of prehistory
+
+// The intuition:
+
+// 'Why do we need all these AC-equivalent nodes? Can't we just pick an AC-representative?'
+
+// Yes, _but_
+
+// You need some method of finding $T$-critical pairs, and to make a complete algorithm, you must _eventually_ resolve every pair.
+
+// And also match modulo $T$ to instantiate identities for equality saturation.
+
+// == Counterexamples to prehistoric EMTs
+// $
+// a + b = a
+// $
+
+// Modulo A, we ought to generate the *infinite* set of implied subterms $b, b + b, ...$. So, prehistoric methods fail when E-graphs are *not flat terms*.
+
+// == Counterexamples to prehistoric EMTs
+// $
+// b + a + c = a
+// $
+
+// The infinite set of equivalent terms modulo A is now $n b + a + n c$. We can no longer recognize the
+// set of all re-associations of this, or the set of canonized forms of this, with a tree automata.
+
+// == Counterexamples to prehistoric EMTs
+// $
+// a + (b + c) = d \
+// a + b = e \
+// e + c = f
+// $
+
+// These equations are individually canonical, but they don't include the consequence
+// $d = a + (b + c) = (a + b) + c = e + c = f$
+
+// Prehistoric methods might canonize, but this means they don't scan for implied equalities among a set of (canonized!) equations.
+// Actually...
+
+// == EMTs and the word problem
+// Scanning for implied equalities is exactly the same thing as resolving all $T$-critical pairs
+
+// Any mechanism to automatically resolve all $T$-critical pairs is a solver for the $T$-word problem.
+
+// == A and AC
+// Finding A-critical pairs, and matching modulo A, is quite feasible. Still, there is not 'packaged' solution possible:
+// the A-word problem is undecidable. So, the best we can do is just provide a list of critical pairs for the 'outer loop' of equality saturation
+// to choose to resolve (or not)
+
+// AC is better: the word problem is decidable (Mayr-Meyer). It's ESPACE-complete...
+// Sounds bad, but E-graphs are EESPACE here, but more importantly: we can solve common cases of
+// the AC word problem faster than ESPACE (hopefully), whereas E-graphs _must_ chug along to saturation to be _certain_
+// (as they have no smart way of knowing if some AC-subterm is relevant to the critical pair problem)
+
+// == The AC word problem, a la Bachmair et al.
+
+// Given $a_1 + a_2 + ... arrow.r e_1$ and $b_1 + b_2 + ... arrow.r e_2$, construct the potential
+// critical pair
+
+// $
+// e_1 + ... = a_1 + a_2 + ... + b_1 + b_2 = ... + e_2
+// $
+
+// Reduce it by existing rules, orient it by some (multiset) ordering
+// and add it as a rule if it is non-trivial.
+
+// #pause
+
+// Very similar to Buchberger's algorithm (see later). Note: we use + in our examples,
+// but this will be written as × when we embed our terms into polynomials!
+
+// == The AC word problem, brief example
+// #figure(
+//   image("buchexample.svg", width: 100%),
+//   caption: [
+//     Starting graph
+//   ],
+// )
+
+// == The AC word problem, brief example
+// #figure(
+//   image("buchexamplecomplete.svg", width: 100%),
+//   caption: [
+//     AC-completed graph
+//   ],
+// )
+
+
+// == The AC word problem, the polynomial encoding
+// If $a b c = d e f$, encode this as a polynomial equation $x_a x_b x_c - x_d x_e x_f = 0$.
+
+// This is not overkill, since we have the ESPACE lower bound...
+
+// #pause
+
+// A set of AC equations form a _polynomial ideal_, and finding a reduced _basis_ for this ideal solves the word problem. And this is also what algebraists
+// have been doing for a long time: Buchberger's algorithm and Gröbner bases are standard tools
+
+// == AC word problem example, as an ideal
+// $
+// (a + b) + c = e_1 \
+// b + (c + d) = e_2 \
+// "translate" => \
+// a b c - e_1 = 0 \
+// b c d - e_2 = 0 \
+// => \
+// a b c d - d(a b c - e_1) = -e_1 d \
+// a b c d - a(b c d - e_2) = -e_2 a \
+// $
+
+// == AC word problem example, as an ideal
+// $
+// e_1 d - e_2 a = 0
+// $
+
+// Final basis:
+
+// $
+// a b c - e_1 = 0 \
+// b c d - e_2 = 0 \
+// e_1 d - e_2 a = 0
+// $
+
+// == Buchberger etc
+
+// Buchberger's algorithm, and the refined $F_4$ and $F_5$ variants, are what we would like to use.
+
+// How to integrate their term-ordering fiddlyness with our flattened E-class system?
+
+// Well, Tiwari solved it in his dissertation sections on congruence closure mod AC.
+
+// (It isn't that hard)
+
+// It turns out E-graphs have yet to fully absorb all the insights of the term-rewriting world.
+
+// == Buchberger again
+
+// We can solve not just AC, but rings, polynomials, ACU, etc, with the same techniques.
+
+// //So, even if there is a purely "term"-based approach
+// // (Bachmair and Tiwari, _Congruence Closure modulo AC_)
+
+// == Better than Buchberger
+// Abelian groups (aka ACUN) can be solved with Hermite normal form. Polynomial time!
+// Vector spaces over a field can be solved with Gaussian elimination, which is $O(n^(2."something"))$
+
+// == Matching modulo AC
+// I have ideas, but you will probably have to wait until EGRAPHS 2026 for the full story :)
+
+// == Integrating theories and E-graphs: design choices
+// There are two ways to think about adding an AC-solver to an E-graph.
+
+// 1. 'Integrated': Treat +-nodes as any other E-graph node, and scan for critical pairs between them
+// 2. 'Side-table': Don't store +-nodes in the normal E-graph at all. Instead, have a side table of AC-rewriting rules.
+//   - When you add e.g. $e_1 + e_2$ to the E-graph, create a new rewrite $e_1 + e_2 → e_3$ for some fresh $e_3$
+//   - Whenever we discover a rewrite $e_j → e_k$ in the AC-solver, feed it back to the original E-graph
+
+// == Integrating theories and E-graphs
+// I chose option 2 for my current implementation. Indeed, I didn't even think too hard about the tradeoff,
+// as it seemed obvious that these are equivalent in some sense.
+
+// == Not entirely equivalent methods
+// However, there is one advantage of the 'side-table' approach that might be accidentally missed in the integrated approach.
+
+// In the side-table approach, if we build the rewrite $e_1 + e_2 → e_3$ and we have an existing rule
+// $e_1 + e_2 + e_2 → e_4$, we can compress the existing rule down to $e_2 + e_3 → e_4$.
+
+// This is a standard step in textbook Buchberger's algorithm.
+
+// == Not entirely equivalent methods
+// Just finding critical pairs is _semantically_ correct, but misses this compression opportunity if you aren't paying attention.
+
+// To make the integrated method equivalent, we need to keep some ordering between $+$-nodes in the same class
+// and do some destructive rewriting of the E-graph.
+
+// == See my thesis...
+// I hope to go a bit more into depth about this design choice in my thesis.
+
+// == Important sources
+// *Decision Procedures in Automated Deduction*: Ashish Tiwari's disseration
+
+// *A Modular Associative Commutative (AC)  Congruence Closure Algorithm*: Deepak Kapur
+
+// *MODULARITY AND COMBINATION OF ASSOCIATIVE COMMUTATIVE CONGRUENCE CLOSURE ALGORITHMS ENRICHED WITH SEMANTIC PROPERTIES*: Deepak Kapur
+
+// *Congruence Closure Modulo Associativity and Commutativity*: L. Bachmair, I. V. Ramakrishnan, A. Tiwari, and L. Vigneron
+
+// *The complexity of the word problems for commutative semigroups and polynomial ideals*: Mayr and Meyer
 
 // == Matching modulo AC: semantics
 // There is the delicate matter that *what* is considered an $A C$-match could affect completeness.

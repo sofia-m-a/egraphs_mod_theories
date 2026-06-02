@@ -1,7 +1,10 @@
 set datafile separator ","
 
-set terminal cairolatex pdf color size 5.0in, 3.5in
-set output "res2.tex"
+# set terminal cairolatex pdf color size 5.0in, 3.5in
+# set output "res2.tex"
+
+set terminal svg size 600,400 dynamic enhanced background 'white'
+set output 'res2.svg'
 
 set xlabel "Size of E-graph with saturation under AC"
 set ylabel "Size of EMT with AC-completion"
