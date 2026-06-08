@@ -1,21 +1,20 @@
 \documentclass[12pt,a4paper,twoside,openright]{report}
 
-\usepackage{moreverb}								% List settings
-\usepackage{textcomp}								% Fonts, symbols etc.
+\usepackage{moreverb}							% List settings
+\usepackage{textcomp}							% Fonts, symbols etc.
 \usepackage{lmodern}								% Latin modern font
-\usepackage{helvet}									% Enables font switching
-\usepackage[T1]{fontenc}							% Output settings
-\usepackage[english]{babel}							% Language settings
-\usepackage[utf8]{inputenc}							% Input settings
+\usepackage{helvet}								% Enables font switching
+\usepackage[T1]{fontenc}						% Output settings
+\usepackage[english]{babel}				% Language settings
+\usepackage[utf8]{inputenc}				% Input settings
 \usepackage{amsmath}								% Mathematical expressions (American mathematical society)
 \usepackage{amssymb}								% Mathematical symbols (American mathematical society)
-\usepackage{graphicx}								% Figures
-\usepackage{subfig}									% Enables subfigures
-\numberwithin{equation}{chapter}					% Numbering order for equations
-\numberwithin{figure}{chapter}						% Numbering order for figures
-\numberwithin{table}{chapter}						% Numbering order for tables
-\usepackage{minted}						    		% Enables source code listings
-%\usepackage{chemfig}								% Chemical structures
+\usepackage{graphicx}							% Figures
+\usepackage{subfig}								% Enables subfigures
+\numberwithin{equation}{chapter}		% Numbering order for equations
+\numberwithin{figure}{chapter}			% Numbering order for figures
+\numberwithin{table}{chapter}			% Numbering order for tables
+\usepackage{minted}						    % Enables source code listings
 \usepackage[top=3cm, bottom=3cm,
 			inner=3cm, outer=3cm]{geometry}			% Page margin lengths			
 \usepackage{eso-pic}								% Create cover page background
@@ -252,6 +251,8 @@ Gothenburg, Sweden \the\year
 
 }
 
+\listoffixmes
+
 % ABSTRACT
 \newpage
 \oneLineTitle\\
@@ -262,9 +263,10 @@ Chalmers University of Technology and University of Gothenburg
 
 \thispagestyle{plain}			% Supress header 
 \section*{Abstract}
-E-graphs are a data structure for equational theorem proving, and which provide the basis for \emph{equality saturation} (section \fxerror{TODO}), a method to automatically derive equational consequences from a starting set of terms, equations, and identities. E-graphs have generated a lot of interest since the publication of the \textsc{Egg} library developed by Willsey et al. and their corresponding paper (\citep{willsey_egg_2021}).
 
-However, E-graphs struggle with a combinatorial explosion when reasoning about certain theories. A notorious case is that of AC theories, those containing associative and commutative operators: the space complexity of saturation is doubly-exponential in the size of the input in the worst case, as shown in section \ref{acegg}.
+E-graphs are a data structure for equational theorem proving, and which provide the basis for \emph{equality saturation} (section \fxerror{forward ref}), a method to automatically derive equational consequences from a starting set of terms, equations, and identities. E-graphs have generated a lot of interest since the publication of the \textsc{Egg} library developed by Willsey et al. and their corresponding paper (\citep{willsey_egg_2021}).
+
+However, E-graphs struggle with a combinatorial explosion when reasoning about certain theories. A notorious case is that of AC theories, those containing associative and commutative operators: the space complexity of saturation is \fxerror{wrong asympt} doubly-exponential in the size of the input in the worst case, as shown in section \ref{acegg}.
 
 Can equality saturation for AC theories be done in a more efficient way? There have been several proposals for extending E-graphs to \emph{E-graphs modulo theories} (EMTs) (\citep{zucker_omelets_2025}, \citep{panchekha_lin-graphs_2025}, \citep{shanabrook_custom_2026}).  These proposals suggest integrating a \emph{theory-specific} reasoning method for AC together with the general mechanisms of E-graphs and equality saturation in order to efficiently deal with AC theories. The hope is that specific methods for AC theories can avoid the inefficiencies in using the general equality saturation mechanism for the AC identities.
 
@@ -272,13 +274,15 @@ EMTs are inspired by the success of theory-specific methods in other automated r
 
 We will develop the idea of EMTs and show that it \emph{is} possible to reason with AC theories and a variety of closely related theories in a way that avoids the worst inefficiencies of plain E-graphs.
 
-In section \fxerror{TODO}, we also provide a formal definition of EMTs that we hope can provide the basis for future work on integrating other theories in a similar manner.
+In section \fxerror{forward ref}, we also provide a formal definition of EMTs that we hope can provide the basis for future work on integrating other theories in a similar manner.
 
 We then, in section \ref{impl}, discuss an implementation of EMTs and benchmark it against pure E-graph reasoning on a variety of equational reasoning tasks (\ref{evalresults}). 
 
-Central to our notion of a `good' theory for an EMT is the necessity of a solver for the word problem over the theory, which we justify in section \fxerror{TODO}. This gives us a lower bound on EMTs for AC: the word problem for AC requires in the worst case exponential space and doubly-exponential time. This is an improvement over the doubly-exponential space upper bound for E-graphs, but highlights that concrete efficiency gains derive from the potential for typical problems to be solvable efficiently. Our solver for AC and polynomials is builds upon Buchberger's algorithm, which has received significant effort to achieve good common-case performance.
+Central to our notion of a `good' theory for an EMT is the necessity of a solver for the word problem over the theory, which we justify in section \fxerror{forward ref}. This gives us a lower bound on EMTs for AC: the word problem for AC requires in the worst case exponential space and doubly-exponential time. This is an improvement over the \fxerror{wrong asympt} doubly-exponential space upper bound for E-graphs, but highlights that concrete efficiency gains derive from the potential for typical problems to be solvable efficiently. Our solver for AC and polynomials is builds upon Buchberger's algorithm, which has received significant effort to achieve good common-case performance.
 
 On the other hand, for the theory ACUN (AC with unit and negation, aka the theory of Abelian groups) or the theory of vector spaces, we have polynomial time bounds: we can use algorithms for Hermite normal form (for Abelian groups) and Gaussian elimination (for vector spaces).
+
+\fxerror{If I have time, set up a proper makefile or similar and split this tex into multiple files, etc}
 
 % KEYWORDS (MAXIMUM 10 WORDS)
 \vfill
@@ -293,6 +297,8 @@ Keywords: E-graphs, AC, associativity, commutativity, Buchberger's algorithm, re
 \thispagestyle{plain}			% Supress header
 \section*{Acknowledgements}
 Here, you can say thank you to your supervisor(s), company advisors and other people that supported you during your project.
+
+\fxerror{Fill this in. Also the date is wrong, which seems to be a Nix issue fixable with \texttt{SOURCE\_DATE\_EPOCH}}
 
 \vspace{1.5cm}
 \hfill
@@ -392,6 +398,10 @@ Applications of equality saturation include optimization in compilers, decompila
 
 Describing E-graphs can be done in 3 layers. First, there is the union-find structure, which is a simple solver for the theory of atomic equations: given a set of \emph{atoms} $e_1, e_2, \ldots$, we can union two of them to set them equal, and we can find a representative of any particular atom. The representative is unique, so we can simply compare representatives for equality to determine if the atoms they represent are equivalent.
 
+\fxerror{The resulting rewrite system is basically how UF is actually implemented in many cases (think \texttt{while e.next != e}) but as a rewrite system is not actually terminating: it is $\rightarrow \setminus 1$ that is terminating. Fix or explain}
+
+\fxerror{Besides, why not pictures here? UF is not actually that important to understand as a rw system until (maybe) later}
+
 The data structure for this can be thought of as presenting a rewriting system among atoms: for instance,
 
 \begin{align*}
@@ -441,6 +451,7 @@ To handle congruence, we will break terms down into \emph{layers}. For instance,
 This motivates the E-graph data structure, and the congruence closure algorithm that restores the congruence invariant. Computing the congruence closure is also known as `rebuilding' the E-graph.
 
 \subsection{E-graphs for congruence-closure} \label{egraphs}
+\fxerror{The following is artificial but didactic. Finding a non-artificial \emph{and} didactic example would be nice, but is hard. But fix if I have some insight}
 
 As an example, we will compute the congruence closure of the following set of equations:
 
@@ -2453,6 +2464,7 @@ Unfortunately, equality saturation handles these identities rather poorly. Consi
 	\label{blowup5}
 \end{center}
 
+\fxerror{Wrong aympt. The below is wrong! actually it is only singly-exponential, but I need to double-check the calculations}
 It's relatively easy to see why: the top E-class has $2^n-1$ E-nodes, one for each way to partition the set of atoms into 2 nonempty parts, so the E-nodes in the top class already have $2^n-1$ E-classes as children. And then each child E-class representing the sum of $k$ atoms has its own $2^k$ enodes, etc. So, there are $O(2^n)$ E-nodes for each of $O(2^n)$ E-classes, giving a doubly-exponentially $O(2^{2^n})$ sized E-graph.
 
 \section{Handling AC with EMTs: a first example}
@@ -2938,7 +2950,7 @@ The final EMT (Figure \ref{emte3}) is saturated, and has `discovered' our desire
 	\end{tikzpicture}
 \end{figure}
 
-\fxerror{Should I unfloat the preceding diagrams?}
+\fxerror{Review which diagrams are floated/not floated}
 
 \section{Challenges for EMT(AC)}
 We have seen the promising aspects of EMTs for AC, but there is a significant gap in the description given so far, and we need something extra. Consider the equations
@@ -3040,16 +3052,24 @@ Our criteria is this: if the EMT contains two terms $t_1 = r + s$ and $t_2 = u +
 
 This equation is a consequence, since $t_1 + u = (r + s) + u = (u + s) + r = t_2 + r$.
 
+\fxerror{Actually put a picture here of EMTs solving the above}
+
 With our above example, we see that $e_b$ contains the E-node $+(a, e_b)$ and $e_c$ contains the E-node $+(a, a)$. Consequently, we insert the equation $e_b + a = e_c + e_b$. Since the right-hand-side is already assigned to $e_d$ and the left-hand-side to $e_b$, this equation simply asks us to equate $e_b$ and $e_d$, exactly as desired.
 
 Let's refine the idea into something more workable. Suppose we have the variadic +-term $+(e_1, \ldots, e_k)$ in some E-class $e$, and the variadic +-term $+(d_1, \ldots, d_i)$ in some E-class $d$. Think of the arguments as multisets, so that $\{e_1, \ldots, e_k\} = E$ and similarly for $D$. Then let the multiset $O$ contain each element with the minimum multiplicity it occurs in either $E$ or $D$. So if $E = \{e_1, e_1, e_2, e_3\}$ and $D = \{e_1, e_3, e_4\}$, then $O = \{e_1, e_3\}$. If the overlap is empty, we can ignore it. Otherwise, construct the terms $E - O + D$ and $D - O + E$, in the obvious way, and then insert the equation $E - O + D = D - O + E$.
 
+\fxerror{Put some words into explaining the non-trivial critical pairs that AC-closure creates compared to just AC-saturation}
+
+\fxerror{Actually, I should use AC-saturation and AC-closure throughout as better terminology}
+
 Is this enough? Suppose we imagine a chain of reasoning involving ground equations, the A identity, and the C identity. We can group the reasoning into `ground' sections and the `AC' sections. An AC section, in total, involves reassociating and commuting some term involving $+$s. So, \fxerror{Write this when I'm less impatient. Proof of completeness+termination}
+
+\fxerror{Put attempted visual proof of Dickson's lemma here?}
 
 \section{Prospects for EMT(AC)}
 EMT(AC) avoids the need for equality saturation on the A and C identities by integrating these rules into the underlying E-graph. However, this has a cost: congruence closure normally is polynomial time \footnote{indeed, at best slightly superlinear} while the AC-closure step outlined above is at worst \textsc{ESpace} \footnote{space proportional to $2^{O(n)}$, where $n$ is the size of the E-graph} as will be discussed later. \fxerror{forward ref}
 
-Moreover, while congruence closure only shrinks the graph by potentially discovering E-classes that can be merged, AC-closure can grow it, so one might want to run AC-closure only intermittently while running congruence closure much more often. This is then not that different in spirit to existing approaches to handling AC blowup in equality saturation by `deprioritizing' the AC identities \fxerror{Do I need a source here}
+Moreover, while congruence closure only shrinks the graph by potentially discovering E-classes that can be merged, AC-closure can grow it, so one might want to run AC-closure only intermittently while running congruence closure much more often. This is then not that different in spirit to existing approaches to handling AC blowup in equality saturation by `deprioritizing' the AC identities \fxerror{Maybe a source here, at least to the Egglog code that handles this}
 
 However, there are two key advantages:
 \begin{itemize}
@@ -3169,7 +3189,7 @@ When we want to reason about AC, we need the notion of AC-critical pair. If $e_1
 
 E-graphs handle AC-critical pairs the same way as critical pairs for any other theory, with equality saturation: we \emph{ground} the AC identities by matching either side with the E-graph, and adding the equivalent other side (if it is not present) and merging the equivalence classes corresponding to either side.
 
-Why do E-graphs fare poorly with AC? We have seen that equality saturation with AC will generate a doubly-exponential number of E-nodes.
+Why do E-graphs fare poorly with AC? We have seen that equality saturation with AC will generate a \fxerror{wrong asympt} doubly-exponential number of E-nodes.
 
 These `redundant' E-nodes and E-classes play a role: any of the $O(2^{2^n})$ AC-subterms of the input could be part of an AC-critical pair, and so equality saturation eagerly assigns new E-classes to them, just in case. Introducing these extra E-classes and E-nodes is seemingly the best we can do in general unless we have a clever way to detect which ground instances of the 
 
@@ -3222,6 +3242,8 @@ This interreduction shrinks the size of the E-graph, so it is important for perf
 In the integrated viewpoint, this amounts to shrinking E-nodes when they can `factor' through another node. For instance, if we have E-nodes $a + b + c$ in class $e_1$ and $b + c$ in class $e_2$, we ought to destructively rewrite the first to $a + e_2$. Just resolving critical pairs will lead to $e_1$ containing both $a + b + c$ and $a + e_2$, which is correct as far as dealing with critical pairs but redundant.
 
 Going further, the performance of Buchberger's algorithm depends on the ordering used (\fxerror{cite}), something that might not be obvious with the integrated approach. It is standard to use grevlex ordering.
+
+\fxerror{Here is where I can go wild with formalities, maybe. Or include a generic-for-any-T formalization section}
 
 \chapter{Beyond rewriting: E-matching, E-analysis, and E-xtraction}
 Many uses of E-graphs don't just use them as an equational theory solver, but want to run certain analyses on the E-graph (perhaps to allow conditional rewrites) or want to extract the smallest term representing an equivalence class, according to some cost metric.
@@ -3341,6 +3363,10 @@ One thing to consider in future work is that matching engine might allow pattern
 \fxerror{Ref to hardness of AC-matching. But note ordinary E-matching is already NP-hard...}
 
 \fxerror{Technically, before when finding overlaps etc, we are doing AC-matching, but a rather limited kind... Maybe I should spell out the algorithm. It is of course just finding multiset partitions}
+
+\fxerror{Actually, the above needs much more fleshing out due to the annoyance of the need to use the AC-reductions on matches to get termination in the presence of cycles, which requires another use of Dickson's lemma. Of course this is again highlighting the connection between matching and closure, but it needs probably at least a whole section}
+
+\fxerror{How hard would implementing ordering constraints in my current engine be? Maybe not that hard. Actually, there is maybe a nicer way to write patterns that generate such constraints behind the hood, I think. But that is a bit of scope creep.}
 
 \chapter{Implementation and evaluation} \label{impl}
 We have built a proof-of-concept implementation of EMT(AC) in Haskell. We discuss some design choices and tradeoffs we made, which could be improved upon in future work, and compare equality saturation against AC-completion running on our implementation.
@@ -4139,6 +4165,8 @@ We can see that for small input data, the AC-completion can sometimes introduce 
 
 Determining time savings is somewhat difficult for our implementation, as we would need to more carefully instrument the different parts of the propagation and saturation to, for instance, separate out the time used for E-matching. E-matching on the non-AC identities is a significant part of the time for both EMTs and E-graphs in our implementation, and thus our fairly slow implementation of matching renders wall-clock times less relevant as a point of comparison.
 
+\fxerror{David's point: it may be faster but is it fast enough? See if I can beg someone for an existing example that is known not to saturate that might with my system}
+
 \chapter{EMTs for other theories}
 \section{Common identities}
 AC is a good example of a theory which E-graphs handle poorly. However, this is not necessarily the case for every common theory, so it may not always be worth the extra complexity of using EMTs. We list some common identities which are worth analyzing:
@@ -4228,6 +4256,8 @@ The word problem is as follows: given some theory $T$ and some equations, does a
 Restricting the set of identities, we get the word problem for commutative semigroups (when $T$ = AC), the word problem for monoids (when $T$ = AU), etc.
 
 \subsection{Reductions}
+\fxerror{This can be a lot nicer if I had formalities previously. Then it is an actual theorem!}
+
 We can reduce the word problem to equality saturation. If we have some input equations, we can add them to an E-graph, saturate under the identities in $T$, and then check if $t_1$ and $t_2$ are represented in the E-graph by the same E-class. Therefore, equality saturation is `word-problem hard'.
 
 We can reduce equality saturation to the word problem. If we want to determine if two terms $t_1$ and $t_2$ would be equal under saturation under $T$ with the input equations, we can solve the word problem with those terms, those input equations, and $T$.
@@ -4260,6 +4290,8 @@ For instance, if we have the rules $f(x, y) \rightarrow_\mathcal{R} g(y, y, x)$ 
 $$g(w, w, h(g(x, y, z))) \leftarrow_\mathcal{R} f(h(g(x, y, z)), w) \rightarrow_\mathcal{R} f(g(x, y, z), w)$$
 
 Now, as we have seen, E-graphs take a set of equations $E$ and build a rewrite system $\rightarrow_E$ such that $s =_E t$ iff there is a $c$ such that $s \rightarrow_E^* c \leftarrow_E^* t$. If we have a rewriting system with a peak $s_1 \leftarrow_\mathcal{R} t \rightarrow_\mathcal{R} s_2$ and we want to make $\mathcal{R}$ be able to describe a theory of equality, we need to find some way to enforce \textbf{confluence}: because $s_1$ and $s_2$ ought to be equal if $\mathcal{R}$ is taken to be axiomatizing equalities, we need to ensure there is a term $c$ such that $s_1 \rightarrow_\mathcal{R}^* c \leftarrow_\mathcal{R}^* s_2$. Ground Knuth-Bendix completion \fxerror{cite} is one method to do this, based on adding a new rewrite $s_1 \rightarrow_\mathcal{R} s_2$ to `orient' each critical pair.
+
+\fxerror{Equality saturation is somewhat like non-ground Knuth-Bendix, but only with ground critical pairs, and over an extended signature. Point this out, maybe?}
 
 E-graphs take another approach: a nonconfluent critical pair $s_1 \leftarrow t \rightarrow s_2$ can only arise if there are rewrite rules that \emph{overlap}, which we can put into two categories: if $f(\ldots) \rightarrow s_1$ and $f(\ldots) \rightarrow s_2$ can both apply to the same ground term, this will manifest in an E-graph as an E-node that is part of two E-classes, which will be merged on rebuilding. If $f(\ldots, g, \ldots) \rightarrow s_1$ and $g \rightarrow s_2$, then note that we will not actually represent the term $f(\ldots, g, \ldots)$ directly: rather, we will introduce a new name $e_1$ and write it as $f(\ldots, e_1, \ldots) \rightarrow s_1$. In this case, after taking into account the rewrite applied to $g$, the critical pair is resolved automatically, as if $g = s_2 = e_1$ then $f(\ldots, g, \ldots) = f(\ldots, s_2, \ldots) = f(\ldots, e_1, \ldots) = s_1$ will all follow from the presented equational theory.
 

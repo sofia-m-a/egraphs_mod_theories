@@ -14,7 +14,7 @@ import Data.GraphViz (GraphvizCanvas (Xlib), GraphvizOutput (Png, Svg), runGraph
 import Data.GraphViz.Types.Generalised (DotGraph)
 import Data.Text qualified as Text
 import Data.Traversable (for)
-import Egraph (EId (..), Egraph, Signature (..), edebug, eempty, eemptyWithMatcher, efindMatches, einsert, einsertFree, ereannotate, eunion, eunionInternal, prettyId)
+import Egraph (EId (..), Egraph, Signature (..), edebug, eempty, eemptyWithMatcher, efindMatches, einsert, einsertFree, ereannotate, eunion, eunionInternal, prettyId, esize, egsEnodes)
 import Ematch (MatchState, Matcher, Pattern, PatternVar, compilePatterns, convert, mdebug)
 import GHC.Generics (Generic1, Generically, Generically1 (..))
 import GraphDrawing
@@ -189,6 +189,9 @@ exampleACNaive n = executingState trivialEmpty do
           j <- einsertFree t'
           eunion i j
 
+exampleACNaiveSize :: Int -> Int
+exampleACNaiveSize = view egsEnodes . esize . exampleACNaive
+
 exampleACNaiveViz :: Int -> IO ()
 exampleACNaiveViz i = runGraphvizCanvas' (toDot Nothing example3Show $ exampleACNaive i) Xlib
 
@@ -310,12 +313,30 @@ example44 = executingState trivialEmpty do
   w <- einsertFree (f4f (g4f a4) c4)
   void (eunion z1 w)
 
+example45 :: Egraph Ex4 ()
+example45 = executingState trivialEmpty do
+  x1 <- einsertFree (f4f (g4f a4) c4)
+  x2 <- einsertFree (h4f a4 (g4f b4))
+  void (eunion x1 x2)
+  y1 <- einsertFree (h4f (g4f c4) b4)
+  y2 <- einsertFree (h4f a4 (g4f c4))
+  void (eunion y1 y2)
+  z1 <- einsertFree (g4f b4)
+  z2 <- einsertFree (g4f c4)
+  void (eunion z1 z2)
+  -- w <- einsertFree (f4f (g4f a4) c4)
+  -- void (eunion z1 w)
+  for_ @[] [a4, b4, c4] $ \v -> do
+    ea <- einsertFree v
+    eb <- einsertFree (g4f v)
+    void (eunion ea eb)
+
 example4Viz :: Egraph Ex4 () -> IO ()
 example4Viz i = runGraphvizCanvas' (toDot Nothing example4Show i) Xlib
 
 example4Gen :: IO ()
 example4Gen = do
-  let examples = zip [1 ..] [example40, example405, example41, example42, example435, example43, example44]
+  let examples = zip [1 ..] [example40, example405, example41, example42, example435, example43, example44, example45]
   for_ @[] examples \(i, e) -> do
     runGraphviz (toDot Nothing example4Show e) Svg ("writings/" ++ "exampleBasic" ++ show i ++ ".svg")
 
