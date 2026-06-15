@@ -15,23 +15,23 @@
 = E-graphs modulo theories
 presented by Sofia Brookie
 
-== E-graphs
-A useful method for equational reasoning
+// == E-graphs
+// A useful method for equational reasoning
 
-#pause
+// #pause
 
-Applications:
-  - compilers & optimization
-  - program synthesis
-  - hardware design
-  - (_...many more_)
+// Applications:
+//   - compilers & optimization
+//   - program synthesis
+//   - hardware design
+//   - (_...many more_)
 
 // == E-graphs overview
 // #set align(center)
 // #diagram(
 //   node-stroke: luma(90%),
 //   edge-corner-radius: none,
-  
+
 //   // Nodes
 //   node((0, 0), [*Equality saturation*], name: <eqsat>),
 //   edge("<|-"),
@@ -45,114 +45,126 @@ Applications:
 #diagram(
   node-stroke: luma(90%),
   edge-corner-radius: none,
-  
+
   // Nodes
-  node((0, 0), [
-    *Equality saturation*
-    
-    Handles non-ground equations (*identities*): $forall x. f(x) = g(x, x)$], name: <eqsat>),
+  node(
+    (0, 0),
+    [
+      *Equality saturation*
+
+      Handles non-ground equations (*identities*): $forall x. f(x) = g(x, x)$],
+    name: <eqsat>,
+  ),
   edge("<|-"),
-  node((0, 1), [
-    *Congruence closure*
-    
-    Handles *ground* non-atomic equations: $f(e_1, e_2) = e_3$
-    ], name: <cc>),
+  node(
+    (0, 1),
+    [
+      *Congruence closure*
+
+      Handles *ground* non-atomic equations: $f(e_1, e_2) = e_3$
+    ],
+    name: <cc>,
+  ),
   edge("<|-"),
-  node((0, 2), [
-    *Union-find*
-    
-    Handles *ground atomic* equations: $e_1 = e_2$
-    ], name: <cc>),
+  node(
+    (0, 2),
+    [
+      *Union-find*
+
+      Handles *ground atomic* equations: $e_1 = e_2$
+    ],
+    name: <cc>,
+  ),
 )
 
-== E-graphs basics, part 1: flattening
-#slide(composer: (auto, 1fr))[
-  Let's represent \
-  the term $h(a, g(b))$
+// == E-graphs basics, part 1: flattening
+// #slide(composer: (auto, 1fr))[
+//   Let's represent \
+//   the term $h(a, g(b))$
 
-][
-#figure(
-  image("exampleBasic1.svg", width: 40%),
-)
-]
+// ][
+// #figure(
+//   image("exampleBasic1.svg", width: 40%),
+// )
+// ]
 
-== E-graph basics, part 2: sharing
-#slide(composer: (auto, 1fr))[
-  Let's add \
-  the term $f(g(a), c)$
-][
-  #figure(
-    image("exampleBasic2.svg", width: 47%),
-  )
-]
+// == E-graph basics, part 2: sharing
+// #slide(composer: (auto, 1fr))[
+//   Let's add \
+//   the term $f(g(a), c)$
+// ][
+//   #figure(
+//     image("exampleBasic2.svg", width: 47%),
+//   )
+// ]
 
-== E-graph basics, part 3: equations
-#slide(composer: (auto, 1fr))[
-  Let's add \
-  the *equation* \
-  $h(a, g(b)) = f(g(a), c)$
-][
-  #figure(
-    image("exampleBasic3.svg", width: 71%),
-  )
-]
+// == E-graph basics, part 3: equations
+// #slide(composer: (auto, 1fr))[
+//   Let's add \
+//   the *equation* \
+//   $h(a, g(b)) = f(g(a), c)$
+// ][
+//   #figure(
+//     image("exampleBasic3.svg", width: 71%),
+//   )
+// ]
 
-== E-graph basics, part 4: more sharing
-#slide(composer: (auto, 1fr))[
-  Let's add \
-  another equation \
-  $h(g(c), b) = h(a, g(c))$
-][
-  #figure(
-    image("exampleBasic4.svg", width: 66%),
-  )
-]
+// == E-graph basics, part 4: more sharing
+// #slide(composer: (auto, 1fr))[
+//   Let's add \
+//   another equation \
+//   $h(g(c), b) = h(a, g(c))$
+// ][
+//   #figure(
+//     image("exampleBasic4.svg", width: 66%),
+//   )
+// ]
 
-== E-graph basics, part 5: contraction
-#slide(composer: (auto, 1fr))[
-  Let's add \
-  another equation \
-  $g(b) = g(c)$
-  
-  Existing E-classes \
-  are merged
-][
-  #figure(
-    image("exampleBasic5.svg", width: 71%),
-  )
-]
+// == E-graph basics, part 5: contraction
+// #slide(composer: (auto, 1fr))[
+//   Let's add \
+//   another equation \
+//   $g(b) = g(c)$
 
-== E-graph basics, part 6: congruence
-#slide(composer: (auto, 1fr))[
-  Now, $h(a, g(b))$ \
-  and $h(a, g(c))$ \
-  are both in \
-  the E-graph.
+//   Existing E-classes \
+//   are merged
+// ][
+//   #figure(
+//     image("exampleBasic5.svg", width: 71%),
+//   )
+// ]
 
-  They ought to \
-  be equal, since \
-  $g(b) = g(c)$
-][
-  #figure(
-    image("exampleBasic5.svg", width: 65%),
-  )
-]
+// == E-graph basics, part 6: congruence
+// #slide(composer: (auto, 1fr))[
+//   Now, $h(a, g(b))$ \
+//   and $h(a, g(c))$ \
+//   are both in \
+//   the E-graph.
 
-== E-graph basics, part 6: propagation
-#slide(composer: (auto, 1fr))[
-  We need to \
-  detect when two \
-  E-nodes have the \
-  same symbol and \
-  same children.
+//   They ought to \
+//   be equal, since \
+//   $g(b) = g(c)$
+// ][
+//   #figure(
+//     image("exampleBasic5.svg", width: 65%),
+//   )
+// ]
 
-  Then, we merge \
-  the E-classes:
-][
-  #figure(
-    image("exampleBasic6.svg", width: 60%),
-  )
-]
+// == E-graph basics, part 6: propagation
+// #slide(composer: (auto, 1fr))[
+//   We need to \
+//   detect when two \
+//   E-nodes have the \
+//   same symbol and \
+//   same children.
+
+//   Then, we merge \
+//   the E-classes:
+// ][
+//   #figure(
+//     image("exampleBasic6.svg", width: 60%),
+//   )
+// ]
 
 // == E-graph refresher: congruence closure
 
@@ -200,33 +212,33 @@ Applications:
 
 // A bit slow (maybe). But we can defer rebuilding and/or use Downey-Sethi-Tarjan (aka binarizing the function symbols)
 
-== E-graphs: adding equality saturation
+// == E-graphs: adding equality saturation
 
-Congruence closure decides the theory of ground equations. What about identities?
+// Congruence closure decides the theory of ground equations. What about identities?
 
 == Equality saturation
 If we have $forall x ..., t = s$, try looking for *instances* of this in
 the E-graph.
 
-If we find an instance, we might have to add the other side into the E-graph, if it 
+If we find an instance, _we might have to add the other side_ into the E-graph, if it
 is not yet present. Then, we merge the corresponding E-classes.
 
-#set align(left)
-== Equality saturation
-Loop:
-- E-match
-- Insert (if needed)
-- Merge
+// #set align(left)
+// == Equality saturation
+// Loop until nothing changes:
+// - E-match
+// - Insert (if needed)
+// - Merge
 
-== Equality saturation
-This doesn't always terminate
+// == Equality saturation
+// This doesn't always terminate
 
-Congruence closure only ever shrinks the E-graph, by bringing together E-classes
+// Congruence closure only ever shrinks the E-graph, by bringing together E-classes
 
-Insertion will grow the E-graph
+// Insertion will grow the E-graph
 
-== Equality saturation
-Still, it terminates in many cases, or we can use heuristics to decide when to stop
+// == Equality saturation
+// Still, it terminates in many cases, or we can use heuristics to decide when to stop
 
 // == E-graph refresher: equality saturation
 
@@ -256,6 +268,8 @@ Still, it terminates in many cases, or we can use heuristics to decide when to s
 
 #set align(center)
 == E-graphs vs AC
+Or really, equality saturation vs AC
+
 A: associativity
 
 $f(x, f(y, z)) = f(f(x, y), z)$
@@ -267,9 +281,9 @@ $f(x, y) = f(y, x)$
 AC: both
 
 == E-graphs vs AC
-The bane of equality saturation is operators that are AC or similar (ACU, abelian groups, etc.).
+AC is the bane of equality saturation (or AC + other stuff, ACU, abelian groups, etc.).
 
-For simplicity, we will use '+' as a generic name for an AC operator.
+We will use '+' as our example AC-operator.
 
 == E-graphs vs AC
 #figure(
@@ -313,28 +327,26 @@ For simplicity, we will use '+' as a generic name for an AC operator.
 
 #set align(left)
 == E-graphs vs AC
-
-Simply saturating with A and C gives $O(2^n)$ E-classes if you have a starting term with $n$ +s ($a + b + c + ...$),
-and each E-class has $O(2^n)$ E-nodes in it! So, *doubly exponential*.
+Simply saturating with A and C gives $O(2^n)$ E-classes if you have a starting term with $n$ +s ($a + b + c + ...$). The total number of E-nodes across those classes is $O(n 2^n)$.
 
 // == Sidenote: What about just A?
 // A is 'only' cubic if you have no 'loops'. Otherwise, it is $O(infinity)$.
 // But making progress here is hard, given that A is fundamentally undecidable.
 
-// == (Non)-solution
-// Backoff methods: fire rules less and less if they are used too many times
+== (Non)-solution
+Backoff methods: fire rules less and less if they are used too many times
 
-// #pause
+#pause
 
-// Issues:
-// - Doesn't help if you run to saturation
-// - Can slow down finding the equations you want to find
+Issues:
+- Doesn't help if you run to saturation
+- Can slow down finding the equations you want to find
 
 == AC problems, an example
 Consider an affine function $f$ with identity
 
 $
-forall x y. f(x + y) + 1 = f(x) + f(y)
+  forall x y. f(x + y) + 1 = f(x) + f(y)
 $
 
 and the starting term $f(a) + f(b) + f(c)$. We can to rewrite this to
@@ -406,7 +418,6 @@ This is a natural idea, that has been thrown around for a while.
     (a + b = b) \
     (a + a = c) \
     (c + b = d) \
-
     b \
     = a + b \
     = a + (a + b) \
@@ -435,7 +446,7 @@ were trying to solve in the first place.
 #diagram(
   node-stroke: luma(90%),
   edge-corner-radius: none,
-  
+
   // Nodes
   node(
     (0, 0),
@@ -524,137 +535,172 @@ Loop:
 - Take the equation $t_1 = t_2$ and *orient* it into a new AC-rewrite rule $t_1 → t_2$ or $t_2 → t_1$
 - Interreduce the new rule with the old ones
 
-== Why this terminates
-Consider the AC-term $a + a + b$ that is on the left hand side of some AC-rewrite rule.
+== Integrating theories and E-graphs: design choices
+There are two ways to think about adding an AC-solver to an E-graph.
 
-We can think of it as $2a + b$
+1. 'Integrated': Treat +-nodes as any other E-graph node, and scan for critical pairs between them
+2. 'Side-table': Don't store +-nodes in the normal E-graph at all. Instead, have a side table of AC-rewriting rules.
+  - When you add e.g. $e_1 + e_2$ to the E-graph, create a new rewrite $e_1 + e_2 → e_3$ for some fresh $e_3$
+  - Whenever we discover a rewrite $e_j → e_k$ in the AC-solver, feed it back to the original E-graph
 
-Any new term $k_1 a + k_2 b + ...$ with $k_1 ≥ 2, k_2 ≥ 1$ will reduce by this one.
+== Integrating theories and E-graphs
+I chose option 2 for my current implementation. Indeed, I didn't even think too hard about the tradeoff,
+as it seemed obvious that these are equivalent in some sense.
 
-== Why this terminates
-Every rewrite rule means we won't make new rewrite rules that *dominate* it, by having an LHS greater than its LHS in every term: those would get reduced by it.
+== The integrated approach
+We could take a discovered equation $t_1 = t_2$ and introduce a new E-class id $e$ and add
 
-You can only add so many rewrite rules that aren't dominated by previous ones
+$
+  t_1 → e \
+  t_2 → e
+$
 
-#set align(center)
+This is more or less the same as the side-table approach (I intent to give a proof in my thesis) and a bit more "E-graph like", since
+we only ever have $f(...) → e$ and never $f(...) → g(...)$ in ordinary E-graphs.
 
-== Visual proof
-#cetz.canvas({
-  import cetz.draw: *
-  for i in range(0, 10) {
-    for j in range(0, 1) {
-      rect((i, j), (i + 1, j + 1))
-    }
-  }
+== Equivalent, but only if you pay attention
+However, there is one advantage of the 'side-table' approach that might be accidentally missed in the integrated approach.
 
-  line((10, 0), (11, 0))
-  mark((11, 0), (12, 0), symbol: ">>", anchor: "base", scale: 4, fill: black)
-})
+In the side-table approach, if we build the rewrite $e_1 + e_2 → e_3$ and we have an existing rule
+$e_1 + e_2 + e_2 → e_4$, we can compress the existing rule down to $e_2 + e_3 → e_4$.
 
-== Visual proof
-#cetz.canvas({
-  import cetz.draw: *
-  for i in range(0, 10) {
-    for j in range(0, 1) {
-       if i > 3 {
-         set-style(fill: red)
-       } else {
-         set-style(fill: white)
-       }
-      rect((i, j), (i + 1, j + 1))
-    }
-  }
+This is a standard step in textbook Buchberger's algorithm.
 
-  line((10, 0), (11, 0))
-  mark((11, 0), (12, 0), symbol: ">>", anchor: "base", scale: 4, fill: black)
-})
+== Equivalent, but only if you pay attention
+To make the integrated method equivalent, we need to do some _destructive rewriting_ of the E-graph in a way that is maybe a little alien to the typical
+ways of working with E-graphs.
 
-== Visual proof
-#cetz.canvas({
-  import cetz.draw: *
-  for i in range(0, 10) {
-    for j in range(0, 1) {
-      if i > 3 {
-        set-style(fill: red)
-      } else if i > 1 {
-        set-style(fill: blue)
-      } else {
-        set-style(fill: white)
-      }
-      rect((i, j), (i + 1, j + 1))
-    }
-  }
+// == Why this terminates
+// Consider the AC-term $a + a + b$ that is on the left hand side of some AC-rewrite rule.
 
-  line((10, 0), (11, 0))
-  mark((11, 0), (12, 0), symbol: ">>", anchor: "base", scale: 4, fill: black)
-})
+// We can think of it as $2a + b$
 
-== Visual proof
-#cetz.canvas({
-  import cetz.draw: *
-  for i in range(0, 9) {
-    for j in range(0, 9) {
-      rect((i, j), (i+1, j+1))
-    }
-  }
+// Any new term $k_1 a + k_2 b + ...$ with $k_1 ≥ 2, k_2 ≥ 1$ will reduce by this one.
 
-  line((9, 0), (10, 0))
-  mark((10, 0), (11, 0), symbol: ">>", anchor: "base", scale: 4, fill: black)
-  
-  line((0, 9), (0, 10))
-  mark((0, 10), (0, 11), symbol: ">>", anchor: "base", scale: 4, fill: black)
-})
+// == Why this terminates
+// Every rewrite rule means we won't make new rewrite rules that *dominate* it, by having an LHS greater than its LHS in every term: those would get reduced by it.
 
-== Visual proof
-#cetz.canvas({
-  import cetz.draw: *
-  for i in range(0, 9) {
-    for j in range(0, 9) {
-      if i > 3 and j > 4 {
-        set-style(fill:red)
-      } else {
-        set-style(fill:white)
-      }
-      rect((i, j), (i + 1, j + 1))
-    }
-  }
+// You can only add so many rewrite rules that aren't dominated by previous ones
 
-  line((9, 0), (10, 0))
-  mark((10, 0), (11, 0), symbol: ">>", anchor: "base", scale: 4, fill: black)
-  
-  line((0, 9), (0, 10))
-  mark((0, 10), (0, 11), symbol: ">>", anchor: "base", scale: 4, fill: black)
-})
+// #set align(center)
 
-== Visual proof
-#cetz.canvas({
-  import cetz.draw: *
-  for i in range(0, 9) {
-    for j in range(0, 9) {
-      if i > 3 and j > 4 {
-        set-style(fill: red)
-      } else {
-        set-style(fill: white)
-      }
-      rect((i, j), (i + 1, j + 1))
-    }
-  }
-  
-  line((9, 0), (10, 0))
-  mark((10, 0), (11, 0), symbol: ">>", anchor: "base", scale: 4, fill: black)
-  
-  line((0, 9), (0, 10))
-  mark((0, 10), (0, 11), symbol: ">>", anchor: "base", scale: 4, fill: black)
+// == Visual proof
+// #cetz.canvas({
+//   import cetz.draw: *
+//   for i in range(0, 10) {
+//     for j in range(0, 1) {
+//       rect((i, j), (i + 1, j + 1))
+//     }
+//   }
 
-  for i in range(0, 4) {
-    line((i + 0.5, 0.25), (i + 0.5, 8.5), stroke: gray)
-    mark((i + 0.5, 8.5), (i + 0.5, 9), symbol: ">>", anchor: "base", scale: 2, stroke: gray, fill: gray)
-  }
-  for j in range(0, 5) {
-    line((0.25, j + 0.5), (8.5, j + 0.5), stroke: gray)
-    mark((8.5, j + 0.5), (9, j + 0.5), symbol: ">>", anchor: "base", scale: 2, stroke: gray, fill: gray)
-  }
-})
+//   line((10, 0), (11, 0))
+//   mark((11, 0), (12, 0), symbol: ">>", anchor: "base", scale: 4, fill: black)
+// })
+
+// == Visual proof
+// #cetz.canvas({
+//   import cetz.draw: *
+//   for i in range(0, 10) {
+//     for j in range(0, 1) {
+//       if i > 3 {
+//         set-style(fill: red)
+//       } else {
+//         set-style(fill: white)
+//       }
+//       rect((i, j), (i + 1, j + 1))
+//     }
+//   }
+
+//   line((10, 0), (11, 0))
+//   mark((11, 0), (12, 0), symbol: ">>", anchor: "base", scale: 4, fill: black)
+// })
+
+// == Visual proof
+// #cetz.canvas({
+//   import cetz.draw: *
+//   for i in range(0, 10) {
+//     for j in range(0, 1) {
+//       if i > 3 {
+//         set-style(fill: red)
+//       } else if i > 1 {
+//         set-style(fill: blue)
+//       } else {
+//         set-style(fill: white)
+//       }
+//       rect((i, j), (i + 1, j + 1))
+//     }
+//   }
+
+//   line((10, 0), (11, 0))
+//   mark((11, 0), (12, 0), symbol: ">>", anchor: "base", scale: 4, fill: black)
+// })
+
+// == Visual proof
+// #cetz.canvas({
+//   import cetz.draw: *
+//   for i in range(0, 9) {
+//     for j in range(0, 9) {
+//       rect((i, j), (i + 1, j + 1))
+//     }
+//   }
+
+//   line((9, 0), (10, 0))
+//   mark((10, 0), (11, 0), symbol: ">>", anchor: "base", scale: 4, fill: black)
+
+//   line((0, 9), (0, 10))
+//   mark((0, 10), (0, 11), symbol: ">>", anchor: "base", scale: 4, fill: black)
+// })
+
+// == Visual proof
+// #cetz.canvas({
+//   import cetz.draw: *
+//   for i in range(0, 9) {
+//     for j in range(0, 9) {
+//       if i > 3 and j > 4 {
+//         set-style(fill: red)
+//       } else {
+//         set-style(fill: white)
+//       }
+//       rect((i, j), (i + 1, j + 1))
+//     }
+//   }
+
+//   line((9, 0), (10, 0))
+//   mark((10, 0), (11, 0), symbol: ">>", anchor: "base", scale: 4, fill: black)
+
+//   line((0, 9), (0, 10))
+//   mark((0, 10), (0, 11), symbol: ">>", anchor: "base", scale: 4, fill: black)
+// })
+
+// == Visual proof
+// #cetz.canvas({
+//   import cetz.draw: *
+//   for i in range(0, 9) {
+//     for j in range(0, 9) {
+//       if i > 3 and j > 4 {
+//         set-style(fill: red)
+//       } else {
+//         set-style(fill: white)
+//       }
+//       rect((i, j), (i + 1, j + 1))
+//     }
+//   }
+
+//   line((9, 0), (10, 0))
+//   mark((10, 0), (11, 0), symbol: ">>", anchor: "base", scale: 4, fill: black)
+
+//   line((0, 9), (0, 10))
+//   mark((0, 10), (0, 11), symbol: ">>", anchor: "base", scale: 4, fill: black)
+
+//   for i in range(0, 4) {
+//     line((i + 0.5, 0.25), (i + 0.5, 8.5), stroke: gray)
+//     mark((i + 0.5, 8.5), (i + 0.5, 9), symbol: ">>", anchor: "base", scale: 2, stroke: gray, fill: gray)
+//   }
+//   for j in range(0, 5) {
+//     line((0.25, j + 0.5), (8.5, j + 0.5), stroke: gray)
+//     mark((8.5, j + 0.5), (9, j + 0.5), symbol: ">>", anchor: "base", scale: 2, stroke: gray, fill: gray)
+//   }
+// })
 
 == Results
 Generate a bunch of random identities (e.g. $f(x) = h(x, f(x))$) and random initial equations.
@@ -687,6 +733,132 @@ Some word problems are much better than ESPACE:
 - Fields, vector spaces, etc: $O(n^(2.#text[something]))$
 
 For AC + other identities (semirings, rings, modules, ...), often a variant of Buchberger's algorithm suffices.
+
+== $T$-closure
+AC-closure has been developed by Tiwari and Kapur, among others, and between them they give a variety of variants to handle scalar multipliers, inverses, idempotency, etc.
+
+== Matching modulo AC
+One tricky thing is cycles.
+
+For instance, consider the equation $a + 0 = a$.
+
+Then the pattern $a + x$ could match
+- $a + 0$
+- $a + (0 + 0)$
+...
+
+== Matching via rewriting
+Finding some set of minimal representatives of the set of matches is exactly the kind of thing our AC-rewriting system is made for!
+
+== Matching via rewriting: vanilla E-graphs
+Consider the rules
+
+$
+  f(e_1, e_1) → e_3 \
+  g(e_3) → e_1
+$
+
+and the pattern $f(g(x), g(x))$
+
+== Pattern compilation
+$f(g(x), g(x))$ can be compiled to the "rewrite system"
+
+$
+  g(x) →_M s_1(x) \
+  f(s_1(x), s_1(x)) →_M s_2(x)
+$
+
+We have a bunch of match states $s_1, s_2, ...$ and each match state carries a partial substitution.
+
+== Running the match system
+$e_1 ← g(e_3) →_M s_1(e_3)$
+
+So, we ought to annotate $e_1$ with the match state $s_1(e_3)$
+
+A lot like finding critical pairs!
+
+== Running the match system
+If $e_1 →_M s_1(e_3)$, then we have the "critical pair"
+
+
+$e_3 ← f(e_1, e_1) →_M^* f(s_1(e_3), s_1(e_3)) →_M s_2(e_3)$.
+
+So,
+
+$e_3 →_M s_2(e_3)$
+
+== There can be multiple matches
+So it can be the case that $t →_M s_i(...)$ and $t →_M s_j(...)$\
+
+== AC-matching
+Match $a + x$
+
+against
+$
+  a → e_a \
+  e_a + 0 → e_a
+$
+
+== AC-matching
+First "critical pair": $e_a ← a →_M s_1$
+So $e_a →_M s_1$
+
+== AC-matching
+Second "critical pair": $e_a ← e_a + 0 →_M s_1 + 0 →_M s_2(0)$
+
+So $e_a →_M s_2(0)$
+
+== AC-matching
+But the matcher itself has a critical pair:
+
+$s + s_2(t) ←_M s + t + 0 →_M s_2(s+t)$
+
+So we ought to add the rule
+$s_2(s + t) → s + s_2(t)$
+
+== AC-matching
+Then the match $s_2(0 + 0)$ would reduce to $0 + s_2(0)$ and thus to
+$s_2(0)$
+
+== Tentative conclusion/conjecture
+AC-matching can be done in an (always terminating?) way by orienting rules to handle the otherwise potentially-infinite match space
+
+== Future work: Further considerations for AC-matching
+Consider the pattern $x + y + z + w$. There are a lot of ways this can match against a term $a + b + c + d$, but we probably only want one of these matches.
+
+So it is natural to consider patterns with *ordering constraints*: "match $x + y + z + w$ where $x ≤ y ≤ z ≤ w$"
+
+== Conclusion
+I started working on the AC-E-graph-matching problem and realized that without AC-closure, E-graphs modulo AC are not very useful.
+
+See my upcoming thesis for more details, although the details of AC-matching for EMT(AC) are still rather sketchy.
+
+// == AC-Matching
+// We have the starting system
+
+// $
+// a^(-1) → e_0
+// e_0 times b times c → e_1 \
+// e_2 times a → e_1$
+
+// And we want to match $x^(-1) times x$
+
+// == AC-matching: compilation
+// Pattern: $x^(-1) times x$
+
+// $
+//   y^(-1) →_M s_1(y) \
+//   s_1(y) times y →_M s_2(y)
+// $
+
+// == AC-matching: running
+// $e_0 →_M s_1(a)$
+
+// == AC-matching: running (mod AC)
+// We need to find AC-critical pairs between the match rule
+// $s_1(y) times y → s_2(y)$ and the E-graph rules.
+
+
 
 // == E-graphs as rewrite systems
 // E-graphs connect very closely to the theory of *rewriting*.
@@ -1009,7 +1181,7 @@ For AC + other identities (semirings, rings, modules, ...), often a variant of B
 // - Quantifier elimination, the decision procedure for the reals
 // - Integer linear programming, Graver or Hilbert bases
 // - Gosper's algorithm, aka A=B
-// - Risch's algorithm 
+// - Risch's algorithm
 
 // == Loose ends 5: scribbles
 // Various things I would like to think more about
