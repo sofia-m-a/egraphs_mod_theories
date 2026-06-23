@@ -35,7 +35,7 @@
     		urlcolor=black}
 
 %% Bibliography https://www.overleaf.com/learn/latex/Bibliography_management_with_biblatex
-\usepackage[style=ieee,
+\usepackage[style=numeric,
     backend=biber,
     natbib=true]{biblatex} % style=apa also possible
 \addbibresource{thesis.bib}
@@ -117,6 +117,7 @@
 \usepackage{makecell}
 \usepackage{changepage}
 \usepackage{stmaryrd}
+\usepackage{bussproofs}
 
 % Old header stuff, seems unneeded?
 %\usepackage{etoolbox}
@@ -129,6 +130,12 @@
 
 \theoremstyle{definition}
 \newtheorem*{ex}{Example}
+\newtheorem*{definition}{Definition}
+\newtheorem{algorithm}{Algorithm}
+
+\theoremstyle{plain}
+\newtheorem{lemma}{Lemma}
+\newtheorem{theorem}{Theorem}
 
 % E-graph typesetting constants
 \definecolor{lightgrey}{RGB}{211,211,211}
@@ -264,29 +271,31 @@ Chalmers University of Technology and University of Gothenburg
 \thispagestyle{plain}			% Supress header 
 \section*{Abstract}
 
-E-graphs are a data structure for equational theorem proving, and which provide the basis for \emph{equality saturation} (section \fxerror{forward ref}), a method to automatically derive equational consequences from a starting set of terms, equations, and identities. E-graphs have generated a lot of interest since the publication of the \textsc{Egg} library developed by Willsey et al. and their corresponding paper (\citep{willsey_egg_2021}).
+E-graphs are a data structure for equational theorem proving which provide the basis for \emph{equality saturation}, a method to automatically derive equational consequences from a starting set of terms, equations, and identities. E-graphs have generated a lot of interest since the publication of the \textsc{Egg} paper by Willsey et al. \cite{willsey_egg_2021}, which describes a fast implementation of E-graphs and its application to a variety of problems.
 
-However, E-graphs struggle with a combinatorial explosion when reasoning about certain theories. A notorious case is that of AC theories, those containing associative and commutative operators: the space complexity of saturation is \fxerror{wrong asympt} doubly-exponential in the size of the input in the worst case, as shown in section \ref{acegg}.
+However, E-graphs struggle with a combinatorial explosion when reasoning about certain theories. A notorious case is that of AC theories, those containing associative and commutative operators: the space complexity of saturation is exponential (more precisely, $O(3^n)$) in the size of the input in the worst case.
 
-Can equality saturation for AC theories be done in a more efficient way? There have been several proposals for extending E-graphs to \emph{E-graphs modulo theories} (EMTs) (\citep{zucker_omelets_2025}, \citep{panchekha_lin-graphs_2025}, \citep{shanabrook_custom_2026}).  These proposals suggest integrating a \emph{theory-specific} reasoning method for AC together with the general mechanisms of E-graphs and equality saturation in order to efficiently deal with AC theories. The hope is that specific methods for AC theories can avoid the inefficiencies in using the general equality saturation mechanism for the AC identities.
+Can equality saturation for AC theories be done in a more efficient way? There have been several proposals for extending E-graphs to \emph{E-graphs modulo theories} (EMTs) \cite{zucker_omelets_2025, panchekha_lin-graphs_2025, shanabrook_custom_2026}.  These proposals suggest integrating a \emph{theory-specific} reasoning method for AC together with the general mechanisms of E-graphs and equality saturation in order to efficiently deal with AC theories. The hope is that specific methods for AC theories can avoid the inefficiencies in using the general equality saturation mechanism for the AC identities.
 
-EMTs are inspired by the success of theory-specific methods in other automated reasoning tasks, such as in \emph{Satisfiability Modulo Theories} solvers (SMT solvers), and the merits of a theory-specific approach in automated reasoning are advocated for in \citet{goos_little_2002} 
+%EMTs are inspired by the success of theory-specific methods in other automated reasoning tasks, such as in \emph{Satisfiability Modulo Theories} solvers (SMT solvers), and the merits of a theory-specific approach in automated reasoning are advocated for in \citet{goos_little_2002}
 
-We will develop the idea of EMTs and show that it \emph{is} possible to reason with AC theories and a variety of closely related theories in a way that avoids the worst inefficiencies of plain E-graphs.
+However, there is a limitation in previous proposals for EMTs for AC, which cause the resulting notion of EMT to be unable to determine straightforward consequences of the AC identities. This thesis develops a notion of EMT that addresses this issue and shows that it \emph{is} possible to reason with AC theories and a variety of closely related theories in a way that avoids the worst inefficiencies of plain E-graphs. It also provides a formal definition of EMTs that we hope can provide the basis for future work on integrating other theories in a similar manner. Finally, we discuss an implementation of EMTs and benchmark it against pure E-graph reasoning on a variety of equational reasoning tasks (\ref{evalresults}), showing significant space savings compared to ordinary E-graphs.
 
-In section \fxerror{forward ref}, we also provide a formal definition of EMTs that we hope can provide the basis for future work on integrating other theories in a similar manner.
+Central to our notion of a `good' theory for an EMT is the necessity of a solver for the word problem over the theory. This gives us a lower bound on EMTs for AC: the word problem for AC requires in the worst case exponential space and doubly-exponential time. This is an improvement over the space upper bound for ordinary E-graphs, but highlights that concrete efficiency gains derive from the potential for typical problems to be solvable efficiently. Our solver for AC and polynomials builds upon Buchberger's algorithm, on which significant work has been done to achieve good common-case performance. Theories similar to AC, such as those with identities for units, negation, or scalar multiplication, have word problems solvable via Buchberger-like algorithms, and in certain cases, AC-like theories can be solved significantly more than AC by itself. Thus our work provides a foundation for future generalization to a this large family of AC-like theories.
 
-We then, in section \ref{impl}, discuss an implementation of EMTs and benchmark it against pure E-graph reasoning on a variety of equational reasoning tasks (\ref{evalresults}). 
-
-Central to our notion of a `good' theory for an EMT is the necessity of a solver for the word problem over the theory, which we justify in section \fxerror{forward ref}. This gives us a lower bound on EMTs for AC: the word problem for AC requires in the worst case exponential space and doubly-exponential time. This is an improvement over the \fxerror{wrong asympt} doubly-exponential space upper bound for E-graphs, but highlights that concrete efficiency gains derive from the potential for typical problems to be solvable efficiently. Our solver for AC and polynomials is builds upon Buchberger's algorithm, which has received significant effort to achieve good common-case performance.
-
-On the other hand, for the theory ACUN (AC with unit and negation, aka the theory of Abelian groups) or the theory of vector spaces, we have polynomial time bounds: we can use algorithms for Hermite normal form (for Abelian groups) and Gaussian elimination (for vector spaces).
+% On the other hand, for the theory ACUN (AC with unit and negation, aka the theory of Abelian groups) or the theory of vector spaces, we have polynomial time bounds: we can use algorithms for Hermite normal form (for Abelian groups) and Gaussian elimination (for vector spaces).
 
 \fxerror{If I have time, set up a proper makefile or similar and split this tex into multiple files, etc}
 
+\fxerror{Title page fixes}
+
+\fxerror{Switched from IEEE to numeric cite style to get [1,2,3] cites like Nick wanted}
+
+\fxerror{Review floats}
+
 % KEYWORDS (MAXIMUM 10 WORDS)
 \vfill
-Keywords: E-graphs, AC, associativity, commutativity, Buchberger's algorithm, rewriting, thesis.
+Keywords: E-graphs, AC, associativity, commutativity, Buchberger's algorithm, rewriting.
 
 \newpage				% Create empty back of side
 \thispagestyle{empty}
@@ -296,13 +305,13 @@ Keywords: E-graphs, AC, associativity, commutativity, Buchberger's algorithm, re
 \newpage
 \thispagestyle{plain}			% Supress header
 \section*{Acknowledgements}
-Here, you can say thank you to your supervisor(s), company advisors and other people that supported you during your project.
+Thank you to my supervisor, Dr. Nick Smallbone, who first noticed the flaw that led to the focus in this thesis on the word problem/AC-closure rather than matching. Thank you to Dr. Hanna Svensson for proofreading. Thank you to Tarik Rosin for early access to their work on AC-saturation, without which this thesis would still likely have the incorrect asymptotics for E-graph size under AC-saturation. Thank you to Milo the cat for occasionally allowing me to use his chair in front of my computer. 
 
-\fxerror{Fill this in. Also the date is wrong, which seems to be a Nix issue fixable with \texttt{SOURCE\_DATE\_EPOCH}}
+\fxerror{The date is wrong, which seems to be a Nix issue fixable with \texttt{SOURCE\_DATE\_EPOCH}}
 
 \vspace{1.5cm}
 \hfill
-Sofia Brookie, Gothenburg, \today
+Sofia Brookie, Palmerston North, \today
 
 \newpage				% Create empty back of side
 \thispagestyle{empty}
@@ -332,42 +341,39 @@ Sofia Brookie, Gothenburg, \today
 
 \chapter{Introduction to E-graphs}
 \section{Equational theorem proving}
-The problem we are interested in solving is to take a set of equations and figure out the set of consequences of those equations. There are some different cases to consider:
+In equational theorem proving, the problem we are interested in solving is how to take a set of equations and find the set of consequences of those equations. There two different cases to consider:
 \begin{enumerate}
 \item We know the goal equation, so we want to either \emph{validate} that it follows from the input equations or determine that it doesn't follow
-\item We don't know the goal equation, and we want to explore some interesting equations that follow from the input equations
+\item We do not know the goal equation, and we want to explore some interesting equations that follow from the input equations
 \end{enumerate}
 
 E-graphs can be used for both, but they particular shine in the second case, as they are not fundamentally `goal-directed'.
 
-Let's consider an example.
-
+Let us consider an example.
 \begin{align}
 	\label{ex1comm} f(x, y) &= f(y, x) \\
 	\label{ex11p1e2} f(1, 1) &= 2 \\
 	\label{ex12p1e3} f(2, 1) &= 3
 \end{align}
-
-Here, the first equation is understood to hold for any values of $x$ and $y$. We will call such an equation an \emph{identity}: really, it stands for the universally quantified formula $\forall x y.\; f(x, y) = f(y, x)$. We will then reserve the term `equation' for \emph{ground} equations: one without such quantifiers.
+Here, the first equation is understood to hold for any values of $x$ and $y$. We will call such an equation an \emph{identity}: really, it stands for the universally quantified formula $\forall x y.\; f(x, y) = f(y, x)$. We will then reserve the term `equation' for \emph{ground} equations: those equations without such quantifiers.
 
 Now, here is one consequence of the above equations:
-
 \begin{align*}
-	f(1, f(1, 1)) \\
-	&= f(f(1, 1), 1) &\textrm{by \ref{ex1comm}} \\
-	&= f(2, 1) &\textrm{by \ref{ex11p1e2}} \\
-	&= 3 &\textrm{by \ref{ex12p1e3}}
+	&\mathrel{\hphantom{=}} f(1, f(1, 1)) \\
+	&= f(f(1, 1), 1) &\textrm{by equation \ref{ex1comm}} \\
+	&= f(2, 1) &\textrm{by equation \ref{ex11p1e2}} \\
+	&= 3 &\textrm{by equation \ref{ex12p1e3}}
 \end{align*}
 
 E-graphs are a data structure on which we can run \emph{equality saturation} to discover the above equational consequence automatically, alongside other consequences.
 
-Applications of equality saturation include optimization in compilers, decompilation, and program synthesis (\citep{willsey_egg_2021}) \fxerror{need ref for program synthesis. Also theorem proving?}.
+Applications of equality saturation include optimization in compilers, decompilation, program synthesis, and hardware synthesis \cite{willsey_egg_2021, frankel_syntax-guided_2025, xiao_skyegg_2025}
 
 \section{Union-find, congruence closure, and equality saturation}
 \begin{figure}[ht!]
 	\centering
 	\begin{tikzpicture}[
-			scale=1.5,
+			scale=1.0,
 			transform shape,
 			every node/.style={
 					draw,
@@ -377,11 +383,11 @@ Applications of equality saturation include optimization in compilers, decompila
 					minimum height=3.5\baselineskip
 				}
 		]
-		\node (n0) at (0, 4) {\makecell[c]{\textbf{Equality saturation} \\		
+		\node (n0) at (0, 6) {\makecell[c]{\textbf{Equality saturation} \\		
 		Handles identities:\\
 		$\forall x. f(x) = g(x, x)$}};
 		
-		\node (n1) at (0, 2) {\makecell[c]{\textbf{Congruence closure} \\		
+		\node (n1) at (0, 3) {\makecell[c]{\textbf{Congruence closure} \\		
 		Handles (ground) non-atomic equations:\\
 		$f(e_1, e_2) = e_3$}};
 		
@@ -398,72 +404,69 @@ Applications of equality saturation include optimization in compilers, decompila
 
 Describing E-graphs can be done in 3 layers. First, there is the union-find structure, which is a simple solver for the theory of atomic equations: given a set of \emph{atoms} $e_1, e_2, \ldots$, we can union two of them to set them equal, and we can find a representative of any particular atom. The representative is unique, so we can simply compare representatives for equality to determine if the atoms they represent are equivalent.
 
-\fxerror{The resulting rewrite system is basically how UF is actually implemented in many cases (think \texttt{while e.next != e}) but as a rewrite system is not actually terminating: it is $\rightarrow \setminus 1$ that is terminating. Fix or explain}
+%\fxerror{The resulting rewrite system is basically how UF is actually implemented in many cases (think \texttt{while e.next != e}) but as a rewrite system is not actually terminating: it is $\rightarrow \setminus 1$ that is terminating. Fix or explain}
 
-\fxerror{Besides, why not pictures here? UF is not actually that important to understand as a rw system until (maybe) later}
+%\fxerror{Besides, why not pictures here? UF is not actually that important to understand as a rw system until (maybe) later}
 
-The data structure for this can be thought of as presenting a rewriting system among atoms: for instance,
+%The data structure for this can be thought of as presenting a rewriting system among atoms: for instance,
 
-\begin{align*}
-	e_1 &\rightarrow e_1 \\
-	e_2 &\rightarrow e_2 \\
-	e_3 &\rightarrow e_3 \\
-	e_4 &\rightarrow e_4 \\
-\end{align*}
+%\begin{align*}
+%	e_1 &\rightarrow e_1 \\
+%	e_2 &\rightarrow e_2 \\
+%	e_3 &\rightarrow e_3 \\
+%	e_4 &\rightarrow e_4 \\
+%\end{align*}
 
-is the trivial equivalence relation on 4 atoms. Unioning $e_1$ and $e_2$ gives
+%is the trivial equivalence relation on 4 atoms. Unioning $e_1$ and $e_2$ gives
 
-\begin{align*}
-	e_1 &\rightarrow \underline{e_2} \\
-	e_2 &\rightarrow e_2 \\
-	e_3 &\rightarrow e_3 \\
-	e_4 &\rightarrow e_4 \\
-\end{align*}
+%\begin{align*}
+%	e_1 &\rightarrow \underline{e_2} \\
+%	e_2 &\rightarrow e_2 \\
+%	e_3 &\rightarrow e_3 \\
+%	e_4 &\rightarrow e_4 \\
+%\end{align*}
 
-where we have (arbitrarily) chosen $e_2$ as the new representative.
+%where we have (arbitrarily) chosen $e_2$ as the new representative.
 
-If we union $e_3$ with $e_4$, we get
+%If we union $e_3$ with $e_4$, we get
 
-\begin{align*}
-	e_1 &\rightarrow e_2 \\
-	e_2 &\rightarrow e_2 \\
-	e_3 &\rightarrow \underline{e_4} \\
-	e_4 &\rightarrow e_4 \\
-\end{align*}
+%\begin{align*}
+%	e_1 &\rightarrow e_2 \\
+%	e_2 &\rightarrow e_2 \\
+%	e_3 &\rightarrow \underline{e_4} \\
+%	e_4 &\rightarrow e_4 \\
+%\end{align*}
 
-Now, if we union $e_3$ and $e_2$, we could get
+%Now, if we union $e_3$ and $e_2$, we could get
 
-\begin{align*}
-	e_1 &\rightarrow e_2 \\
-	e_2 &\rightarrow \underline{e_4} \\
-	e_3 &\rightarrow e_4 \\
-	e_4 &\rightarrow e_4 \\
-\end{align*}
+%\begin{align*}
+%	e_1 &\rightarrow e_2 \\
+%	e_2 &\rightarrow \underline{e_4} \\
+%	e_3 &\rightarrow e_4 \\
+%	e_4 &\rightarrow e_4 \\
+%\end{align*}
 
-Note that we do a lookup before performing the union, so that we union the two \emph{representatives} ($e_4$ of $e_3$ and $e_2$ of $e_2$) together.
+%Note that we do a lookup before performing the union, so that we union the two \emph{representatives} ($e_4$ of $e_3$ and $e_2$ of $e_2$) together.
 
-Now it takes two steps to rewrite $e_1$ to $e_4$. It is possible to either eagerly canonize the rewrite system on update, setting $e_1$ to rewrite to $e_4$, or do it lazily (compressing such multi-step rewrites on lookup), which is asymptotically more efficient in general. However, these efficiency gains are hard to realize given the congruence closure structure we will build on top of the union-find structure.
+%Now it takes two steps to rewrite $e_1$ to $e_4$. It is possible to either eagerly canonize the rewrite system on update, setting $e_1$ to rewrite to $e_4$, or do it lazily (compressing such multi-step rewrites on lookup), which is asymptotically more efficient in general. However, these efficiency gains are hard to realize given the congruence closure structure we will build on top of the union-find structure.
 
-On top of union-find, we can build a congruence-closure structure. To handle non-atomic terms, we have to consider function symbols applied to atoms and other terms (like $f(g(e_1), e_2)$), and we need to respect \emph{congruence}: if $s_i = t_i$, then we must conclude $f(s_1, \ldots) = f(t_1, \ldots)$.
+Union-find alone cannot handle equations between non-atomic terms, like $h(a) = f(g(c))$. In particular, terms cannot be treated as atomic, since there is the rule of \emph{congruence}: if $s_i = t_i$, then we must conclude $f(s_1, \ldots) = f(t_1, \ldots)$. 
 
-To handle congruence, we will break terms down into \emph{layers}. For instance, to represent $f(g(e_1), e_2)$ we will assign a new constant $e_3$ for $g(e_1)$, and then assign a constant $e_4$ for $f(e_3, e_2)$. This way, all congruence checks only need to apply to `flat' terms: if $e_i = d_i$ then we conclude $f(e_1, \ldots) = f(d_1, \ldots)$.
+To handle non-atomic terms, we build a congruence-closure structure on top of a union-find structure. The congruence-closure structure works by breaking terms down into \emph{layers}. For instance, to represent $f(g(e_1), e_2)$ we will assign a new constant $e_3$ for $g(e_1)$, and then assign a constant $e_4$ for $f(e_3, e_2)$. This way, all congruence checks only need to apply to `flat' terms: if $e_i = d_i$ then we conclude $f(e_1, \ldots) = f(d_1, \ldots)$.
 
 This motivates the E-graph data structure, and the congruence closure algorithm that restores the congruence invariant. Computing the congruence closure is also known as `rebuilding' the E-graph.
 
-\subsection{E-graphs for congruence-closure} \label{egraphs}
+\section{E-graphs for congruence-closure} \label{egraphs}
 \fxerror{The following is artificial but didactic. Finding a non-artificial \emph{and} didactic example would be nice, but is hard. But fix if I have some insight}
 
 As an example, we will compute the congruence closure of the following set of equations:
-
 \begin{align}
   \label{examplecc1}	f(g(a), c) &= h(a, g(b)) \\
   \label{examplecc2}	h(g(c), b) &= h(a, g(c)) \\
   \label{examplecc3}	g(b) &= g(c) \\
   \label{examplecc4}	f(g(a), c) &= g(b)
 \end{align}
-
-As a first step, we represent the term $h(a, g(b))$ from \ref{examplecc1}.
-
+As a first step, we represent the term $h(a, g(b))$ from equation \ref{examplecc1}:
 \begin{center}
     \begin{tikzpicture}[y=1cm, x=1cm, yscale=\globalscale,xscale=\globalscale, every node/.append style={scale=\globalscale}, inner sep=0pt, outer sep=0pt]
   \begin{scope}[shift={(0.1411, -8.3256)}]
@@ -548,11 +551,9 @@ As a first step, we represent the term $h(a, g(b))$ from \ref{examplecc1}.
 \end{tikzpicture}
     \label{exampleBasic1}
 \end{center}
+Notice how we have flattened the term: the three levels of nesting become edges or pointers between the three layers of our graph. In particular, we think of the edges from $h$ as being numbered: the left-most edge corresponds to the first argument $h(a, -)$, while the rightmost is the second argument $h(-, g(b))$. 
 
-Notice how we have flattened the term: the three levels of nesting become pointers between the three layers of our graph.
-
-Then we will add the other term $f(g(a), c)$ from \ref{examplecc1}.
-
+Then we will add the other term $f(g(a), c)$ from equation \ref{examplecc1}:
 \begin{center}
 \begin{tikzpicture}[y=1cm, x=1cm, yscale=\globalscale,xscale=\globalscale, every node/.append style={scale=\globalscale}, inner sep=0pt, outer sep=0pt]
   \begin{scope}[shift={(0.1411, -11.1831)}]
@@ -699,7 +700,6 @@ Then we will add the other term $f(g(a), c)$ from \ref{examplecc1}.
 \end{center}
 
 Now, as a final step, we need to \emph{union} the two top nodes of both sides of the equation:
-
 \begin{center}
 \begin{tikzpicture}[y=1cm, x=1cm, yscale=\globalscale,xscale=\globalscale, every node/.append style={scale=\globalscale}, inner sep=0pt, outer sep=0pt]
   \begin{scope}[shift={(0.1411, -8.3256)}]
@@ -840,11 +840,9 @@ Now, as a final step, we need to \emph{union} the two top nodes of both sides of
 \end{tikzpicture}
 \label{exampleBasic3}
 \end{center}
+We call the outer nodes \emph{E-classes} (equivalence classes), while the inner nodes are \emph{E-nodes}. E-classes can contain multiple E-nodes, and two E-nodes are in the same E-class iff they represent equivalent (sets of) terms. The arrows point from E-nodes to E-classes. So, for instance, there are two E-nodes each with the symbol $g$, each as the only item in their respective E-classes. The only non-trivial E-class so far is the top E-class, with two E-nodes labelled with $f$ and $h$.
 
-We call the outer nodes \emph{E-classes} (equivalence classes), while the inner nodes are \emph{E-nodes}. E-classes can contain multiple E-nodes. The arrows point from E-nodes to E-classes.
-
-Next we move on to \ref{examplecc2}. This time, notice that the subterm $g(c)$ is used twice, and we \emph{share} this in the E-graph, indicated by two arrows pointing to the E-class for $g(c)$.
-
+Next we move on to equation \ref{examplecc2} ($h(g(c), b) = h(a, g(c))$). This time, notice that the subterm $g(c)$ is used twice, and we \emph{share} this in the E-graph, indicated by two arrows pointing to the E-class for $g(c)$:
 \begin{center}
 \begin{tikzpicture}[y=1cm, x=1cm, yscale=\globalscale,xscale=\globalscale, every node/.append style={scale=\globalscale}, inner sep=0pt, outer sep=0pt]
   \begin{scope}[shift={(0.1411, -11.1831)}]
@@ -1058,7 +1056,7 @@ Next we move on to \ref{examplecc2}. This time, notice that the subterm $g(c)$ i
 \label{exampleBasic4}
 \end{center}
 
-Now we handle \ref{examplecc3}, which doesn't add any new E-nodes in the graph. Instead, it merges the separate E-classes representing $g(b)$ and $g(c)$ into a single E-node.
+Now we handle equation \ref{examplecc3} ($g(b) = g(c)$), which does not add any new E-nodes in the graph. Instead, it merges the separate E-classes representing $g(b)$ and $g(c)$ into a single E-node:
 
 \begin{center}
 \begin{tikzpicture}[y=1cm, x=1cm, yscale=\globalscale,xscale=\globalscale, every node/.append style={scale=\globalscale}, inner sep=0pt, outer sep=0pt]
@@ -1269,7 +1267,7 @@ Now we handle \ref{examplecc3}, which doesn't add any new E-nodes in the graph. 
 \label{exampleBasic5}
 \end{center}
 
-Now notice that we have two instances of an $h$ with the same arguments: $h(a, g(b))$ and $h(a, g(c)$ have become equal by congruence, but they are located in two different E-classes. So, after unioning, we need to \emph{propagate} by continuing to union things that have become equal. This gives us the simpler E-graph
+Notice that we have two instances of an $h$ with the same arguments: $h(a, g(b))$ and $h(a, g(c))$ have become equal by congruence, but they are located in two different E-classes. So, after unioning, we need to \emph{propagate} by continuing to union E-classes that have become equal. This gives us the simpler E-graph:
 
 \begin{center}
 \begin{tikzpicture}[y=1cm, x=1cm, yscale=\globalscale,xscale=\globalscale, every node/.append style={scale=\globalscale}, inner sep=0pt, outer sep=0pt]
@@ -1452,9 +1450,7 @@ Now notice that we have two instances of an $h$ with the same arguments: $h(a, g
 \label{exampleBasic6}
 \end{center}
 
-Now we handle \ref{examplecc4}. This time, it will create a \emph{cycle} in the E-graph: an E-node pointing to its own E-class. A simple equation that generates a cycle is $g(d) = d$, which gives rise to the infinite set of equations $g^n(d) = d$ by congruence.
-
-In general, we might have cycles going through multiple intermediary nodes: $f(\ldots g(\ldots e_1 \ldots) \ldots) = e_1$. Cycles become very important in the analysis of how theories fare with E-graphs under equality saturation (section \fxerror{forward ref}).
+Finally we handle equation \ref{examplecc4} ($f(g(a), c) = g(b)$). This time, it will create a \emph{cycle} in the E-graph: an E-node pointing to its own E-class.
 
 \begin{center}
 \begin{tikzpicture}[y=1cm, x=1cm, yscale=\globalscale,xscale=\globalscale, every node/.append style={scale=\globalscale}, inner sep=0pt, outer sep=0pt]
@@ -1631,14 +1627,24 @@ In general, we might have cycles going through multiple intermediary nodes: $f(\
 
 \end{tikzpicture}
 \label{exampleBasic7}
+%\caption{The E-graph representing equations \ref{examplecc1}--\ref{examplecc4} with congruence closure applied}
 \end{center}
+
+\subsection{Cyclic E-graphs} \label{accycles}
+A simple equation that generates a cycle is $g(d) = d$, which gives rise to the infinite set of equations $g^n(d) = d$ by congruence.
+
+In general, we might have cycles going through multiple intermediary nodes:
+$$f(\ldots g(\ldots e_1 \ldots) \ldots) = e_1$$
+Cycles become very important in the analysis of how theories fare with E-graphs under equality saturation (section \ref{howfare}).
 
 Handling congruence closure in E-graphs with cycles is not difficult: we can just propagate until nothing changes. There is a finite upper bound on propagation: at most, we could discover that every E-node is equal to every other. Every step moves closer to that bound by merging some E-nodes. Thus, this fix-point algorithm clearly terminates.
 
-\subsubsection{Equality saturation}
-Suppose instead of the equations $h(g(c), b) = h(a, g(c))$ in the above example we had the identity $\forall x.\; h(a, x) = h(x, b)$. To do equality saturation with this identity, we would \emph{match} the left-hand-side $h(a, x)$ against our E-graph, which would find the match $h(a, g(b))$, corresponding to the substitution $x = g(b)$. Then, we apply the same substitution to the right hand side, thus finding the \emph{equations} $h(a, g(b)) = h(g(b), b)$. Inserting this equation into our E-graph and using congruence closure would then yield the above E-graph.
+\section{Equality saturation}
+Equality saturation is a procedure that builds on the congruence-closure algorithm for E-graphs to handle \emph{identities} rather than just \emph{equations}.
 
-Equalities are symmetric, so we need to match the right-hand-side and add the substituted left-hand-side in general equality saturation.
+Suppose that, instead of equation \ref{examplecc3} ($h(g(c), b) = h(a, g(c))$) in the example from above (section \ref{egraphs}), we had the identity $\forall x.\; h(a, x) = h(x, b)$. To do equality saturation with this identity, we would \emph{match} the left-hand-side $h(a, x)$ against our E-graph, which would find the match $h(a, g(b))$, corresponding to the substitution $x = g(b)$. Then, we apply the same substitution to the right hand side, thus finding the \emph{equations} $h(a, g(b)) = h(g(b), b)$. Inserting this equation into our E-graph and using congruence closure would then yield the same E-graph as above.
+
+Equalities are symmetric, so we also need to match the right-hand-side and add the substituted left-hand-side in general equality saturation.
 
 So, in general, to handle identities, we use the following procedure:
 
@@ -1653,28 +1659,28 @@ So, in general, to handle identities, we use the following procedure:
 	\end{enumerate}
 \end{enumerate}
 
-If the fixed point is reached, we call the graph \textbf{saturated}.
+If the fixed point is reached, we call the graph \emph{saturated}.
 
-In practical applications such as compilers, we often have a final step to \emph{extract} some minimal term equal to the starting term. Extraction is covered later \fxerror{forward ref}
-
-\subsubsection{Equality saturation: limitations}
-When both substituted terms from E-matching an identity are already represented by the graph, we call the merge a \emph{proper merge}. Unfortunately, proper merges aren't enough. If we consider the associative identity $\forall x y z.\; x + (y + z) = (x + y) + z$, and we begin with the two terms $w + (x + (y + z))$ and $((w + x) + y) + z$, we would like to prove that these terms are equal. However, the attempt to prove even the first step, that $w + (x + (y + z)) = (w + x) + (y + z)$, founders. Our representation includes no equivalence class to represent $(w + x) + (y + z)$, and so there are no equivalence classes to merge.
-
-The `solution' is to include the possibility of \textbf{inserting} new classes during the procedure. We call a mix of insertion and a merge an \textbf{improper merge}.
-
-Insertion has one key problem: we now have no guarantees the process of merging will terminate. With only proper merges, there are a finite set of input terms and thus a finite bound on the equivalence relation we maintain. Thus, eventually we will get to a point where no merge changes the equivalence relation, and we have reached saturation. Introducing new classes for inserted terms now means that saturation is no longer guaranteed to be reached at any point, and worse, the strategy for insertion and merging now can affect whether or not saturation is reached.
-
-To even get a \emph{semi-decision procedure}, where we aim to prove a specific equality if it exists and can fail otherwise, we must ensure that the insertion and merging processes are sufficiently \emph{fair} (in the sense of `fair' as used in concurrent programming): we must have some strategy to ensure every possible term that could be inserted \emph{does} get inserted eventually, or we might get stuck inserting other terms infinitely while nonetheless not making progress on the goal.
-
-In some sense, this is to be expected, as even for just equational theorem proving, there are theories which are known to be undecidable. However, even when the process of E-matching, inserting and merging doesn't terminate, we can consider the infinite fixed-point of this process as the `semantics' of our E-graph \citep{suciu_semantic_2025}, and this will be what we will preserve in the shift to EMTs.
+In practical applications such as compilers, we often have a final step to \emph{extract} some minimal term equal to the starting term. Extraction is covered in section \ref{extraction}.
 
 \subsection{Aside: variations on equality saturation}
 We can do several matches/insertions/merges in between rebuilding; it is sufficient that rebuilding is \emph{eventually} run after changes to the E-graph \citep{willsey_egg_2021}.
 
-There are plenty of extensions to the outer loop that include things such as conditional reasoning (along the lines of: if $a = b$, then assert that $c = d$ by merging classes) or E-class analyses (\citep{willsey_egg_2021}).
+There are plenty of extensions to the outer loop that include things such as conditional reasoning (along the lines of: if $a = b$, then assert that $c = d$ by merging classes) or E-class analyses \cite{willsey_egg_2021}.
+
+\subsection{Equality saturation: limitations}
+When both substituted terms from E-matching an identity are already represented by the graph, we call the merge a \emph{proper merge}. Unfortunately, proper merges are not enough. If we consider the associative identity $\forall x y z.\; x + (y + z) = (x + y) + z$, and we begin with the two terms $w + (x + (y + z))$ and $((w + x) + y) + z$, we would like to prove that these terms are equal. However, the attempt to prove even the first step, that $w + (x + (y + z)) = (w + x) + (y + z)$, founders. Our representation includes no equivalence class to represent $(w + x) + (y + z)$, and so there are no equivalence classes to merge.
+
+The `solution' is to include the possibility of \emph{inserting} new classes during the procedure. We call a mix of insertion and a merge an \emph{improper merge}.
+
+Insertion has one key problem: we now have no guarantees the process of merging will terminate. With only proper merges, there is a finite set of input terms and thus a finite bound on the equivalence relation we maintain. Thus, eventually we will get to a point where no merge changes the equivalence relation, and we have reached saturation. Introducing new classes for inserted terms now means that saturation is no longer guaranteed to be reached at any point, and worse, the strategy for insertion and merging now can affect whether or not saturation is reached.
+
+With the possibility of non-termination, we might wish to at least get a \emph{semi-decision procedure}: the procedure takes in a specific equality and must prove the equality if it is provable, but can loop indefinitely when it isn't. For this, we must ensure that the insertion and merging processes are sufficiently \emph{fair} (in the sense of `fair' as used in concurrent programming): we must have some strategy to ensure every possible term that could be inserted \emph{does} get inserted eventually, or we might get stuck inserting other terms infinitely while nonetheless not making progress on the goal.
+
+In some sense, this is to be expected, as even for just equational theorem proving, there are theories which are known to be undecidable. However, even when the process of E-matching, inserting and merging does not terminate, we can consider the infinite fixed-point of this process as the `semantics' of our E-graph \citep{suciu_semantic_2025}, and this will be what we will preserve in the shift to EMTs.
 
 \chapter{E-graphs modulo AC} \label{acegg}
-One common pair of identities we want to work with is associativity
+When doing using E-graphs, one common pair of identities we want to work with is associativity
 
 \begin{equation}
 	\label{assocdef} \forall x y z.\; f(x, f(y, z)) = f(f(x, y), z)
@@ -1686,815 +1692,94 @@ and commutativity
 	\label{commdef} \forall x y.\; f(x, y) = f(y, x)
 \end{equation}
 
-We refer to this combination as AC
+We refer to the combination of these identities as AC. Developing a method for working modulo AC efficiently is a central goal of this thesis.
 
-A common AC operator is +, and we will use that as a generic name for an AC operator.
+A common AC operator is +, and we will use this as our main example of an AC operator.
 
 \section{AC and equality saturation}
-Unfortunately, equality saturation handles these identities rather poorly. Consider as a simple case the terms of length $n$ over some constant terms $k_n$ $t_n = a + (b + (...k_n))$. Then we can see that there is a significant blowup in the size of the saturated graph as we increase $n$:
+Unfortunately, equality saturation handles the AC identities rather poorly. Consider as a simple case the terms $t_n = a_1 + a_2 + \ldots + a_n$, where we add together $n$ constants.
 
+There are many ways to parenthesize this term when $n$ is large. For instance, for $n = 5$, we have $a_1 + ((a_2 + (a_3 + a_4)) + a_5)$ and $(a_1 + a_2) + (a_3 + (a_4 + a_5))$ and many other parenthesizations, all of which are equal up to A. The exact number of such parenthesizations is given by the $n$-th Catalan number $C_n$, which is $O(\frac{4^n}{n^{3/2}})$.
+
+Adding commutativity means we can reorder the $n$ constants in any of $n!$ ways. For instance, $a_1 + (a_2 + a_3)$ is equal to $(a_3 + a_1) + a_2$ under AC.
+
+Running under the AC-identities to saturation, the E-graph will need to represent that all of these ways of rearranging the term are equal. E-graphs are able to share some of the subterms that are required to represent all these equalities, but running to saturation still requires exponentially-sized E-graphs:
 
 \begin{center}
 	\begin{tikzpicture}[y=1cm, x=1cm, yscale=\globalscale,xscale=\globalscale, every node/.append style={scale=\globalscale}, inner sep=0pt, outer sep=0pt]
-  \begin{scope}[shift={(0.1411, -5.4681)}]
-    \path[fill=white] (-0.1411, 5.4681) -- (-0.1411, 11.0772) -- (5.9267, 11.0772) -- (5.9267, 5.4681) -- (-0.1411, 5.4681) -- (-0.1411, 5.4681)-- cycle;;
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (0.7056, 5.8914).. controls (0.7056, 5.8914) and (2.3283, 5.8914) .. (2.3283, 5.8914).. controls (2.54, 5.8914) and (2.7517, 6.1031) .. (2.7517, 6.3147).. controls (2.7517, 6.3147) and (2.7517, 7.3731) .. (2.7517, 7.3731).. controls (2.7517, 7.5847) and (2.54, 7.7964) .. (2.3283, 7.7964).. controls (2.3283, 7.7964) and (0.7056, 7.7964) .. (0.7056, 7.7964).. controls (0.4939, 7.7964) and (0.2822, 7.5847) .. (0.2822, 7.3731).. controls (0.2822, 7.3731) and (0.2822, 6.3147) .. (0.2822, 6.3147).. controls (0.2822, 6.1031) and (0.4939, 5.8914) .. (0.7056, 5.8914);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (3.4572, 5.8914).. controls (3.4572, 5.8914) and (5.08, 5.8914) .. (5.08, 5.8914).. controls (5.2917, 5.8914) and (5.5033, 6.1031) .. (5.5033, 6.3147).. controls (5.5033, 6.3147) and (5.5033, 7.3731) .. (5.5033, 7.3731).. controls (5.5033, 7.5847) and (5.2917, 7.7964) .. (5.08, 7.7964).. controls (5.08, 7.7964) and (3.4572, 7.7964) .. (3.4572, 7.7964).. controls (3.2456, 7.7964) and (3.0339, 7.5847) .. (3.0339, 7.3731).. controls (3.0339, 7.3731) and (3.0339, 6.3147) .. (3.0339, 6.3147).. controls (3.0339, 6.1031) and (3.2456, 5.8914) .. (3.4572, 5.8914);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (2.0814, 8.7489).. controls (2.0814, 8.7489) and (3.7042, 8.7489) .. (3.7042, 8.7489).. controls (3.9158, 8.7489) and (4.1275, 8.9606) .. (4.1275, 9.1722).. controls (4.1275, 9.1722) and (4.1275, 10.2306) .. (4.1275, 10.2306).. controls (4.1275, 10.4422) and (3.9158, 10.6539) .. (3.7042, 10.6539).. controls (3.7042, 10.6539) and (2.0814, 10.6539) .. (2.0814, 10.6539).. controls (1.8697, 10.6539) and (1.6581, 10.4422) .. (1.6581, 10.2306).. controls (1.6581, 10.2306) and (1.6581, 9.1722) .. (1.6581, 9.1722).. controls (1.6581, 8.9606) and (1.8697, 8.7489) .. (2.0814, 8.7489);
-
-
-
-    \path[draw=black] (2.6282, 9.1369).. controls (2.6282, 8.7422) and (2.4899, 8.3446) .. (2.3107, 7.9957);
-
-
-
-    \path[draw=black,fill=black] (2.3657, 7.9682) -- (2.2267, 7.843) -- (2.2574, 8.0275) -- (2.3657, 7.9682) -- (2.3657, 7.9682)-- cycle;;
-
-
-
-    \path[draw=black] (3.1574, 9.1369).. controls (3.1574, 8.7422) and (3.2957, 8.3446) .. (3.4749, 7.9957);
-
-
-
-    \path[draw=black,fill=black] (3.5281, 8.0275) -- (3.5588, 7.843) -- (3.4198, 7.9682) -- (3.5281, 8.0275) -- (3.5281, 8.0275)-- cycle;;
-
-
-
-    \path[draw=black,fill=white] (2.0461, 7.5142).. controls (2.0461, 7.5142) and (0.9878, 7.5142) .. (0.9878, 7.5142).. controls (0.7761, 7.5142) and (0.5644, 7.3025) .. (0.5644, 7.0908).. controls (0.5644, 7.0908) and (0.5644, 6.5969) .. (0.5644, 6.5969).. controls (0.5644, 6.3853) and (0.7761, 6.1736) .. (0.9878, 6.1736).. controls (0.9878, 6.1736) and (2.0461, 6.1736) .. (2.0461, 6.1736).. controls (2.2578, 6.1736) and (2.4694, 6.3853) .. (2.4694, 6.5969).. controls (2.4694, 6.5969) and (2.4694, 7.0908) .. (2.4694, 7.0908).. controls (2.4694, 7.3025) and (2.2578, 7.5142) .. (2.0461, 7.5142);
-
-
-
-    \node[anchor=south west] (text16) at (1.3716, 6.6788){a};
-
-
-
-    \path[draw=black,fill=white] (4.7978, 7.5142).. controls (4.7978, 7.5142) and (3.7394, 7.5142) .. (3.7394, 7.5142).. controls (3.5278, 7.5142) and (3.3161, 7.3025) .. (3.3161, 7.0908).. controls (3.3161, 7.0908) and (3.3161, 6.5969) .. (3.3161, 6.5969).. controls (3.3161, 6.3853) and (3.5278, 6.1736) .. (3.7394, 6.1736).. controls (3.7394, 6.1736) and (4.7978, 6.1736) .. (4.7978, 6.1736).. controls (5.0094, 6.1736) and (5.2211, 6.3853) .. (5.2211, 6.5969).. controls (5.2211, 6.5969) and (5.2211, 7.0908) .. (5.2211, 7.0908).. controls (5.2211, 7.3025) and (5.0094, 7.5142) .. (4.7978, 7.5142);
-
-
-
-    \node[anchor=south west] (text5380) at (4.1099, 6.6788){b};
-
-
-
-    \path[draw=black,fill=white] (3.4219, 10.3717).. controls (3.4219, 10.3717) and (2.3636, 10.3717) .. (2.3636, 10.3717).. controls (2.1519, 10.3717) and (1.9403, 10.16) .. (1.9403, 9.9483).. controls (1.9403, 9.9483) and (1.9403, 9.4544) .. (1.9403, 9.4544).. controls (1.9403, 9.2428) and (2.1519, 9.0311) .. (2.3636, 9.0311).. controls (2.3636, 9.0311) and (3.4219, 9.0311) .. (3.4219, 9.0311).. controls (3.6336, 9.0311) and (3.8453, 9.2428) .. (3.8453, 9.4544).. controls (3.8453, 9.4544) and (3.8453, 9.9483) .. (3.8453, 9.9483).. controls (3.8453, 10.16) and (3.6336, 10.3717) .. (3.4219, 10.3717);
-
-
-
-    \node[anchor=south west] (text5981) at (2.6811, 9.5366){+};
-
-
-
-  \end{scope}
-
-\end{tikzpicture}
+  \input{figures/blowup2.tex}
+	\end{tikzpicture}
 	\label{blowup2}
 \end{center}
 
 \begin{center}
-\begin{tikzpicture}[y=1cm, x=1cm, yscale=\globalscale,xscale=\globalscale, every node/.append style={scale=\globalscale}, inner sep=0pt, outer sep=0pt]
-  \begin{scope}[shift={(0.1411, -8.3256)}]
-    \path[fill=white] (-0.1411, 8.3256) -- (-0.1411, 16.7922) -- (9.1722, 16.7922) -- (9.1722, 8.3256) -- (-0.1411, 8.3256) -- (-0.1411, 8.3256)-- cycle;;
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (0.7056, 8.7489).. controls (0.7056, 8.7489) and (2.3283, 8.7489) .. (2.3283, 8.7489).. controls (2.54, 8.7489) and (2.7517, 8.9606) .. (2.7517, 9.1722).. controls (2.7517, 9.1722) and (2.7517, 10.2306) .. (2.7517, 10.2306).. controls (2.7517, 10.4422) and (2.54, 10.6539) .. (2.3283, 10.6539).. controls (2.3283, 10.6539) and (0.7056, 10.6539) .. (0.7056, 10.6539).. controls (0.4939, 10.6539) and (0.2822, 10.4422) .. (0.2822, 10.2306).. controls (0.2822, 10.2306) and (0.2822, 9.1722) .. (0.2822, 9.1722).. controls (0.2822, 8.9606) and (0.4939, 8.7489) .. (0.7056, 8.7489);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (3.7042, 8.7489).. controls (3.7042, 8.7489) and (5.3269, 8.7489) .. (5.3269, 8.7489).. controls (5.5386, 8.7489) and (5.7503, 8.9606) .. (5.7503, 9.1722).. controls (5.7503, 9.1722) and (5.7503, 10.2306) .. (5.7503, 10.2306).. controls (5.7503, 10.4422) and (5.5386, 10.6539) .. (5.3269, 10.6539).. controls (5.3269, 10.6539) and (3.7042, 10.6539) .. (3.7042, 10.6539).. controls (3.4925, 10.6539) and (3.2808, 10.4422) .. (3.2808, 10.2306).. controls (3.2808, 10.2306) and (3.2808, 9.1722) .. (3.2808, 9.1722).. controls (3.2808, 8.9606) and (3.4925, 8.7489) .. (3.7042, 8.7489);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (6.7028, 8.7489).. controls (6.7028, 8.7489) and (8.3256, 8.7489) .. (8.3256, 8.7489).. controls (8.5372, 8.7489) and (8.7489, 8.9606) .. (8.7489, 9.1722).. controls (8.7489, 9.1722) and (8.7489, 10.2306) .. (8.7489, 10.2306).. controls (8.7489, 10.4422) and (8.5372, 10.6539) .. (8.3256, 10.6539).. controls (8.3256, 10.6539) and (6.7028, 10.6539) .. (6.7028, 10.6539).. controls (6.4911, 10.6539) and (6.2794, 10.4422) .. (6.2794, 10.2306).. controls (6.2794, 10.2306) and (6.2794, 9.1722) .. (6.2794, 9.1722).. controls (6.2794, 8.9606) and (6.4911, 8.7489) .. (6.7028, 8.7489);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (0.9525, 11.6064).. controls (0.9525, 11.6064) and (2.5753, 11.6064) .. (2.5753, 11.6064).. controls (2.7869, 11.6064) and (2.9986, 11.8181) .. (2.9986, 12.0297).. controls (2.9986, 12.0297) and (2.9986, 13.0881) .. (2.9986, 13.0881).. controls (2.9986, 13.2997) and (2.7869, 13.5114) .. (2.5753, 13.5114).. controls (2.5753, 13.5114) and (0.9525, 13.5114) .. (0.9525, 13.5114).. controls (0.7408, 13.5114) and (0.5292, 13.2997) .. (0.5292, 13.0881).. controls (0.5292, 13.0881) and (0.5292, 12.0297) .. (0.5292, 12.0297).. controls (0.5292, 11.8181) and (0.7408, 11.6064) .. (0.9525, 11.6064);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (3.7042, 11.6064).. controls (3.7042, 11.6064) and (5.3269, 11.6064) .. (5.3269, 11.6064).. controls (5.5386, 11.6064) and (5.7503, 11.8181) .. (5.7503, 12.0297).. controls (5.7503, 12.0297) and (5.7503, 13.0881) .. (5.7503, 13.0881).. controls (5.7503, 13.2997) and (5.5386, 13.5114) .. (5.3269, 13.5114).. controls (5.3269, 13.5114) and (3.7042, 13.5114) .. (3.7042, 13.5114).. controls (3.4925, 13.5114) and (3.2808, 13.2997) .. (3.2808, 13.0881).. controls (3.2808, 13.0881) and (3.2808, 12.0297) .. (3.2808, 12.0297).. controls (3.2808, 11.8181) and (3.4925, 11.6064) .. (3.7042, 11.6064);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (6.4558, 11.6064).. controls (6.4558, 11.6064) and (8.0786, 11.6064) .. (8.0786, 11.6064).. controls (8.2903, 11.6064) and (8.5019, 11.8181) .. (8.5019, 12.0297).. controls (8.5019, 12.0297) and (8.5019, 13.0881) .. (8.5019, 13.0881).. controls (8.5019, 13.2997) and (8.2903, 13.5114) .. (8.0786, 13.5114).. controls (8.0786, 13.5114) and (6.4558, 13.5114) .. (6.4558, 13.5114).. controls (6.2442, 13.5114) and (6.0325, 13.2997) .. (6.0325, 13.0881).. controls (6.0325, 13.0881) and (6.0325, 12.0297) .. (6.0325, 12.0297).. controls (6.0325, 11.8181) and (6.2442, 11.6064) .. (6.4558, 11.6064);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (2.3989, 14.4639).. controls (2.3989, 14.4639) and (6.0678, 14.4639) .. (6.0678, 14.4639).. controls (6.2794, 14.4639) and (6.4911, 14.6756) .. (6.4911, 14.8872).. controls (6.4911, 14.8872) and (6.4911, 15.9456) .. (6.4911, 15.9456).. controls (6.4911, 16.1572) and (6.2794, 16.3689) .. (6.0678, 16.3689).. controls (6.0678, 16.3689) and (2.3989, 16.3689) .. (2.3989, 16.3689).. controls (2.1872, 16.3689) and (1.9756, 16.1572) .. (1.9756, 15.9456).. controls (1.9756, 15.9456) and (1.9756, 14.8872) .. (1.9756, 14.8872).. controls (1.9756, 14.6756) and (2.1872, 14.4639) .. (2.3989, 14.4639);
-
-
-
-    \path[draw=black] (1.4993, 11.9944).. controls (1.4993, 11.6325) and (1.5014, 11.2381) .. (1.5046, 10.8818);
-
-
-
-    \path[draw=black,fill=black] (1.5663, 10.8839) -- (1.506, 10.7072) -- (1.4429, 10.8828) -- (1.5663, 10.8839) -- (1.5663, 10.8839)-- cycle;;
-
-
-
-    \path[draw=black] (2.0285, 11.9944).. controls (2.0285, 11.6547) and (2.5439, 11.1562) .. (3.1055, 10.7142);
-
-
-
-    \path[draw=black,fill=black] (3.1365, 10.7682) -- (3.2385, 10.6116) -- (3.0614, 10.6705) -- (3.1365, 10.7682) -- (3.1365, 10.7682)-- cycle;;
-
-
-
-    \path[draw=black] (4.251, 11.9944).. controls (4.251, 11.611) and (3.6036, 11.0663) .. (2.939, 10.6077);
-
-
-
-    \path[draw=black,fill=black] (2.9764, 10.5586) -- (2.7958, 10.511) -- (2.9072, 10.6609) -- (2.9764, 10.5586) -- (2.9764, 10.5586)-- cycle;;
-
-
-
-    \path[draw=black] (4.7801, 11.9944).. controls (4.7801, 11.611) and (5.4275, 11.0663) .. (6.0921, 10.6077);
-
-
-
-    \path[draw=black,fill=black] (6.1239, 10.6609) -- (6.2353, 10.511) -- (6.0547, 10.5586) -- (6.1239, 10.6609) -- (6.1239, 10.6609)-- cycle;;
-
-
-
-    \path[draw=black] (7.0026, 11.9944).. controls (7.0026, 11.6547) and (6.4872, 11.1562) .. (5.9256, 10.7142);
-
-
-
-    \path[draw=black,fill=black] (5.9697, 10.6705) -- (5.7926, 10.6116) -- (5.8946, 10.7682) -- (5.9697, 10.6705) -- (5.9697, 10.6705)-- cycle;;
-
-
-
-    \path[draw=black] (7.5318, 11.9944).. controls (7.5318, 11.6325) and (7.5297, 11.2381) .. (7.5265, 10.8818);
-
-
-
-    \path[draw=black,fill=black] (7.5882, 10.8828) -- (7.5251, 10.7072) -- (7.4648, 10.8839) -- (7.5882, 10.8828) -- (7.5882, 10.8828)-- cycle;;
-
-
-
-    \path[draw=black] (2.9457, 14.8519).. controls (2.9457, 13.6102) and (1.1275, 14.5796) .. (0.4939, 13.5114).. controls (0.0074, 12.6908) and (0.363, 11.6343) .. (0.7828, 10.8476);
-
-
-
-    \path[draw=black,fill=black] (0.8329, 10.8846) -- (0.8647, 10.7005) -- (0.725, 10.8246) -- (0.8329, 10.8846) -- (0.8329, 10.8846)-- cycle;;
-
-
-
-    \path[draw=black] (3.4749, 14.8519).. controls (3.4749, 13.6645) and (4.7671, 14.1217) .. (5.7856, 13.5114).. controls (5.8057, 13.4994) and (5.8261, 13.487) .. (5.8466, 13.4747);
-
-
-
-    \path[draw=black,fill=black] (5.8681, 13.534) -- (5.987, 13.3897) -- (5.8043, 13.4281) -- (5.8681, 13.534) -- (5.8681, 13.534)-- cycle;;
-
-
-
-    \path[draw=black] (5.521, 14.8519).. controls (5.521, 13.3851) and (7.7378, 14.7415) .. (8.5372, 13.5114).. controls (9.0593, 12.7081) and (8.6949, 11.6431) .. (8.2628, 10.8493);
-
-
-
-    \path[draw=black,fill=black] (8.3189, 10.8232) -- (8.1781, 10.7001) -- (8.2116, 10.8843) -- (8.3189, 10.8232) -- (8.3189, 10.8232)-- cycle;;
-
-
-
-    \path[draw=black] (4.9918, 14.8519).. controls (4.9918, 14.7338) and (4.0485, 14.0836) .. (3.1821, 13.511);
-
-
-
-    \path[draw=black,fill=black] (3.2244, 13.4652) -- (3.0431, 13.4197) -- (3.1567, 13.5682) -- (3.2244, 13.4652) -- (3.2244, 13.4652)-- cycle;;
-
-
-
-    \path[draw=black,fill=white] (2.0461, 10.3717).. controls (2.0461, 10.3717) and (0.9878, 10.3717) .. (0.9878, 10.3717).. controls (0.7761, 10.3717) and (0.5644, 10.16) .. (0.5644, 9.9483).. controls (0.5644, 9.9483) and (0.5644, 9.4544) .. (0.5644, 9.4544).. controls (0.5644, 9.2428) and (0.7761, 9.0311) .. (0.9878, 9.0311).. controls (0.9878, 9.0311) and (2.0461, 9.0311) .. (2.0461, 9.0311).. controls (2.2578, 9.0311) and (2.4694, 9.2428) .. (2.4694, 9.4544).. controls (2.4694, 9.4544) and (2.4694, 9.9483) .. (2.4694, 9.9483).. controls (2.4694, 10.16) and (2.2578, 10.3717) .. (2.0461, 10.3717);
-
-
-
-    \node[anchor=south west] (text2527) at (1.3716, 9.5363){a};
-
-
-
-    \path[draw=black,fill=white] (5.0447, 10.3717).. controls (5.0447, 10.3717) and (3.9864, 10.3717) .. (3.9864, 10.3717).. controls (3.7747, 10.3717) and (3.5631, 10.16) .. (3.5631, 9.9483).. controls (3.5631, 9.9483) and (3.5631, 9.4544) .. (3.5631, 9.4544).. controls (3.5631, 9.2428) and (3.7747, 9.0311) .. (3.9864, 9.0311).. controls (3.9864, 9.0311) and (5.0447, 9.0311) .. (5.0447, 9.0311).. controls (5.2564, 9.0311) and (5.4681, 9.2428) .. (5.4681, 9.4544).. controls (5.4681, 9.4544) and (5.4681, 9.9483) .. (5.4681, 9.9483).. controls (5.4681, 10.16) and (5.2564, 10.3717) .. (5.0447, 10.3717);
-
-
-
-    \node[anchor=south west] (text8728) at (4.3568, 9.5363){b};
-
-
-
-    \path[draw=black,fill=white] (8.0433, 10.3717).. controls (8.0433, 10.3717) and (6.985, 10.3717) .. (6.985, 10.3717).. controls (6.7733, 10.3717) and (6.5617, 10.16) .. (6.5617, 9.9483).. controls (6.5617, 9.9483) and (6.5617, 9.4544) .. (6.5617, 9.4544).. controls (6.5617, 9.2428) and (6.7733, 9.0311) .. (6.985, 9.0311).. controls (6.985, 9.0311) and (8.0433, 9.0311) .. (8.0433, 9.0311).. controls (8.255, 9.0311) and (8.4667, 9.2428) .. (8.4667, 9.4544).. controls (8.4667, 9.4544) and (8.4667, 9.9483) .. (8.4667, 9.9483).. controls (8.4667, 10.16) and (8.255, 10.3717) .. (8.0433, 10.3717);
-
-
-
-    \node[anchor=south west] (text3218) at (7.3819, 9.5363){c};
-
-
-
-    \path[draw=black,fill=white] (2.2931, 13.2292).. controls (2.2931, 13.2292) and (1.2347, 13.2292) .. (1.2347, 13.2292).. controls (1.0231, 13.2292) and (0.8114, 13.0175) .. (0.8114, 12.8058).. controls (0.8114, 12.8058) and (0.8114, 12.3119) .. (0.8114, 12.3119).. controls (0.8114, 12.1003) and (1.0231, 11.8886) .. (1.2347, 11.8886).. controls (1.2347, 11.8886) and (2.2931, 11.8886) .. (2.2931, 11.8886).. controls (2.5047, 11.8886) and (2.7164, 12.1003) .. (2.7164, 12.3119).. controls (2.7164, 12.3119) and (2.7164, 12.8058) .. (2.7164, 12.8058).. controls (2.7164, 13.0175) and (2.5047, 13.2292) .. (2.2931, 13.2292);
-
-
-
-    \node[anchor=south west] (text4936) at (1.5522, 12.3941){+};
-
-
-
-    \path[draw=black,fill=white] (5.0447, 13.2292).. controls (5.0447, 13.2292) and (3.9864, 13.2292) .. (3.9864, 13.2292).. controls (3.7747, 13.2292) and (3.5631, 13.0175) .. (3.5631, 12.8058).. controls (3.5631, 12.8058) and (3.5631, 12.3119) .. (3.5631, 12.3119).. controls (3.5631, 12.1003) and (3.7747, 11.8886) .. (3.9864, 11.8886).. controls (3.9864, 11.8886) and (5.0447, 11.8886) .. (5.0447, 11.8886).. controls (5.2564, 11.8886) and (5.4681, 12.1003) .. (5.4681, 12.3119).. controls (5.4681, 12.3119) and (5.4681, 12.8058) .. (5.4681, 12.8058).. controls (5.4681, 13.0175) and (5.2564, 13.2292) .. (5.0447, 13.2292);
-
-
-
-    \node[anchor=south west] (text8548) at (4.3039, 12.3941){+};
-
-
-
-    \path[draw=black,fill=white] (7.7964, 13.2292).. controls (7.7964, 13.2292) and (6.7381, 13.2292) .. (6.7381, 13.2292).. controls (6.5264, 13.2292) and (6.3147, 13.0175) .. (6.3147, 12.8058).. controls (6.3147, 12.8058) and (6.3147, 12.3119) .. (6.3147, 12.3119).. controls (6.3147, 12.1003) and (6.5264, 11.8886) .. (6.7381, 11.8886).. controls (6.7381, 11.8886) and (7.7964, 11.8886) .. (7.7964, 11.8886).. controls (8.0081, 11.8886) and (8.2197, 12.1003) .. (8.2197, 12.3119).. controls (8.2197, 12.3119) and (8.2197, 12.8058) .. (8.2197, 12.8058).. controls (8.2197, 13.0175) and (8.0081, 13.2292) .. (7.7964, 13.2292);
-
-
-
-    \node[anchor=south west] (text2455) at (7.0556, 12.3941){+};
-
-
-
-    \path[draw=black,fill=white] (3.7394, 16.0867).. controls (3.7394, 16.0867) and (2.6811, 16.0867) .. (2.6811, 16.0867).. controls (2.4694, 16.0867) and (2.2578, 15.875) .. (2.2578, 15.6633).. controls (2.2578, 15.6633) and (2.2578, 15.1694) .. (2.2578, 15.1694).. controls (2.2578, 14.9578) and (2.4694, 14.7461) .. (2.6811, 14.7461).. controls (2.6811, 14.7461) and (3.7394, 14.7461) .. (3.7394, 14.7461).. controls (3.9511, 14.7461) and (4.1628, 14.9578) .. (4.1628, 15.1694).. controls (4.1628, 15.1694) and (4.1628, 15.6633) .. (4.1628, 15.6633).. controls (4.1628, 15.875) and (3.9511, 16.0867) .. (3.7394, 16.0867);
-
-
-
-    \node[anchor=south west] (text9837) at (2.9986, 15.2513){+};
-
-
-
-    \path[draw=black,fill=white] (5.7856, 16.0867).. controls (5.7856, 16.0867) and (4.7272, 16.0867) .. (4.7272, 16.0867).. controls (4.5156, 16.0867) and (4.3039, 15.875) .. (4.3039, 15.6633).. controls (4.3039, 15.6633) and (4.3039, 15.1694) .. (4.3039, 15.1694).. controls (4.3039, 14.9578) and (4.5156, 14.7461) .. (4.7272, 14.7461).. controls (4.7272, 14.7461) and (5.7856, 14.7461) .. (5.7856, 14.7461).. controls (5.9972, 14.7461) and (6.2089, 14.9578) .. (6.2089, 15.1694).. controls (6.2089, 15.1694) and (6.2089, 15.6633) .. (6.2089, 15.6633).. controls (6.2089, 15.875) and (5.9972, 16.0867) .. (5.7856, 16.0867);
-
-
-
-    \node[anchor=south west] (text5280) at (5.0447, 15.2513){+};
-
-
-
-  \end{scope}
-
-\end{tikzpicture}
+	\begin{tikzpicture}[y=1cm, x=1cm, yscale=0.8,xscale=0.8, every node/.append style={scale=\globalscale}, inner sep=0pt, outer sep=0pt]
+  \input{figures/blowup3.tex}
+	\end{tikzpicture}
 	\label{blowup3}
 \end{center}
 
 \begin{center}
-\begin{tikzpicture}[y=1cm, x=1cm, yscale=0.6,xscale=0.6, every node/.append style={scale=\globalscale}, inner sep=0pt, outer sep=0pt]
-  \begin{scope}[shift={(0.1411, -11.1831)}]
-    \path[fill=white] (-0.1411, 11.1831) -- (-0.1411, 22.5072) -- (24.3769, 22.5072) -- (24.3769, 11.1831) -- (-0.1411, 11.1831) -- (-0.1411, 11.1831)-- cycle;;
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (7.5494, 11.6064).. controls (7.5494, 11.6064) and (9.1722, 11.6064) .. (9.1722, 11.6064).. controls (9.3839, 11.6064) and (9.5956, 11.8181) .. (9.5956, 12.0297).. controls (9.5956, 12.0297) and (9.5956, 13.0881) .. (9.5956, 13.0881).. controls (9.5956, 13.2997) and (9.3839, 13.5114) .. (9.1722, 13.5114).. controls (9.1722, 13.5114) and (7.5494, 13.5114) .. (7.5494, 13.5114).. controls (7.3378, 13.5114) and (7.1261, 13.2997) .. (7.1261, 13.0881).. controls (7.1261, 13.0881) and (7.1261, 12.0297) .. (7.1261, 12.0297).. controls (7.1261, 11.8181) and (7.3378, 11.6064) .. (7.5494, 11.6064);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (15.1342, 11.6064).. controls (15.1342, 11.6064) and (16.7569, 11.6064) .. (16.7569, 11.6064).. controls (16.9686, 11.6064) and (17.1803, 11.8181) .. (17.1803, 12.0297).. controls (17.1803, 12.0297) and (17.1803, 13.0881) .. (17.1803, 13.0881).. controls (17.1803, 13.2997) and (16.9686, 13.5114) .. (16.7569, 13.5114).. controls (16.7569, 13.5114) and (15.1342, 13.5114) .. (15.1342, 13.5114).. controls (14.9225, 13.5114) and (14.7108, 13.2997) .. (14.7108, 13.0881).. controls (14.7108, 13.0881) and (14.7108, 12.0297) .. (14.7108, 12.0297).. controls (14.7108, 11.8181) and (14.9225, 11.6064) .. (15.1342, 11.6064);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (18.3092, 11.6064).. controls (18.3092, 11.6064) and (19.9319, 11.6064) .. (19.9319, 11.6064).. controls (20.1436, 11.6064) and (20.3553, 11.8181) .. (20.3553, 12.0297).. controls (20.3553, 12.0297) and (20.3553, 13.0881) .. (20.3553, 13.0881).. controls (20.3553, 13.2997) and (20.1436, 13.5114) .. (19.9319, 13.5114).. controls (19.9319, 13.5114) and (18.3092, 13.5114) .. (18.3092, 13.5114).. controls (18.0975, 13.5114) and (17.8858, 13.2997) .. (17.8858, 13.0881).. controls (17.8858, 13.0881) and (17.8858, 12.0297) .. (17.8858, 12.0297).. controls (17.8858, 11.8181) and (18.0975, 11.6064) .. (18.3092, 11.6064);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (0.7056, 11.6064).. controls (0.7056, 11.6064) and (2.3283, 11.6064) .. (2.3283, 11.6064).. controls (2.54, 11.6064) and (2.7517, 11.8181) .. (2.7517, 12.0297).. controls (2.7517, 12.0297) and (2.7517, 13.0881) .. (2.7517, 13.0881).. controls (2.7517, 13.2997) and (2.54, 13.5114) .. (2.3283, 13.5114).. controls (2.3283, 13.5114) and (0.7056, 13.5114) .. (0.7056, 13.5114).. controls (0.4939, 13.5114) and (0.2822, 13.2997) .. (0.2822, 13.0881).. controls (0.2822, 13.0881) and (0.2822, 12.0297) .. (0.2822, 12.0297).. controls (0.2822, 11.8181) and (0.4939, 11.6064) .. (0.7056, 11.6064);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (14.6756, 14.4639).. controls (14.6756, 14.4639) and (16.2983, 14.4639) .. (16.2983, 14.4639).. controls (16.51, 14.4639) and (16.7217, 14.6756) .. (16.7217, 14.8872).. controls (16.7217, 14.8872) and (16.7217, 15.9456) .. (16.7217, 15.9456).. controls (16.7217, 16.1572) and (16.51, 16.3689) .. (16.2983, 16.3689).. controls (16.2983, 16.3689) and (14.6756, 16.3689) .. (14.6756, 16.3689).. controls (14.4639, 16.3689) and (14.2522, 16.1572) .. (14.2522, 15.9456).. controls (14.2522, 15.9456) and (14.2522, 14.8872) .. (14.2522, 14.8872).. controls (14.2522, 14.6756) and (14.4639, 14.4639) .. (14.6756, 14.4639);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (9.1722, 14.4639).. controls (9.1722, 14.4639) and (10.795, 14.4639) .. (10.795, 14.4639).. controls (11.0067, 14.4639) and (11.2183, 14.6756) .. (11.2183, 14.8872).. controls (11.2183, 14.8872) and (11.2183, 15.9456) .. (11.2183, 15.9456).. controls (11.2183, 16.1572) and (11.0067, 16.3689) .. (10.795, 16.3689).. controls (10.795, 16.3689) and (9.1722, 16.3689) .. (9.1722, 16.3689).. controls (8.9606, 16.3689) and (8.7489, 16.1572) .. (8.7489, 15.9456).. controls (8.7489, 15.9456) and (8.7489, 14.8872) .. (8.7489, 14.8872).. controls (8.7489, 14.6756) and (8.9606, 14.4639) .. (9.1722, 14.4639);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (18.2739, 14.4639).. controls (18.2739, 14.4639) and (19.8967, 14.4639) .. (19.8967, 14.4639).. controls (20.1083, 14.4639) and (20.32, 14.6756) .. (20.32, 14.8872).. controls (20.32, 14.8872) and (20.32, 15.9456) .. (20.32, 15.9456).. controls (20.32, 16.1572) and (20.1083, 16.3689) .. (19.8967, 16.3689).. controls (19.8967, 16.3689) and (18.2739, 16.3689) .. (18.2739, 16.3689).. controls (18.0622, 16.3689) and (17.8506, 16.1572) .. (17.8506, 15.9456).. controls (17.8506, 15.9456) and (17.8506, 14.8872) .. (17.8506, 14.8872).. controls (17.8506, 14.6756) and (18.0622, 14.4639) .. (18.2739, 14.4639);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (19.8614, 17.3214).. controls (19.8614, 17.3214) and (23.5303, 17.3214) .. (23.5303, 17.3214).. controls (23.7419, 17.3214) and (23.9536, 17.5331) .. (23.9536, 17.7447).. controls (23.9536, 17.7447) and (23.9536, 18.8031) .. (23.9536, 18.8031).. controls (23.9536, 19.0147) and (23.7419, 19.2264) .. (23.5303, 19.2264).. controls (23.5303, 19.2264) and (19.8614, 19.2264) .. (19.8614, 19.2264).. controls (19.6497, 19.2264) and (19.4381, 19.0147) .. (19.4381, 18.8031).. controls (19.4381, 18.8031) and (19.4381, 17.7447) .. (19.4381, 17.7447).. controls (19.4381, 17.5331) and (19.6497, 17.3214) .. (19.8614, 17.3214);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (2.3283, 14.4639).. controls (2.3283, 14.4639) and (3.9511, 14.4639) .. (3.9511, 14.4639).. controls (4.1628, 14.4639) and (4.3744, 14.6756) .. (4.3744, 14.8872).. controls (4.3744, 14.8872) and (4.3744, 15.9456) .. (4.3744, 15.9456).. controls (4.3744, 16.1572) and (4.1628, 16.3689) .. (3.9511, 16.3689).. controls (3.9511, 16.3689) and (2.3283, 16.3689) .. (2.3283, 16.3689).. controls (2.1167, 16.3689) and (1.905, 16.1572) .. (1.905, 15.9456).. controls (1.905, 15.9456) and (1.905, 14.8872) .. (1.905, 14.8872).. controls (1.905, 14.6756) and (2.1167, 14.4639) .. (2.3283, 14.4639);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (5.5739, 14.4639).. controls (5.5739, 14.4639) and (7.1967, 14.4639) .. (7.1967, 14.4639).. controls (7.4083, 14.4639) and (7.62, 14.6756) .. (7.62, 14.8872).. controls (7.62, 14.8872) and (7.62, 15.9456) .. (7.62, 15.9456).. controls (7.62, 16.1572) and (7.4083, 16.3689) .. (7.1967, 16.3689).. controls (7.1967, 16.3689) and (5.5739, 16.3689) .. (5.5739, 16.3689).. controls (5.3622, 16.3689) and (5.1506, 16.1572) .. (5.1506, 15.9456).. controls (5.1506, 15.9456) and (5.1506, 14.8872) .. (5.1506, 14.8872).. controls (5.1506, 14.6756) and (5.3622, 14.4639) .. (5.5739, 14.4639);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (4.6214, 17.3214).. controls (4.6214, 17.3214) and (8.2903, 17.3214) .. (8.2903, 17.3214).. controls (8.5019, 17.3214) and (8.7136, 17.5331) .. (8.7136, 17.7447).. controls (8.7136, 17.7447) and (8.7136, 18.8031) .. (8.7136, 18.8031).. controls (8.7136, 19.0147) and (8.5019, 19.2264) .. (8.2903, 19.2264).. controls (8.2903, 19.2264) and (4.6214, 19.2264) .. (4.6214, 19.2264).. controls (4.4097, 19.2264) and (4.1981, 19.0147) .. (4.1981, 18.8031).. controls (4.1981, 18.8031) and (4.1981, 17.7447) .. (4.1981, 17.7447).. controls (4.1981, 17.5331) and (4.4097, 17.3214) .. (4.6214, 17.3214);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (11.9239, 14.4639).. controls (11.9239, 14.4639) and (13.5467, 14.4639) .. (13.5467, 14.4639).. controls (13.7583, 14.4639) and (13.97, 14.6756) .. (13.97, 14.8872).. controls (13.97, 14.8872) and (13.97, 15.9456) .. (13.97, 15.9456).. controls (13.97, 16.1572) and (13.7583, 16.3689) .. (13.5467, 16.3689).. controls (13.5467, 16.3689) and (11.9239, 16.3689) .. (11.9239, 16.3689).. controls (11.7122, 16.3689) and (11.5006, 16.1572) .. (11.5006, 15.9456).. controls (11.5006, 15.9456) and (11.5006, 14.8872) .. (11.5006, 14.8872).. controls (11.5006, 14.6756) and (11.7122, 14.4639) .. (11.9239, 14.4639);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (9.4192, 17.3214).. controls (9.4192, 17.3214) and (13.0881, 17.3214) .. (13.0881, 17.3214).. controls (13.2997, 17.3214) and (13.5114, 17.5331) .. (13.5114, 17.7447).. controls (13.5114, 17.7447) and (13.5114, 18.8031) .. (13.5114, 18.8031).. controls (13.5114, 19.0147) and (13.2997, 19.2264) .. (13.0881, 19.2264).. controls (13.0881, 19.2264) and (9.4192, 19.2264) .. (9.4192, 19.2264).. controls (9.2075, 19.2264) and (8.9958, 19.0147) .. (8.9958, 18.8031).. controls (8.9958, 18.8031) and (8.9958, 17.7447) .. (8.9958, 17.7447).. controls (8.9958, 17.5331) and (9.2075, 17.3214) .. (9.4192, 17.3214);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (15.0636, 17.3214).. controls (15.0636, 17.3214) and (18.7325, 17.3214) .. (18.7325, 17.3214).. controls (18.9442, 17.3214) and (19.1558, 17.5331) .. (19.1558, 17.7447).. controls (19.1558, 17.7447) and (19.1558, 18.8031) .. (19.1558, 18.8031).. controls (19.1558, 19.0147) and (18.9442, 19.2264) .. (18.7325, 19.2264).. controls (18.7325, 19.2264) and (15.0636, 19.2264) .. (15.0636, 19.2264).. controls (14.8519, 19.2264) and (14.6403, 19.0147) .. (14.6403, 18.8031).. controls (14.6403, 18.8031) and (14.6403, 17.7447) .. (14.6403, 17.7447).. controls (14.6403, 17.5331) and (14.8519, 17.3214) .. (15.0636, 17.3214);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (10.9361, 20.1789).. controls (10.9361, 20.1789) and (16.6511, 20.1789) .. (16.6511, 20.1789).. controls (16.8628, 20.1789) and (17.0744, 20.3906) .. (17.0744, 20.6022).. controls (17.0744, 20.6022) and (17.0744, 21.6606) .. (17.0744, 21.6606).. controls (17.0744, 21.8722) and (16.8628, 22.0839) .. (16.6511, 22.0839).. controls (16.6511, 22.0839) and (10.9361, 22.0839) .. (10.9361, 22.0839).. controls (10.7244, 22.0839) and (10.5128, 21.8722) .. (10.5128, 21.6606).. controls (10.5128, 21.6606) and (10.5128, 20.6022) .. (10.5128, 20.6022).. controls (10.5128, 20.3906) and (10.7244, 20.1789) .. (10.9361, 20.1789);
-
-
-
-    \path[draw=black] (15.2224, 14.8519).. controls (15.2224, 13.7245) and (11.8368, 13.0669) .. (9.822, 12.7755);
-
-
-
-    \path[draw=black,fill=black] (9.8316, 12.7145) -- (9.6481, 12.7508) -- (9.8143, 12.8365) -- (9.8316, 12.7145) -- (9.8316, 12.7145)-- cycle;;
-
-
-
-    \path[draw=black] (15.7515, 14.8519).. controls (15.7515, 14.4893) and (15.7766, 14.0952) .. (15.809, 13.7389);
-
-
-
-    \path[draw=black,fill=black] (15.8701, 13.746) -- (15.8256, 13.5643) -- (15.7473, 13.734) -- (15.8701, 13.746) -- (15.8701, 13.746)-- cycle;;
-
-
-
-    \path[draw=black] (9.719, 14.8519).. controls (9.719, 14.4427) and (9.5532, 14.0437) .. (9.3373, 13.6977);
-
-
-
-    \path[draw=black,fill=black] (9.3917, 13.6684) -- (9.2424, 13.5558) -- (9.289, 13.7368) -- (9.3917, 13.6684) -- (9.3917, 13.6684)-- cycle;;
-
-
-
-    \path[draw=black] (10.2482, 14.8519).. controls (10.2482, 14.2843) and (10.9132, 14.5969) .. (11.4653, 14.4639).. controls (13.9838, 13.8571) and (14.7458, 14.2928) .. (17.2156, 13.5114).. controls (17.3683, 13.4631) and (17.5242, 13.4045) .. (17.678, 13.3406);
-
-
-
-    \path[draw=black,fill=black] (17.6996, 13.3989) -- (17.8368, 13.2719) -- (17.6505, 13.2853) -- (17.6996, 13.3989) -- (17.6996, 13.3989)-- cycle;;
-
-
-
-    \path[draw=black] (18.8207, 14.8519).. controls (18.8207, 14.4438) and (18.0954, 13.8762) .. (17.3732, 13.4119);
-
-
-
-    \path[draw=black,fill=black] (17.4075, 13.3608) -- (17.2254, 13.3188) -- (17.3415, 13.4652) -- (17.4075, 13.3608) -- (17.4075, 13.3608)-- cycle;;
-
-
-
-    \path[draw=black] (19.3499, 14.8519).. controls (19.3499, 14.4889) and (19.3202, 14.0949) .. (19.2821, 13.7389);
-
-
-
-    \path[draw=black,fill=black] (19.3435, 13.7326) -- (19.2624, 13.5643) -- (19.2207, 13.7467) -- (19.3435, 13.7326) -- (19.3435, 13.7326)-- cycle;;
-
-
-
-    \path[draw=black] (20.4082, 17.7094).. controls (20.4082, 16.4123) and (18.7463, 17.2724) .. (17.8153, 16.3689).. controls (17.1203, 15.6944) and (17.5331, 15.0435) .. (16.7569, 14.4639).. controls (15.6736, 13.655) and (11.9214, 13.0549) .. (9.8185, 12.773);
-
-
-
-    \path[draw=black,fill=black] (9.8312, 12.7123) -- (9.6485, 12.7504) -- (9.815, 12.8348) -- (9.8312, 12.7123) -- (9.8312, 12.7123)-- cycle;;
-
-
-
-    \path[draw=black] (20.9374, 17.7094).. controls (20.9374, 17.2731) and (20.7282, 16.8751) .. (20.4502, 16.5389);
-
-
-
-    \path[draw=black,fill=black] (20.4982, 16.4998) -- (20.3348, 16.4088) -- (20.4057, 16.5816) -- (20.4982, 16.4998) -- (20.4982, 16.4998)-- cycle;;
-
-
-
-    \path[draw=black] (22.9835, 17.7094).. controls (22.9835, 16.0256) and (21.6337, 14.545) .. (20.5299, 13.6158);
-
-
-
-    \path[draw=black,fill=black] (20.5715, 13.5703) -- (20.3962, 13.5054) -- (20.4932, 13.6656) -- (20.5715, 13.5703) -- (20.5715, 13.5703)-- cycle;;
-
-
-
-    \path[draw=black] (22.4543, 17.7094).. controls (22.4543, 17.3027) and (22.0087, 17.4576) .. (21.6253, 17.3214).. controls (19.9806, 16.7372) and (19.4776, 16.9016) .. (17.8153, 16.3689).. controls (17.5232, 16.2754) and (17.2149, 16.1636) .. (16.9217, 16.0507);
-
-
-
-    \path[draw=black,fill=black] (16.958, 15.9985) -- (16.7714, 15.9921) -- (16.9132, 16.1135) -- (16.958, 15.9985) -- (16.958, 15.9985)-- cycle;;
-
-
-
-    \path[draw=black] (2.8751, 14.8519).. controls (2.8751, 13.1071) and (5.2772, 12.6831) .. (6.9025, 12.5956);
-
-
-
-    \path[draw=black,fill=black] (6.8996, 12.6573) -- (7.0728, 12.5878) -- (6.894, 12.5342) -- (6.8996, 12.6573) -- (6.8996, 12.6573)-- cycle;;
-
-
-
-    \path[draw=black] (3.4043, 14.8519).. controls (3.4043, 14.4113) and (3.1898, 14.0113) .. (2.9058, 13.6744);
-
-
-
-    \path[draw=black,fill=black] (2.9517, 13.6331) -- (2.7873, 13.5438) -- (2.86, 13.716) -- (2.9517, 13.6331) -- (2.9517, 13.6331)-- cycle;;
-
-
-
-    \path[draw=black] (6.1207, 14.8519).. controls (6.1207, 14.0039) and (11.751, 13.1459) .. (14.4872, 12.779);
-
-
-
-    \path[draw=black,fill=black] (14.4914, 12.8408) -- (14.6579, 12.7564) -- (14.4748, 12.7183) -- (14.4914, 12.8408) -- (14.4914, 12.8408)-- cycle;;
-
-
-
-    \path[draw=black] (6.6499, 14.8519).. controls (6.6499, 13.238) and (4.4972, 12.7674) .. (2.9799, 12.6365);
-
-
-
-    \path[draw=black,fill=black] (2.9856, 12.5748) -- (2.8049, 12.6227) -- (2.976, 12.6979) -- (2.9856, 12.5748) -- (2.9856, 12.5748)-- cycle;;
-
-
-
-    \path[draw=black] (5.1682, 17.7094).. controls (5.1682, 16.4536) and (6.9148, 17.3831) .. (7.6553, 16.3689).. controls (7.9562, 15.9568) and (8.1495, 14.6879) .. (8.2564, 13.734);
-
-
-
-    \path[draw=black,fill=black] (8.3171, 13.7463) -- (8.2748, 13.5643) -- (8.1943, 13.7333) -- (8.3171, 13.7463) -- (8.3171, 13.7463)-- cycle;;
-
-
-
-    \path[draw=black] (5.6974, 17.7094).. controls (5.6974, 17.3334) and (5.7856, 16.9372) .. (5.8991, 16.583);
-
-
-
-    \path[draw=black,fill=black] (5.9563, 16.6063) -- (5.9552, 16.4193) -- (5.8395, 16.5661) -- (5.9563, 16.6063) -- (5.9563, 16.6063)-- cycle;;
-
-
-
-    \path[draw=black] (7.7435, 17.7094).. controls (7.7435, 14.6791) and (3.0036, 18.6926) .. (1.0583, 16.3689).. controls (0.4491, 15.6411) and (0.6689, 14.5401) .. (0.9786, 13.7146);
-
-
-
-    \path[draw=black,fill=black] (1.0319, 13.7478) -- (1.0393, 13.5608) -- (0.9172, 13.7022) -- (1.0319, 13.7478) -- (1.0319, 13.7478)-- cycle;;
-
-
-
-    \path[draw=black] (7.2143, 17.7094).. controls (7.2143, 16.1713) and (12.5712, 16.9259) .. (14.0053, 16.3689).. controls (14.0208, 16.3629) and (14.036, 16.3569) .. (14.0515, 16.3505);
-
-
-
-    \path[draw=black,fill=black] (14.0677, 16.4109) -- (14.2035, 16.2825) -- (14.0173, 16.298) -- (14.0677, 16.4109) -- (14.0677, 16.4109)-- cycle;;
-
-
-
-    \path[draw=black] (12.4707, 14.8519).. controls (12.4707, 12.6605) and (15.1663, 14.2875) .. (17.2156, 13.5114).. controls (17.3669, 13.4539) and (17.5228, 13.3893) .. (17.677, 13.3212);
-
-
-
-    \path[draw=black,fill=black] (17.702, 13.3777) -- (17.8372, 13.2489) -- (17.6509, 13.2652) -- (17.702, 13.3777) -- (17.702, 13.3777)-- cycle;;
-
-
-
-    \path[draw=black] (12.9999, 14.8519).. controls (12.9999, 14.5994) and (6.0688, 13.3766) .. (2.9764, 12.8436);
-
-
-
-    \path[draw=black,fill=black] (2.9884, 12.7829) -- (2.8042, 12.8139) -- (2.9676, 12.9046) -- (2.9884, 12.7829) -- (2.9884, 12.7829)-- cycle;;
-
-
-
-    \path[draw=black] (12.0121, 17.7094).. controls (12.0121, 16.1269) and (9.6686, 17.6308) .. (8.7136, 16.3689).. controls (8.1502, 15.6249) and (8.103, 14.5468) .. (8.1725, 13.7333);
-
-
-
-    \path[draw=black,fill=black] (8.2331, 13.746) -- (8.1897, 13.5643) -- (8.1104, 13.7336) -- (8.2331, 13.746) -- (8.2331, 13.746)-- cycle;;
-
-
-
-    \path[draw=black] (12.5413, 17.7094).. controls (12.5413, 17.3468) and (12.5663, 16.9527) .. (12.5988, 16.5964);
-
-
-
-    \path[draw=black,fill=black] (12.6598, 16.6035) -- (12.6153, 16.4218) -- (12.537, 16.5915) -- (12.6598, 16.6035) -- (12.6598, 16.6035)-- cycle;;
-
-
-
-    \path[draw=black] (10.4951, 17.7094).. controls (10.4951, 15.669) and (2.758, 17.9017) .. (1.4111, 16.3689).. controls (0.7892, 15.6612) and (0.8989, 14.5584) .. (1.1148, 13.7273);
-
-
-
-    \path[draw=black,fill=black] (1.1726, 13.7492) -- (1.1606, 13.5629) -- (1.0537, 13.7164) -- (1.1726, 13.7492) -- (1.1726, 13.7492)-- cycle;;
-
-
-
-    \path[draw=black] (9.966, 17.7094).. controls (9.966, 17.3475) and (9.9681, 16.9531) .. (9.9713, 16.5968);
-
-
-
-    \path[draw=black,fill=black] (10.033, 16.5989) -- (9.9727, 16.4222) -- (9.9095, 16.5978) -- (10.033, 16.5989) -- (10.033, 16.5989)-- cycle;;
-
-
-
-    \path[draw=black] (15.6104, 17.7094).. controls (15.6104, 16.9256) and (16.4853, 17.1044) .. (16.7569, 16.3689).. controls (17.0759, 15.5056) and (16.819, 14.4826) .. (16.5128, 13.7192);
-
-
-
-    \path[draw=black,fill=black] (16.5714, 13.6994) -- (16.4461, 13.5604) -- (16.4574, 13.747) -- (16.5714, 13.6994) -- (16.5714, 13.6994)-- cycle;;
-
-
-
-    \path[draw=black] (16.1396, 17.7094).. controls (16.1396, 17.6463) and (15.0887, 16.9566) .. (14.1549, 16.3558);
-
-
-
-    \path[draw=black,fill=black] (14.1965, 16.3093) -- (14.0148, 16.2659) -- (14.1298, 16.413) -- (14.1965, 16.3093) -- (14.1965, 16.3093)-- cycle;;
-
-
-
-    \path[draw=black] (18.1857, 17.7094).. controls (18.1857, 15.8905) and (3.175, 17.6361) .. (1.8697, 16.3689).. controls (1.5053, 16.0151) and (1.452, 14.7154) .. (1.4672, 13.7393);
-
-
-
-    \path[draw=black,fill=black] (1.5289, 13.7425) -- (1.4711, 13.5647) -- (1.4055, 13.7396) -- (1.5289, 13.7425) -- (1.5289, 13.7425)-- cycle;;
-
-
-
-    \path[draw=black] (17.6565, 17.7094).. controls (17.6565, 17.297) and (17.829, 16.8984) .. (18.0541, 16.5541);
-
-
-
-    \path[draw=black,fill=black] (18.1024, 16.5926) -- (18.1532, 16.4126) -- (18.0015, 16.5216) -- (18.1024, 16.5926) -- (18.1024, 16.5926)-- cycle;;
-
-
-
-    \path[draw=black] (15.5751, 20.5669).. controls (15.5751, 18.0135) and (5.8854, 21.1113) .. (4.1628, 19.2264).. controls (3.5916, 18.6016) and (4.0273, 18.1571) .. (4.1628, 17.3214).. controls (4.2164, 16.9912) and (4.9036, 14.7232) .. (5.1153, 14.4639).. controls (5.5908, 13.8818) and (6.2988, 13.444) .. (6.9324, 13.1389);
-
-
-
-    \path[draw=black,fill=black] (6.9441, 13.2017) -- (7.0778, 13.0711) -- (6.8919, 13.0898) -- (6.9441, 13.2017) -- (6.9441, 13.2017)-- cycle;;
-
-
-
-    \path[draw=black] (16.1043, 20.5669).. controls (16.1043, 20.2039) and (16.0747, 19.8099) .. (16.0366, 19.4539);
-
-
-
-    \path[draw=black,fill=black] (16.098, 19.4476) -- (16.0168, 19.2793) -- (15.9752, 19.4617) -- (16.098, 19.4476) -- (16.098, 19.4476)-- cycle;;
-
-
-
-    \path[draw=black] (13.529, 20.5669).. controls (13.529, 19.1121) and (14.2286, 17.5687) .. (14.7913, 16.5626);
-
-
-
-    \path[draw=black,fill=black] (14.8417, 16.5989) -- (14.8752, 16.4151) -- (14.7345, 16.5379) -- (14.8417, 16.5989) -- (14.8417, 16.5989)-- cycle;;
-
-
-
-    \path[draw=black] (14.0582, 20.5669).. controls (14.0582, 19.1068) and (13.9541, 18.7237) .. (13.5467, 17.3214).. controls (13.4743, 17.0723) and (13.377, 16.813) .. (13.2747, 16.5693);
-
-
-
-    \path[draw=black,fill=black] (13.3361, 16.5555) -- (13.2094, 16.4179) -- (13.2228, 16.6042) -- (13.3361, 16.5555) -- (13.3361, 16.5555)-- cycle;;
-
-
-
-    \path[draw=black] (12.0121, 20.5669).. controls (12.0121, 18.7279) and (5.5009, 20.0272) .. (3.8453, 19.2264).. controls (2.1467, 18.4048) and (1.4683, 18.0947) .. (0.7056, 16.3689).. controls (0.3316, 15.5229) and (0.5965, 14.4918) .. (0.9204, 13.7213);
-
-
-
-    \path[draw=black,fill=black] (0.9768, 13.7463) -- (0.9913, 13.5601) -- (0.864, 13.6966) -- (0.9768, 13.7463) -- (0.9768, 13.7463)-- cycle;;
-
-
-
-    \path[draw=black] (11.4829, 20.5669).. controls (11.4829, 19.939) and (12.2276, 20.3119) .. (12.8411, 20.1789).. controls (15.6302, 19.5739) and (16.5118, 20.2092) .. (19.1911, 19.2264).. controls (19.2066, 19.2207) and (19.2222, 19.2147) .. (19.2373, 19.2088);
-
-
-
-    \path[draw=black,fill=black] (19.2514, 19.2701) -- (19.389, 19.1435) -- (19.2028, 19.1565) -- (19.2514, 19.2701) -- (19.2514, 19.2701)-- cycle;;
-
-
-
-    \path[draw=black,fill=white] (8.89, 13.2292).. controls (8.89, 13.2292) and (7.8317, 13.2292) .. (7.8317, 13.2292).. controls (7.62, 13.2292) and (7.4083, 13.0175) .. (7.4083, 12.8058).. controls (7.4083, 12.8058) and (7.4083, 12.3119) .. (7.4083, 12.3119).. controls (7.4083, 12.1003) and (7.62, 11.8886) .. (7.8317, 11.8886).. controls (7.8317, 11.8886) and (8.89, 11.8886) .. (8.89, 11.8886).. controls (9.1017, 11.8886) and (9.3133, 12.1003) .. (9.3133, 12.3119).. controls (9.3133, 12.3119) and (9.3133, 12.8058) .. (9.3133, 12.8058).. controls (9.3133, 13.0175) and (9.1017, 13.2292) .. (8.89, 13.2292);
-
-
-
-    \node[anchor=south west] (text4681) at (8.2155, 12.3938){a};
-
-
-
-    \path[draw=black,fill=white] (16.4747, 13.2292).. controls (16.4747, 13.2292) and (15.4164, 13.2292) .. (15.4164, 13.2292).. controls (15.2047, 13.2292) and (14.9931, 13.0175) .. (14.9931, 12.8058).. controls (14.9931, 12.8058) and (14.9931, 12.3119) .. (14.9931, 12.3119).. controls (14.9931, 12.1003) and (15.2047, 11.8886) .. (15.4164, 11.8886).. controls (15.4164, 11.8886) and (16.4747, 11.8886) .. (16.4747, 11.8886).. controls (16.6864, 11.8886) and (16.8981, 12.1003) .. (16.8981, 12.3119).. controls (16.8981, 12.3119) and (16.8981, 12.8058) .. (16.8981, 12.8058).. controls (16.8981, 13.0175) and (16.6864, 13.2292) .. (16.4747, 13.2292);
-
-
-
-    \node[anchor=south west] (text8552) at (15.7868, 12.3938){b};
-
-
-
-    \path[draw=black,fill=white] (19.6497, 13.2292).. controls (19.6497, 13.2292) and (18.5914, 13.2292) .. (18.5914, 13.2292).. controls (18.3797, 13.2292) and (18.1681, 13.0175) .. (18.1681, 12.8058).. controls (18.1681, 12.8058) and (18.1681, 12.3119) .. (18.1681, 12.3119).. controls (18.1681, 12.1003) and (18.3797, 11.8886) .. (18.5914, 11.8886).. controls (18.5914, 11.8886) and (19.6497, 11.8886) .. (19.6497, 11.8886).. controls (19.8614, 11.8886) and (20.0731, 12.1003) .. (20.0731, 12.3119).. controls (20.0731, 12.3119) and (20.0731, 12.8058) .. (20.0731, 12.8058).. controls (20.0731, 13.0175) and (19.8614, 13.2292) .. (19.6497, 13.2292);
-
-
-
-    \node[anchor=south west] (text9510) at (18.9883, 12.3938){c};
-
-
-
-    \path[draw=black,fill=white] (2.0461, 13.2292).. controls (2.0461, 13.2292) and (0.9878, 13.2292) .. (0.9878, 13.2292).. controls (0.7761, 13.2292) and (0.5644, 13.0175) .. (0.5644, 12.8058).. controls (0.5644, 12.8058) and (0.5644, 12.3119) .. (0.5644, 12.3119).. controls (0.5644, 12.1003) and (0.7761, 11.8886) .. (0.9878, 11.8886).. controls (0.9878, 11.8886) and (2.0461, 11.8886) .. (2.0461, 11.8886).. controls (2.2578, 11.8886) and (2.4694, 12.1003) .. (2.4694, 12.3119).. controls (2.4694, 12.3119) and (2.4694, 12.8058) .. (2.4694, 12.8058).. controls (2.4694, 13.0175) and (2.2578, 13.2292) .. (2.0461, 13.2292);
-
-
-
-    \node[anchor=south west] (text7270) at (1.3582, 12.3938){d};
-
-
-
-    \path[draw=black,fill=white] (16.0161, 16.0867).. controls (16.0161, 16.0867) and (14.9578, 16.0867) .. (14.9578, 16.0867).. controls (14.7461, 16.0867) and (14.5344, 15.875) .. (14.5344, 15.6633).. controls (14.5344, 15.6633) and (14.5344, 15.1694) .. (14.5344, 15.1694).. controls (14.5344, 14.9578) and (14.7461, 14.7461) .. (14.9578, 14.7461).. controls (14.9578, 14.7461) and (16.0161, 14.7461) .. (16.0161, 14.7461).. controls (16.2278, 14.7461) and (16.4394, 14.9578) .. (16.4394, 15.1694).. controls (16.4394, 15.1694) and (16.4394, 15.6633) .. (16.4394, 15.6633).. controls (16.4394, 15.875) and (16.2278, 16.0867) .. (16.0161, 16.0867);
-
-
-
-    \node[anchor=south west] (text8198) at (15.2753, 15.2516){+};
-
-
-
-    \path[draw=black,fill=white] (10.5128, 16.0867).. controls (10.5128, 16.0867) and (9.4544, 16.0867) .. (9.4544, 16.0867).. controls (9.2428, 16.0867) and (9.0311, 15.875) .. (9.0311, 15.6633).. controls (9.0311, 15.6633) and (9.0311, 15.1694) .. (9.0311, 15.1694).. controls (9.0311, 14.9578) and (9.2428, 14.7461) .. (9.4544, 14.7461).. controls (9.4544, 14.7461) and (10.5128, 14.7461) .. (10.5128, 14.7461).. controls (10.7244, 14.7461) and (10.9361, 14.9578) .. (10.9361, 15.1694).. controls (10.9361, 15.1694) and (10.9361, 15.6633) .. (10.9361, 15.6633).. controls (10.9361, 15.875) and (10.7244, 16.0867) .. (10.5128, 16.0867);
-
-
-
-    \node[anchor=south west] (text762) at (9.7719, 15.2516){+};
-
-
-
-    \path[draw=black,fill=white] (19.6144, 16.0867).. controls (19.6144, 16.0867) and (18.5561, 16.0867) .. (18.5561, 16.0867).. controls (18.3444, 16.0867) and (18.1328, 15.875) .. (18.1328, 15.6633).. controls (18.1328, 15.6633) and (18.1328, 15.1694) .. (18.1328, 15.1694).. controls (18.1328, 14.9578) and (18.3444, 14.7461) .. (18.5561, 14.7461).. controls (18.5561, 14.7461) and (19.6144, 14.7461) .. (19.6144, 14.7461).. controls (19.8261, 14.7461) and (20.0378, 14.9578) .. (20.0378, 15.1694).. controls (20.0378, 15.1694) and (20.0378, 15.6633) .. (20.0378, 15.6633).. controls (20.0378, 15.875) and (19.8261, 16.0867) .. (19.6144, 16.0867);
-
-
-
-    \node[anchor=south west] (text4293) at (18.8736, 15.2516){+};
-
-
-
-    \path[draw=black,fill=white] (21.2019, 18.9442).. controls (21.2019, 18.9442) and (20.1436, 18.9442) .. (20.1436, 18.9442).. controls (19.9319, 18.9442) and (19.7203, 18.7325) .. (19.7203, 18.5208).. controls (19.7203, 18.5208) and (19.7203, 18.0269) .. (19.7203, 18.0269).. controls (19.7203, 17.8153) and (19.9319, 17.6036) .. (20.1436, 17.6036).. controls (20.1436, 17.6036) and (21.2019, 17.6036) .. (21.2019, 17.6036).. controls (21.4136, 17.6036) and (21.6253, 17.8153) .. (21.6253, 18.0269).. controls (21.6253, 18.0269) and (21.6253, 18.5208) .. (21.6253, 18.5208).. controls (21.6253, 18.7325) and (21.4136, 18.9442) .. (21.2019, 18.9442);
-
-
-
-    \node[anchor=south west] (text9199) at (20.4611, 18.1088){+};
-
-
-
-    \path[draw=black,fill=white] (23.2481, 18.9442).. controls (23.2481, 18.9442) and (22.1897, 18.9442) .. (22.1897, 18.9442).. controls (21.9781, 18.9442) and (21.7664, 18.7325) .. (21.7664, 18.5208).. controls (21.7664, 18.5208) and (21.7664, 18.0269) .. (21.7664, 18.0269).. controls (21.7664, 17.8153) and (21.9781, 17.6036) .. (22.1897, 17.6036).. controls (22.1897, 17.6036) and (23.2481, 17.6036) .. (23.2481, 17.6036).. controls (23.4597, 17.6036) and (23.6714, 17.8153) .. (23.6714, 18.0269).. controls (23.6714, 18.0269) and (23.6714, 18.5208) .. (23.6714, 18.5208).. controls (23.6714, 18.7325) and (23.4597, 18.9442) .. (23.2481, 18.9442);
-
-
-
-    \node[anchor=south west] (text1438) at (22.5072, 18.1088){+};
-
-
-
-    \path[draw=black,fill=white] (3.6689, 16.0867).. controls (3.6689, 16.0867) and (2.6106, 16.0867) .. (2.6106, 16.0867).. controls (2.3989, 16.0867) and (2.1872, 15.875) .. (2.1872, 15.6633).. controls (2.1872, 15.6633) and (2.1872, 15.1694) .. (2.1872, 15.1694).. controls (2.1872, 14.9578) and (2.3989, 14.7461) .. (2.6106, 14.7461).. controls (2.6106, 14.7461) and (3.6689, 14.7461) .. (3.6689, 14.7461).. controls (3.8806, 14.7461) and (4.0922, 14.9578) .. (4.0922, 15.1694).. controls (4.0922, 15.1694) and (4.0922, 15.6633) .. (4.0922, 15.6633).. controls (4.0922, 15.875) and (3.8806, 16.0867) .. (3.6689, 16.0867);
-
-
-
-    \node[anchor=south west] (text3133) at (2.9281, 15.2516){+};
-
-
-
-    \path[draw=black,fill=white] (6.9144, 16.0867).. controls (6.9144, 16.0867) and (5.8561, 16.0867) .. (5.8561, 16.0867).. controls (5.6444, 16.0867) and (5.4328, 15.875) .. (5.4328, 15.6633).. controls (5.4328, 15.6633) and (5.4328, 15.1694) .. (5.4328, 15.1694).. controls (5.4328, 14.9578) and (5.6444, 14.7461) .. (5.8561, 14.7461).. controls (5.8561, 14.7461) and (6.9144, 14.7461) .. (6.9144, 14.7461).. controls (7.1261, 14.7461) and (7.3378, 14.9578) .. (7.3378, 15.1694).. controls (7.3378, 15.1694) and (7.3378, 15.6633) .. (7.3378, 15.6633).. controls (7.3378, 15.875) and (7.1261, 16.0867) .. (6.9144, 16.0867);
-
-
-
-    \node[anchor=south west] (text4102) at (6.1736, 15.2516){+};
-
-
-
-    \path[draw=black,fill=white] (5.9619, 18.9442).. controls (5.9619, 18.9442) and (4.9036, 18.9442) .. (4.9036, 18.9442).. controls (4.6919, 18.9442) and (4.4803, 18.7325) .. (4.4803, 18.5208).. controls (4.4803, 18.5208) and (4.4803, 18.0269) .. (4.4803, 18.0269).. controls (4.4803, 17.8153) and (4.6919, 17.6036) .. (4.9036, 17.6036).. controls (4.9036, 17.6036) and (5.9619, 17.6036) .. (5.9619, 17.6036).. controls (6.1736, 17.6036) and (6.3853, 17.8153) .. (6.3853, 18.0269).. controls (6.3853, 18.0269) and (6.3853, 18.5208) .. (6.3853, 18.5208).. controls (6.3853, 18.7325) and (6.1736, 18.9442) .. (5.9619, 18.9442);
-
-
-
-    \node[anchor=south west] (text9144) at (5.2211, 18.1088){+};
-
-
-
-    \path[draw=black,fill=white] (8.0081, 18.9442).. controls (8.0081, 18.9442) and (6.9497, 18.9442) .. (6.9497, 18.9442).. controls (6.7381, 18.9442) and (6.5264, 18.7325) .. (6.5264, 18.5208).. controls (6.5264, 18.5208) and (6.5264, 18.0269) .. (6.5264, 18.0269).. controls (6.5264, 17.8153) and (6.7381, 17.6036) .. (6.9497, 17.6036).. controls (6.9497, 17.6036) and (8.0081, 17.6036) .. (8.0081, 17.6036).. controls (8.2197, 17.6036) and (8.4314, 17.8153) .. (8.4314, 18.0269).. controls (8.4314, 18.0269) and (8.4314, 18.5208) .. (8.4314, 18.5208).. controls (8.4314, 18.7325) and (8.2197, 18.9442) .. (8.0081, 18.9442);
-
-
-
-    \node[anchor=south west] (text8934) at (7.2672, 18.1088){+};
-
-
-
-    \path[draw=black,fill=white] (13.2644, 16.0867).. controls (13.2644, 16.0867) and (12.2061, 16.0867) .. (12.2061, 16.0867).. controls (11.9944, 16.0867) and (11.7828, 15.875) .. (11.7828, 15.6633).. controls (11.7828, 15.6633) and (11.7828, 15.1694) .. (11.7828, 15.1694).. controls (11.7828, 14.9578) and (11.9944, 14.7461) .. (12.2061, 14.7461).. controls (12.2061, 14.7461) and (13.2644, 14.7461) .. (13.2644, 14.7461).. controls (13.4761, 14.7461) and (13.6878, 14.9578) .. (13.6878, 15.1694).. controls (13.6878, 15.1694) and (13.6878, 15.6633) .. (13.6878, 15.6633).. controls (13.6878, 15.875) and (13.4761, 16.0867) .. (13.2644, 16.0867);
-
-
-
-    \node[anchor=south west] (text8363) at (12.5236, 15.2516){+};
-
-
-
-    \path[draw=black,fill=white] (12.8058, 18.9442).. controls (12.8058, 18.9442) and (11.7475, 18.9442) .. (11.7475, 18.9442).. controls (11.5358, 18.9442) and (11.3242, 18.7325) .. (11.3242, 18.5208).. controls (11.3242, 18.5208) and (11.3242, 18.0269) .. (11.3242, 18.0269).. controls (11.3242, 17.8153) and (11.5358, 17.6036) .. (11.7475, 17.6036).. controls (11.7475, 17.6036) and (12.8058, 17.6036) .. (12.8058, 17.6036).. controls (13.0175, 17.6036) and (13.2292, 17.8153) .. (13.2292, 18.0269).. controls (13.2292, 18.0269) and (13.2292, 18.5208) .. (13.2292, 18.5208).. controls (13.2292, 18.7325) and (13.0175, 18.9442) .. (12.8058, 18.9442);
-
-
-
-    \node[anchor=south west] (text9979) at (12.065, 18.1088){+};
-
-
-
-    \path[draw=black,fill=white] (10.7597, 18.9442).. controls (10.7597, 18.9442) and (9.7014, 18.9442) .. (9.7014, 18.9442).. controls (9.4897, 18.9442) and (9.2781, 18.7325) .. (9.2781, 18.5208).. controls (9.2781, 18.5208) and (9.2781, 18.0269) .. (9.2781, 18.0269).. controls (9.2781, 17.8153) and (9.4897, 17.6036) .. (9.7014, 17.6036).. controls (9.7014, 17.6036) and (10.7597, 17.6036) .. (10.7597, 17.6036).. controls (10.9714, 17.6036) and (11.1831, 17.8153) .. (11.1831, 18.0269).. controls (11.1831, 18.0269) and (11.1831, 18.5208) .. (11.1831, 18.5208).. controls (11.1831, 18.7325) and (10.9714, 18.9442) .. (10.7597, 18.9442);
-
-
-
-    \node[anchor=south west] (text6555) at (10.0189, 18.1088){+};
-
-
-
-    \path[draw=black,fill=white] (16.4042, 18.9442).. controls (16.4042, 18.9442) and (15.3458, 18.9442) .. (15.3458, 18.9442).. controls (15.1342, 18.9442) and (14.9225, 18.7325) .. (14.9225, 18.5208).. controls (14.9225, 18.5208) and (14.9225, 18.0269) .. (14.9225, 18.0269).. controls (14.9225, 17.8153) and (15.1342, 17.6036) .. (15.3458, 17.6036).. controls (15.3458, 17.6036) and (16.4042, 17.6036) .. (16.4042, 17.6036).. controls (16.6158, 17.6036) and (16.8275, 17.8153) .. (16.8275, 18.0269).. controls (16.8275, 18.0269) and (16.8275, 18.5208) .. (16.8275, 18.5208).. controls (16.8275, 18.7325) and (16.6158, 18.9442) .. (16.4042, 18.9442);
-
-
-
-    \node[anchor=south west] (text2473) at (15.6633, 18.1088){+};
-
-
-
-    \path[draw=black,fill=white] (18.4503, 18.9442).. controls (18.4503, 18.9442) and (17.3919, 18.9442) .. (17.3919, 18.9442).. controls (17.1803, 18.9442) and (16.9686, 18.7325) .. (16.9686, 18.5208).. controls (16.9686, 18.5208) and (16.9686, 18.0269) .. (16.9686, 18.0269).. controls (16.9686, 17.8153) and (17.1803, 17.6036) .. (17.3919, 17.6036).. controls (17.3919, 17.6036) and (18.4503, 17.6036) .. (18.4503, 17.6036).. controls (18.6619, 17.6036) and (18.8736, 17.8153) .. (18.8736, 18.0269).. controls (18.8736, 18.0269) and (18.8736, 18.5208) .. (18.8736, 18.5208).. controls (18.8736, 18.7325) and (18.6619, 18.9442) .. (18.4503, 18.9442);
-
-
-
-    \node[anchor=south west] (text5836) at (17.7094, 18.1088){+};
-
-
-
-    \path[draw=black,fill=white] (16.3689, 21.8017).. controls (16.3689, 21.8017) and (15.3106, 21.8017) .. (15.3106, 21.8017).. controls (15.0989, 21.8017) and (14.8872, 21.59) .. (14.8872, 21.3783).. controls (14.8872, 21.3783) and (14.8872, 20.8844) .. (14.8872, 20.8844).. controls (14.8872, 20.6728) and (15.0989, 20.4611) .. (15.3106, 20.4611).. controls (15.3106, 20.4611) and (16.3689, 20.4611) .. (16.3689, 20.4611).. controls (16.5806, 20.4611) and (16.7922, 20.6728) .. (16.7922, 20.8844).. controls (16.7922, 20.8844) and (16.7922, 21.3783) .. (16.7922, 21.3783).. controls (16.7922, 21.59) and (16.5806, 21.8017) .. (16.3689, 21.8017);
-
-
-
-    \node[anchor=south west] (text9503) at (15.6281, 20.9663){+};
-
-
-
-    \path[draw=black,fill=white] (14.3228, 21.8017).. controls (14.3228, 21.8017) and (13.2644, 21.8017) .. (13.2644, 21.8017).. controls (13.0528, 21.8017) and (12.8411, 21.59) .. (12.8411, 21.3783).. controls (12.8411, 21.3783) and (12.8411, 20.8844) .. (12.8411, 20.8844).. controls (12.8411, 20.6728) and (13.0528, 20.4611) .. (13.2644, 20.4611).. controls (13.2644, 20.4611) and (14.3228, 20.4611) .. (14.3228, 20.4611).. controls (14.5344, 20.4611) and (14.7461, 20.6728) .. (14.7461, 20.8844).. controls (14.7461, 20.8844) and (14.7461, 21.3783) .. (14.7461, 21.3783).. controls (14.7461, 21.59) and (14.5344, 21.8017) .. (14.3228, 21.8017);
-
-
-
-    \node[anchor=south west] (text831) at (13.5819, 20.9663){+};
-
-
-
-    \path[draw=black,fill=white] (12.2767, 21.8017).. controls (12.2767, 21.8017) and (11.2183, 21.8017) .. (11.2183, 21.8017).. controls (11.0067, 21.8017) and (10.795, 21.59) .. (10.795, 21.3783).. controls (10.795, 21.3783) and (10.795, 20.8844) .. (10.795, 20.8844).. controls (10.795, 20.6728) and (11.0067, 20.4611) .. (11.2183, 20.4611).. controls (11.2183, 20.4611) and (12.2767, 20.4611) .. (12.2767, 20.4611).. controls (12.4883, 20.4611) and (12.7, 20.6728) .. (12.7, 20.8844).. controls (12.7, 20.8844) and (12.7, 21.3783) .. (12.7, 21.3783).. controls (12.7, 21.59) and (12.4883, 21.8017) .. (12.2767, 21.8017);
-
-
-
-    \node[anchor=south west] (text9618) at (11.5358, 20.9663){+};
-
-
-
-  \end{scope}
-
-\end{tikzpicture}
+	\begin{adjustwidth}{-40pt}{-40pt}
+		\includegraphics[scale=0.23]{figures/blowup4.png}
+	\end{adjustwidth}
 	\label{blowup4}
 \end{center}
 
 \begin{center}
-\begin{adjustwidth}{-60pt}{-60pt}
-	\includegraphics[scale=0.25]{blowup5.png}
-\end{adjustwidth}
+	\begin{adjustwidth}{-50pt}{-50pt}
+		\includegraphics[scale=0.08]{figures/blowup5.png}
+	\end{adjustwidth}
 	\label{blowup5}
 \end{center}
 
-\fxerror{Wrong aympt. The below is wrong! actually it is only singly-exponential, but I need to double-check the calculations}
-It's relatively easy to see why: the top E-class has $2^n-1$ E-nodes, one for each way to partition the set of atoms into 2 nonempty parts, so the E-nodes in the top class already have $2^n-1$ E-classes as children. And then each child E-class representing the sum of $k$ atoms has its own $2^k$ enodes, etc. So, there are $O(2^n)$ E-nodes for each of $O(2^n)$ E-classes, giving a doubly-exponentially $O(2^{2^n})$ sized E-graph.
+\begin{theorem}
+Saturating the term $a_1 \ldots a_n$ under AC yields an E-graph with $2^n - 1$ E-classes and $ 3^n - 2^{n+1} + n + 1$ E-nodes \cite{rosin_associativity_2026}.
+\end{theorem}
+
+\begin{proof}
+Repeated applications of the AC-identities will create one E-class representing the sum of every non-empty subset of the set $\{a_1, \ldots, a_n\}$.
+
+Each such class representing the sum of a subset $A_i$ of $\{a_1, \ldots, a_n\}$ will have one E-node $+(e_j, e_k)$ for every pair of E-classes $e_j$ and $e_k$ such that the E-classes $e_i$ and $e_j$ represent a partition of the terms in the sum: $A_i = A_j \cup A_k$.
+
+So, for an E-class where $|A_i| = m$, we have $2^m - 2$ E-nodes: $2^m$ subsets of $A_i$ for the left partition $A_j$, minus the total and empty partitions, since there is no E-class for the empty sum. For the special case $|A_i| = 1$, we have 1 E-node to represent the single constant in $A_i$.
+
+The total amount of E-nodes is therefore 
+\begin{align*}
+	&\mathrel{\hphantom{=}} \sum_{m=2}^n \binom{n}{m}(2^m - 2) + n \\
+	&= (\sum_{m=0}^n \binom{n}{m}(2^m - 2) - \binom{n}{1}(2^1 - 2)) - \binom{n}{0}(2^0 - 2) + n \\
+	&= \sum_{m=0}^n \binom{n}{m} 2^m - 2 \sum_{m=1}^n \binom{n}{m} + 1 + n \\
+	&= \sum_{m=0}^n \binom{n}{m} 2^m 1^{n-m} - 2 \sum_{m=0}^n \binom{n}{m} 1^m 1^{n-m} + 1 + n \\
+	&= (2 + 1)^n - 2(1 + 1)^n + 1 + n \\
+	&= 3^n - 2^{n+1} + n + 1
+\end{align*}
+\end{proof}
+We can summarize these combinatorial results as there being $O(2^n)$ E-nodes and $O(3^n)$ E-classes at saturation.
 
 \section{Handling AC with EMTs: a first example}
-The poor handling of AC by plain E-graphs with equality saturation motivates developing a notion of \emph{E-graphs modulo theories}. In this case, we want to work `modulo AC' in some way. Developing a method for working modulo AC is the central goal of this thesis.
+The poor handling of AC by plain E-graphs with equality saturation motivates developing a notion of \emph{E-graphs modulo theories}. In this case, we want to work `modulo AC' in some way.
 
-We will use an example problem: besides the AC operator $+$, we introduce a function symbol $f$ and the identity $\forall xy.\; f(x + y) + 1 = f(x) + f(y)$. We also allow integer constants $k_i$, and treat integer arithmetic as an identity: $\forall xy.\; k_i + k_j = k_{i+j}$. Indeed, we will write integer constants directly.
+We will use an example problem: besides the AC operator $+$, we introduce a function symbol $f$ and the identity $\forall xy.\; f(x + y) + 1 = f(x) + f(y)$. We have integer constants satisfying the identities of arithmetic, in particular the equation $1 + 1 = 2$.
 
 We begin with the term $f(a) + (f(b) + f(c))$. We would like to discover that this input term is equal to $2 + f(a + (b + c))$, using the reasoning
-
 \begin{align*}
-	&f(a) + (f(b) + f(c)) = \\
-	&f(a) + (f(b + c) + 1) = \\
-	&(f(a) + f(b + c)) + 1 = \\
-	&(f(a + (b + c)) + 1) + 1 = \\
-	&f(a + (b + c)) + (1 + 1) = \\
-	&f(a + (b + c)) + 2 = \\
-	&2 + f(a + (b + c))
+	&\mathrel{\hphantom{=}} f(a) + (f(b) + f(c)) \\
+	&= f(a) + (f(b + c) + 1) \\
+	&= (f(a) + f(b + c)) + 1 \\
+	&= (f(a + (b + c)) + 1) + 1 \\
+	&= f(a + (b + c)) + (1 + 1) \\
+	&= f(a + (b + c)) + 2 \\
+	&= 2 + f(a + (b + c))
 \end{align*}
 
 We will present a pictorial overview of how we might solve the above problem using equality saturation on EMTs rather than E-graphs.
 
-The natural first step is to simply not add any different representations of terms that are equal up to AC; thus, nodes in the E-graph for AC operators will be variadic and we will consider their children unordered. This is the key idea from prior work (\citep{zucker_omelets_2025}, \citep{panchekha_lin-graphs_2025}, \citep{shanabrook_custom_2026}).
+The natural first step is to simply not add any different representations of terms that are equal up to AC; thus, nodes in the E-graph for AC operators will be variadic and we will consider their children unordered. This is the key idea from prior work \citep{zucker_omelets_2025, panchekha_lin-graphs_2025, shanabrook_custom_2026}, and is one attempt to define what `working up to AC' means. 
 
 Figure \ref{emte1} begins with the variadic AC-term $f(a) + f(b) + f(c)$.
 We omit the labels of equivalence classes.
 
-\begin{figure}[ht!]
-	\centering
-	\caption{EMT of the term $f(a) + f(b) + f(c)$.}
-  \label{emte1}
+\begin{center}
 	\begin{tikzpicture}[
 			scale=2,
 			transform shape,
@@ -2573,14 +1858,15 @@ We omit the labels of equivalence classes.
 		\draw[->, >=stealth, thick] (bf1.north) to[out=90, in=270, looseness=1] (s.south);
 		\draw[->, >=stealth, thick] (bf2.north) to[out=90, in=270, looseness=1] (s.south);	
 	\end{tikzpicture}
-\end{figure}
+	\captionof{figure}{EMT of the term $f(a) + f(b) + f(c)$.}
+  \label{emte1}
+\end{center}
+
+Working up to AC in this way, we don't need to pick an association $f(a) + (f(b) + f(c))$ or $(f(a) + f(b)) + f(c)$ for the input, and all associations and all reorderings are considered to be represented by the top node in figure \ref{emte1}.
 
 Now, in order to \emph{match} the left-hand side of $f(x) + f(y) = f(x + y) + 1$, we need to do \emph{matching modulo theories}, which will tell us of six matches: $(x, y) \in \{(a, b), (a, c), (b, c), (b, a), (c, a), (c, b)\}$. Then we will add the six substituted forms of $f(x + y) = 1$. Here, we will want to \emph{insert modulo theories}, in a way that keeps the E-graph from representing multiple AC-equivalent terms. The arrows in Figure \ref{emte2} have become crowded, but top E-class now represents the original term, and $f(a + b) + f(c) + 1$ and its variants with $a,b,c$ permuted.
 
-\begin{figure}[ht!]
-	\centering
-	\caption{EMT of the term $f(a) + f(b) + f(c)$ after some steps.}
-  \label{emte2}
+\begin{center}
 	\begin{tikzpicture}[
 			scale=2,
 			transform shape,
@@ -2592,22 +1878,22 @@ Now, in order to \emph{match} the left-hand side of $f(x) + f(y) = f(x + y) + 1$
 					rounded corners
 				}
 		]
-		\node (s) at (0, 4.5) {$+$};
+		\node[fill=blue!30, ultra thick] (s) at (0, 4.5) {$+$};
 		\node (r0) at (2, 4.5) {$+$};
 		\node (r1) at (3, 4.5) {$+$};
 		\node (r2) at (4, 4.5) {$+$};
-		\node (f0) at (0, 3) {$f$};
-		\node (f1) at (1, 3) {$f$};
-		\node (f2) at (2, 3) {$f$};
+		\node[fill=blue!30, ultra thick] (f0) at (0, 3) {$f$};
+		\node[fill=blue!30, ultra thick] (f1) at (1, 3) {$f$};
+		\node[fill=blue!30, ultra thick] (f2) at (2, 3) {$f$};
 		\node (f01) at (3, 3) {$f$};
 		\node (f02) at (4, 3) {$f$};
 		\node (f12) at (5, 3) {$f$};
 		\node (n01) at (3, 1.5) {$+$};
 		\node (n02) at (4, 1.5) {$+$};
 		\node (n12) at (5, 1.5) {$+$};
-		\node (n0) at (0, 0) {$a$};
-		\node (n1) at (1, 0) {$b$};
-		\node (n2) at (2, 0) {$c$};
+		\node[fill=blue!30, ultra thick] (n0) at (0, 0) {$a$};
+		\node[fill=blue!30, ultra thick] (n1) at (1, 0) {$b$};
+		\node[fill=blue!30, ultra thick] (n2) at (2, 0) {$c$};
 		\node (c1) at (3, 0) {$1$};
 
 		\begin{pgfonlayer}{background}
@@ -2742,18 +2028,17 @@ Now, in order to \emph{match} the left-hand side of $f(x) + f(y) = f(x + y) + 1$
 			([xshift=0.75ex]bf12.east) to[out=90, in=270, looseness=1]
 			(r2.south);
 	\end{tikzpicture}
-\end{figure}
+	\captionof{figure}{EMT of the term $f(a) + f(b) + f(c)$ after some steps. The initial term is highlighted.}
+  \label{emte2}
+\end{center}
 
 Now, we once again try to match $f(x) + f(y)$. The only new matches will be $(x, y) = (a + b, c)$ and its permutations, and, modulo AC, the substituted-for term $f(x + y) + 1$ will be the same for all of these. So, we just need to add a single node.
 
 Our last step is to notice that the term $f(a + b + c) + 1 + 1$ has, up to AC, the implicit subterm $1 + 1$, which we can reduce to $2$. Having reduced the implicit subterm, we no longer need the 3-part term $f(a + b + c) + 1 + 1$, and can entirely replace it with $f(a + b + c) + 2$.
 
-The final EMT (Figure \ref{emte3}) is saturated, and has `discovered' our desired equality.
+The final EMT (Figure \ref{emte3}) is saturated, and has `discovered' our desired equality, while remaining relatively compact.
 
-\begin{figure}[ht!]
-	\centering
-	\caption{EMT of the term $f(a) + f(b) + f(c)$ once saturated, highlighting the desired term.}
-  \label{emte3}
+\begin{center}
 	\begin{tikzpicture}[
 			scale=2,
 			transform shape,
@@ -2765,14 +2050,14 @@ The final EMT (Figure \ref{emte3}) is saturated, and has `discovered' our desire
 					rounded corners
 				}
 		]
-		\node (s) at (0, 4.5) {$+$};
+		\node[fill=blue!30, ultra thick] (s) at (0, 4.5) {$+$};
 		\node[fill=green!30, ultra thick] (t) at (1, 4.5) {$+$};
 		\node (r0) at (2, 4.5) {$+$};
 		\node (r1) at (3, 4.5) {$+$};
 		\node (r2) at (4, 4.5) {$+$};
-		\node (f0) at (0, 3) {$f$};
-		\node (f1) at (1, 3) {$f$};
-		\node (f2) at (2, 3) {$f$};
+		\node[fill=blue!30, ultra thick] (f0) at (0, 3) {$f$};
+		\node[fill=blue!30, ultra thick] (f1) at (1, 3) {$f$};
+		\node[fill=blue!30, ultra thick] (f2) at (2, 3) {$f$};
 		\node[fill=green!30, ultra thick] (f012) at (3, 3) {$f$};
 		\node (f01) at (4, 3) {$f$};
 		\node (f02) at (5, 3) {$f$};
@@ -2781,9 +2066,9 @@ The final EMT (Figure \ref{emte3}) is saturated, and has `discovered' our desire
 		\node (n01) at (1, 1.5) {$+$};
 		\node (n02) at (2, 1.5) {$+$};
 		\node (n12) at (3, 1.5) {$+$};
-		\node (n0) at (1, 0) {$a$};
-		\node (n1) at (2, 0) {$b$};
-		\node (n2) at (3, 0) {$c$};
+		\node[fill=blue!30, ultra thick] (n0) at (1, 0) {$a$};
+		\node[fill=blue!30, ultra thick] (n1) at (2, 0) {$b$};
+		\node[fill=blue!30, ultra thick] (n2) at (3, 0) {$c$};
 		\node[fill=green!30, ultra thick] (c2) at (4, 1.5) {$2$};
 		\node (c1p1) at (5, 1.5) {$+$};
 		\node (c1) at (4, 0) {$1$};
@@ -2948,13 +2233,12 @@ The final EMT (Figure \ref{emte3}) is saturated, and has `discovered' our desire
 		\draw[->, >=stealth, thick] (bf012.north) to[out=90, in=270, looseness=1] (t.south);
 		\draw[->, >=stealth, thick] (bc2.north) to[out=90, in=270, looseness=1] (t.south);
 	\end{tikzpicture}
-\end{figure}
-
-\fxerror{Review which diagrams are floated/not floated}
+	\captionof{figure}{EMT of the term $f(a) + f(b) + f(c)$ once saturated, highlighting the initial term and the desired final term.}
+  \label{emte3}
+\end{center}
 
 \section{Challenges for EMT(AC)}
 We have seen the promising aspects of EMTs for AC, but there is a significant gap in the description given so far, and we need something extra. Consider the equations
-
 \begin{align}
 	a + b &= b \\
 	a + a &= c \\
@@ -3040,7 +2324,6 @@ Consider the equation $b = d$, which follows from the simple deduction
 \begin{align*}
 	b = a + b = a + (a + b) = (a + a) + b = c + b = d
 \end{align*}
-
 However, $e_b$ and $e_d$ are two distinct E-classes in the E-graph! Why?
 
 The central step in the deduction relies on two different associations of the term $a + a + b$. The association $(a + a) + b$ is correctly assigned to class $e_d$, while the association $a + (a + b)$ is correctly assigned to the class $e_b$. However, given that we want to work modulo theories, we need to discover the fact that $e_b = e_d$, or we are throwing out some of the consequences derivable from the theory.
@@ -3048,28 +2331,132 @@ The central step in the deduction relies on two different associations of the te
 \section{Filling the gap}
 To fill the gap, we need to reason about when such an `overlapping' term could occur, while not generating all AC-subterms like equality saturation would.
 
-Our criteria is this: if the EMT contains two terms $t_1 = r + s$ and $t_2 = u + s$ then we need to insert the equation $t_1 + u = t_2 + r$.
+Our criteria is this: if the EMT contains two terms $t_1 = r + s$ and $t_2 = u + s$, with a non-trivial \emph{overlap} $s$, then we need to insert the equation $t_1 + u = t_2 + r$.
 
-This equation is a consequence, since $t_1 + u = (r + s) + u = (u + s) + r = t_2 + r$.
-
-\fxerror{Actually put a picture here of EMTs solving the above}
+This new equation is a consequence of the AC identities, since $t_1 + u = (r + s) + u = (u + s) + r = t_2 + r$.
 
 With our above example, we see that $e_b$ contains the E-node $+(a, e_b)$ and $e_c$ contains the E-node $+(a, a)$. Consequently, we insert the equation $e_b + a = e_c + e_b$. Since the right-hand-side is already assigned to $e_d$ and the left-hand-side to $e_b$, this equation simply asks us to equate $e_b$ and $e_d$, exactly as desired.
 
-Let's refine the idea into something more workable. Suppose we have the variadic +-term $+(e_1, \ldots, e_k)$ in some E-class $e$, and the variadic +-term $+(d_1, \ldots, d_i)$ in some E-class $d$. Think of the arguments as multisets, so that $\{e_1, \ldots, e_k\} = E$ and similarly for $D$. Then let the multiset $O$ contain each element with the minimum multiplicity it occurs in either $E$ or $D$. So if $E = \{e_1, e_1, e_2, e_3\}$ and $D = \{e_1, e_3, e_4\}$, then $O = \{e_1, e_3\}$. If the overlap is empty, we can ignore it. Otherwise, construct the terms $E - O + D$ and $D - O + E$, in the obvious way, and then insert the equation $E - O + D = D - O + E$.
+\begin{center}
+	\begin{tikzpicture}[
+			scale=2,
+			transform shape,
+			every node/.style={
+					draw,
+					fill=white,
+					text height=1.5ex, % Height above the baseline
+					text depth=0.25ex, % Depth below the baseline
+					rounded corners
+				}
+		]
+		\node (na) at (0, 0) {$a$};
+		\node (nb) at (1, 0) {$b$};
+		\node (nc) at (3, 0) {$c$};
+		\node (nd) at (2, 0) {$d$};
+		\node (nab) at (1, 1) {$+$};
+		\node (naa) at (3, 1) {$+$};
+		\node (nbc) at (2, 1) {$+$};
 
-\fxerror{Put some words into explaining the non-trivial critical pairs that AC-closure creates compared to just AC-saturation}
+		\node[
+			draw=none,
+			fill=none,
+			inner sep=12pt,         % Space between nodes and the box border
+			fit=(nb) (nab) (nd) (nbc),     % Tells TikZ which nodes to enclose
+		] (box1) {};
 
-\fxerror{Actually, I should use AC-saturation and AC-closure throughout as better terminology}
+		\node[
+			draw=none,
+			fill=none,
+			inner sep=12pt,         % Space between nodes and the box border
+			fit=(nc) (naa),     % Tells TikZ which nodes to enclose
+		] (box2) {};
 
-Is this enough? Suppose we imagine a chain of reasoning involving ground equations, the A identity, and the C identity. We can group the reasoning into `ground' sections and the `AC' sections. An AC section, in total, involves reassociating and commuting some term involving $+$s. So, \fxerror{Write this when I'm less impatient. Proof of completeness+termination}
+		\begin{pgfonlayer}{background}
+		\draw[dashed, fill=black!15, rounded corners=3pt]
+		(box1.north east) --
+		(box1.north west) node[midway, draw=none, fill=green!10, inner sep=1pt] {\small $e_b$} --
+		(box1.south west) --
+		(box1.south east) -- cycle;
+		
+		\draw[dashed, fill=black!15, rounded corners=3pt]
+		(box2.north east) --
+		(box2.north west) node[midway, draw=none, fill=green!10, inner sep=1pt] {\small $e_c$} --
+		(box2.south west) --
+		(box2.south east) -- cycle;
+		
+		\end{pgfonlayer}
+		
+		\draw[->, >=stealth, thick] (na.north) to[out=90, in=270, looseness=1] ([xshift=-0.5em]nab.south);
+		\draw[->, >=stealth, thick] (na.north) to[out=90, in=270, looseness=1] ([xshift=-0.5em]naa.south);
+		\draw[->, >=stealth, thick] (na.north) to[out=90, in=270, looseness=1.2] ([xshift=0.5em]naa.south);
+		\draw[->, >=stealth, thick] (box1.north) to[out=270, in=270, looseness=1] ([xshift=0.5em]nab.south);
+		\draw[->, >=stealth, thick] (box1.north) to[out=90, in=270, looseness=1] ([xshift=-0.5em]nbc.south);
+		\draw[->, >=stealth, thick] (box2.north) to[out=90, in=270, looseness=1] ([xshift=0.5em]nbc.south);
+		
+	\end{tikzpicture}
+\end{center}
 
-\fxerror{Put attempted visual proof of Dickson's lemma here?}
+We refer to the procedure of adding these new equations as \emph{AC-closure}. We can think of it as fitting into the standard parts of E-graphs like this:
+
+\begin{center}
+	\begin{tikzpicture}[
+			scale=1.0,
+			transform shape,
+			every node/.style={
+					draw,
+					text height=1.5ex, % Height above the baseline
+					text depth=0.25ex,  % Depth below the baseline
+					align=center,
+					minimum height=3.5\baselineskip
+				}
+		]
+		\node (n0) at (0, 9) {\makecell[c]{\textbf{Equality saturation} \\		
+		Handles identities:\\
+		$\forall x. f(x) = g(x, x)$}};
+		
+		\node (n1) at (0, 6) {\makecell[c]{\textbf{AC-closure} \\		
+		Handles the AC identities applied to AC-nodes: \\ $e_1 + e_2$ }};
+		
+		\node (n2) at (0, 3) {\makecell[c]{\textbf{Congruence closure} \\		
+		Handles (ground) non-atomic equations:\\
+		$f(e_1, e_2) = e_3$}};
+		
+		\node (n3) at (0, 0) {\makecell[c]{\textbf{Union-find} \\
+		Handles ground atomic equations:\\
+		$e_1 = e_2$}};
+		
+		\draw[->, >=stealth, thick] (n1.north) to[out=270, in=270] (n0.south);
+		
+		\draw[->, >=stealth, thick] (n2.north) to[out=270, in=270] (n1.south);
+		
+		\draw[->, >=stealth, thick] (n3.north) to[out=270, in=270] (n2.south);
+		
+	\end{tikzpicture}
+\end{center}
+
+AC-closure occupies a middle ground between congruence closure and equality saturation: it is more general than congruence closure and less general than equality saturation, as it handles the AC identities but no others, and it has an intermediate time complexity between polynomial-time congruence closure and equality saturation, which is generally not even guaranteed to terminate.
+
+\section{Cycles and AC-saturation}
+AC-saturation will in general not terminate on terms with certain kinds of cycles while AC-closure will. Consider the equation
+\begin{equation}
+	a = a + b
+\end{equation}
+This is a generic example of a cycle through the operator $+$, in the sense that if there is some E-class $e_a$ that is equal to a sum that includes itself $e_a = \ldots + (\ldots + e_a + \ldots) + \ldots$, it can be put into this form by applications of AC.
+
+Since $a = a + b = (a + b) + b$, equality saturation will generate the equation $(a + b) + b = a + (b + b)$ to be added to the E-graph. Then, $a + (b + b) = (a + b) + (b + b) = a + (b + (b + b))$, so the term $b + (b + b)$ will be added to the E-graph, etc. Therefore, AC-saturation will add an infinite number of terms.
+
+AC-closure does not have this problem: there is an overlap between $a$ and $a + b$ on $a$, which generates the new equation $a = a$, which is trivial.
+
+Of course, this example may be a little artificial as, in typical domains of interest, $a + b = a$ means that $b = 0$, so that $b + b = b$\footnote{Or, for the second-most famous AC operator $\times$, if $a \times b = a$, $b = 1$}. Once the E-graph has added the equation $b + b = b$, this will collapse any further term built only of $b$s down to just $b$. Or, in other words, any new equation $a + (b + \ldots (b + b))$ will already be implicitly represented in the E-graph.
+
+Still, this illustrates one more advantage of AC-closure over AC-saturation, and is an example that illustrates some of the subtlety of cycles in E-graphs.
+
+\fxerror{I cut the section `AC-closure in slightly more detail'. Rewrite this, maybe?}
 
 \section{Prospects for EMT(AC)}
-EMT(AC) avoids the need for equality saturation on the A and C identities by integrating these rules into the underlying E-graph. However, this has a cost: congruence closure normally is polynomial time \footnote{indeed, at best slightly superlinear} while the AC-closure step outlined above is at worst \textsc{ESpace} \footnote{space proportional to $2^{O(n)}$, where $n$ is the size of the E-graph} as will be discussed later. \fxerror{forward ref}
+EMT(AC) avoids the need for equality saturation on the A and C identities by integrating these rules into the underlying E-graph. However, this has a cost: congruence closure normally is polynomial time\footnote{indeed, at best slightly superlinear} while the AC-closure step outlined above is at worst \textsc{ESpace}\footnote{space proportional to $2^{O(n)}$, where $n$ is the size of the E-graph} as will be discussed in section \ref{hrmite}.
 
-Moreover, while congruence closure only shrinks the graph by potentially discovering E-classes that can be merged, AC-closure can grow it, so one might want to run AC-closure only intermittently while running congruence closure much more often. This is then not that different in spirit to existing approaches to handling AC blowup in equality saturation by `deprioritizing' the AC identities \fxerror{Maybe a source here, at least to the Egglog code that handles this}
+Moreover, while congruence closure only shrinks the graph by potentially discovering E-classes that can be merged, AC-closure can grow it, so one might want to run AC-closure only intermittently while running congruence closure much more often. This is then not that different in spirit to existing approaches to handling AC blowup in equality saturation by `deprioritizing' the AC identities\footnote{For example, see the code for \texttt{BackoffScheduler} in Egg \cite{willsey_egg_2026}}
 
 However, there are two key advantages:
 \begin{itemize}
@@ -3138,27 +2525,24 @@ Consider the E-graph
 	\end{tikzpicture}
 \end{figure}
 
-We can read off a set of equations from our final E-graph:
-
+We can read off a set of equations from it:
 \begin{align*}
 	a &= e_a \\
 	f(e_a) &= e_a \\
 	b &= e_b \\
 	g(e_a, e_b) &= e_b \\
 \end{align*}
-
-Given this resulting set of equations, we can determine if any two terms at all are equal under our initial set of equations: simply reduce the terms by treating these equations as a \emph{rewrite system}, read from left-to-right, and see if the normal forms are the same. This is the perspective of Abstract Congruence Closure (\citep{bachmair_abstract_2000}): E-graphs present a rewriting system for terms over an \emph{extended signature}. The signature is extended in the sense that we don't just have the symbols $f$, $a$, $g$, etc, but also $e_a, e_b, \ldots$. In general, we introduce a new E-class $e_i$ whenever we need to represent a subterm.
+Given this resulting set of equations, we can determine if any two terms at all are equal under our initial set of equations: simply reduce the terms by treating these equations as a \emph{rewrite system}, read from left-to-right, and see if the normal forms are the same. This is the perspective of Abstract Congruence Closure \citep{bachmair_abstract_2000}: E-graphs present a rewriting system for terms over an \emph{extended signature}. The signature is extended in the sense that we don't just have the symbols $f$, $a$, $g$, etc, but also $e_a, e_b, \ldots$. In general, we introduce a new E-class $e_i$ whenever we need to represent a subterm.
 
 Then the congruence closure algorithm, aka E-graph rebuilding, is a matter of restoring \emph{confluence} to this rewrite system. Confluence is the property that any maximal sequence of rewrites end up with the same result. For instance, consider
-
 \begin{align*}
 	f(e_1, e_2) &\rightarrow e_3 \\
 	f(e_1, e_2) &\rightarrow e_4
 \end{align*}
 
-$f(e_1, e_2)$ can rewrite to both $e_3$ and $e_4$. This would violate confluence, unless we have the rewrite $e_3 \rightarrow e_4$ or $e_3 \rightarrow e_4$. Let's say that $e_3 \rightarrow e_4$. Then $f(e_1, e_2) \rightarrow e_3 \rightarrow e_4$, so the divergence $e_3 \leftarrow f(e_1, e_2) \rightarrow e_4$ is only temporary: the left rewrite is not maximal and can be extended.
+$f(e_1, e_2)$ can rewrite to both $e_3$ and $e_4$. This would violate confluence, unless we have the rewrite $e_3 \rightarrow e_4$ or $e_4 \rightarrow e_3$. Let's say that $e_3 \rightarrow e_4$. Then $e_4 \leftarrow e_3 \leftarrow f(e_1, e_2)$, so the divergence $e_3 \leftarrow f(e_1, e_2) \rightarrow e_4$ is only temporary: the left rewrite is not maximal and can be extended.
 
-Of course, confluence applied in this case is simply an instance of the congruence rule: $f(e_1, e_2)$ is in two E-classes that need to be merged by taking the union of $e_3$ and $e_4$, which introduces the rule $e_3 \rightarrow e_4$ or its converse.
+Of course, confluence applied in this case is simply an instance of the congruence rule: $f(e_1, e_2)$ is in two E-classes that need to be merged by taking the union of $e_3$ and $e_4$, which introduces the rewrite rule $e_3 \rightarrow e_4$ or its converse.
 
 \section{E-graphs simplify confluence}
 E-graphs in the rewriting perspective consist of two kinds of rules: union-find rules $e_i \rightarrow e_j$ and E-node rules $f(\ldots) \rightarrow e_k$. To turn an equation $s = t$ into rules, we flatten it completely into E-node rules, and add a union-find rule when the resulting top E-nodes would be in different classes.
@@ -3169,81 +2553,424 @@ Termination and confluence together give convergence, which means that we can ap
 
 We will use $\rightarrow^*$ for the reflexive transitive closure of the rewriting relation.
 
-Here are all the ways in which an E-graph-like rewriting system could fail to be confluent:
+Here are the two ways in which an E-graph-like rewriting system could fail to be confluent:
 
 \begin{enumerate}
 	\item $e_1 \rightarrow^* e_2$ and $e_1 \rightarrow^* e_3$
 	\item $f(e_1, e_2, \ldots) \rightarrow^* e$ and $f(d_1, d_2, \ldots) \rightarrow^* d$, where for each $i$, $e_i \rightarrow^* d_i$
 \end{enumerate}
 
-That's it! The first kind of case is resolved by the union-find. The second case is precisely congruence.
+The first case is resolved by the union-find. The second case is resolved by congruence-closure.
 
 If, whenever we have the rule $e_i \rightarrow e_j$, we replace $e_i$ everywhere in our rewriting system by $e_j$, then the confluence rule is even simpler, as we only need to check for $f(e_1, \ldots) \rightarrow e, f(d_1, \ldots) \rightarrow d$, and $e_i = d_i$ or $e_i \rightarrow d_i$. Now we don't even have to think about $\rightarrow^*$.
 
-So, E-graphs simplify the problem of congruence closure by reducing the problem to checking for certain kinds of non-closure (local failures of confluence), resolving them, and repeating until fixpoint. In this way there is no complexity to handling deeply-nested subterms.
+So, E-graphs simplify the problem of congruence closure by reducing the problem to checking for certain kinds of \emph{local} non-closure (local failures of confluence), resolving them, and repeating until fixpoint. With this method, there is no added complexity to handling deeply-nested subterms.
 
-Such local failures of confluence are known as critical pairs\footnote{They are also required to be minimal, but we gloss over this here}.
+Such local failures of confluence are known as critical pairs\footnote{They are also required to be minimal, but we gloss over this here} (see section \ref{critpairs}).
 
-\section{Equality satuation: \\ handling AC-critical pairs by brute force}
-When we want to reason about AC, we need the notion of AC-critical pair. If $e_1 + e_2 \rightarrow e_3$ and $e_4 + e_2 \rightarrow e_5$, then there is a critical term $e_1 + e_2 + e_4$, which is AC-equal to $(e_1 + e_2) + e_4$ which rewrites to $e_3 + e_4$, and also to $e_1 + (e_2 + e_4)$ which rewrites to $e_1 + e_5$. So, our critical pair is $e_3 + e_4$ and $e_1 + e_5$.
+\section{Formalizing congruence closure}
+To provide a formal definition of various aspects of E-graphs and EMTs, we will need some basic notions of signatures, terms, and flat terms.
 
+\subsection{Terms and signatures}
+\begin{definition}
+A \textbf{signature} is a set $\Sigma$ of function symbols with an arity given by a function $\alpha : \Sigma \rightarrow \mathbb{N}$. Given a set of constants $A$, a \textbf{flat term} $\Sigma(A)$ is a pair of an element of $f \in \Sigma$ together with a list of elements of $A$ of length $\alpha(f)$. A \textbf{term} over $A$, denoted by $\Sigma^*(A)$, is defined inductively as either a constant $a \in A$ or a flat term over $\Sigma^*(A)$.
+\end{definition}
+
+This definition builds the notion of term inductively from flat (1-layer) terms, which are useful in their own right.
+
+% Given a term in $\Sigma^*(A)$, we can extend it to be over more constants $\Sigma^*(A + B)$ in the obvious way, denoting by $+$ the disjoint union of sets. We will often use auxiliary constants written as $a, b, c$ etc., but these should be distinguished from the notion of a variable in an identity defined below.
+
+\subsection{Relations}
+A binary relation is some subset of the Cartesian product of two sets, which we will write $\rightarrow\; \subseteq S \times T$. We can write elements of the relation either as $(s, t) \in \rightarrow$ or $s \rightarrow t$.
+
+If $\rightarrow$ is a relation, we will (naturally) write its transpose as $\leftarrow$: $a \rightarrow b$ iff $b \leftarrow a$.
+
+There are some natural forms of closure we can apply to relations:
+\begin{itemize}
+	\item Given a relation $\rightarrow\; \subseteq S \times S$, its reflexive transitive closure $\rightarrow^*\; \subseteq S \times S$ is the smallest relation containing $\rightarrow$ such that $s \rightarrow^* s$ for each $s \in S$ and $s \rightarrow^* u$ if $s \rightarrow^* t$ and $t \rightarrow^* u$ for each $s, t, u \in S$.
+	\item Given a relation $\rightarrow\; \subseteq \Sigma(A) \times A$, we can define a generalized notion of reflexive transitive closure as the smallest relation $\rightarrow^*\; \subseteq \Sigma^*(A) \times A$ such that
+	\begin{enumerate}
+		\item $a \rightarrow^* a$ for each $a \in A$
+		\item $f(t_1, \ldots, t_n) \rightarrow^* a$ if $t_i \rightarrow^* a_i$ and $f(a_1, \ldots, a_n) \rightarrow a$ for each $f, a, t_i$, and $a_i$
+	\end{enumerate}
+	
+	Informally, $t \rightarrow^* a$ if we can reduce the term $t$ to $a$ by reducing from the leaves and repeatedly reducing until it is a single element of $A$.
+	
+	An example of this notion that we have already seen is that if an E-graph with E-node rules $\rightarrow_F$ rewrites the term $t$ to $e_i$, then it assigns the term $t$ to the E-class $e_i$.
+	\item Given a relation $\rightarrow\; \subseteq \Sigma^*(A) \times \Sigma^*(A)$, its reflexive transitive congruence closure $\rightarrow^{*\mathcal{C}}\; \subseteq \Sigma^*(A) \times \Sigma^*(A)$ is the smallest relation containing $\rightarrow$ such that 
+	\begin{enumerate}
+		\item $a \rightarrow^* a$ for each $a \in A$
+		\item $f(t_1, \ldots, t_n) \rightarrow^{*\mathcal{C}} a$ if $t_i \rightarrow^{*\mathcal{C}} a_i$ for each $f, a, t_i$, and $a_i$
+	\end{enumerate}
+	
+	This captures the natural notion of applying arbitrarily many rewrites from $\rightarrow$ to a term, and allowing the possibility of applying them at any subterm.
+	
+We define some basic properties and terminology for binary relations:
+\begin{itemize}
+\item A relation $\rightarrow \subseteq A \times B$ is \emph{functional} if, for every $a \in A$, there is at most one $b \in B$ such that $a \rightarrow b$.
+\item If $a \rightarrow b$, then we call $b$ a \emph{direct successor} of $a$.
+\item If there is no $b$ that is a direct successor of $a$ under $\rightarrow$, we say that $a$ is a normal form.
+\item A relation $\rightarrow$ is \emph{terminating} if there is no infinite chain $x \rightarrow y \rightarrow \ldots$.
+%\item A relation $\rightarrow$ is \emph{confluent} if every sequence 
+\end{itemize}
+	%\item Given a relation $\rightarrow\; \subseteq A \times A$, its congruence closure $\rightarrow_\mathcal{C}\; \subseteq \Sigma^*(A) \times \Sigma^*(A)$ is the smallest relation such that $f(s_1, \ldots, s_n) \rightarrow_\mathcal{C} f(t_1, \ldots, t_n)$ if $s_1 \rightarrow_C t_1$ or $s_1 = t_1$ for each $f, s_i$ and $t_i$.
+\end{itemize}
+
+\subsection{E-graph rewrite systems}
+\begin{definition}
+An \emph{E-graph rewrite system} over $\Sigma$ consists of a set $C$ of E-classes, a relation $\rightarrow_U \subseteq C \times C$ of union-find rules, and a relation $\rightarrow_F \subseteq \Sigma(C) \times C$ of E-node rules. 
+\end{definition}
+
+We can now define closure under the union-find's equivalence relation:
+
+\begin{definition}
+An E-graph rewrite system is equivalence-closed if the following hold:
+\begin{itemize}
+\item \label{uffunc} (Functionality) $\rightarrow_U$ is functional.
+\item (Acylicity) There are no cycles $e \rightarrow_U e' \rightarrow_U \ldots \rightarrow_U e$ in $\rightarrow_U$
+\item (E-canonization) If $f(e_1, \ldots, e_n) \rightarrow_F e$, then all of $e_1, \ldots, e_n$ and $e$ have no direct successors.
+\end{itemize}
+\end{definition}
+
+Finally, we can define congruence closure:
+
+\begin{definition}
+An E-graph rewrite system is congruence-closed if it is equivalence-closed and the relation $\rightarrow_F$ is functional. Explicitly: if $f(e_1, \ldots, e_n) \rightarrow_F e$ and $f(e_1, \ldots, e_n) \rightarrow_F f$, then $e = f$.
+\end{definition}
+
+\subsection{Critical pairs} \label{critpairs}
+Given two rewrite rules $s_1 \rightarrow t_1$ and $s_2 \rightarrow t_2$, we can ask if they form a critical pair. Formally, we think of each individual rewrite rule as just an ordered pair, but we keep the $\rightarrow$ between the sides as a reminder that each particular pair tends to come from a relation. However, note that it is often reasonable to consider critical pairs between rewrites from two different relations.
+
+\begin{definition} \label{peak}
+A \emph{peak} between $s_1 \rightarrow t_1$ and $s_2 \rightarrow t_2$ exists if there is a term $s$ such that both $s_1$ and $s_2$ are \emph{overlapping} subterms of $s$.
+
+The \emph{critical pair} for the peak is the pair of terms obtained by replacing $s_1$ with $t_1$ and $s_2$ with $t_2$ inside $s$.
+\end{definition}
+
+Note that for terms as we have defined them, subterms can only overlap if one is a subterm of the other. When we generalize to AC-critical pairs, we need to work with a more general kind of overlap.
+
+\begin{definition}
+A critical pair $t_1 \leftarrow_A s \rightarrow_B t_2$ is \emph{joinable} if there is a term $t$ such that $t_1 \rightarrow^*_B t \leftarrow^*_A t_2$. \fxerror{Rewiew defn}
+\end{definition}
+
+\subsection{Congruence closure is confluence}
+\begin{lemma}
+If an E-graph rewrite system is equivalence-closed, then every critical pair between $\rightarrow_U$ and $\rightarrow_U$ is joinable.
+\end{lemma}
+\begin{proof}
+Suppose we have $e_1 \leftarrow e \rightarrow e_2$. Then by the functionality requirement for equivalence-closure, $e_1 = e_2$ and so $e_1 \rightarrow^*_U e_1 \leftarrow^*_U e_2$ 
+\end{proof}
+
+\begin{lemma}
+If an E-graph rewrite system is equivalence-closed, then every critical pair between $\rightarrow^*_{U \mathcal{C}}$ and $\rightarrow_F$ is joinable.
+\end{lemma}
+\begin{proof}
+Suppose we have $f(d_1, \ldots, d_n) \leftarrow^{*\mathcal{C}}_U f(e_1, \ldots, e_n) \rightarrow e$. We must have, by the definition of $\rightarrow^{*\mathcal{C}}_U$, that $e_i \rightarrow^*_U d_i$. Then by E-canonization we must have that $d_i = e_i$. So $f(d_1, \ldots, d_n) \rightarrow^*_F e \leftarrow^{*\mathcal{C}}_U e$.
+\end{proof}
+
+\begin{lemma}
+If an E-graph rewrite system is congruence-closed, then every critical pair between $\rightarrow_F$ and $\rightarrow_F$ is joinable. Moreover, every critical pair between $\rightarrow_U \cup \rightarrow_F$ and $\rightarrow_U \cup \rightarrow_F$ is joinable.
+\end{lemma}
+\begin{proof}
+Every critical pair are already equal by the functionality of $\rightarrow_F$, so they are joinable.
+
+So $(F,F)$ critical pairs are joinable, and $(U,F)$, $(F, U)$, and $(U, U)$ critical pairs are joinable by the previous lemmas for equivalence-closure.
+\end{proof}
+
+\begin{theorem}
+If an E-graph rewrite system is congruence-closed, then the relation $(\rightarrow_U \cup \rightarrow_F)^{*\mathcal{C}}$ is confluent.
+\end{theorem}
+\begin{proof}
+$\rightarrow_U \cup \rightarrow_F$ is \emph{locally confluent} by the previous lemma. Local confluence is just the property of every critical pair being joinable. Further, $\rightarrow_U \cup \rightarrow_F$ is terminating by the acylicity of $\rightarrow_U$ and the fact that $\rightarrow_F$ maps terms to smaller terms. Therefore, we can apply Newman's lemma \cite[Section~2.7]{baader_term_1998}.
+\end{proof}
+
+This theorem is fairly intuitive and easy to verify without this level of formality, but these techniques will be helpful for the more involved proofs for EMTs.
+
+\section{The semantics of equality saturation}
+Given an identity $\forall x_1 \ldots x_n.\; t_1 = t_2$, we can think of it as two rewrite rules, $t_1 \rightarrow t_2$ and $t_2 \rightarrow t_1$.
+
+We can then extend our notion of critical pair to include substitution for variables. For instance, $x + y \rightarrow y + x$, one half of C, and $e_1 + e_2 \rightarrow e_3$ have the critical pair $e_2 + e_1 \leftarrow e_1 + e_2 \rightarrow e_3$, which uses the substitution instance $x := e_1, y := e_2$.
+
+\begin{definition}
+	A critical pair between the rewrite $s_1 \rightarrow t_1$ and the rewrite $s_2 \rightarrow t_2$ is a substitution $\sigma$ and a critical pair between $\sigma(s_1) \rightarrow \sigma(t_1)$ and $\sigma(s_2) \rightarrow \sigma(t_2)$.
+\end{definition}
+
+Using this insight, equality saturation can be also seen to proceed by joining critical pairs, although there is one key restriction: we only look for \emph{grounded} critical pairs: critical pairs where at least one of the rules involved is not an identity. For instance, given the identities $\forall x.\; f(a, x) = b$ and $\forall x.\; f(x, a) = c$, we would derive the two rewrite rules $f(a, x) \rightarrow b$ and $f(x, a) \rightarrow c$, which have a critical pair $b \leftarrow f(a, a) \rightarrow c$. However, this critical pair, even though it consists entirely of ground terms, is not \emph{grounded}, because it doesn't originate as the critical pair between an identity and a ground non-identity.\footnote{This, besides the use of an extended signature, is the key difference between equality saturation and Knuth-Bendix completion}.
+
+After having turned our identities into rewrite rules (containing variables), we can define when an E-graph rewrite system is \emph{saturated} under this set $\rightarrow_I$ of rewrite rules:
+
+\begin{definition}
+	An E-graph rewrite system is saturated under $R$ if, for every $t_1 \rightarrow_R t_2$, substitution $\sigma$, and E-class $e_1$, then $e_1 \leftarrow^*_F \sigma(t_1)$ implies $\sigma(t_2) \rightarrow^*_F e_1$.
+\end{definition}
+
+This amounts to saying that every critical pair $\sigma(t_2) \leftarrow_R \sigma(t_1) \rightarrow^* e_1$ is resolved by $\sigma(t_2) \rightarrow^* e_1$.
+
+\section{AC-critical pairs}
+When we want to reason about AC, we need the notion of AC-critical pair.
+
+\begin{ex}
+If $e_1 + e_2 \rightarrow e_3$ and $e_4 + e_2 \rightarrow e_5$, then there is a critical term $e_1 + e_2 + e_4$. This is AC-equal to $(e_1 + e_2) + e_4$, which rewrites to $e_3 + e_4$, and also to $e_1 + (e_2 + e_4)$, which rewrites to $e_1 + e_5$. So, our critical pair is $e_3 + e_4$ and $e_1 + e_5$.
+\end{ex}
+
+In general, we can consider two variadic $+$-terms, $+(e_1, \ldots, e_k)$ and $+(d_1, \ldots, d_i)$. We will think of the arguments as multisets, so that $\{e_1, \ldots, e_k\} = E$ and similarly for $D$. Then let the multiset $O$ contain each element with the minimum multiplicity it occurs in either $E$ or $D$. So if $E = \{e_1, e_1, e_2, e_3\}$ and $D = \{e_1, e_3, e_4\}$, then $O = \{e_1, e_3\}$. Construct the terms $E - O + D$ and $E + D - O$, where $+$ and $-$ are multiset addition and subtraction (that is, they act elementwise on the multiplicities of elements). It is easy to see that $E - O + D = E + D - O$ up to AC, so this will be our peak. $O$ is, by construction, contained in both $E$ and $D$, so the subtraction is always defined.
+
+\begin{definition}
+	Given two rewrites $+(E) \rightarrow t_1$ and $+(D) \rightarrow t_2$, their AC-critical pair is
+	$t_1 + D - \min(D, E) \leftarrow E + D - \min(D, E) \rightarrow E - \min(D, E) + t_2$, as long as $\min(D, E)$ is not the empty multiset.
+\end{definition}
+
+The non-emptiness condition on AC-critical pairs corresponds to the condition for ordinary critical pairs that the relevant subterms overlap in the peak term (section \ref{peak}).
+
+Note that $E + D - \min(D, E) = \max(D, E)$ by the integer identity $n + m = \max(n, m) + \min(n, m)$, but this form obscures somewhat the structure of the peak term and in particular the overlap term. $E + D - O$ can also be thought of as $(E - O) + (D - O) + O$: we add the non-overlapping parts and then add a single copy of the overlap.
+
+\subsection{AC-subterms}
+An AC-subterm $s$ of a term $t$ is one whose overlap with $t$ is $s$ itself. More concretely, this means that $s$ is a sub-multiset of $t$. This forms a natural generalization of the ordinary notion of subterm.
+
+\section{AC-critical pairs and equality saturation} \label{acsatbad}
 E-graphs handle AC-critical pairs the same way as critical pairs for any other theory, with equality saturation: we \emph{ground} the AC identities by matching either side with the E-graph, and adding the equivalent other side (if it is not present) and merging the equivalence classes corresponding to either side.
 
-Why do E-graphs fare poorly with AC? We have seen that equality saturation with AC will generate a \fxerror{wrong asympt} doubly-exponential number of E-nodes.
+\begin{ex}
+	Suppose we have the E-node rules $e_1 + e_2 \rightarrow e_3$ and $e_4 + e_2 \rightarrow e_5$.
+	Applying the C identity gives $e_2 + e_1 \rightarrow e_3$ and $e_2 + e_4 \rightarrow e_5$, but the A identity cannot be applied, since that would require either $e_3$ or $e_5$, which are on the right of a +-node rule, to also be on the left.
+	
+	Now suppose we add a +-node rule $e_3 + e_4 \rightarrow e_4$. Now the A-rule applies to the term $(e_1 + e_2) + e_4$, which rewrites to $e_4$, and we add the corresponding right-hand side $e_1 + (e_2 + e_4)$ to the E-graph. Since $e_2 + e_4$ is already present and rewrites to $e_5$, we add the new +-node rule $e_1 + e_5 \rightarrow e_4$.
+	
+	Given that both $e_3 + e_4$ and $e_1 + e_5$ now rewrite to $e_4$, the critical pair $e_3 + e_4$ and $e_1 + e_5$ is resolved.
+\end{ex}
 
-These `redundant' E-nodes and E-classes play a role: any of the $O(2^{2^n})$ AC-subterms of the input could be part of an AC-critical pair, and so equality saturation eagerly assigns new E-classes to them, just in case. Introducing these extra E-classes and E-nodes is seemingly the best we can do in general unless we have a clever way to detect which ground instances of the 
+Why do E-graphs fare poorly with AC? We have seen that equality saturation with AC will typically generate an exponential number of E-nodes. It seems the `redundant' E-nodes and E-classes play a role in AC-saturation, or at least \emph{could} play a role when viewed through the lens of the general machinery of equality saturation.
 
-It should be noted that equality saturation does not directly add the critical pairs of terms; rather, it adds every potential overlap, and if that overlap is then part of two terms that form a critical pair, the critical pair will be resolved by applying AC-rules and unioning the relevant nodes.identities are needed in order to ensure confluence modulo those identities.
+Using the terminology of peaks, critical pairs, and overlaps, we can give a succinct description of how AC-saturation behaves and how it differs from AC-closure:
+\begin{itemize}
+	\item In AC-saturation, we eagerly create AC-subterms of every AC-term in the E-graph. Let $\Sigma(M)$ denote any term or E-class representing the sum of the terms in the multiset $M$. If we represent the terms $\Sigma(E)$ and $\Sigma(D)$ with overlap $\Sigma(O)$, $\Sigma(O)$ will be assigned its own subterm with an E-class $\Sigma(O) \rightarrow^*_F o$, and there will be rewrites such that $\Sigma(O) + \Sigma(E - O) \rightarrow^*_F e$ and $\Sigma(O) + \Sigma(D - O) \rightarrow^*_F d$.
+	
+	If there were any E-class representing the peak $\Sigma(E + D - O)$, AC-saturation would eventually add a rule $e + \Sigma(D - O) \rightarrow_F p$, and by associativity the rule $d + \Sigma(D - O)$ will then be added. Thus, if this critical pair would appear as a (sub)term anywhere, AC-saturation will (eventually) resolve it.
+	\item In AC-closure, we don't represent the large number of subterms (potentially infinitely many in the case of cycles, as seen in \ref{accycles}). However, we do need to materialize the actual critical pairs more eagerly: whereas AC-saturation effectively only looks at critical pairs of the form $e_1 \leftarrow t \rightarrow e_2 + e_3$, AC-closure must handle critical pairs of the form $e_1 + \ldots \leftarrow t \rightarrow d_1 + \ldots$ where both terms contain the operator. Handling these critical pairs is essential because one of the critical terms may be a subterm of an existing AC-node, or might \emph{become} a subterm of an AC-node yet to be inserted. Resolving each critical pair allows this subterm relation to be established by later critical pair resolution, since the subterms just form special kinds of critical pairs.
+\end{itemize}
 
-\section{EMTs: Handling AC-critical pairs less na\"ively}
-We don't need to add all AC-subterms to find all critical overlaps. It suffices to consider every pair of E-nodes with an AC symbol and check them for overlap.
+As an example of the last point, consider the rules
+\begin{align}
+	e_1 + e_2 &\rightarrow e_4 \\
+	e_2 + e_3 &\rightarrow e_5 \\
+	e_1 + e_5 + e_6 &\rightarrow e_7
+\end{align}
+The critical pair $e_1 + e_5 \leftarrow e_1 + e_2 + e_3 \rightarrow e_4 + e_3$ means that $e_3 + e_4$ and $e_1 + e_5$ are equal, and we potentially need to be able to deduce that $e_7 = e_1 + e_5 + e_6 = e_3 + e_4 + e_6$. The last equation might only appear \emph{later} than the examination of this critical pair, so the critical pair must be resolved into a rule; it is not enough to just scan for current terms with either side as a subterm when resolving a critical pair.
 
-This procedure always terminates (\citep{bachmair_abstract_2000}). It is, in fact, a special case of Buchberger's algorithm for finding Gr\"obner bases of sets of polynomials (\citep{tiwari_decision_2000}), a well-studied algorithm with a lot of work done in optimizing it to be fast enough in practice. \fxerror{I think we will have proved termination in the introductory section by this point}
+\section{EMTs: handling AC-critical pairs directly}
+EMTs for AC add a third class of rewrite rule to E-graphs, the AC-rules. We will focus on the case with one AC-operator $+$, although the generalization to multiple rules is straightforward; the different AC-operators essentially get their own set of AC-rules, and these sets don't interact directly.
 
-\fxerror{I need to explain at some point that even though EqSat doesn't add the crit pairs, just adds the overlaps until it `discovers' certain crit pairs, AC-completion can't get away with not adding the crit pairs because it is in building the complete system including crit pairs that we discover whether overlaps are required. As in, either add all overlaps (EqSat) or don't add any but resolve crit pairs until fixpoint, because that is what it takes to eliminate the overlaps from potentially appearing in an AC-deduction that is not represented in the E-graph}
+Our algorithm for EMT(AC)s is similar to \emph{Buchberger's algorithm} \cite[Chapter~8]{baader_term_1998}, and is an adaptation of methods described in \cite{bachmair_abstract_2000, tiwari_decision_2000, kapur_modular_2021}.
 
-So, if an E-graph has E-node rules and union-find rules, EMT(AC) adds a third kind, an AC-rule.
-
+\subsection{A note on approaches}
 For AC-rules, do we want to allow rules of the form $e_1 + \ldots + e_n \rightarrow d_1 + \ldots + d_k$ or restrict to simply $e_1 + \ldots + e_n \rightarrow e$? The former is closer to usual presentations of Buchberger's algorithm, while the latter is more in the spirit of E-node rules. We will refer to these as the \emph{side-table} and \emph{integrated} approaches. Both are valid, but there is a subtlety in the integrated approach that might be missed, while the side-table approach makes it much more obvious.
 
-\subsection{EMT(AC)s via a side-table}
+\subsection{EMT(AC)s via a side-table, briefly}
 With the side-table approach, we think of the set of AC rules $e_1 + \ldots + e_n \rightarrow d_1 + \ldots + d_n$ as being a separate thing entirely to the E-graph.
 
 On insertion, we don't add any E-node rules whenever the function symbol is an AC symbol +, but generate a new E-class name $e$ and add the AC-rule $e_1 + \ldots + e_i \rightarrow e$ when we insert the flattened term $e_1 + \ldots + e_i$.
 
-To compute the AC-closure, we take every pair of two AC-rules $r \rightarrow s$ and $t \rightarrow u$. Consider $r, s, t, u$ to be multisets, and define $+, -, \max, \min$ as operations lifted across them, acting on the multiplicities. Then we can define
+To compute the AC-closure, we take every pair of two AC-rules $+(R) \rightarrow +(S)$ and $+(T) \rightarrow +(U)$, where $R, S, T, U$ are multisets of E-classes. Then we can define, as usual,
 \begin{itemize}
-\item The overlap: $\min(r, t)$
-\item The critical term: $\max(r, t)$
-\item The critical pair: $c_1 = \max(r, t) - r + s$ and $c_2 = \max(r, t) - t + u$
+\item The overlap: $\min(R, T)$
+\item The critical term: $\max(R, T) = R + T - \min(R, T)$
+\item The critical pair: $c_1 = \max(R, T) - R + S$ and $c_2 = \max(R, T) - T + U$
 \end{itemize}
 
-Note that $\max(r,t) + \min(r,t) = r + t$, so it is also possible to write the critical pair as $c_1 = t + s - \min(r,t)$ and $c_2 = r + u - \min(r,t)$.
-
-When the overlap is not 0, then we take the critical pair and try to rewrite both sides by existing rules until it is minimal. If it is still non-trivial, we \emph{orient} it, according to some ordering on flat AC-terms. A common choice for Buchberger's algorithm is \emph{grevlex} order, graded reverse-lexicographic, which is used in our implementation.
+When the overlap is not the empty multiset, then we take the critical pair and try to rewrite both sides by existing rules until it is minimal. If it is still non-trivial, we \emph{orient} it, according to some ordering on flat AC-terms. A common choice for Buchberger's algorithm is \emph{grevlex} order, graded reverse-lexicographic, which is used in our implementation.
 
 After orienting the reduced rule, we reduce every other rule with respect to it, and add it to the set of AC rules.
 
-\fxerror{This section needs a bit more detail/clarity, probably}
+The final ingredient is the `combination rule'. If we were ever to have a reduced rule $e_1 \rightarrow e_2$, with 1-term sums on either side, we should instead treat this as a union-find rule, and correspondingly propagate its consequences into the union-find and E-node rules. And vice versa, whenever the union-find rules are updated, we need to update any AC-rules according to the new ordering on atoms induced by the union-find rule.
 
-The final ingredient is combination rules. If we were ever to have a reduced rule $e_1 \rightarrow e_2$, with 1-term sums on either side, we should instead treat this as a union-find rule, and correspondingly propagate its consequences into the union-find and E-node rules. And vice versa, whenever the union-find rules are updated, we need to update any AC-rules according to the new ordering on atoms induced by the union-find rule.
-
-\subsection{Integrated EMT(AC)s}
+\subsection{Integrated EMT(AC)s, briefly}
 Unlike the side-table approach, here we will only allow AC rules with an atomic right-hand-side, thus making them of the same form as E-node rules.
 
 As before, we can now form critical pairs $c_1, c_2$ for rules with non-empty overlap. We proceed as above and reduce the critical terms as much as possible by existing rules. Then we need to create a new E-class id $e$ and insert the rules $c_{1\textrm{reduced}} \rightarrow e$ and $c_{2\textrm{reduced}} \rightarrow e$.
 
 One subtlety is that here we want to reduce \emph{existing} rules by the new one. This interreduction step is a standard step in Buchberger's algorithm, but may not be obvious in the `integrated' viewpoint, as it is a form of destructive rewriting on the E-graph.
 
-This interreduction shrinks the size of the E-graph, so it is important for performance.
-
-\fxerror{Can we prove these approaches equivalent easily?}
-
 In the integrated viewpoint, this amounts to shrinking E-nodes when they can `factor' through another node. For instance, if we have E-nodes $a + b + c$ in class $e_1$ and $b + c$ in class $e_2$, we ought to destructively rewrite the first to $a + e_2$. Just resolving critical pairs will lead to $e_1$ containing both $a + b + c$ and $a + e_2$, which is correct as far as dealing with critical pairs but redundant.
 
-Going further, the performance of Buchberger's algorithm depends on the ordering used (\fxerror{cite}), something that might not be obvious with the integrated approach. It is standard to use grevlex ordering.
+This interreduction shrinks the size of the E-graph, so it is important for performance in general and \emph{required} to properly handle cyclic E-graphs.
 
-\fxerror{Here is where I can go wild with formalities, maybe. Or include a generic-for-any-T formalization section}
+\subsection{Comparing the approaches}
+Despite the fact that side-table rules of the form $e_1 + e_2 + \ldots \rightarrow e_3 + e_4 + \ldots$ are less natural from an E-graph perspective than integrated rules of the form $e_1 + e_2 + \ldots \rightarrow e$, the side-table approach has a key advantage.
+
+In the integrated approach, an equation $e_1 + e_2 + \ldots = e_3 + e_4 + \ldots$ is oriented into \emph{two} AC-rules $e_1 + e_2 + \ldots \rightarrow e$ and $e_3 + e_4 + \ldots \rightarrow e$. When computing critical pairs, we have to find critical pairs between both new left-hand sides. On the other hand, the side table approach orients this equation to either $e_1 + e_2 + \ldots \rightarrow e_3 + e_4 + \ldots$ or $e_3 + e_4 + \ldots \rightarrow e_1 + e_2 + \ldots$, in effect `subsuming' the term on the right by the rewrite, so we don't need to compute critical pairs between it and other terms. 
+
+This subsumption is facilitated by an ordering on (flat) AC-terms, which is required for the side-table approach. Generating new constants in the integrated approach is, in effect, a very special term ordering: each new constant generated can be freely put below any terms that it appears on the right of. The naturality of this approach obscurs the fact that this ordering even exists. The AC-closure algorithm is a vairant of Buchberger's algorithm, and it has been observed that the performance of Buchberger's algorithm depends quite critically on the ordering used \cite[Chapter~2, section~10, subsection \textit{Complexity~issues}]{cox_ideals_2015}.
+
+We will prove in section \ref{equivres} the equivalence of the approaches in that they both terminate with a confluent rewriting system. However, the exact rewrite system generated is sensitive to the ordering on terms used to generate it, and in general we expect the side-table approach to be more flexible and efficient than the integrated approach, at the expense of some extra conceptual and implementation complexity.
+
+Prior approaches to congruence closure modulo AC \cite{bachmair_abstract_2000, tiwari_decision_2000, kapur_modular_2021} have entirely focused on what we refer to as the side-table approach.
+
+\section{EMT(AC)s, formally}
+\begin{definition}
+	An integrated EMT(AC) consists of the set $C$ and the relation $\rightarrow_U$ and $\rightarrow_F$ of an E-graph together with a relation $\rightarrow_{AC} \subseteq \mathcal{M_\textrm{fin}}(C) \times C$, where $\mathcal{M_\textrm{fin}}$ is the set of finite multisets over $C$.
+\end{definition}
+
+The sense in which this is integrated is that $\rightarrow_{AC}$ can be thought of as a special subset of $\rightarrow_F$.
+
+\begin{definition}
+	A side-table EMT(AC) consists of the set $C$ and the relation $\rightarrow_U$ and $\rightarrow_F$ of an E-graph together with a relation $\rightarrow_{AC} \subseteq \mathcal{M_\textrm{fin}}(C) \times \mathcal{M_\textrm{fin}}(C)$
+\end{definition}
+
+\subsection{Canonization}
+First, we describe AC-canonization:
+\begin{algorithm}
+	Input: an EMT $(C, \rightarrow_U, \rightarrow_F, \rightarrow_{AC})$ and an AC-term $t$.
+	
+	Procedure: repeat either of the following steps until neither is applicable:
+		\begin{enumerate}
+			\item If there is a rule $s \rightarrow_{AC} e_i$ such that $s$ is an AC-subterm of $t$, replace $t$ with $t - s + e_i$ ($t - s$ is defined as $s$ is an AC-subterm of $t$).
+			\item If there is a rule $e_j \rightarrow_U e_i$ such that $e_j$ appears in $t$, replace all copies of $s_j$ in $t$ with $e_i$.
+		\end{enumerate}
+\end{algorithm}
+
+\subsection{The algorithm for integrated EMT(AC) closure}
+Using canonization we can describe the integrated EMT(AC) variant:
+
+\begin{algorithm}
+	Input: an EMT $(C, \rightarrow_U, \rightarrow_F, \rightarrow_{AC})$ and a set $R$ of AC-equations.
+	
+	Procedure: while $R$ is not empty:
+		\begin{enumerate}
+			\item Remove $t_1 = t_2$ from $R$.
+			\item AC-canonize both $t_1$ and $t_2$. Call the canonized forms $t_1'$ and $t_2'$.
+			\item If $t_1'$ and $t_2'$ are single E-classes $e_1$ and $e_2$, then:
+				\begin{enumerate}
+					\item If $e_1 \neq e_2$, then:
+						\begin{enumerate}
+							\item Add $e_1 \rightarrow e_2$ to $\rightarrow_U$ and recompute congruence closure on $\rightarrow_U$ and $\rightarrow_F$.
+							\item For any AC-rule $s \rightarrow_{AC} e_i$ where one of the E-classes in $s$ or $e_i$ has a successor in the union find, remove that rule from $\rightarrow_{AC}$ and add $s = e_i$ to $R$.
+						\end{enumerate}
+					\item Otherwise, since $e_1 = e_2$, go to the top of the loop.
+				\end{enumerate}
+			\item Otherwise:
+				\begin{itemize}
+					\item Extend $C$ to $C \cup \{e_n\}$ for a new constant $e_n$
+					\item Add the rules $t_1' \rightarrow_{AC} e_n$ and $t_2' \rightarrow_{AC} e_n$ to $\rightarrow_{AC}$.
+					\item For every rule except the two just added, if $t_1'$ or $t_2'$ is a subterm of the left-hand-side, remove that rule $s \rightarrow_{AC} e_i$ from $\rightarrow_{AC}$ and add $s = e_i$ to $R$.
+					\item For every rule $t_l \rightarrow_{AC} t_r$ except the two rules just added, if $t_l$ has $t_1'$ or $t_2'$ as an AC-subterm, remove it from $\rightarrow_{AC}$ and add $t_l = t_r$ to $R$.
+					\item For every rule except the two just added, compute the critical pairs between that rule and both the new rules, and add the two equations $c_{1a} = c_{1b}$ and $c_{2a} = c_{2b}$ to $R$, where $c_{1a}$ and $c_{1b}$ are the terms of the critical pair between the old rule and the first new rule, and likewise $c_{2a}$ and $c_{2b}$ for the second new rule.
+				\end{itemize}
+		\end{enumerate}
+\end{algorithm}
+
+This is a little complex, but can be seen as iteratively resolving critical pairs between the various sets of rewrite rules in the EMT. Congruence closure is be run whenever a new nontrivial equation of the form $e_i = e_j$ is discovered. Rules in $\rightarrow_{AC}$ can be invalidated if their left-hand-side occurs in a critical pair with some newly-added rule, so they are moved back into $R$ for further processing.
+
+\subsection{The algorithm for side-table EMT(AC) closure}
+The algorithm for the side-table variant is structurally similar.
+
+\begin{algorithm}
+	Input: an EMT $(C, \rightarrow_U, \rightarrow_F, \rightarrow_{AC})$ and a set $R$ of AC-equations.
+	
+	Procedure: while $R$ is not empty:
+		\begin{enumerate}
+			\item Remove $t_1 = t_2$ from $R$.
+			\item AC-canonize both $t_1$ and $t_2$. Call the canonized forms $t_1'$ and $t_2'$.
+			\item If $t_1'$ and $t_2'$ are single E-classes $e_1$ and $e_2$, then:
+				\begin{enumerate}
+					\item If $e_1 \neq e_2$, then:
+						\begin{enumerate}
+							\item Add $e_1 \rightarrow e_2$ to $\rightarrow_U$ and recompute congruence closure on $\rightarrow_U$ and $\rightarrow_F$.
+							\item For any AC-rule $s \rightarrow_{AC} e_i$ where one of the E-classes in $s$ or $e_i$ has a successor in the union find, remove that rule from $\rightarrow_{AC}$ and add $s = e_i$ to $R$.
+						\end{enumerate}
+					\item Otherwise, since $e_1 = e_2$, go to the top of the loop.
+				\end{enumerate}
+			\item Otherwise:
+				\begin{itemize}
+					\item Compare the terms $t_1'$ and $t_2'$ according to some ordering, and call the smaller $t_a$ and the larger $t_b$.
+					\item Add the rule $t_b \rightarrow_{AC} t_a$ to $\rightarrow_{AC}$.
+					\item For every rule $t_l \rightarrow_{AC} t_r$ except the rule just added, if $t_l$ has $t_b$ as an AC-subterm, remove it from $\rightarrow_{AC}$ and add $t_l = t_r$ to $R$.
+					\item For every rule except the one just added, compute the critical pair between that rule and the new rule, and add the equation $c_a = c_b$ to $R$, where $c_a$ and $c_b$ are the terms of the critical pair.
+				\end{itemize}
+		\end{enumerate}
+\end{algorithm}
+
+\subsection{Correctness and partial equivalence of the algorithms} \label{equivres}
+We will prove termination and correctness for the side-table algorithm first, and then show how to relate the integrated algorithm to the side-table one to re-use this proof.
+
+Define the \emph{Dickson ordering} on multisets as the partial ordering $s \ge t$ if the multiplicity of every element in $s$ is $\ge$ the multiplicity of the same element in $t$. This is the same as saying that $s$ has $t$ as an AC-subterm.
+
+\begin{lemma}
+	At each iteration of the algorithm, there are no rules in $\rightarrow_{AC}$ with left-hand-sides that are related by $\ge$ in the Dickson ordering.
+\end{lemma}
+\begin{proof}
+	If $s \ge t$, then $s$ has $t$ as an AC-subterm. Before each iteration, this invariant holds for every pair of existing rules. When a new rule is added in step 4, any rule which would be greater than the new left-hand-side is removed and added to $R$, so this invariant is restored.
+\end{proof}
+
+\begin{lemma}
+	(Stability) When a rule $t_l \rightarrow_{AC} t_r$ is removed, any further rule with a left-hand-side $s$ which would satisfy $s \ge t_l$ will satisfy this with one of the remaining rules.
+\end{lemma}
+\begin{proof}
+	Whenever we remove a rule with left-hand-side $t_l$, this is because we determined that $t_l \ge t$ for some new left-hand-side $t$. So any $s$ for which $s \ge t_l$ would then satisfy $s \ge t_l \ge t$ with the remaining set of rules that include $t$ on the left of the new rule.
+\end{proof}
+
+Therefore, the set of left-hand-sides in $\rightarrow_{AC}$ is a set of elements in $\mathcal{M}_\textrm{fin}(C)$, none greater than any other in the Dickson ordering. Each iteration, we either
+	\begin{itemize}
+		\item Add a new rewrite to $\rightarrow_U$, and do some other changes
+		\item Add a new element to this set of left-hand-sides, possibly removing some existing elements, and do some other changes
+		\item Remove one equation from $R$.
+	\end{itemize}
+	
+Since $C$ is fixed, only finitely many changes to $\rightarrow_U$ are possible, since at most we can equate every element in $C$ in the union-find.
+
+Once the algorithm reaches the point it doesn't alter $\rightarrow_U$	any further, then we look at how it changes the set of left-hand sides of rules in $\rightarrow_AC$. Any new element must not just be not greater than any existing element, but also any past ones, by the stability lemma. Therefore, we can consider the entire set of previous and current elements, and this set only grows.
+
+By Dickson's lemma \cites{goos_congruence_2000}, there can't be an infinite set of elements in $\mathcal{M}_\textrm{fin}(C)$ over a finite set $C$ that are pairwise incomparable. Therefore, the process of adding rules must terminate at some point.
+
+Once adding rules stops, the remaining equations in $R$ will be removed and the algorithm terminates.
+
+Correctness is fairly straightforward: critical pairs are added to $R$ and eventually resolved. Assuming that the ordering on terms includes the Dickson ordering, then orienting a critical pair $t = s$ from $R$ into $t \rightarrow s$ means that 
+
+ Since we add all critical pairs between new rules and existing ones, the final system of AC-rewrites can't have critical pairs that are unjoinable.
+
+\subsubsection{Equivalence}
+
+
+
+
+
+
+The first thing to note is that, even though we introduce new constants to $C$, there is a limitation to how these constants may appear in $\rightarrow_U$ or $\rightarrow_F$. In particular, a constant $e_n$ introduced during AC-closure can only enter $\rightarrow_U$ by becoming equal to an existing constant $e_i$, and the rule $e_i \rightarrow_U e_n$ or $e_n \rightarrow_U e_i$ being added to $\rightarrow_U$. If $e_n \rightarrow_U e_i$, then $e_n$ will never appear in $\rightarrow_F$ at all. If $e_i \rightarrow_U e_n$, then $e_n$ may appear in $\rightarrow_F$, but only as a potential replacement for $e_i$. Thus, the effective number of constants mentioned in $\rightarrow_F$ doesn't increase. This means that there are only finitely many changes to $\rightarrow_F$ possible, by the usual argument for E-graphs: each application of congruence closure to $\rightarrow_F$ may equate some existing E-classes, and there can only be finitely many such steps taken before all E-classes mentioned in $\rightarrow_F$ are equal, upon which $\rightarrow_F$ won't change except for renaming of E-classes.
+
+
+\begin{lemma}
+	Every rule $t_l \rightarrow_{AC} t_r$ satisfies $t_l \ge t_r$ according to the chosen term ordering.
+\end{lemma}
+\begin{proof}
+	The rule $t_b \rightarrow_{AC} t_a$ is only added if $t_b \ge t_a$.
+\end{proof}
+
+\begin{prooftree}
+\AxiomC{$R[f(e_1, \ldots, e_n)], f(e_1, \ldots, e_n) \nrightarrow_{AC}, e \notin C$}
+\LeftLabel{Extension}
+\UnaryInfC{$R[e], f(e_1, \ldots, e_n) \rightarrow_F e, e \in C$}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{$R[e_1 + \ldots + e_n], e_1 + \ldots + e_n \nrightarrow_{AC}, e \notin C$}
+\LeftLabel{AC-Extension}
+\UnaryInfC{$R[e], e_1 + \ldots + e_n \rightarrow_F e, e \in C$}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{$R \cup \{e_i = e_j\}$}
+\LeftLabel{Orient}
+\UnaryInfC{$R, e_i \rightarrow_U e_j$}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{$R \cup \{e_i = e_j\}$}
+\LeftLabel{Orient-U}
+\UnaryInfC{$R, e_i \rightarrow_U e_j$}
+\end{prooftree}
+
+%This procedure always terminates (\citep{bachmair_abstract_2000}). It is, in fact, a special case of Buchberger's algorithm for finding Gr\"obner bases of sets of polynomials (\citep{tiwari_decision_2000}), a well-studied algorithm with a lot of work done in optimizing it to be fast enough in practice. \fxerror{I think we will have proved termination in the introductory section by this point}
+
+%So, if an E-graph has E-node rules and union-find rules, EMT(AC) adds a third kind, an AC-rule.
+
 
 \chapter{Beyond rewriting: E-matching, E-analysis, and E-xtraction}
 Many uses of E-graphs don't just use them as an equational theory solver, but want to run certain analyses on the E-graph (perhaps to allow conditional rewrites) or want to extract the smallest term representing an equivalence class, according to some cost metric.
@@ -3259,7 +2986,7 @@ This interpretation gives us a basis for an E-analysis. Keep a map $a$ from E-cl
 
 We need the a binary operation $\sqcap : D \times D \rightarrow D$ on the domain, which is called to merge annotations when E-classes are merged. To make this process well-defined regardless of the details of the congruence-closure/rebuilding process, we want $\sqcap$ to be associative, commutative, and idempotent.
 
-\section{Extraction}
+\section{Extraction} \label{extraction}
 Suppose we have some cost function $c : T \rightarrow K$ mapping terms $t \in T$ to a totally-ordered set $C$. Then we can define extraction as an analysis by taking our domain to be $T \times C$, and defining
 
 \begin{align*}
@@ -3267,7 +2994,7 @@ Suppose we have some cost function $c : T \rightarrow K$ mapping terms $t \in T$
 \llbracket f \rrbracket ((t_1, c_1), \ldots) = (f(t_1, \ldots), c(f(t_1, \ldots)))
 \end{align*}
 
-For this to be well-defined, we require that cost is monotonic: if $c(t_i) < c(s_i)$, then $c(f(t_1, \ldots)) < c(f(s_1, \ldots)$. Otherwise, lower-cost child terms could make higher-cost parent terms, so we cannot rely on a simple propagation strategy to find the overal lowest-cost term in each E-class.
+For this to be well-defined, we require that cost is monotonic: if $c(t_i) < c(s_i)$, then $c(f(t_1, \ldots)) < c(f(s_1, \ldots)$. Otherwise, lower-cost child terms could make higher-cost parent terms, so we cannot rely on a simple propagation strategy to find the overall lowest-cost term in each E-class.
 
 \section{E-matching}
 \subsection{Compilation}
@@ -4277,19 +4004,19 @@ For distributivity, the word problem is again undecidable unless the distributin
 
 \fxerror{What about idempotency?}
 
-Introducing negation, giving us the theory ACUN of abelian groups, moves the bound from \textsc{ESpace} to polynomial-time: Buchberger's algorithm reduces to finding the Hermite normal form of an integer matrix \fxerror{cite}. If we have a distributive operator where we can \emph{divide}, such as the theory of fields or vector spaces, then we can use Gaussian elimination, which is not just polynomial-time but subcubic \fxerror{cite}
+Introducing negation, giving us the theory ACUN of Abelian groups, moves the bound from \textsc{ESpace} to polynomial-time: Buchberger's algorithm reduces to finding the Hermite normal form of an integer matrix \fxerror{cite}. If we have a distributive operator where we can \emph{divide}, such as the theory of fields or vector spaces, then we can use Gaussian elimination, which is not just polynomial-time but subcubic \fxerror{cite}
 
 \section{On the general notion of EMT}
 So, for a theory $T$, we need to build in to our E-graph a system equivalent in strength to a word problem solver (even if, as for $T$ = A, that system is partial).
 
 \subsection{Critical pairs}
 Resolving $T$-critical pairs is a natural way to integrate such a solver.
-If we have a rewriting relation $\rightarrow_\mathcal{R}$, then a \textbf{peak} is a trio of terms $s_1, s_2$ and $t$ such that $s_1 \leftarrow_\mathcal{R} t \rightarrow_\mathcal{R} s_2$. A \textbf{critical pair} is a peak that cannot be obtained as a non-trivial substitution instance of another.
+If we have a rewriting relation $\rightarrow_\mathcal{R}$, then a \emph{peak} is a trio of terms $s_1, s_2$ and $t$ such that $s_1 \leftarrow_\mathcal{R} t \rightarrow_\mathcal{R} s_2$. A \emph{critical pair} is a peak that cannot be obtained as a non-trivial substitution instance of another.
 For instance, if we have the rules $f(x, y) \rightarrow_\mathcal{R} g(y, y, x)$ and $h(x) \rightarrow_\mathcal{R} x$, then the term $f(h(g(x, y, z)), w)$ is a peak, because
 
 $$g(w, w, h(g(x, y, z))) \leftarrow_\mathcal{R} f(h(g(x, y, z)), w) \rightarrow_\mathcal{R} f(g(x, y, z), w)$$
 
-Now, as we have seen, E-graphs take a set of equations $E$ and build a rewrite system $\rightarrow_E$ such that $s =_E t$ iff there is a $c$ such that $s \rightarrow_E^* c \leftarrow_E^* t$. If we have a rewriting system with a peak $s_1 \leftarrow_\mathcal{R} t \rightarrow_\mathcal{R} s_2$ and we want to make $\mathcal{R}$ be able to describe a theory of equality, we need to find some way to enforce \textbf{confluence}: because $s_1$ and $s_2$ ought to be equal if $\mathcal{R}$ is taken to be axiomatizing equalities, we need to ensure there is a term $c$ such that $s_1 \rightarrow_\mathcal{R}^* c \leftarrow_\mathcal{R}^* s_2$. Ground Knuth-Bendix completion \fxerror{cite} is one method to do this, based on adding a new rewrite $s_1 \rightarrow_\mathcal{R} s_2$ to `orient' each critical pair.
+Now, as we have seen, E-graphs take a set of equations $E$ and build a rewrite system $\rightarrow_E$ such that $s =_E t$ iff there is a $c$ such that $s \rightarrow_E^* c \leftarrow_E^* t$. If we have a rewriting system with a peak $s_1 \leftarrow_\mathcal{R} t \rightarrow_\mathcal{R} s_2$ and we want to make $\mathcal{R}$ be able to describe a theory of equality, we need to find some way to enforce \emph{confluence}: because $s_1$ and $s_2$ ought to be equal if $\mathcal{R}$ is taken to be axiomatizing equalities, we need to ensure there is a term $c$ such that $s_1 \rightarrow_\mathcal{R}^* c \leftarrow_\mathcal{R}^* s_2$. Ground Knuth-Bendix completion \fxerror{cite} is one method to do this, based on adding a new rewrite $s_1 \rightarrow_\mathcal{R} s_2$ to `orient' each critical pair.
 
 \fxerror{Equality saturation is somewhat like non-ground Knuth-Bendix, but only with ground critical pairs, and over an extended signature. Point this out, maybe?}
 
@@ -4311,7 +4038,7 @@ That \emph{some} notion of EMT ought to exist has been stated multiple times bef
 \citet{zucker_omelets_2025} notes that we have \emph{canonizers} for many theories, which provide a way to solve the problem of ground equality modulo theories. A canonizer for a theory $T$ is just some function on terms $c$ such that, if $t_1 =_T t_2$, then $c(t_1) = c(t_2)$: that is, it shifts the problem from equality modulo $T$ to just ordinary term equality.
 
 \subsection{Intutition 2: Containers}
-The signature for an E-graph, $\Sigma$, is equivalent to a certain kind of \emph{container}: one that has a number of `shapes' (corresponding to the function symbols) and each shape has an ordered collection of slots (with length given by the arity of the shape). Thus, it is natural to consider generalizing this to containers of more general varieties. If one assigns to a single symbol one shape of every arity , with ordered slots, this gives the theory of AU: terms like $+()$, $+(a, b)$, $+(a, b, c)$ are all covered by this notion, and one doesn't need to arbitarily split a given list into binary uses of $+(-,-)$ and nilary uses of $e$. If the ordering constraint is dropped on the collections of slots, we get multiset containers, suitable for ACU, and moving to set containers gives something akin to ACIU -- ACU with idempotence.
+The signature for an E-graph, $\Sigma$, is equivalent to a certain kind of \emph{container}: one that has a number of `shapes' (corresponding to the function symbols) and each shape has an ordered collection of slots (with length given by the arity of the shape). Thus, it is natural to consider generalizing this to containers of more general varieties. If one assigns to a single symbol one shape of every arity , with ordered slots, this gives the theory of AU: terms like $+()$, $+(a, b)$, $+(a, b, c)$ are all covered by this notion, and one doesn't need to arbitrarily split a given list into binary uses of $+(-,-)$ and nilary uses of $e$. If the ordering constraint is dropped on the collections of slots, we get multiset containers, suitable for ACU, and moving to set containers gives something akin to ACIU -- ACU with idempotence.
 
 The second intuition also arises naturally out of concrete implementation work on E-graphs. Given a signature with an ACU binary operator $f$ with unit $e$, and some other operators $g, h$, we can imagine building a parameterized data structure for term-fragments along the lines of the following pseudo-Haskell:
 
@@ -4410,7 +4137,7 @@ There has been work on congruence closure modulo various theories:
 \end{itemize}
 
 \chapter{Conclusion and future work} \label{conclu}
-EMTs provide a good basis for integrating certain common well-behaved theories more tightly into the core of E-graphs, rather than allowing the potentially explosive equality saturation to handle them. However, there are still fundamental limitatations to how `nice' EMTs can be: they expand the E-graph during the resolution of critical pairs, unlike congruence-closure which can only shrink it, and the possible performance gains are bounded tightly by the complexity of solving the word problems for the relevant theories.
+EMTs provide a good basis for integrating certain common well-behaved theories more tightly into the core of E-graphs, rather than allowing the potentially explosive equality saturation to handle them. However, there are still fundamental limitations to how `nice' EMTs can be: they expand the E-graph during the resolution of critical pairs, unlike congruence-closure which can only shrink it, and the possible performance gains are bounded tightly by the complexity of solving the word problems for the relevant theories.
 
 \section{Future work: EMTs for other theories}
 Given that there are already several variants of congruence-closure modulo theories (Section \ref{ccmodx}), it would be useful to evaluate EMTs on these theories, including with E-matching modulo these theories. Many of them require Buchberger-like algorithms similar to the one we have presented for AC. Variations of this algorithm for certain theories (Section \ref{hrmite}) can be polynomial-time rather than \textsc{ESpace}.
@@ -4418,10 +4145,15 @@ Given that there are already several variants of congruence-closure modulo theor
 \section{Future work: improving AC-closure}
 Buchberger's algorithm has the $F_4$ and $F_5$ variants and an extensive literature on optimizing it. Importing these variants into an EMT implementation could provide significant speedup. Also, as discussed in Section \ref{nonincac}, there is the potential to make the AC-closure more incremental and reduce the cost associated with computing it.
 
+Given that E-graphs work over an extended signature, is it worthwhile to compress the AC-rules by shrinking the signature? For instance, if we have AC-rules $e_1 + e_2 \rightarrow e_3$ and $e_3 + e_4 \rightarrow e_5$, and $e_3$ doesn't appear among the ordinary E-node rules, then we could shrink the system to just $e_1 + e_2 + e_4 \rightarrow e_5$ and delete $e_3$.
+
 \section{Future work: constrained matching}
 \fxerror{I can probably find a precedent for this}
 
 As mentioned in Section \ref{panacea}, adding constraints to patterns for matching could significantly cut down the search space for matching modulo theories when the full space of matches, which includes a lot of redundant symmetries, is not needed.
+
+\section{Future work: realistic applications}
+While EMT(AC)s may be fast\emph{er} than E-graphs, it remains to be seen if they are fast \emph{enough} to make significant progress in various application domains that have struggled with the explosive nature of AC-saturation. 
 
 
 % REFERENCES / BIBLIOGRAPHY
