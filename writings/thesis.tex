@@ -2571,7 +2571,7 @@ Such local failures of confluence are known as critical pairs\footnote{They are 
 \section{Formalizing congruence closure}
 To provide a formal definition of various aspects of E-graphs and EMTs, we will need some basic notions of signatures, terms, and flat terms.
 
-\subsection{Terms and signatures}
+\subsection{Terms and signatures} \label{sig}
 \begin{definition}
 A \textbf{signature} is a set $\Sigma$ of function symbols with an arity given by a function $\alpha : \Sigma \rightarrow \mathbb{N}$. Given a set of constants $A$, a \textbf{flat term} $\Sigma(A)$ is a pair of an element of $f \in \Sigma$ together with a list of elements of $A$ of length $\alpha(f)$. A \textbf{term} over $A$, denoted by $\Sigma^*(A)$, is defined inductively as either a constant $a \in A$ or a flat term over $\Sigma^*(A)$.
 \end{definition}
@@ -2761,8 +2761,42 @@ EMTs for AC add a third class of rewrite rule to E-graphs, the AC-rules. We will
 
 Our algorithm for EMT(AC)s is similar to \emph{Buchberger's algorithm} \cite[Chapter~8]{baader_term_1998}, and is an adaptation of methods described in \cite{bachmair_abstract_2000, tiwari_decision_2000, kapur_modular_2021}.
 
-\subsection{A note on approaches}
-For AC-rules, do we want to allow rules of the form $e_1 + \ldots + e_n \rightarrow d_1 + \ldots + d_k$ or restrict to simply $e_1 + \ldots + e_n \rightarrow e$? The former is closer to usual presentations of Buchberger's algorithm, while the latter is more in the spirit of E-node rules. We will refer to these as the \emph{side-table} and \emph{integrated} approaches. Both are valid, but there is a subtlety in the integrated approach that might be missed, while the side-table approach makes it much more obvious.
+\subsection{A note on our approach}
+For AC-rules, do we want to allow rules of the form $e_1 + \ldots + e_n \rightarrow d_1 + \ldots + d_k$ or restrict to simply $e_1 + \ldots + e_n \rightarrow e$? The former is closer to usual presentations of Buchberger's algorithm, while the latter is more in the spirit of E-node rules.
+
+We will refer to these as the \emph{side-table} and \emph{integrated} approaches. Unfortunately, there, is a difficulty with the integrated approach.
+
+\subsection{The difficulties of integrated EMT(AC)s}
+Consider the very simple example
+\begin{align*}
+	a + b &\rightarrow_{AC} d \\
+	a + c &\rightarrow_{AC} e
+\end{align*}
+These rewrite rules overlap on $a$ and thus form a critical pair $c + d \leftarrow_{AC} a + b + c \rightarrow_{AC} b + e$.
+
+Suppose we try to add new rules to resolve the critical pair
+\begin{align*}
+	c + d &\rightarrow_{AC} f \\
+	b + e &\rightarrow_{AC} f
+\end{align*}
+for a new E-class $f$. This is in line with E-graphs, where rules always have atomic right-hand-sides.
+
+Unfortunately, the new rules continue to have \emph{unjoinable} critical pairs with the originals:
+\begin{align*}
+	d + e \leftarrow_{AC} a + b + e \rightarrow_{AC} a + f \leftarrow_{AC} a + c + d \rightarrow_{AC} d + e
+\end{align*}
+Notice how both new critical pairs are between $a + f$ and $d + e$. Resolving these in the same way with a new constant $g$ would lead to further unjoinable critical pairs. Both new critical pairs could be joinable if we could turn the $\rightarrow_{AC} a + f \leftarrow_{AC}$ in the centre into $\rightarrow_{AC} a + f \rightarrow_{AC}$.
+
+This problem is solved by the side-table approach which instead inserts the new rule $c + d  \rightarrow_{AC} b + e$ or its reverse, skipping the unjoinable central term $a + f$.
+
+It is possible to make the integrated approach work with an additional rule $a + f \rightarrow_{AC} e + d$. This extra rule has the property that all critical pairs with it where $a$ is the overlap are already joinable, while there are no critical pairs with $f$ as the overlap, since $f$ only appears on the right-hand side of the rules introduced above. Therefore, this rule can function as a `shadow' rule, available for canonization but that doesn't need to take part in critical pair calculation.
+
+However, introducing two kinds of rule (normal and `shadow') in order to make all the normal rules have the standard E-graph form with an atomic right-hand-side seems more complex than its worth.
+
+Prior approaches to congruence closure modulo AC \cite{bachmair_abstract_2000, tiwari_decision_2000, kapur_modular_2021} have entirely focused on what we refer to as the side-table approach.
+
+\subsubsection{Aside: why don't ordinary E-graphs have this problem?}
+
 
 \subsection{EMT(AC)s via a side-table, briefly}
 With the side-table approach, we think of the set of AC rules $e_1 + \ldots + e_n \rightarrow d_1 + \ldots + d_n$ as being a separate thing entirely to the E-graph.
@@ -2776,43 +2810,15 @@ To compute the AC-closure, we take every pair of two AC-rules $+(R) \rightarrow 
 \item The critical pair: $c_1 = \max(R, T) - R + S$ and $c_2 = \max(R, T) - T + U$
 \end{itemize}
 
-When the overlap is not the empty multiset, then we take the critical pair and try to rewrite both sides by existing rules until it is minimal. If it is still non-trivial, we \emph{orient} it, according to some ordering on flat AC-terms. A common choice for Buchberger's algorithm is \emph{grevlex} order, graded reverse-lexicographic, which is used in our implementation.
+When the overlap is not the empty multiset, then we take the critical pair and try to rewrite both sides by existing rules until it is minimal. If it is still non-trivial, we \emph{orient} it, according to some ordering on flat AC-terms. A common choice for Buchberger's algorithm is \emph{grevlex} order, graded reverse-lexicographic, which is used in our implementation. It has been observed that the performance of Buchberger's algorithm depends quite critically on the ordering used \cite[Chapter~2, section~10, subsection \textit{Complexity~issues}]{cox_ideals_2015}. Unfortunately, there is no (mathematically) canonical ordering to choose.
 
-After orienting the reduced rule, we reduce every other rule with respect to it, and add it to the set of AC rules.
+After orienting the reduced rule, we reduce every other rule with respect to it, and add it to the set of AC rules. This interreduction step is a standard step in Buchberger's algorithm, but may not be natural from the E-graph viewpoint, as it is a form of destructive rewriting on the E-graph.
 
 The final ingredient is the `combination rule'. If we were ever to have a reduced rule $e_1 \rightarrow e_2$, with 1-term sums on either side, we should instead treat this as a union-find rule, and correspondingly propagate its consequences into the union-find and E-node rules. And vice versa, whenever the union-find rules are updated, we need to update any AC-rules according to the new ordering on atoms induced by the union-find rule.
 
-\subsection{Integrated EMT(AC)s, briefly}
-Unlike the side-table approach, here we will only allow AC rules with an atomic right-hand-side, thus making them of the same form as E-node rules.
-
-As before, we can now form critical pairs $c_1, c_2$ for rules with non-empty overlap. We proceed as above and reduce the critical terms as much as possible by existing rules. Then we need to create a new E-class id $e$ and insert the rules $c_{1\textrm{reduced}} \rightarrow e$ and $c_{2\textrm{reduced}} \rightarrow e$.
-
-One subtlety is that here we want to reduce \emph{existing} rules by the new one. This interreduction step is a standard step in Buchberger's algorithm, but may not be obvious in the `integrated' viewpoint, as it is a form of destructive rewriting on the E-graph.
-
-In the integrated viewpoint, this amounts to shrinking E-nodes when they can `factor' through another node. For instance, if we have E-nodes $a + b + c$ in class $e_1$ and $b + c$ in class $e_2$, we ought to destructively rewrite the first to $a + e_2$. Just resolving critical pairs will lead to $e_1$ containing both $a + b + c$ and $a + e_2$, which is correct as far as dealing with critical pairs but redundant.
-
-This interreduction shrinks the size of the E-graph, so it is important for performance in general and \emph{required} to properly handle cyclic E-graphs.
-
-\subsection{Comparing the approaches}
-Despite the fact that side-table rules of the form $e_1 + e_2 + \ldots \rightarrow e_3 + e_4 + \ldots$ are less natural from an E-graph perspective than integrated rules of the form $e_1 + e_2 + \ldots \rightarrow e$, the side-table approach has a key advantage.
-
-In the integrated approach, an equation $e_1 + e_2 + \ldots = e_3 + e_4 + \ldots$ is oriented into \emph{two} AC-rules $e_1 + e_2 + \ldots \rightarrow e$ and $e_3 + e_4 + \ldots \rightarrow e$. When computing critical pairs, we have to find critical pairs between both new left-hand sides. On the other hand, the side table approach orients this equation to either $e_1 + e_2 + \ldots \rightarrow e_3 + e_4 + \ldots$ or $e_3 + e_4 + \ldots \rightarrow e_1 + e_2 + \ldots$, in effect `subsuming' the term on the right by the rewrite, so we don't need to compute critical pairs between it and other terms. 
-
-This subsumption is facilitated by an ordering on (flat) AC-terms, which is required for the side-table approach. Generating new constants in the integrated approach is, in effect, a very special term ordering: each new constant generated can be freely put below any terms that it appears on the right of. The naturality of this approach obscurs the fact that this ordering even exists. The AC-closure algorithm is a vairant of Buchberger's algorithm, and it has been observed that the performance of Buchberger's algorithm depends quite critically on the ordering used \cite[Chapter~2, section~10, subsection \textit{Complexity~issues}]{cox_ideals_2015}.
-
-We will prove in section \ref{equivres} the equivalence of the approaches in that they both terminate with a confluent rewriting system. However, the exact rewrite system generated is sensitive to the ordering on terms used to generate it, and in general we expect the side-table approach to be more flexible and efficient than the integrated approach, at the expense of some extra conceptual and implementation complexity.
-
-Prior approaches to congruence closure modulo AC \cite{bachmair_abstract_2000, tiwari_decision_2000, kapur_modular_2021} have entirely focused on what we refer to as the side-table approach.
-
 \section{EMT(AC)s, formally}
 \begin{definition}
-	An integrated EMT(AC) consists of the set $C$ and the relation $\rightarrow_U$ and $\rightarrow_F$ of an E-graph together with a relation $\rightarrow_{AC} \subseteq \mathcal{M_\textrm{fin}}(C) \times C$, where $\mathcal{M_\textrm{fin}}$ is the set of finite multisets over $C$.
-\end{definition}
-
-The sense in which this is integrated is that $\rightarrow_{AC}$ can be thought of as a special subset of $\rightarrow_F$.
-
-\begin{definition}
-	A side-table EMT(AC) consists of the set $C$ and the relation $\rightarrow_U$ and $\rightarrow_F$ of an E-graph together with a relation $\rightarrow_{AC} \subseteq \mathcal{M_\textrm{fin}}(C) \times \mathcal{M_\textrm{fin}}(C)$
+	An EMT(AC) consists of the set $C$ and the relation $\rightarrow_U$ and $\rightarrow_F$ of an E-graph together with a relation $\rightarrow_{AC} \subseteq \mathcal{M_\textrm{fin}}(C) \times \mathcal{M_\textrm{fin}}(C)$
 \end{definition}
 
 \subsection{Canonization}
@@ -2827,9 +2833,7 @@ First, we describe AC-canonization:
 		\end{enumerate}
 \end{algorithm}
 
-\subsection{The algorithm for integrated EMT(AC) closure}
-Using canonization we can describe the integrated EMT(AC) variant:
-
+\subsection{The algorithm for EMT(AC) closure}
 \begin{algorithm}
 	Input: an EMT $(C, \rightarrow_U, \rightarrow_F, \rightarrow_{AC})$ and a set $R$ of AC-equations.
 	
@@ -2837,47 +2841,12 @@ Using canonization we can describe the integrated EMT(AC) variant:
 		\begin{enumerate}
 			\item Remove $t_1 = t_2$ from $R$.
 			\item AC-canonize both $t_1$ and $t_2$. Call the canonized forms $t_1'$ and $t_2'$.
+			\item If $t_1' = t_2'$, then go to the next iteration.
 			\item If $t_1'$ and $t_2'$ are single E-classes $e_1$ and $e_2$, then:
-				\begin{enumerate}
-					\item If $e_1 \neq e_2$, then:
-						\begin{enumerate}
-							\item Add $e_1 \rightarrow e_2$ to $\rightarrow_U$ and recompute congruence closure on $\rightarrow_U$ and $\rightarrow_F$.
-							\item For any AC-rule $s \rightarrow_{AC} e_i$ where one of the E-classes in $s$ or $e_i$ has a successor in the union find, remove that rule from $\rightarrow_{AC}$ and add $s = e_i$ to $R$.
-						\end{enumerate}
-					\item Otherwise, since $e_1 = e_2$, go to the top of the loop.
-				\end{enumerate}
-			\item Otherwise:
-				\begin{itemize}
-					\item Extend $C$ to $C \cup \{e_n\}$ for a new constant $e_n$
-					\item Add the rules $t_1' \rightarrow_{AC} e_n$ and $t_2' \rightarrow_{AC} e_n$ to $\rightarrow_{AC}$.
-					\item For every rule except the two just added, if $t_1'$ or $t_2'$ is a subterm of the left-hand-side, remove that rule $s \rightarrow_{AC} e_i$ from $\rightarrow_{AC}$ and add $s = e_i$ to $R$.
-					\item For every rule $t_l \rightarrow_{AC} t_r$ except the two rules just added, if $t_l$ has $t_1'$ or $t_2'$ as an AC-subterm, remove it from $\rightarrow_{AC}$ and add $t_l = t_r$ to $R$.
-					\item For every rule except the two just added, compute the critical pairs between that rule and both the new rules, and add the two equations $c_{1a} = c_{1b}$ and $c_{2a} = c_{2b}$ to $R$, where $c_{1a}$ and $c_{1b}$ are the terms of the critical pair between the old rule and the first new rule, and likewise $c_{2a}$ and $c_{2b}$ for the second new rule.
-				\end{itemize}
-		\end{enumerate}
-\end{algorithm}
-
-This is a little complex, but can be seen as iteratively resolving critical pairs between the various sets of rewrite rules in the EMT. Congruence closure is be run whenever a new nontrivial equation of the form $e_i = e_j$ is discovered. Rules in $\rightarrow_{AC}$ can be invalidated if their left-hand-side occurs in a critical pair with some newly-added rule, so they are moved back into $R$ for further processing.
-
-\subsection{The algorithm for side-table EMT(AC) closure}
-The algorithm for the side-table variant is structurally similar.
-
-\begin{algorithm}
-	Input: an EMT $(C, \rightarrow_U, \rightarrow_F, \rightarrow_{AC})$ and a set $R$ of AC-equations.
-	
-	Procedure: while $R$ is not empty:
-		\begin{enumerate}
-			\item Remove $t_1 = t_2$ from $R$.
-			\item AC-canonize both $t_1$ and $t_2$. Call the canonized forms $t_1'$ and $t_2'$.
-			\item If $t_1'$ and $t_2'$ are single E-classes $e_1$ and $e_2$, then:
-				\begin{enumerate}
-					\item If $e_1 \neq e_2$, then:
-						\begin{enumerate}
-							\item Add $e_1 \rightarrow e_2$ to $\rightarrow_U$ and recompute congruence closure on $\rightarrow_U$ and $\rightarrow_F$.
-							\item For any AC-rule $s \rightarrow_{AC} e_i$ where one of the E-classes in $s$ or $e_i$ has a successor in the union find, remove that rule from $\rightarrow_{AC}$ and add $s = e_i$ to $R$.
-						\end{enumerate}
-					\item Otherwise, since $e_1 = e_2$, go to the top of the loop.
-				\end{enumerate}
+					\begin{enumerate}
+						\item Add $e_1 \rightarrow e_2$ to $\rightarrow_U$ and recompute congruence closure on $\rightarrow_U$ and $\rightarrow_F$.
+						\item For any AC-rule $s \rightarrow_{AC} e_i$ where one of the E-classes in $s$ or $e_i$ has a successor in the union find, remove that rule from $\rightarrow_{AC}$ and add $s = e_i$ to $R$.
+					\end{enumerate}
 			\item Otherwise:
 				\begin{itemize}
 					\item Compare the terms $t_1'$ and $t_2'$ according to some ordering, and call the smaller $t_a$ and the larger $t_b$.
@@ -2888,9 +2857,7 @@ The algorithm for the side-table variant is structurally similar.
 		\end{enumerate}
 \end{algorithm}
 
-\subsection{Correctness and partial equivalence of the algorithms} \label{equivres}
-We will prove termination and correctness for the side-table algorithm first, and then show how to relate the integrated algorithm to the side-table one to re-use this proof.
-
+\subsection{Correctness of the algorithm} \label{equivres}
 Define the \emph{Dickson ordering} on multisets as the partial ordering $s \ge t$ if the multiplicity of every element in $s$ is $\ge$ the multiplicity of the same element in $t$. This is the same as saying that $s$ has $t$ as an AC-subterm.
 
 \begin{lemma}
@@ -2924,53 +2891,9 @@ Once adding rules stops, the remaining equations in $R$ will be removed and the 
 
 Correctness is fairly straightforward: critical pairs are added to $R$ and eventually resolved. Assuming that the ordering on terms includes the Dickson ordering, then orienting a critical pair $t = s$ from $R$ into $t \rightarrow s$ means that 
 
- Since we add all critical pairs between new rules and existing ones, the final system of AC-rewrites can't have critical pairs that are unjoinable.
+Since we add all critical pairs between new rules and existing ones, the final system of AC-rewrites can't have critical pairs that are unjoinable.
 
-\subsubsection{Equivalence}
-
-
-
-
-
-
-The first thing to note is that, even though we introduce new constants to $C$, there is a limitation to how these constants may appear in $\rightarrow_U$ or $\rightarrow_F$. In particular, a constant $e_n$ introduced during AC-closure can only enter $\rightarrow_U$ by becoming equal to an existing constant $e_i$, and the rule $e_i \rightarrow_U e_n$ or $e_n \rightarrow_U e_i$ being added to $\rightarrow_U$. If $e_n \rightarrow_U e_i$, then $e_n$ will never appear in $\rightarrow_F$ at all. If $e_i \rightarrow_U e_n$, then $e_n$ may appear in $\rightarrow_F$, but only as a potential replacement for $e_i$. Thus, the effective number of constants mentioned in $\rightarrow_F$ doesn't increase. This means that there are only finitely many changes to $\rightarrow_F$ possible, by the usual argument for E-graphs: each application of congruence closure to $\rightarrow_F$ may equate some existing E-classes, and there can only be finitely many such steps taken before all E-classes mentioned in $\rightarrow_F$ are equal, upon which $\rightarrow_F$ won't change except for renaming of E-classes.
-
-
-\begin{lemma}
-	Every rule $t_l \rightarrow_{AC} t_r$ satisfies $t_l \ge t_r$ according to the chosen term ordering.
-\end{lemma}
-\begin{proof}
-	The rule $t_b \rightarrow_{AC} t_a$ is only added if $t_b \ge t_a$.
-\end{proof}
-
-\begin{prooftree}
-\AxiomC{$R[f(e_1, \ldots, e_n)], f(e_1, \ldots, e_n) \nrightarrow_{AC}, e \notin C$}
-\LeftLabel{Extension}
-\UnaryInfC{$R[e], f(e_1, \ldots, e_n) \rightarrow_F e, e \in C$}
-\end{prooftree}
-
-\begin{prooftree}
-\AxiomC{$R[e_1 + \ldots + e_n], e_1 + \ldots + e_n \nrightarrow_{AC}, e \notin C$}
-\LeftLabel{AC-Extension}
-\UnaryInfC{$R[e], e_1 + \ldots + e_n \rightarrow_F e, e \in C$}
-\end{prooftree}
-
-\begin{prooftree}
-\AxiomC{$R \cup \{e_i = e_j\}$}
-\LeftLabel{Orient}
-\UnaryInfC{$R, e_i \rightarrow_U e_j$}
-\end{prooftree}
-
-\begin{prooftree}
-\AxiomC{$R \cup \{e_i = e_j\}$}
-\LeftLabel{Orient-U}
-\UnaryInfC{$R, e_i \rightarrow_U e_j$}
-\end{prooftree}
-
-%This procedure always terminates (\citep{bachmair_abstract_2000}). It is, in fact, a special case of Buchberger's algorithm for finding Gr\"obner bases of sets of polynomials (\citep{tiwari_decision_2000}), a well-studied algorithm with a lot of work done in optimizing it to be fast enough in practice. \fxerror{I think we will have proved termination in the introductory section by this point}
-
-%So, if an E-graph has E-node rules and union-find rules, EMT(AC) adds a third kind, an AC-rule.
-
+The properties of the AC-term ordering come into play in proving that \emph{canonization} terminates. In particular, we can reuse the Dickson-order argument, as long as the term order is reflexive, antisymmetric, and transitive (and thus actually an order!), and is an extension of the Dickson ordering, so that if $t \le s$ in the Dickson ordering, then $t \le s$ in the term ordering. With these properties, the iterations of the canonization cannot increase the term in the Dickson ordering, and so can only rewrite the term within the finite set of of terms that are not Dickson-greater than the original. Then, we rule out cycles by the ordering properties: if $t_1 \ge t_2 \ge \ldots \ge t_1$, then $t_1 \ge t_2 \ge t_1$ and so $t_1 = t_2$, which is only possible if the rewrite rule involved is of the form $s \rightarrow_{AC} s$. However, the algorithm never add rules with equal left-hand and right-hand sides to the rewrite system.
 
 \chapter{Beyond rewriting: E-matching, E-analysis, and E-xtraction}
 Many uses of E-graphs don't just use them as an equational theory solver, but want to run certain analyses on the E-graph (perhaps to allow conditional rewrites) or want to extract the smallest term representing an equivalence class, according to some cost metric.
@@ -3099,7 +3022,7 @@ One thing to consider in future work is that matching engine might allow pattern
 We have built a proof-of-concept implementation of EMT(AC) in Haskell. We discuss some design choices and tradeoffs we made, which could be improved upon in future work, and compare equality saturation against AC-completion running on our implementation.
 
 \section{Signatures}
-We want to be somewhat generic in the signature used to build terms. \fxerror{If we have discussed $\Sigma$ or $\Sigma^*$ at this point, point back to that discussion.} Our EMT is generic over a type constructor \texttt{enode} belonging to the following typeclass
+We want to be somewhat generic in the signature used to build terms. Our EMT is generic over a type constructor \texttt{enode} belonging to the following typeclass
 
 \begin{minted}{haskell}
 class (Ord (ACSymbol enode),
@@ -3132,7 +3055,7 @@ class (Ord (ACSymbol enode),
   reconstructAC = absurd
 \end{minted}
 
-In particular, \texttt{enode} is expected to be all of a \texttt{Functor}, \texttt{Foldable}, and \texttt{Traversable}. All these classes can be derived automatically with relevant language extensions, and they provide useful functionality to work with the \texttt{EId}s within an \texttt{enode EId}. Moreover, we can define the type of (non-single-layer) terms simply as \texttt{Fix enode}, or terms potentially with \texttt{EId} leaves as \texttt{Free enode EId}, using the standard \texttt{data-fix} and \texttt{free} packages.
+The idea is that \texttt{enode a} is akin to the definition of $\Sigma(A)$ given in section \ref{sig}. In particular, \texttt{enode} is expected to be all of a \texttt{Functor}, \texttt{Foldable}, and \texttt{Traversable}. All these classes can be derived automatically with relevant language extensions, and they provide useful functionality to work with the \texttt{EId}s within an \texttt{enode EId}. Moreover, we can define the type of (non-single-layer) terms simply as \texttt{Fix enode}, or terms potentially with \texttt{EId} leaves as \texttt{Free enode EId}, using the standard \texttt{data-fix} and \texttt{free} packages.
 
 The type family \texttt{Symbol} is defined with the intent that \texttt{Symbol enode} is isomorphic to \texttt{enode ()}. However, the default definition can be overriden to allow more compact definitions than the generic \texttt{enode ()}. Note that an enode with \texttt{()} in every argument slot is only distinguished by the function symbol, which motivates this definition.
 
@@ -3192,7 +3115,7 @@ Unlike congruence-closure, for which it is possible to incrementally restore the
 
 This is one of the difficulties of applying some binarization to AC-symbols: we could store the AC-rules in some kind of trie, but the structure is upended fairly arbitrarily on unions, and then we potentially have to interreduce other rules with the new one, and so forth. Thus any sort of trie-like binarized structure doesn't seem to help much when computing AC-closure.
 
-We know \fxerror{forward/backref} that AC-closure is \textsc{ESpace}-complete. However, this leaves room for constant-factor or even polynomial-factor improvements in the algorithmic steps of lookup, finding critical pairs, resolving critical pairs, and so forth. If certain parts of these steps can be made incremental, that is a promising path to achieving such improvements.
+In section \ref{hrmite} we note that AC-closure is \textsc{ESpace}-complete. However, this leaves room for constant-factor or even polynomial-factor improvements in the algorithmic steps of lookup, finding critical pairs, resolving critical pairs, and so forth. If certain parts of these steps can be made incremental, that is a promising path to achieving such improvements.
 
 \section{Evaluation} \label{evalresults}
 To evaluate our proof-of-concept implementation, we generate a variety of `random theories'

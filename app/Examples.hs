@@ -12,9 +12,10 @@ import Data.Foldable1 (foldr1)
 import Data.Functor.Classes (Show1)
 import Data.GraphViz (GraphvizCanvas (Xlib), GraphvizOutput (Png, Svg), runGraphviz, runGraphvizCanvas')
 import Data.GraphViz.Types.Generalised (DotGraph)
+import Data.Set qualified as Set
 import Data.Text qualified as Text
 import Data.Traversable (for)
-import Egraph (EId (..), Egraph, Signature (..), edebug, eempty, eemptyWithMatcher, efindMatches, einsert, einsertFree, ereannotate, eunion, eunionInternal, prettyId, esize, egsEnodes)
+import Egraph (EId (..), Egraph, Signature (..), edebug, eempty, eemptyWithMatcher, efindMatches, egsEnodes, einsert, einsertFree, ereannotate, esize, eunion, eunionInternal, prettyId)
 import Ematch (MatchState, Matcher, Pattern, PatternVar, compilePatterns, convert, mdebug)
 import GHC.Generics (Generic1, Generically, Generically1 (..))
 import GraphDrawing
@@ -177,14 +178,27 @@ associationsOf (x : xs) = associationsOf xs >>= graft x
 catalanNumbers :: [Int]
 catalanNumbers = [length (associationsOf [1 .. i]) | i <- [1 .. 10]] :: [Int]
 
-exampleACNaive :: Int -> Egraph Ex3 ()
-exampleACNaive n = executingState trivialEmpty do
+exampleANaive :: Int -> Egraph Ex3 ()
+exampleANaive n = executingState trivialEmpty do
   is <- for (take n commonVars) (einsert . Ex3Var)
   for_ (subsequences is) \js -> do
     case associationsOf js of
       [] -> pass
       t : ts -> do
         i <- einsertFree t
+        for_ ts \t' -> do
+          j <- einsertFree t'
+          eunion i j
+
+exampleACNaive :: Int -> Egraph Ex3 ()
+exampleACNaive n = executingState trivialEmpty do
+  is <- for (take n commonVars) (einsert . Ex3Var)
+  for_ (subsequences is) \js -> do
+    case concatMap associationsOf (permutations js) of
+      [] -> pass
+      t : ts -> do
+        i <- einsertFree t
+        -- Permutations?
         for_ ts \t' -> do
           j <- einsertFree t'
           eunion i j
@@ -196,12 +210,10 @@ exampleACNaiveViz :: Int -> IO ()
 exampleACNaiveViz i = runGraphvizCanvas' (toDot Nothing example3Show $ exampleACNaive i) Xlib
 
 exampleACNaiveGen :: Int -> Int -> IO ()
-exampleACNaiveGen i j = for_ ([i .. j] :: [Int]) \k -> do
-  runGraphviz (toDot Nothing example3Show $ exampleACNaive k) Svg ("writings/blowup" ++ show k ++ ".svg")
+exampleACNaiveGen i j = for_ ([i .. j] :: [Int]) \k -> runGraphviz (toDot Nothing example3Show $ exampleACNaive k) Svg ("writings/figures/blowup" ++ show k ++ ".svg")
 
 exampleACNaiveGenPng :: Int -> Int -> IO ()
-exampleACNaiveGenPng i j = for_ ([i .. j] :: [Int]) \k -> do
-  runGraphviz (toDot Nothing example3Show $ exampleACNaive k) Png ("writings/blowup" ++ show k ++ ".png")
+exampleACNaiveGenPng i j = for_ ([i .. j] :: [Int]) \k -> runGraphviz (toDot Nothing example3Show $ exampleACNaive k) Png ("writings/figures/blowup" ++ show k ++ ".png")
 
 exampleNonWord :: Egraph Ex3 ()
 exampleNonWord = executingState trivialEmpty do
@@ -337,8 +349,7 @@ example4Viz i = runGraphvizCanvas' (toDot Nothing example4Show i) Xlib
 example4Gen :: IO ()
 example4Gen = do
   let examples = zip [1 ..] [example40, example405, example41, example42, example435, example43, example44, example45]
-  for_ @[] examples \(i, e) -> do
-    runGraphviz (toDot Nothing example4Show e) Svg ("writings/" ++ "exampleBasic" ++ show i ++ ".svg")
+  for_ @[] examples \(i, e) -> runGraphviz (toDot Nothing example4Show e) Svg ("writings/" ++ "exampleBasic" ++ show i ++ ".svg")
 
 debugMatches :: [(Int, EId, IntMap EId)] -> Doc ann
 debugMatches ms =
@@ -536,10 +547,9 @@ genInitialClasses numACOps ars = do
         spl <- chooseInt (0, size)
         pure (size - spl, spl)
   nonACs <-
-    replicateM nonACN $ do
-      chooseInt (0, min 3 size) >>= \i -> smallerScale i $ replicateNEM i do
-        t <- genTerm ars
-        pure (iter Fix $ fmap (Fix . BenchConst) t)
+    replicateM nonACN $ chooseInt (0, min 3 size) >>= \i -> smallerScale i $ replicateNEM i do
+      t <- genTerm ars
+      pure (iter Fix $ fmap (Fix . BenchConst) t)
   (acs1, acs2) <-
     fmap
       (unzip . fmap unzip)
@@ -550,3 +560,4 @@ genInitialClasses numACOps ars = do
             pure (iter Fix $ fmap (Fix . BenchConst) t1, iter Fix $ fmap (Fix . BenchConst) t2)
       )
   pure (nonACs ++ acs1, nonACs ++ acs2)
+

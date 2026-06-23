@@ -25,10 +25,10 @@
                   # Specify your build/dev dependencies here.
                   # cabal-fmt
                   cabal-install
-                  ghcid
+                  # ghcid
                   haskell-language-server
                   # ormolu
-                  pkgs.nixpkgs-fmt
+                  # pkgs.nixpkgs-fmt
                 ]);
           };
       in
