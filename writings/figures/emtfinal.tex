@@ -1,0 +1,182 @@
+\node[fill=blue!30, ultra thick] (s) at (0, 4.5) {$+$};
+\node[fill=green!30, ultra thick] (t) at (1, 4.5) {$+$};
+\node (r0) at (2, 4.5) {$+$};
+\node (r1) at (3, 4.5) {$+$};
+\node (r2) at (4, 4.5) {$+$};
+\node[fill=blue!30, ultra thick] (f0) at (0, 3) {$f$};
+\node[fill=blue!30, ultra thick] (f1) at (1, 3) {$f$};
+\node[fill=blue!30, ultra thick] (f2) at (2, 3) {$f$};
+\node[fill=green!30, ultra thick] (f012) at (3, 3) {$f$};
+\node (f01) at (4, 3) {$f$};
+\node (f02) at (5, 3) {$f$};
+\node (f12) at (6, 3) {$f$};
+\node[fill=green!30, ultra thick] (n012) at (0, 1.5) {$+$};
+\node (n01) at (1, 1.5) {$+$};
+\node (n02) at (2, 1.5) {$+$};
+\node (n12) at (3, 1.5) {$+$};
+\node[fill=blue!30, ultra thick] (n0) at (1, 0) {$a$};
+\node[fill=blue!30, ultra thick] (n1) at (2, 0) {$b$};
+\node[fill=blue!30, ultra thick] (n2) at (3, 0) {$c$};
+\node[fill=green!30, ultra thick] (c2) at (4, 1.5) {$2$};
+\node (c1p1) at (5, 1.5) {$+$};
+\node (c1) at (4, 0) {$1$};
+
+\begin{pgfonlayer}{background}
+\node[draw=none, fill=black!15, inner sep=12pt, fit=(n0)] (bn0) {};
+\draw[dashed, rounded corners=3pt]
+(bn0.north east) --
+(bn0.north west) --
+(bn0.south west) --
+(bn0.south east) -- cycle;
+\node[draw=none, fill=black!15, inner sep=12pt, fit=(n1)] (bn1) {};
+\draw[dashed, rounded corners=3pt]
+(bn1.north east) --
+(bn1.north west) --
+(bn1.south west) --
+(bn1.south east) -- cycle;
+\node[draw=none, fill=black!15, inner sep=12pt, fit=(n2)] (bn2) {};
+\draw[dashed, rounded corners=3pt]
+(bn2.north east) --
+(bn2.north west) --
+(bn2.south west) --
+(bn2.south east) -- cycle;
+
+\node[draw=none, fill=black!15, inner sep=12pt, fit=(c1)] (bc1) {};
+\draw[dashed, rounded corners=3pt]
+(bc1.north east) --
+(bc1.north west) --
+(bc1.south west) --
+(bc1.south east) -- cycle;
+\node[draw=none, fill=black!15, inner sep=12pt, fit=(c2) (c1p1)] (bc2) {};
+\draw[dashed, rounded corners=3pt]
+(bc2.north east) --
+(bc2.north west) --
+(bc2.south west) --
+(bc2.south east) -- cycle;
+
+\node[draw=none, fill=black!15, inner sep=12pt, fit=(n01)] (bn01) {};
+\draw[dashed, rounded corners=3pt]
+(bn01.north east) --
+(bn01.north west) --
+(bn01.south west) --
+(bn01.south east) -- cycle;
+\node[draw=none, fill=black!15, inner sep=12pt, fit=(n02)] (bn02) {};
+\draw[dashed, rounded corners=3pt]
+(bn02.north east) --
+(bn02.north west) --
+(bn02.south west) --
+(bn02.south east) -- cycle;
+\node[draw=none, fill=black!15, inner sep=12pt, fit=(n12)] (bn12) {};
+\draw[dashed, rounded corners=3pt]
+(bn12.north east) --
+(bn12.north west) --
+(bn12.south west) --
+(bn12.south east) -- cycle;
+\node[draw=none, fill=black!15, inner sep=12pt, fit=(n012)] (bn012) {};
+\draw[dashed, rounded corners=3pt]
+(bn012.north east) --
+(bn012.north west) --
+(bn012.south west) --
+(bn012.south east) -- cycle;
+
+\node[draw=none, fill=black!15, inner sep=12pt, fit=(f0)] (bf0) {};
+\draw[dashed, rounded corners=3pt]
+(bf0.north east) --
+(bf0.north west) --
+(bf0.south west) --
+(bf0.south east) -- cycle;
+\node[draw=none, fill=black!15, inner sep=12pt, fit=(f1)] (bf1) {};
+\draw[dashed, rounded corners=3pt]
+(bf1.north east) --
+(bf1.north west) --
+(bf1.south west) --
+(bf1.south east) -- cycle;
+\node[draw=none, fill=black!15, inner sep=12pt, fit=(f2)] (bf2) {};
+\draw[dashed, rounded corners=3pt]
+(bf2.north east) --
+(bf2.north west) --
+(bf2.south west) --
+(bf2.south east) -- cycle;
+
+\node[draw=none, fill=black!15, inner sep=12pt, fit=(f012)] (bf012) {};
+\draw[dashed, rounded corners=3pt]
+(bf012.north east) --
+(bf012.north west) --
+(bf012.south west) --
+(bf012.south east) -- cycle;
+\node[draw=none, fill=black!15, inner sep=12pt, fit=(f01)] (bf01) {};
+\draw[dashed, rounded corners=3pt]
+(bf01.north east) --
+(bf01.north west) --
+(bf01.south west) --
+(bf01.south east) -- cycle;
+\node[draw=none, fill=black!15, inner sep=12pt, fit=(f02)] (bf02) {};
+\draw[dashed, rounded corners=3pt]
+(bf02.north east) --
+(bf02.north west) --
+(bf02.south west) --
+(bf02.south east) -- cycle;
+\node[draw=none, fill=black!15, inner sep=12pt, fit=(f12)] (bf12) {};
+\draw[dashed, rounded corners=3pt]
+(bf12.north east) --
+(bf12.north west) --
+(bf12.south west) --
+(bf12.south east) -- cycle;
+
+\node[draw=none, fill=black!15, inner sep=12pt, fit=(s) (t) (r0) (r1) (r2)] (bs) {};
+\draw[dashed, rounded corners=3pt]
+(bs.north east) --
+(bs.north west) --
+(bs.south west) --
+(bs.south east) -- cycle;
+\end{pgfonlayer}
+
+\draw[->, >=stealth, thick] (bn0.north) to[out=90, in=270, looseness=1] (f0.south);
+\draw[->, >=stealth, thick] (bn1.north) to[out=90, in=270, looseness=1] (f1.south);
+\draw[->, >=stealth, thick] (bn2.north) to[out=90, in=270, looseness=1] (f2.south);
+
+\draw[->, >=stealth, thick] (bn0.north) to[out=90, in=270, looseness=1] (n01.south);
+\draw[->, >=stealth, thick] (bn1.north) to[out=90, in=270, looseness=1] (n01.south);
+\draw[->, >=stealth, thick] (bn0.north) to[out=90, in=270, looseness=1] (n02.south);
+\draw[->, >=stealth, thick] (bn2.north) to[out=90, in=270, looseness=1] (n02.south);
+\draw[->, >=stealth, thick] (bn1.north) to[out=90, in=270, looseness=1] (n12.south);
+\draw[->, >=stealth, thick] (bn2.north) to[out=90, in=270, looseness=1] (n12.south);
+
+\draw[->, >=stealth, thick] (bn01.north) to[out=90, in=270, looseness=1] (f01.south);
+\draw[->, >=stealth, thick] (bn02.north) to[out=90, in=270, looseness=1] (f02.south);
+\draw[->, >=stealth, thick] (bn12.north) to[out=90, in=270, looseness=1] (f12.south);
+
+\draw[->, >=stealth, thick] (bf0.north) to[out=90, in=270, looseness=1] (s.south);
+\draw[->, >=stealth, thick] (bf1.north) to[out=90, in=270, looseness=1] (s.south);
+\draw[->, >=stealth, thick] (bf2.north) to[out=90, in=270, looseness=1] (s.south);
+
+\draw[->, >=stealth, thick] (bf01.north) to[out=90, in=270, looseness=1] (r0.south);
+\draw[->, >=stealth, thick] (bf2.north) to[out=90, in=270, looseness=1] (r0.south);
+\draw[->, >=stealth, thick] (bc1.north) to[out=90, in=270, looseness=1]
+    ([xshift=1.25ex]bc2.east) to[out=90, in=270, looseness=1]
+    ([xshift=0.75ex]bf12.east) to[out=90, in=270, looseness=1]
+    (r0.south);
+
+\draw[->, >=stealth, thick] (bf02.north) to[out=90, in=270, looseness=1] (r1.south);
+\draw[->, >=stealth, thick] (bf1.north) to[out=90, in=270, looseness=1] (r1.south);
+\draw[->, >=stealth, thick] (bc1.north) to[out=90, in=270, looseness=1] 
+    ([xshift=1.25ex]bc2.east) to[out=90, in=270, looseness=1]
+    ([xshift=0.75ex]bf12.east) to[out=90, in=270, looseness=1]
+    (r1.south);
+
+\draw[->, >=stealth, thick] (bf12.north) to[out=90, in=270, looseness=1] (r2.south);
+\draw[->, >=stealth, thick] (bf0.north) to[out=90, in=270, looseness=1] (r2.south);
+\draw[->, >=stealth, thick] (bc1.north) to[out=90, in=270, looseness=1]
+    ([xshift=1.25ex]bc2.east) to[out=90, in=270, looseness=1]
+    ([xshift=0.75ex]bf12.east) to[out=90, in=270, looseness=1]
+    (r2.south);
+    
+\draw[->, >=stealth, thick] (bc1.north) to[out=90, in=225, looseness=1] (c1p1.south);
+\draw[->, >=stealth, thick] (bc1.north) to[out=90, in=315, looseness=1] (c1p1.south);
+
+\draw[->, >=stealth, thick] (bn0.north) to[out=90, in=270, looseness=1] (n012.south);
+\draw[->, >=stealth, thick] (bn1.north) to[out=90, in=270, looseness=1] (n012.south);
+\draw[->, >=stealth, thick] (bn2.north) to[out=90, in=270, looseness=1] (n012.south);
+\draw[->, >=stealth, thick] (bn012.north) to[out=90, in=270, looseness=1] (bf012.south);
+\draw[->, >=stealth, thick] (bf012.north) to[out=90, in=270, looseness=1] (t.south);
+\draw[->, >=stealth, thick] (bc2.north) to[out=90, in=270, looseness=1] (t.south);

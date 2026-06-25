@@ -162,11 +162,24 @@
 \addtolength{\voffset}{2cm}
 
 % Cover picture (replace with your own or delete)		
-%\begin{figure}[H]
-%\centering
-%\vspace{1cm}	% Adjust vertical spacing here
+\begin{figure}[H]
+\centering
+\vspace{1cm}	% Adjust vertical spacing here
+	\begin{tikzpicture}[
+			scale=2,
+			transform shape,
+			every node/.style={
+					draw,
+					fill=white,
+					text height=1.5ex, % Height above the baseline
+					text depth=0.25ex, % Depth below the baseline
+					rounded corners
+				}
+		]
+		\input{figures/emtfinal.tex}
+	\end{tikzpicture}
 %\includegraphics[width=0.9\linewidth]{figure/somepicture}
-%\end{figure}
+\end{figure}
 
 % Cover text
 \mbox{}
@@ -249,7 +262,7 @@ Telephone +46 31 772 1000 \setlength{\parskip}{0.5cm}
 
 \vfill
 % Caption for cover page figure if used, possibly with reference to further information in the report
-Cover: Description of the picture on the cover page (if applicable)
+Cover: An E-graph Modulo Theory compactly representing a set of terms involving the associative and commutative function symbol + alongside another function symbol $f$.
 
 
 Typeset in \LaTeX \\
@@ -284,14 +297,6 @@ However, there is a limitation in previous proposals for EMTs for AC, which caus
 Central to our notion of a `good' theory for an EMT is the necessity of a solver for the word problem over the theory. This gives us a lower bound on EMTs for AC: the word problem for AC requires in the worst case exponential space and doubly-exponential time. This is an improvement over the space upper bound for ordinary E-graphs, but highlights that concrete efficiency gains derive from the potential for typical problems to be solvable efficiently. Our solver for AC and polynomials builds upon Buchberger's algorithm, on which significant work has been done to achieve good common-case performance. Theories similar to AC, such as those with identities for units, negation, or scalar multiplication, have word problems solvable via Buchberger-like algorithms, and in certain cases, AC-like theories can be solved significantly more than AC by itself. Thus our work provides a foundation for future generalization to a this large family of AC-like theories.
 
 % On the other hand, for the theory ACUN (AC with unit and negation, aka the theory of Abelian groups) or the theory of vector spaces, we have polynomial time bounds: we can use algorithms for Hermite normal form (for Abelian groups) and Gaussian elimination (for vector spaces).
-
-\fxerror{If I have time, set up a proper makefile or similar and split this tex into multiple files, etc}
-
-\fxerror{Title page fixes}
-
-\fxerror{Switched from IEEE to numeric cite style to get [1,2,3] cites like Nick wanted}
-
-\fxerror{Review floats}
 
 % KEYWORDS (MAXIMUM 10 WORDS)
 \vfill
@@ -2050,188 +2055,7 @@ The final EMT (Figure \ref{emte3}) is saturated, and has `discovered' our desire
 					rounded corners
 				}
 		]
-		\node[fill=blue!30, ultra thick] (s) at (0, 4.5) {$+$};
-		\node[fill=green!30, ultra thick] (t) at (1, 4.5) {$+$};
-		\node (r0) at (2, 4.5) {$+$};
-		\node (r1) at (3, 4.5) {$+$};
-		\node (r2) at (4, 4.5) {$+$};
-		\node[fill=blue!30, ultra thick] (f0) at (0, 3) {$f$};
-		\node[fill=blue!30, ultra thick] (f1) at (1, 3) {$f$};
-		\node[fill=blue!30, ultra thick] (f2) at (2, 3) {$f$};
-		\node[fill=green!30, ultra thick] (f012) at (3, 3) {$f$};
-		\node (f01) at (4, 3) {$f$};
-		\node (f02) at (5, 3) {$f$};
-		\node (f12) at (6, 3) {$f$};
-		\node[fill=green!30, ultra thick] (n012) at (0, 1.5) {$+$};
-		\node (n01) at (1, 1.5) {$+$};
-		\node (n02) at (2, 1.5) {$+$};
-		\node (n12) at (3, 1.5) {$+$};
-		\node[fill=blue!30, ultra thick] (n0) at (1, 0) {$a$};
-		\node[fill=blue!30, ultra thick] (n1) at (2, 0) {$b$};
-		\node[fill=blue!30, ultra thick] (n2) at (3, 0) {$c$};
-		\node[fill=green!30, ultra thick] (c2) at (4, 1.5) {$2$};
-		\node (c1p1) at (5, 1.5) {$+$};
-		\node (c1) at (4, 0) {$1$};
-
-		\begin{pgfonlayer}{background}
-		\node[draw=none, fill=black!15, inner sep=12pt, fit=(n0)] (bn0) {};
-		\draw[dashed, rounded corners=3pt]
-		(bn0.north east) --
-		(bn0.north west) --
-		(bn0.south west) --
-		(bn0.south east) -- cycle;
-		\node[draw=none, fill=black!15, inner sep=12pt, fit=(n1)] (bn1) {};
-		\draw[dashed, rounded corners=3pt]
-		(bn1.north east) --
-		(bn1.north west) --
-		(bn1.south west) --
-		(bn1.south east) -- cycle;
-		\node[draw=none, fill=black!15, inner sep=12pt, fit=(n2)] (bn2) {};
-		\draw[dashed, rounded corners=3pt]
-		(bn2.north east) --
-		(bn2.north west) --
-		(bn2.south west) --
-		(bn2.south east) -- cycle;
-		
-		\node[draw=none, fill=black!15, inner sep=12pt, fit=(c1)] (bc1) {};
-		\draw[dashed, rounded corners=3pt]
-		(bc1.north east) --
-		(bc1.north west) --
-		(bc1.south west) --
-		(bc1.south east) -- cycle;
-		\node[draw=none, fill=black!15, inner sep=12pt, fit=(c2) (c1p1)] (bc2) {};
-		\draw[dashed, rounded corners=3pt]
-		(bc2.north east) --
-		(bc2.north west) --
-		(bc2.south west) --
-		(bc2.south east) -- cycle;
-		
-		\node[draw=none, fill=black!15, inner sep=12pt, fit=(n01)] (bn01) {};
-		\draw[dashed, rounded corners=3pt]
-		(bn01.north east) --
-		(bn01.north west) --
-		(bn01.south west) --
-		(bn01.south east) -- cycle;
-		\node[draw=none, fill=black!15, inner sep=12pt, fit=(n02)] (bn02) {};
-		\draw[dashed, rounded corners=3pt]
-		(bn02.north east) --
-		(bn02.north west) --
-		(bn02.south west) --
-		(bn02.south east) -- cycle;
-		\node[draw=none, fill=black!15, inner sep=12pt, fit=(n12)] (bn12) {};
-		\draw[dashed, rounded corners=3pt]
-		(bn12.north east) --
-		(bn12.north west) --
-		(bn12.south west) --
-		(bn12.south east) -- cycle;
-		\node[draw=none, fill=black!15, inner sep=12pt, fit=(n012)] (bn012) {};
-		\draw[dashed, rounded corners=3pt]
-		(bn012.north east) --
-		(bn012.north west) --
-		(bn012.south west) --
-		(bn012.south east) -- cycle;
-
-		\node[draw=none, fill=black!15, inner sep=12pt, fit=(f0)] (bf0) {};
-		\draw[dashed, rounded corners=3pt]
-		(bf0.north east) --
-		(bf0.north west) --
-		(bf0.south west) --
-		(bf0.south east) -- cycle;
-		\node[draw=none, fill=black!15, inner sep=12pt, fit=(f1)] (bf1) {};
-		\draw[dashed, rounded corners=3pt]
-		(bf1.north east) --
-		(bf1.north west) --
-		(bf1.south west) --
-		(bf1.south east) -- cycle;
-		\node[draw=none, fill=black!15, inner sep=12pt, fit=(f2)] (bf2) {};
-		\draw[dashed, rounded corners=3pt]
-		(bf2.north east) --
-		(bf2.north west) --
-		(bf2.south west) --
-		(bf2.south east) -- cycle;
-		
-		\node[draw=none, fill=black!15, inner sep=12pt, fit=(f012)] (bf012) {};
-		\draw[dashed, rounded corners=3pt]
-		(bf012.north east) --
-		(bf012.north west) --
-		(bf012.south west) --
-		(bf012.south east) -- cycle;
-		\node[draw=none, fill=black!15, inner sep=12pt, fit=(f01)] (bf01) {};
-		\draw[dashed, rounded corners=3pt]
-		(bf01.north east) --
-		(bf01.north west) --
-		(bf01.south west) --
-		(bf01.south east) -- cycle;
-		\node[draw=none, fill=black!15, inner sep=12pt, fit=(f02)] (bf02) {};
-		\draw[dashed, rounded corners=3pt]
-		(bf02.north east) --
-		(bf02.north west) --
-		(bf02.south west) --
-		(bf02.south east) -- cycle;
-		\node[draw=none, fill=black!15, inner sep=12pt, fit=(f12)] (bf12) {};
-		\draw[dashed, rounded corners=3pt]
-		(bf12.north east) --
-		(bf12.north west) --
-		(bf12.south west) --
-		(bf12.south east) -- cycle;
-		
-		\node[draw=none, fill=black!15, inner sep=12pt, fit=(s) (t) (r0) (r1) (r2)] (bs) {};
-		\draw[dashed, rounded corners=3pt]
-		(bs.north east) --
-		(bs.north west) --
-		(bs.south west) --
-		(bs.south east) -- cycle;
-		\end{pgfonlayer}
-		
-		\draw[->, >=stealth, thick] (bn0.north) to[out=90, in=270, looseness=1] (f0.south);
-		\draw[->, >=stealth, thick] (bn1.north) to[out=90, in=270, looseness=1] (f1.south);
-		\draw[->, >=stealth, thick] (bn2.north) to[out=90, in=270, looseness=1] (f2.south);
-		
-		\draw[->, >=stealth, thick] (bn0.north) to[out=90, in=270, looseness=1] (n01.south);
-		\draw[->, >=stealth, thick] (bn1.north) to[out=90, in=270, looseness=1] (n01.south);
-		\draw[->, >=stealth, thick] (bn0.north) to[out=90, in=270, looseness=1] (n02.south);
-		\draw[->, >=stealth, thick] (bn2.north) to[out=90, in=270, looseness=1] (n02.south);
-		\draw[->, >=stealth, thick] (bn1.north) to[out=90, in=270, looseness=1] (n12.south);
-		\draw[->, >=stealth, thick] (bn2.north) to[out=90, in=270, looseness=1] (n12.south);
-		
-		\draw[->, >=stealth, thick] (bn01.north) to[out=90, in=270, looseness=1] (f01.south);
-		\draw[->, >=stealth, thick] (bn02.north) to[out=90, in=270, looseness=1] (f02.south);
-		\draw[->, >=stealth, thick] (bn12.north) to[out=90, in=270, looseness=1] (f12.south);
-		
-		\draw[->, >=stealth, thick] (bf0.north) to[out=90, in=270, looseness=1] (s.south);
-		\draw[->, >=stealth, thick] (bf1.north) to[out=90, in=270, looseness=1] (s.south);
-		\draw[->, >=stealth, thick] (bf2.north) to[out=90, in=270, looseness=1] (s.south);
-		
-		\draw[->, >=stealth, thick] (bf01.north) to[out=90, in=270, looseness=1] (r0.south);
-		\draw[->, >=stealth, thick] (bf2.north) to[out=90, in=270, looseness=1] (r0.south);
-		\draw[->, >=stealth, thick] (bc1.north) to[out=90, in=270, looseness=1]
-			([xshift=1.25ex]bc2.east) to[out=90, in=270, looseness=1]
-			([xshift=0.75ex]bf12.east) to[out=90, in=270, looseness=1]
-			(r0.south);
-		
-		\draw[->, >=stealth, thick] (bf02.north) to[out=90, in=270, looseness=1] (r1.south);
-		\draw[->, >=stealth, thick] (bf1.north) to[out=90, in=270, looseness=1] (r1.south);
-		\draw[->, >=stealth, thick] (bc1.north) to[out=90, in=270, looseness=1] 
-			([xshift=1.25ex]bc2.east) to[out=90, in=270, looseness=1]
-			([xshift=0.75ex]bf12.east) to[out=90, in=270, looseness=1]
-			(r1.south);
-		
-		\draw[->, >=stealth, thick] (bf12.north) to[out=90, in=270, looseness=1] (r2.south);
-		\draw[->, >=stealth, thick] (bf0.north) to[out=90, in=270, looseness=1] (r2.south);
-		\draw[->, >=stealth, thick] (bc1.north) to[out=90, in=270, looseness=1]
-			([xshift=1.25ex]bc2.east) to[out=90, in=270, looseness=1]
-			([xshift=0.75ex]bf12.east) to[out=90, in=270, looseness=1]
-			(r2.south);
-			
-		\draw[->, >=stealth, thick] (bc1.north) to[out=90, in=225, looseness=1] (c1p1.south);
-		\draw[->, >=stealth, thick] (bc1.north) to[out=90, in=315, looseness=1] (c1p1.south);
-		
-		\draw[->, >=stealth, thick] (bn0.north) to[out=90, in=270, looseness=1] (n012.south);
-		\draw[->, >=stealth, thick] (bn1.north) to[out=90, in=270, looseness=1] (n012.south);
-		\draw[->, >=stealth, thick] (bn2.north) to[out=90, in=270, looseness=1] (n012.south);
-		\draw[->, >=stealth, thick] (bn012.north) to[out=90, in=270, looseness=1] (bf012.south);
-		\draw[->, >=stealth, thick] (bf012.north) to[out=90, in=270, looseness=1] (t.south);
-		\draw[->, >=stealth, thick] (bc2.north) to[out=90, in=270, looseness=1] (t.south);
+		\input{figures/emtfinal.tex}
 	\end{tikzpicture}
 	\captionof{figure}{EMT of the term $f(a) + f(b) + f(c)$ once saturated, highlighting the initial term and the desired final term.}
   \label{emte3}
@@ -2650,7 +2474,7 @@ The \emph{critical pair} for the peak is the pair of terms obtained by replacing
 Note that for terms as we have defined them, subterms can only overlap if one is a subterm of the other. When we generalize to AC-critical pairs, we need to work with a more general kind of overlap.
 
 \begin{definition}
-A critical pair $t_1 \leftarrow_A s \rightarrow_B t_2$ is \emph{joinable} if there is a term $t$ such that $t_1 \rightarrow^*_B t \leftarrow^*_A t_2$. \fxerror{Rewiew defn}
+A critical pair $t_1 \leftarrow_A s \rightarrow_B t_2$ is \emph{joinable} if there is a term $t$ such that $t_1 \rightarrow^*_B t \leftarrow^*_A t_2$. 
 \end{definition}
 
 \subsection{Congruence closure is confluence}
@@ -2665,7 +2489,7 @@ Suppose we have $e_1 \leftarrow e \rightarrow e_2$. Then by the functionality re
 If an E-graph rewrite system is equivalence-closed, then every critical pair between $\rightarrow^*_{U \mathcal{C}}$ and $\rightarrow_F$ is joinable.
 \end{lemma}
 \begin{proof}
-Suppose we have $f(d_1, \ldots, d_n) \leftarrow^{*\mathcal{C}}_U f(e_1, \ldots, e_n) \rightarrow e$. We must have, by the definition of $\rightarrow^{*\mathcal{C}}_U$, that $e_i \rightarrow^*_U d_i$. Then by E-canonization we must have that $d_i = e_i$. So $f(d_1, \ldots, d_n) \rightarrow^*_F e \leftarrow^{*\mathcal{C}}_U e$.
+Suppose we have $f(d_1, \ldots, d_n) \leftarrow^{*\mathcal{C}}_U f(e_1, \ldots, e_n) \rightarrow e$. We must have, by the definition of $\rightarrow^{*\mathcal{C}}_U$, that $e_i \rightarrow^*_U d_i$. Then by E-canonization we must have that $d_i = e_i$. Therefore, $f(d_1, \ldots, d_n) \rightarrow^*_F e \leftarrow^{*\mathcal{C}}_U e$.
 \end{proof}
 
 \begin{lemma}
@@ -2712,7 +2536,7 @@ When we want to reason about AC, we need the notion of AC-critical pair.
 If $e_1 + e_2 \rightarrow e_3$ and $e_4 + e_2 \rightarrow e_5$, then there is a critical term $e_1 + e_2 + e_4$. This is AC-equal to $(e_1 + e_2) + e_4$, which rewrites to $e_3 + e_4$, and also to $e_1 + (e_2 + e_4)$, which rewrites to $e_1 + e_5$. So, our critical pair is $e_3 + e_4$ and $e_1 + e_5$.
 \end{ex}
 
-In general, we can consider two variadic $+$-terms, $+(e_1, \ldots, e_k)$ and $+(d_1, \ldots, d_i)$. We will think of the arguments as multisets, so that $\{e_1, \ldots, e_k\} = E$ and similarly for $D$. Then let the multiset $O$ contain each element with the minimum multiplicity it occurs in either $E$ or $D$. So if $E = \{e_1, e_1, e_2, e_3\}$ and $D = \{e_1, e_3, e_4\}$, then $O = \{e_1, e_3\}$. Construct the terms $E - O + D$ and $E + D - O$, where $+$ and $-$ are multiset addition and subtraction (that is, they act elementwise on the multiplicities of elements). It is easy to see that $E - O + D = E + D - O$ up to AC, so this will be our peak. $O$ is, by construction, contained in both $E$ and $D$, so the subtraction is always defined.
+In general, we can consider two variadic $+$-terms, $+(e_1, \ldots, e_k)$ and $+(d_1, \ldots, d_i)$. We will think of the arguments as multisets, so that $\{e_1, \ldots, e_k\} = E$ and similarly for $D$. Let the multiset $O$ contain each element with the minimum multiplicity it occurs in either $E$ or $D$. For example, if $E = \{e_1, e_1, e_2, e_3\}$ and $D = \{e_1, e_3, e_4\}$, then $O = \{e_1, e_3\}$. Construct the terms $E - O + D$ and $E + D - O$, where $+$ and $-$ are multiset addition and subtraction (that is, they act elementwise on the multiplicities of elements). It is easy to see that $E - O + D = E + D - O$ up to AC, so this will be our peak. $O$ is, by construction, contained in both $E$ and $D$, so the subtraction is always defined.
 
 \begin{definition}
 	Given two rewrites $+(E) \rightarrow t_1$ and $+(D) \rightarrow t_2$, their AC-critical pair is
@@ -2744,8 +2568,8 @@ Using the terminology of peaks, critical pairs, and overlaps, we can give a succ
 \begin{itemize}
 	\item In AC-saturation, we eagerly create AC-subterms of every AC-term in the E-graph. Let $\Sigma(M)$ denote any term or E-class representing the sum of the terms in the multiset $M$. If we represent the terms $\Sigma(E)$ and $\Sigma(D)$ with overlap $\Sigma(O)$, $\Sigma(O)$ will be assigned its own subterm with an E-class $\Sigma(O) \rightarrow^*_F o$, and there will be rewrites such that $\Sigma(O) + \Sigma(E - O) \rightarrow^*_F e$ and $\Sigma(O) + \Sigma(D - O) \rightarrow^*_F d$.
 	
-	If there were any E-class representing the peak $\Sigma(E + D - O)$, AC-saturation would eventually add a rule $e + \Sigma(D - O) \rightarrow_F p$, and by associativity the rule $d + \Sigma(D - O)$ will then be added. Thus, if this critical pair would appear as a (sub)term anywhere, AC-saturation will (eventually) resolve it.
-	\item In AC-closure, we don't represent the large number of subterms (potentially infinitely many in the case of cycles, as seen in \ref{accycles}). However, we do need to materialize the actual critical pairs more eagerly: whereas AC-saturation effectively only looks at critical pairs of the form $e_1 \leftarrow t \rightarrow e_2 + e_3$, AC-closure must handle critical pairs of the form $e_1 + \ldots \leftarrow t \rightarrow d_1 + \ldots$ where both terms contain the operator. Handling these critical pairs is essential because one of the critical terms may be a subterm of an existing AC-node, or might \emph{become} a subterm of an AC-node yet to be inserted. Resolving each critical pair allows this subterm relation to be established by later critical pair resolution, since the subterms just form special kinds of critical pairs.
+	If there were any E-class representing the peak $\Sigma(E + D - O)$, AC-saturation would eventually add a rule $e + \Sigma(D - O) \rightarrow_F p$, and by associativity the rule $d + \Sigma(D - O)$ will then be added. Thus, if this critical pair appears as a (sub)term anywhere, AC-saturation will (eventually) resolve it.
+	\item In AC-closure, we do not represent the large number of subterms (potentially infinitely many in the case of cycles, as seen in \ref{accycles}). However, we do need to materialize the actual critical pairs more eagerly: whereas AC-saturation effectively only looks at critical pairs of the form $e_1 \leftarrow t \rightarrow e_2 + e_3$, AC-closure must handle critical pairs of the form $e_1 + \ldots \leftarrow t \rightarrow d_1 + \ldots$ where both terms contain the operator. Handling these critical pairs is essential because one of the critical terms may be a subterm of an existing AC-node, or might \emph{become} a subterm of an AC-node yet to be inserted. Resolving each critical pair allows this subterm relation to be established by later critical pair resolution, since the subterms just form special kinds of critical pairs.
 \end{itemize}
 
 As an example of the last point, consider the rules
@@ -2757,14 +2581,14 @@ As an example of the last point, consider the rules
 The critical pair $e_1 + e_5 \leftarrow e_1 + e_2 + e_3 \rightarrow e_4 + e_3$ means that $e_3 + e_4$ and $e_1 + e_5$ are equal, and we potentially need to be able to deduce that $e_7 = e_1 + e_5 + e_6 = e_3 + e_4 + e_6$. The last equation might only appear \emph{later} than the examination of this critical pair, so the critical pair must be resolved into a rule; it is not enough to just scan for current terms with either side as a subterm when resolving a critical pair.
 
 \section{EMTs: handling AC-critical pairs directly}
-EMTs for AC add a third class of rewrite rule to E-graphs, the AC-rules. We will focus on the case with one AC-operator $+$, although the generalization to multiple rules is straightforward; the different AC-operators essentially get their own set of AC-rules, and these sets don't interact directly.
+EMTs for AC add a third class of rewrite rule to E-graphs, the AC-rules. We will focus on the case with one AC-operator $+$, although the generalization to multiple rules is straightforward; the different AC-operators essentially get their own set of AC-rules, and these sets do not interact directly.
 
 Our algorithm for EMT(AC)s is similar to \emph{Buchberger's algorithm} \cite[Chapter~8]{baader_term_1998}, and is an adaptation of methods described in \cite{bachmair_abstract_2000, tiwari_decision_2000, kapur_modular_2021}.
 
 \subsection{A note on our approach}
 For AC-rules, do we want to allow rules of the form $e_1 + \ldots + e_n \rightarrow d_1 + \ldots + d_k$ or restrict to simply $e_1 + \ldots + e_n \rightarrow e$? The former is closer to usual presentations of Buchberger's algorithm, while the latter is more in the spirit of E-node rules.
 
-We will refer to these as the \emph{side-table} and \emph{integrated} approaches. Unfortunately, there, is a difficulty with the integrated approach.
+We will refer to these as the \emph{side-table} and \emph{integrated} approaches. Unfortunately, there is a difficulty with the integrated approach.
 
 \subsection{The difficulties of integrated EMT(AC)s}
 Consider the very simple example
@@ -2789,19 +2613,25 @@ Notice how both new critical pairs are between $a + f$ and $d + e$. Resolving th
 
 This problem is solved by the side-table approach which instead inserts the new rule $c + d  \rightarrow_{AC} b + e$ or its reverse, skipping the unjoinable central term $a + f$.
 
-It is possible to make the integrated approach work with an additional rule $a + f \rightarrow_{AC} e + d$. This extra rule has the property that all critical pairs with it where $a$ is the overlap are already joinable, while there are no critical pairs with $f$ as the overlap, since $f$ only appears on the right-hand side of the rules introduced above. Therefore, this rule can function as a `shadow' rule, available for canonization but that doesn't need to take part in critical pair calculation.
+It is possible to make the integrated approach work with an additional rule $a + f \rightarrow_{AC} e + d$. This extra rule has the property that all critical pairs with it where $a$ is the overlap are already joinable, while there are no critical pairs with $f$ as the overlap, since $f$ only appears on the right-hand side of the rules introduced above. Therefore, this rule can function as a `shadow' rule, available for canonization but that does not need to take part in critical pair calculation.
 
 However, introducing two kinds of rule (normal and `shadow') in order to make all the normal rules have the standard E-graph form with an atomic right-hand-side seems more complex than its worth.
 
 Prior approaches to congruence closure modulo AC \cite{bachmair_abstract_2000, tiwari_decision_2000, kapur_modular_2021} have entirely focused on what we refer to as the side-table approach.
 
 \subsubsection{Aside: why don't ordinary E-graphs have this problem?}
+We have seen that the AC-term $a + b$ overlaps with the AC-term $a + c$, and then can overlap with the term $b + e$ in the critical pair. Why can't this happen with ordinary E-graphs?
 
+For ordinary terms, if $t$ is a subterm of $f(s_1, s_2)$, we can conclude that either $t = f(s_1, s_2)$, or that $t$ is a subterm of either $s_1$ or $s_2$. For instance, consider the critical pair for the deeply-nested rules $f(g(h(a))) \rightarrow s$ and $h(a) \rightarrow t$. The critical pair consists of $f(g(t))$ and $s$. We can reason that if $h(a)$ overlaps $f(g(t))$, it must overlap $t$ already, while if $f(g(h(a)))$ overlaps $f(g(t))$, either it already overlaps $t$ or $t = h(a)$.
+
+By contrast, $a + b$ overlaps $b + e$ without either $a$ being equal to $e$ or $a + b$ being a subterm of one of $b$ and $e$.
+
+The trivial kinds of overlap for ordinary E-graphs are enough to argue that the `endless overlap' problem can't happen. On the other hand, for EMTs, non-trivial kinds of overlap require a generalization of the kind of rules allowed.
 
 \subsection{EMT(AC)s via a side-table, briefly}
 With the side-table approach, we think of the set of AC rules $e_1 + \ldots + e_n \rightarrow d_1 + \ldots + d_n$ as being a separate thing entirely to the E-graph.
 
-On insertion, we don't add any E-node rules whenever the function symbol is an AC symbol +, but generate a new E-class name $e$ and add the AC-rule $e_1 + \ldots + e_i \rightarrow e$ when we insert the flattened term $e_1 + \ldots + e_i$.
+On insertion, we do not add any E-node rules whenever the function symbol is an AC symbol +, but generate a new E-class name $e$ and add the AC-rule $e_1 + \ldots + e_i \rightarrow e$ when we insert the flattened term $e_1 + \ldots + e_i$.
 
 To compute the AC-closure, we take every pair of two AC-rules $+(R) \rightarrow +(S)$ and $+(T) \rightarrow +(U)$, where $R, S, T, U$ are multisets of E-classes. Then we can define, as usual,
 \begin{itemize}
@@ -2858,7 +2688,7 @@ First, we describe AC-canonization:
 \end{algorithm}
 
 \subsection{Correctness of the algorithm} \label{equivres}
-Define the \emph{Dickson ordering} on multisets as the partial ordering $s \ge t$ if the multiplicity of every element in $s$ is $\ge$ the multiplicity of the same element in $t$. This is the same as saying that $s$ has $t$ as an AC-subterm.
+Define the \emph{Dickson ordering} on multisets as the partial ordering $s \ge t$ if the multiplicity of every element in $s$ is greater than or equal to the multiplicity of the same element in $t$. This is the same as saying that $s$ has $t$ as an AC-subterm.
 
 \begin{lemma}
 	At each iteration of the algorithm, there are no rules in $\rightarrow_{AC}$ with left-hand-sides that are related by $\ge$ in the Dickson ordering.
@@ -2889,14 +2719,12 @@ By Dickson's lemma \cites{goos_congruence_2000}, there can't be an infinite set 
 
 Once adding rules stops, the remaining equations in $R$ will be removed and the algorithm terminates.
 
-Correctness is fairly straightforward: critical pairs are added to $R$ and eventually resolved. Assuming that the ordering on terms includes the Dickson ordering, then orienting a critical pair $t = s$ from $R$ into $t \rightarrow s$ means that 
-
-Since we add all critical pairs between new rules and existing ones, the final system of AC-rewrites can't have critical pairs that are unjoinable.
+Correctness is fairly straightforward: critical pairs are added to $R$ and eventually resolved. Since we add all critical pairs between new rules and existing ones, the final system of AC-rewrites cannot have critical pairs that are unjoinable.
 
 The properties of the AC-term ordering come into play in proving that \emph{canonization} terminates. In particular, we can reuse the Dickson-order argument, as long as the term order is reflexive, antisymmetric, and transitive (and thus actually an order!), and is an extension of the Dickson ordering, so that if $t \le s$ in the Dickson ordering, then $t \le s$ in the term ordering. With these properties, the iterations of the canonization cannot increase the term in the Dickson ordering, and so can only rewrite the term within the finite set of of terms that are not Dickson-greater than the original. Then, we rule out cycles by the ordering properties: if $t_1 \ge t_2 \ge \ldots \ge t_1$, then $t_1 \ge t_2 \ge t_1$ and so $t_1 = t_2$, which is only possible if the rewrite rule involved is of the form $s \rightarrow_{AC} s$. However, the algorithm never add rules with equal left-hand and right-hand sides to the rewrite system.
 
-\chapter{Beyond rewriting: E-matching, E-analysis, and E-xtraction}
-Many uses of E-graphs don't just use them as an equational theory solver, but want to run certain analyses on the E-graph (perhaps to allow conditional rewrites) or want to extract the smallest term representing an equivalence class, according to some cost metric.
+\chapter{Beyond equations: E-matching, E-analysis, and E-xtraction}
+Often, applications of E-graphs don't just use them as an equational theory solver, but involve running certain analyses on the E-graph (perhaps to allow conditional rewrites) or want to extract the smallest term representing an equivalence class, according to some cost metric.
 
 Besides that, E-matching is a core part of the equality saturation loop.
 
@@ -2907,7 +2735,7 @@ Suppose we have, for each function symbol $f$ of arity $\alpha(f)$, an \emph{int
 
 This interpretation gives us a basis for an E-analysis. Keep a map $a$ from E-class names to values in $D$, and when we insert $f(e_1, \ldots)$ into a new E-class $e$, set $a(e) = \llbracket f \rrbracket (a(e_1), \ldots)$.
 
-We need the a binary operation $\sqcap : D \times D \rightarrow D$ on the domain, which is called to merge annotations when E-classes are merged. To make this process well-defined regardless of the details of the congruence-closure/rebuilding process, we want $\sqcap$ to be associative, commutative, and idempotent.
+We need the a binary operation $\sqcap : D \times D \rightarrow D$ on the domain, which merges annotations when their E-classes are merged. To make this process well-defined regardless of the details of the congruence-closure/rebuilding process, we want $\sqcap$ to be associative, commutative, and idempotent.
 
 \section{Extraction} \label{extraction}
 Suppose we have some cost function $c : T \rightarrow K$ mapping terms $t \in T$ to a totally-ordered set $C$. Then we can define extraction as an analysis by taking our domain to be $T \times C$, and defining
@@ -2917,10 +2745,10 @@ Suppose we have some cost function $c : T \rightarrow K$ mapping terms $t \in T$
 \llbracket f \rrbracket ((t_1, c_1), \ldots) = (f(t_1, \ldots), c(f(t_1, \ldots)))
 \end{align*}
 
-For this to be well-defined, we require that cost is monotonic: if $c(t_i) < c(s_i)$, then $c(f(t_1, \ldots)) < c(f(s_1, \ldots)$. Otherwise, lower-cost child terms could make higher-cost parent terms, so we cannot rely on a simple propagation strategy to find the overall lowest-cost term in each E-class.
+For this to be well-defined, we require that cost is monotonic: if $c(t_i) < c(s_i)$, then $c(f(t_1, \ldots)) < c(f(s_1, \ldots))$. Otherwise, lower-cost child terms could make higher-cost parent terms, so we cannot rely on a simple propagation strategy to find the overall lowest-cost term in each E-class.
 
 \section{E-matching}
-\subsection{Compilation}
+\subsection{Compiling E-matching to an E-analysis} \label{ematchred}
 Suppose we have some pattern, like $f(x, g(a, x, y), h(y))$, where $x$ and $y$ are variables. The first step is to compile the patterns into a \emph{match table}, which for this example would look like
 
 \begin{itemize}
@@ -2928,63 +2756,83 @@ Suppose we have some pattern, like $f(x, g(a, x, y), h(y))$, where $x$ and $y$ a
 	\item States:
 		\begin{align*}
 			a &\rightarrow s_1 \\
-			g(s_1, \bot) &\rightarrow s_2 \\
-			h(\bot, \bot) &\rightarrow s_3 \\
-			f(s_1, s_2, s_3) &\rightarrow s_4
+			g(s_1, \bot(x), \bot(y)) &\rightarrow s_2(x, y) \\
+			h(\bot(y)) &\rightarrow s_3(y) \\
+			f(s_1(x), s_2(x, y), s_3(y)) &\rightarrow s_4(x,y)
 		\end{align*}
 	\item Final state: $s_4$
 \end{itemize}
 
-\fxerror{Talk about how this is only one join order, and there are many other ways to do this}
-
-The idea is that, thinking of the term as a tree, we can assign a state to each node in the tree. Then, our E-analysis for doing E-matching will map E-ids to the domain of sets of pairs (state, set of substitutions).
+The idea is that, thinking of the pattern term as a tree, we can assign a state to each node in the tree. Then, our E-analysis for doing E-matching will map E-ids to the domain of sets of pairs of the form (state, set of substitutions). A state $s$ with substitution $\{x \mapsto e_i\}$ is represented as $s(e_i)$, since each state has a fixed list of previously-matched symbols that appear in its associated substitutions.
 
 Our interpretation for each function symbol is
-
 \begin{align*}
-	\llbracket f \rrbracket (d_1, \ldots) = \{(\bot, \{l \mapsto e\ \mid l \in L\}\} \cup
-		\textrm{match}_f(d_1, d_2)
+	\llbracket f \rrbracket (d_1, \ldots) = \{(\bot, \{l \mapsto e\}) \mid l \in L\} \cup
+		\textrm{match}_f(d_1, \ldots)
 \end{align*}
-
-where $\textrm{match}_f$ is defined in a way dependent on the match table, taking joins across substitutions in the appropriate way when the states match with some entry.
-
-and $\sqcap$ unions the sets of states, and when both sides of the union contain the same state, the sets of substitutions are merged.
-
-Note that the interpretation depends on the E-class id $e$, so it doesn't quite fit in the framework for E-analysis from above, but this is not a significant change.\footnote{It is possible to have an `Id-counter' as part of the domain and entirely reconstruct a set of E-class ids as a pure E-analysis independently of the ones actually used in the E-graph, but this feels more like a theoretical trick than something useful. $\sqcap$ for this domain requires a lot of remapping of E-ids, for instance}
-
-\section{The `Three Es' for EMTs}
-Of course, part of our motivation for EMTs is to avoid explicitly representing nodes that would be present in the E-graph if running purely with equality saturation. Since an E-analysis is defined per-E-class, our E-analysis will not \emph{directly} be defined for certain E-classes that simply don't exist in our EMT.
-
-\subsection{Representedness of terms}
-It is worth spelling out exactly which E-classes are represented in E-graphs that aren't in EMTs. EMTs will also represent potentially some extra for handling critical pairs that are nonetheless not (currently) used in AC-reasoning \fxerror{Better terminology needed}.
-
-It is clear that equality saturation on AC will simply generate subterms-up-to-AC of existing terms. That is, if we have a multiset of atoms $E$, then equality saturation will represent every binary tree whose multiset of leaves is $E$.
-
-Therefore, we can define the `representation status' of an AC-term $t$ according to the following:
+where
 \begin{itemize}
-	\item Rewrite $t$ according to all appropriate AC-rules until reaching a normal form
-	\item If $t$ is now a single E-class id $e$, $t$ is directly represented
-	\item If $t$ is now a term $e_1 + e_2 + \ldots$, then see if $t$ is a subset of a term appearing in an AC-rule. In this case, it is indirectly represented.
-	\fxerror{We ought to only need the LHS of rewrite rules, right?}
-	\item If $t$ is not a subset of the terms in the AC-rules, it is not represented.
+	\item $e$ is the E-class assigned to the E-class we are analyzing. The interpretation depending on the E-class means that it doesn't quite fit in the framework for E-analysis from above, but this is not a significant change.\footnote{It is possible to have an `Id-counter' as part of the domain and entirely reconstruct a set of E-class ids as a pure E-analysis independently of the ones actually used in the E-graph, but this feels more like a theoretical trick than something useful. $\sqcap$ for this domain requires a lot of remapping of E-ids, for instance}
+ \item $\textrm{match}_f$ is defined in a way dependent on the match table, taking \emph{joins} across substitutions in the appropriate way when the states match with some entry in the match table. For instance, for the above match table,
+ \begin{align*}
+ \textrm{match}_f((s_a, \sigma_a), (s_b, \sigma_b), &(s_c, \sigma_c)) = \\ \{(s_4, \{x \mapsto \sigma_1(x)&, y \mapsto \sigma_2(y)\}) \mid \\ s_a &= s_1, \\ s_b &= s_2, \\ s_c &= s_3, \\ \sigma_1(x) &= \sigma_2(x), \\ \sigma_2(y) &= \sigma_3(y) \}
+ \end{align*}
 \end{itemize}
 
-Note that the `side-table' and `integrated' approaches (\fxerror{backref}) differ exactly on which things are directly or indirectly represented, due to the integrated approach generating more E-ids for certain AC-terms created during completion.
+For this E-analysis, $\sqcap$ takes the union of the sets of states, and when both sides of the union contain the same state, the sets of substitutions are merged.
+
+
+\subsection{Joins and join plans}
+The above scheme for E-matching is not the only approach. E-matching is a case of evaluating certain kinds of \emph{conjunctive queries} over the E-graph thought of as a database \cite{zhang_relational_2022}, and there are many ways to evaluate such queries  \cite{wang_free_2023}. We leave describing other evaluation strategies for E-matching in the context of EMTs to future work (section \ref{ematchtheories}).
+
+% In section \ref{releee}, we give a way to think of these three problems that is less tied to a particular scheme for compiling patterns.
+
+%\section{The `Three Es' relationally} \label{releee}
+%As we have seen, it is possible to view these three problems as all akin to E-analysis. However, we can adopt a slightly more general framework which builds upon the notion of critical pair (section \ref{critpairs}).
+
+%An E-analysis consists of an interpretation function $\llbracket f \rrbracket \in D^{\alpha(f)} \rightarrow D$ for each function symbol $f$. Functions are a special case of relation: define $\rightarrow_{\llbracket \rrbracket} \subseteq \Sigma(D) \times D$ as the relation containing the pairs $(f(d_1, \ldots, d_{\alpha(f)}), \llbracket f \rrbracket (d_1, \ldots, d_{\alpha(f)}))$ for every $f$ and sequence of elements $d_1, \ldots, d_{\alpha(f)}$ of the domain.
+
+%An annotated E-graph rewrite system is one with a relation $\rightarrow_D \subseteq (C, D)$ where $C$ is the set of E-classes.
+
+%For example, take our domain to be the set $\mathbb{Z}$ of integers and consider the annotated E-graph rewrite system
+%\begin{align*}
+%	f(e_1, e_2) &\rightarrow_F e_3 \\
+%	e_1 &\rightarrow_D 2 \\
+%	e_2 &\rightarrow_D 3 \\
+%	e_3 &\rightarrow_D 6
+%\end{align*}
+
+%Suppose we have the interpretation $\llbracket f \rrbracket (a, b) = a + 2b$. Then there is a sequence of rewrites  $f(e_1, e_2) \rightarrow^{*\mathcal{C}}_D f(2, 3) \rightarrow_{\llbracket \rrbracket} 2 + 2\cdot 3$. Considering $(\rightarrow_D \cup \rightarrow_{\llbracket \rrbracket})^{*\mathcal{C}}$ to be a single relation which we will call $\rightarrow_E$, then $2 + 2 \cdot 3 \leftarrow_E f(e_1, e_2) \rightarrow_F e_3 \rightarrow_E 6$.
+
+%We can consider this a critical pair between $\rightarrow_E$ and $(\rightarrow_F \cup \rightarrow_E)^*$. 
+
+\section{The `Three Es' for EMTs}
+Generalizing to EMTs has some subtleties. Part of our motivation for EMTs is to avoid explicitly representing nodes that would be present in the E-graph if running purely with equality saturation. Since an E-analysis is defined per-E-class, our EMT E-analysis will not \emph{directly} be defined for certain E-classes that simply do not exist in our EMT.
+
+\subsection{Representation status of terms}
+AC-saturation will represent all AC-subterms of every term in the E-graph explicitly. For EMTs, one of the key goals is to avoid representing all of these subterms, at the cost of handling AC-critical pairs. For a term $t$, we will define its \emph{representation status} in an EMT as follows:
+\begin{itemize}
+	\item Rewrite $t$ according to all appropriate AC-rules until reaching a normal form.
+	\item If $t$ is now a single E-class id $e$, $t$ is \emph{directly represented}.
+	\item If $t$ is now a term $e_1 + e_2 + \ldots$, then see if $t$ is an AC-subterm of a term appearing on either side of an AC-rule. In this case, it is \emph{indirectly represented}.
+	\item Otherwise, it is not represented.
+\end{itemize}
+
+%Note that the `side-table' and `integrated' approaches (\fxerror{backref}) differ exactly on which things are directly or indirectly represented, due to the integrated approach generating more E-ids for certain AC-terms created during completion.
 
 \subsection{AC-analyses}
-Regardless, we can now spell out what is required for a well-behaved AC-analysis. We don't want to make any distinction between directly and indirectly represented terms.
+Regardless, we can now spell out what is required for a well-behaved AC-analysis. We want to treat directly and indirectly represented terms on somewhat equal footing, as indirectly represented terms would be (directly) represented in the corresponding E-graph with AC-saturation.
 
 For a directly represented term, we want a variadic interpretation function for any AC-symbol $\llbracket + \rrbracket (d_1, \ldots)$ that is associative and commutative, naturally. When constructing an AC E-node, we can use this interpretation to assign the analysis.
 
-For indirectly represented terms, we can apply the interpretation function lazily: for instance, if $e_1 + e_2$ is only indirectly represented, we don't store $a(e_1 + e_2)$ in any sense, but just calculate $\llbracket e_1 + e_2 \\rrbracket(a(e_1), a(e_2))$ when needed. Since this term would be directly represented in an E-graph with equality saturation, we ought to consider its annotation to nonetheless not be simply undefined.
+For indirectly represented terms, we can apply the interpretation function lazily: for instance, if $e_1 + e_2$ is only indirectly represented, we do not store $a(e_1 + e_2)$ in any sense, but compute $a(e_1 + e_2)$ by canonizing $e_1 + e_2$ to $t = e_i + \ldots$ and then calculate $\llbracket + \rrbracket(a(e_i), \ldots)$ when needed. Since this term would be directly represented in an E-graph with AC-saturation, we ought to consider its annotation to nonetheless not be simply undefined.
 
-A natural worry is that we might have, say, $e_1 + e_2$ and $e_3 + e_4$, that are both indirectly represented, but that ought to be equal: that is, if they were to be directly represented, they would be assigned the same E-class. In that case, $a(e_1 + e_2)$ ought to be equal to $a(e_1 + e_2) \sqcap a(e_3 + e_4)$. But this is exactly the problem that AC-completion solves! In particular, if $t_1$ rewrites to $e_1 + e_2$ and $t_2$ rewrites to $e_3 + e_4$, and $e_1 + e_2 = e_3 + e_4$ according to the equivalence of the EMT, then $e_1 + e_2$ and $e_3 + e_4$ would be the critical pair of some critical term.
+A natural worry is that we might have, say, $e_1 + e_2$ and $e_3 + e_4$, that are both indirectly represented, but that ought to be equal: that is, if they were to be directly represented, they would be assigned the same E-class. In that case, both $a(e_1 + e_2)$ and $a(e_3 + e_4)$ ought to be equal to $a(e_1 + e_2) \sqcap a(e_3 + e_4)$. But this is exactly the problem that AC-completion solves! In particular, if $e_1 + e_2 = e_3 + e_4$ according to the equivalence induced by the EMT, then $e_1 + e_2 \rightarrow^* t \leftarrow^* e_3 + e_4$. Thus, $a(e_1 + e_2) = a(t) = a(e_3 + e_4) = a(e_1 + e_2) \sqcap a(e_3 + e_4)$.
 
 \subsection{AC E-matching: EMTs are no panacaea} \label{panacea}
-Porting our `matching engine' from \fxerror{backref} to handle AC-symbols is possible, but it does force us to confront the unavoidable difficulties of AC-matching.
+Porting our `matching engine' from section \ref{ematchred} to handle AC-symbols is possible, but it does force us to confront the unavoidable difficulties of AC-matching.
 
-Let's consider a na\"ive matching table for a small example pattern, $f(x + x + g(y + z))$.
-
+Consider a na\"ive matching table for a small example pattern, $f(x + x + g(y + z))$.
 \begin{align*}
 	\bot + \bot &\rightarrow s_1 \\
 	g(s_1) &\rightarrow s_2 \\
@@ -2994,13 +2842,13 @@ Let's consider a na\"ive matching table for a small example pattern, $f(x + x + 
 
 Now consider matching this against $f(a + b + g(a + b) + b + a)$.
 
-$g(a + b)$ matches up to state $s_2$, but we have missed the commutativity of the arguments: not only is $\{x \mapsto a, y \mapsto b\}$ a valid substitution, but also $\{x \mapsto b, y \mapsto a\}$.
+$g(a + b)$ matches up to state $s_2$, but we have missed the commutativity of the arguments: not only is $\{y \mapsto a, z \mapsto b\}$ a valid substitution, but also $\{y \mapsto b, z \mapsto a\}$.
 
-Going further, we are in more trouble: We have a 5-argument $+$ in our input term, but only a 3-argument rule to reach state $s_3$.
+Going further, there is another issue: We have a 5-argument $+$ in our input term, but only a 3-argument rule to reach state $s_3$.
 
-All of these issues can be solved by techniques we've already developed! We will think of our matching table as an \emph{AC}-rewriting system, where rewrites carry out certain operations on substitutions whenever we apply them.
+The key to solving these issues is to consider \emph{flat AC-matching}, which is somewhat simpler than the general notion of AC-matching \cite[Chapter 8]{robinson_handbook_2001}. In particular, when matching $x + y + \ldots$ against $e_1 + e_2 + e_3 \ldots$, we have to consider every multiset partition of $\{e_1, e_2, e_3, \ldots\}$ into non-empty multisets: so, $\{x \mapsto e_1, y \mapsto e_2\}$ and $\{x \mapsto e_3, y \mapsto e_1 + e_2\}$ are both valid substitutions from the single AC-match.
 
-$a + b$ rewrites via the first rule to $s_1$. Since it matches the rule in two ways (up to commutativity), we generate both substitutions in state $s_1$.
+In our example, $a + b$ can be rewritten via the first match rule to $s_1$. Since it AC-matches the rule in two ways, we generate both $\{y \mapsto a, z \mapsto b\}$ and $\{y \mapsto b, z \mapsto a\}$ as substitutions for state $s_1$.
 
 Then $a + b + s_2 + b + a$ matches against our third rule. Here, we generate a substitution for $x$ that is $\{x \mapsto a + b\}$: an example of a substitution that mentions a whole \emph{term}, since the term $a + b$ is not necessarily directly representable in the E-graph. We have to filter out all AC-matches to the third rule to the ones that map the two occurences of $x$ to AC-equal terms, as usual.
 
@@ -3010,13 +2858,40 @@ In particular, single-level AC-matching is quite expensive: matching $x + y + z 
 
 One thing to consider in future work is that matching engine might allow patterns with certain constraints, such as $x + y + z + w, x \le y \le z \le w$, to cut down the search space. In particular, a pattern like $x + y + z + w$ is likely to come up in a context where the goal is to find instances of four things added together, without caring about full space of all substitutions.
 
-\fxerror{Ref to hardness of AC-matching. But note ordinary E-matching is already NP-hard...}
+\subsubsection{AC E-matching on cyclic terms} \label{matchcyc}
+Consider matching the pattern $a + x$ against the EMT representing the equation $a + b = a$. Clearly, $\{x \mapsto b\}$ is one valid substitution, but $a + b = (a + b) + b = a + (b + b)$, so $\{x \mapsto b + b\}$ ought to be another substitution. In general, we would expect, for every $n$, a term of $n$ $b$s added together to be a valid substitution for the match.
 
-\fxerror{Technically, before when finding overlaps etc, we are doing AC-matching, but a rather limited kind... Maybe I should spell out the algorithm. It is of course just finding multiset partitions}
+The algorithm in the previous section will only find the single match $\{x \mapsto b\}$. 
 
-\fxerror{Actually, the above needs much more fleshing out due to the annoyance of the need to use the AC-reductions on matches to get termination in the presence of cycles, which requires another use of Dickson's lemma. Of course this is again highlighting the connection between matching and closure, but it needs probably at least a whole section}
+We will sketch out an algorithm that not only handles these cycles, but also can represent the infinite set of matches compactly.
 
-\fxerror{How hard would implementing ordering constraints in my current engine be? Maybe not that hard. Actually, there is maybe a nicer way to write patterns that generate such constraints behind the hood, I think. But that is a bit of scope creep.}
+Writing our pattern $a + x$ as a match table gives 
+\begin{align*}
+	a + \bot(x) \rightarrow_M s_1(x)
+\end{align*}
+with $L = \{x\}$ and final state $s_1$. We use $\rightarrow_M$ for the match table relation.
+
+Our AC-rewrite system is just
+\begin{align*}
+	a + b \rightarrow_{AC} a
+\end{align*}
+
+Putting these together, we have an AC-critical pair between $\rightarrow_M$ and $\rightarrow_{AC}$:
+\begin{align*}
+	a + x \leftarrow_{AC} a + b + x \rightarrow_M b + s_1(x)
+\end{align*}
+Now, $a + x \rightarrow_M s_1(x)$, but then we cannot make further progress. In order to make this criticial pair joinable, we can introduce $b + s_1(x) \rightarrow_{AC} s_1(x)$. This final rewrite witnesses that any match in state $s_1$, when part of a term containing a $b$, can form another match in state $s_1$, since the $b$ can be expanded to $a + b$.
+
+This rewrite-based perspective on matching (and analysis in general) is promising, but we leave the full development to future work (section \ref{acmatch2}).
+
+%All of these issues can be solved by techniques we've already developed! We will think of our matching table as an \emph{AC}-rewriting system, where rewrites carry out certain operations on substitutions whenever we apply them.
+
+
+%\fxerror{Ref to hardness of AC-matching. But note ordinary E-matching is already NP-hard...}
+
+%\fxerror{Actually, the above needs much more fleshing out due to the annoyance of the need to use the AC-reductions on matches to get termination in the presence of cycles, which requires another use of Dickson's lemma. Of course this is again highlighting the connection between matching and closure, but it needs probably at least a whole section}
+
+%\fxerror{How hard would implementing ordering constraints in my current engine be? Maybe not that hard. Actually, there is maybe a nicer way to write patterns that generate such constraints behind the hood, I think. But that is a bit of scope creep.}
 
 \chapter{Implementation and evaluation} \label{impl}
 We have built a proof-of-concept implementation of EMT(AC) in Haskell. We discuss some design choices and tradeoffs we made, which could be improved upon in future work, and compare equality saturation against AC-completion running on our implementation.
@@ -3094,26 +2969,26 @@ Here is an example E-node type constructor implementing \texttt{Signature}:
 
 \section{Implementation tradeoffs}
 \subsection{Persistent data structures}
-We use standard persistent ordering-based data structures from the \texttt{containers} library: \texttt{IntMap, IntSet, Map}, and \texttt{Set}. Using persistent hash-based data structures from the \texttt{unordered-containers} library might be faster, but we decided not to worry about the potential constant-factor improvements. It is possible to get \emph{asymptotic} improvements for some parts of the algorithm by switching to non-persistent data structures, such as arrays and mutable hash-tables: this removes the $\log(n)$ overhead of persistence. However, as a proof-of-concept, we decided persistent structures are somewhat easier to work with as they don't require one to thread unique mutable instances everywhere.
+We use standard persistent ordering-based data structures from the \texttt{containers} library: \texttt{IntMap, IntSet, Map}, and \texttt{Set}. Using persistent hash-based data structures from the \texttt{unordered-containers} library might be faster, but we decided not to worry about the potential constant-factor improvements. It is possible to get \emph{asymptotic} improvements for some parts of the algorithm by switching to non-persistent data structures, such as arrays and mutable hash-tables: this removes the $\log(n)$ overhead of persistence. However, as a proof-of-concept, we decided persistent structures are somewhat easier to work with as they do not require one to thread unique mutable instances everywhere.
 
 \subsection{Binarization and incremental congruence closure}
 Downey-Sethi-Tarjan's algorithm for congruence closure \citep{downey_variations_1980} improves upon other algorithms such as Nelson-Oppen's algorithm \citep{nelson_fast_1980} by \emph{binarizing} the function symbols. For instance, given a ternary symbol $f$ where we might insert E-nodes of the form $f(e_1, e_2, e_3)$, we can instead replace it with a two symbols $f_2$ and $\pi$ so that we insert the \emph{term} $f_2(e_1, \pi(e_2, e_3))$ instead. This generates multiple E-nodes per original E-node, but it restricts the arity to at most 2, which makes certain kinds of reverse lookup fast: for each E-class id $e$, it can either occur in the left part of an E-node $h(e, --)$ or in the right part $h(--, e)$, for which we only need to store one other E-class id and symbol.
 
 Such reverse lookups are important for making congruence closure incremental: when we union $e$ with $e'$, we want to lookup the \emph{uses} of $e$ and replace them with $e'$, possibly discovering more unions to carry out in the process.
 
-The egg library \citep{willsey_egg_2021} doesn't use either binarization or indeed any sort of incrementality in propagating equalities, instead preferring to batch the congruence closure computation into big `rebuilding' steps between multiple steps of equality saturation.
+The egg library \citep{willsey_egg_2021} does not use either binarization or indeed any sort of incrementality in propagating equalities, instead preferring to batch the congruence closure computation into big `rebuilding' steps between multiple steps of equality saturation.
 
 Our library does calculate congruence closure incrementally, but we decided for simplicity to omit the binarization trick for congruence closure. Implementing it adds some complexity, and it seems hard to make a form of binarization that works well for the AC part of the system.
 
 \subsection{Union-find laziness}
-The union-find structure can achieve an amortized time complexity of $O(n \alpha(n))$ for $n$ union and find steps, where $\alpha$ is the inverse Ackermann function. This is typically achieved by some degree of laziness on union: union doesn't entirely canonicalize the structure, and instead find operations mutate the structure to compress indirect paths $e_1 \rightarrow e_2 \rightarrow \ldots$ as they are discovered.
+The union-find structure can achieve an amortized time complexity of $O(n \alpha(n))$ for $n$ union and find steps, where $\alpha$ is the inverse Ackermann function. This is typically achieved by some degree of laziness on union: union does not entirely canonicalize the structure, and instead find operations mutate the structure to compress indirect paths $e_1 \rightarrow e_2 \rightarrow \ldots$ as they are discovered.
 
 For congruence closure, and thus E-graphs, the laziness possible in the union-find seems difficult to make use of, as we need to detect the congruence $f(a_1, \ldots, b, \ldots, a_n) = f(a_1, \ldots, b, \ldots, a_n)$ once $b$ and $c$ have been equated; it is not enough to just `discover' that $b = c$ when calling find on $b$ or $c$ or one of their equivalents, as such a find call is not guaranteed to happen at any particular point before we need to discover the congruence.
 
 \subsection{Non-incrementality of AC} \label{nonincac}
 Unlike congruence-closure, for which it is possible to incrementally restore the congruence-closure invariant with a minimal amount of work when changes are made to the E-graph, AC-closure seems hard to make incremental. For instance, suppose we have some ordering on AC-terms, and we union $e_i$ and $e_j$ so that $e_i \rightarrow e_j$ becomes a union-find rule. Consider an AC-rule $e_1 + e_2 + e_i + e_3 \rightarrow e_4$. We can keep track of the `uses' of $e_i$, and thus we know when merging $e_i$ we need to update this rule, but depending on the relative ordering of $e_i$ and $e_j$, the ordering of the left-hand-side of this AC-rule could change dramatically.
 
-This is one of the difficulties of applying some binarization to AC-symbols: we could store the AC-rules in some kind of trie, but the structure is upended fairly arbitrarily on unions, and then we potentially have to interreduce other rules with the new one, and so forth. Thus any sort of trie-like binarized structure doesn't seem to help much when computing AC-closure.
+This is one of the difficulties of applying some binarization to AC-symbols: we could store the AC-rules in some kind of trie, but the structure is upended fairly arbitrarily on unions, and then we potentially have to interreduce other rules with the new one, and so forth. Thus any sort of trie-like binarized structure does not seem to help much when computing AC-closure.
 
 In section \ref{hrmite} we note that AC-closure is \textsc{ESpace}-complete. However, this leaves room for constant-factor or even polynomial-factor improvements in the algorithmic steps of lookup, finding critical pairs, resolving critical pairs, and so forth. If certain parts of these steps can be made incremental, that is a promising path to achieving such improvements.
 
@@ -3815,7 +3690,7 @@ We can see that for small input data, the AC-completion can sometimes introduce 
 
 Determining time savings is somewhat difficult for our implementation, as we would need to more carefully instrument the different parts of the propagation and saturation to, for instance, separate out the time used for E-matching. E-matching on the non-AC identities is a significant part of the time for both EMTs and E-graphs in our implementation, and thus our fairly slow implementation of matching renders wall-clock times less relevant as a point of comparison.
 
-\fxerror{David's point: it may be faster but is it fast enough? See if I can beg someone for an existing example that is known not to saturate that might with my system}
+%\fxerror{David's point: it may be faster but is it fast enough? See if I can beg someone for an existing example that is known not to saturate that might with my system}
 
 \chapter{EMTs for other theories}
 \section{Common identities}
@@ -3833,17 +3708,13 @@ AC is a good example of a theory which E-graphs handle poorly. However, this is 
 				\hline
 				Commutativity        & C            & $(f, 2)$                 & $\forall xy. f(x, y) = f(y, z)$                    \\
 				\hline
-				Left-unitality       &              & $(f, 2), (e, 0)$         & $\forall x. f(e, x) = x$                           \\
+				Unitality       & U             & $(f, 2), (e, 0)$         & $\forall x. f(e, x) = x$                           \\
+				
+				      &              &          & $\forall x. f(x, e) = x$                           \\
 				\hline
-				Right-unitality      &              & $(f, 2), (e, 0)$         & $\forall x. f(x, e) = x$                           \\
-				\hline
-				Unitality            & U            & $(f, 2), (e, 0)$         & Both of the above                                  \\
-				\hline
-				Left-distributivity  &              & $(f, 2), (g, 2)$         & $\forall xyz. g(x, f(y, z)) = f(g(x, y), g(x, z))$ \\
-				\hline
-				Right-distributivity &              & $(f, 2), (g, 2)$         & $\forall xyz. g(f(y, z), x) = f(g(y, x), g(z, x))$ \\
-				\hline
-				Distributivity       & D            & $(f, 2), (g, 2)$         & Both of the above                                  \\
+				Distributivity  &  D            & $(f, 2), (g, 2)$         & $\forall xyz. g(x, f(y, z)) = f(g(x, y), g(x, z))$ \\
+				
+				  &              &           & $\forall xyz. g(f(y, z), x) = f(g(y, x), g(z, x))$ \\
 				\hline
 				Idempotence          & I            & $(f, 2)$                 & $\forall x. f(x, x) = x$                           \\
 				\hline
@@ -3861,8 +3732,8 @@ AC is a good example of a theory which E-graphs handle poorly. However, this is 
 
 We use the convention of naming combined theories by taking the juxtaposition of the identity names: as we have seen, AC is the theory with both A and C identities (for some function symbol), and so forth.
 
-\fxerror{cut down if some of these don't appear}
-\fxerror{also we don't need the one-sided versions, probably}
+%\fxerror{cut down if some of these don't appear}
+%\fxerror{also we don't need the one-sided versions, probably}
 
 This list of identities covers a wide range of common mathematical structures, such as semigroups, monoids, groups, semirings, rings, modules, semilattices, lattices, Boolean algebras, as well as some less common ones such as bands, quasigroups, loops, and near-semirings.
 
@@ -3874,29 +3745,21 @@ In general, using theories with equality saturation will lead to a growth in the
 The possibility of cyclic graphs is a core sticking point for how certain theories fare when used in the equality saturation process.
 
 \subsection{A quick analysis}
-For the theories C, I, and V, every subterm of one side of the identity is also a subterm of the other, and so no new E-classes  are ever added as a result of these theories; all merges are proper.
+For C, if we have an E-node $f(e_1, e_2)$, we might need to add the E-node $f(e_2, e_1)$. However, we never need to add a new E-class. Indeed, we never need to add a new E-class for any identity unless one side of the identity contains a \emph{proper} subterm not contained on the other. This property is also satisfied by I. U requires us to possibly add an E-class to represent $e$, but once this has been added, no new E-classes are generated by the identities.
 
-For U and its one-sided subtheories, it is possible the subterm $e$ is not part of the graph and needs to be seeded, but once seeded, the class of $e$ will remain in the graph ensuring that all subsequent merges are proper.
+V generates a new E-class $i(e)$ for each existing E-class $e$, but then continuing this process for $i(e)$ generates $i(i(e))$ which is already equal to $e$. In other words, saturation doubles the number of E-classes and goes no further.
 
-The prime examples of `difficult' identities that we will cover here are, then, associativity and distributivity.
+The prime examples of `difficult' identities that we will cover here are, then, A, D, and N.
 
-\subsection{Inverse}
-Inverse is something of an interesting case. Given the identity $\forall x. f(i(x), x) = e$, $x$ does not appear at all on the right-hand side. Given that, an E-graph representing $e$ could be extended to contain \emph{any} new term for $x$ as a result of this identity. However, it would seem unproductive to instantiate $x$ with random terms, and indeed we can reason as follows:
-
-Consider all the proofs that could involve the use of the identity for inverse in this direction. We show that $f(i(s), s) = e$ is only useful for certain values of $s$:
-\begin{enumerate}
-	\item We could use transitivity via $t = f(i(s), s)$ and $f(i(s), s) = e$. In that case, we require already to establish an equation containing $f(i(s), s)$.
-	\item We could use transitivity via $f(i(s), s) = e$ and $e = t$, proving that $f(i(s), s) = t$. The usefulness of this equation can be analyzed by following this argument recursively.
-	\item We could use symmetry to establish $e = f(i(s), s)$, but this is again only useful in conjunction with another use of this reversed equality
-  \item We could use congruence to establish that, if $i(s) = t_1$ and $s = t_2$, then $f(i(s), s) = f(t_1, t_2)$.
-\end{enumerate}
-
-A similar argument holds for the symmetric identity $\forall x. f(x, i(x)) = e$ in the theory N.
-
-Such reasoning is fairly ad-hoc, and can be subsumed by analyses involving critical pairs \fxerror{forward ref}. This notion is useful for understanding the behaviour of even plain equality saturation, at least when dealing with identities that don't contain every variable on both sides.
-
-\subsection{Weak term acyclicity}
+\subsection{Weak term acyclicity} \label{weaktermacyclicity}
 \citep{suciu_semantic_2025} gives a definition of when a theory\footnote{actually, they define saturation under a set of rewrite rules, rather than equations, but we can treat equations as bidirectional rewrite rules} is `weakly term acyclic', and proves that such theories can be solved with equality saturation in polynomial time. This is a generalization of our basic syntactic analysis of the identities to identify which E-nodes can potentially be created by saturating under an identity.
+
+The intuition is that one can track the `source' of new E-classes that can be generated during saturation. If, for instance, every three existing E-classes with some particular relation between them generate a fourth potentially new E-class that \emph{can not} be in this same relation with any other classes, we can bound the number of E-classes created as $O(n^3)$ where $n$ is the number of initial E-classes.
+
+\subsection{The case of N}
+N is an interesting case because the variable $x$ is only bound on one side of the identity. In other words, if we have an E-class $e'$ representing the constant $e$, for what values of $x$ should we instantiate $f(i(x), x)$ with to add to the class $e'$?
+
+Our notion of critical pairs (section \ref{critpairs}) gives a straightforward answer. The pseudo-rule $f(i(x), x) \rightarrow e'$ is only relevant insofar as it creates critical pairs with some other existing rule in an E-graph rewrite system. An exact analysis of when this occurs is beyond the scope of this section, given that it depends on what other identities we have in the theory, but the general point is that $x$ will only need to be instantiated with some `known' E-class.
 
 \section{The word problem}
 Doing equality saturation on a theory $T$, or coming up with a notion of EM($T$), connects to the \emph{word problem}.
@@ -3905,63 +3768,44 @@ The word problem is as follows: given some theory $T$ and some equations, does a
 
 Restricting the set of identities, we get the word problem for commutative semigroups (when $T$ = AC), the word problem for monoids (when $T$ = AU), etc.
 
-\subsection{Reductions}
-\fxerror{This can be a lot nicer if I had formalities previously. Then it is an actual theorem!}
+\subsection{E-graphs, EMTs, and the word problem}
+%\fxerror{This can be a lot nicer if I had formalities previously. Then it is an actual theorem!}
 
-We can reduce the word problem to equality saturation. If we have some input equations, we can add them to an E-graph, saturate under the identities in $T$, and then check if $t_1$ and $t_2$ are represented in the E-graph by the same E-class. Therefore, equality saturation is `word-problem hard'.
+We can reduce the word problem to equality saturation. If we have some input equations, we can add them to an E-graph, saturate under the identities in $T$, and then check if $t_1$ and $t_2$ are represented in the E-graph by the same E-class. Therefore, equality saturation is at least as hard as the word-problem.
 
-We can reduce equality saturation to the word problem. If we want to determine if two terms $t_1$ and $t_2$ would be equal under saturation under $T$ with the input equations, we can solve the word problem with those terms, those input equations, and $T$.
+Since EMTs are trying to solve the same problem as E-graphs with equality saturation, just in a more efficient way, any good notion of EM($T$) for a theory $T$ essentially includes a solver for the word problem over $T$.
 
-Note that this reduction is merely for the decision problem of whether two terms end up assigned to equal E-classes, rather than for reconstructing the actual (potentially infinite!) E-graph that is the fixpoint of saturation.
+Going the other way, we can partially reduce equality saturation to the word problem. Suppose we have some input terms and equations. We can use a word problem solver to determine if any pair of terms is equal given the equations and the identities in $T$, and construct an E-graph assigning all equal terms to the same class. This is not necessarily the same E-graph that would result from equality saturation; equality saturation might create all sorts of intermediate E-classes and E-nodes that are not necessarily present in our E-graph derived from the word problem. Indeed, the observation that a word-problem solver can have some internal method for solving the word problem that doesn't do all the intermediate steps of equality saturation is the key observation that makes EMTs worth pursuing.
 
-Since EMTs are trying to solve essentially the same problem as E-graphs with equality saturation, just in a more efficient way, any good notion of EM($T$) for a theory $T$ is essentially equivalent to a solver for the word problem over $T$.
+% If we want to determine if two terms $t_1$ and $t_2$ would be equal under saturation under $T$ with the input equations, we can solve the word problem with those terms, those input equations, and $T$.
+
+% Note that this reduction is merely for the decision problem of whether two terms end up assigned to equal E-classes, rather than for reconstructing the actual (potentially infinite!) E-graph that is the fixpoint of saturation.
 
 \subsection{Results on various theories} \label{hrmite}
 For A, the theory of semigroups, the word problem is undecidable \citep{nyberg-brodda_g_2024}, and this extends to AU, the theory of monoids.
 
-Therefore, while EM(A) and EM(AU) might be worthwhile notions to explore, there is no terminating ``A-completion'' that can be applied: we can provide infrastructure to find and resolve critical pairs incrementally but never have a guarantee that process will terminate.
+Therefore, while EMT(A) and EMT(AU) might be worthwhile notions to explore, there is no terminating ``A-completion'' that can be applied: we can provide infrastructure to find and resolve critical pairs incrementally but never have a guarantee that process will terminate.
 
 Adding commutativity is the key ingredient that makes the word problem decidable. The word problem for AC and ACU (commutative semigroups and commutative monoids) is \textsc{ESpace}-complete \citep{mayr_complexity_1982}, which provides a fairly tight bound on the worst-case complexity.
 
-For distributivity, the word problem is again undecidable unless the distributing operator (the `multiplication') is also commutative, in which case Buchberger-like algorithms can decide it. \fxerror{source}
+For distributivity, as long as the multiplication operator is itself commutative, so that the word problem for the `coefficients' can be solved, the word problem for the combination can be decided with Buchberger-like algorithms \cite{tiwari_decision_2000}.
 
-\fxerror{What about idempotency?}
+Introducing negation, giving us the theory ACUN of Abelian groups, moves the bound from \textsc{ESpace} to polynomial-time: Buchberger's algorithm reduces to finding the Hermite normal form of an integer matrix \cite{kandri-rody_ideal-theoretic_1985}. For the theory of vector spaces, Gaussian elimination can solve the word problem in (sub)cubic time. 
 
-Introducing negation, giving us the theory ACUN of Abelian groups, moves the bound from \textsc{ESpace} to polynomial-time: Buchberger's algorithm reduces to finding the Hermite normal form of an integer matrix \fxerror{cite}. If we have a distributive operator where we can \emph{divide}, such as the theory of fields or vector spaces, then we can use Gaussian elimination, which is not just polynomial-time but subcubic \fxerror{cite}
+\subsection{EMTs and the word problem via critical pairs}
+So, for a theory $T$, we need to build in to our E-graph a system equivalent in strength to a word problem solver (even if, as for $T$ = A, that system is partial, i.e. only a semidecision procedure).
 
-\section{On the general notion of EMT}
-So, for a theory $T$, we need to build in to our E-graph a system equivalent in strength to a word problem solver (even if, as for $T$ = A, that system is partial).
-
-\subsection{Critical pairs}
-Resolving $T$-critical pairs is a natural way to integrate such a solver.
-If we have a rewriting relation $\rightarrow_\mathcal{R}$, then a \emph{peak} is a trio of terms $s_1, s_2$ and $t$ such that $s_1 \leftarrow_\mathcal{R} t \rightarrow_\mathcal{R} s_2$. A \emph{critical pair} is a peak that cannot be obtained as a non-trivial substitution instance of another.
-For instance, if we have the rules $f(x, y) \rightarrow_\mathcal{R} g(y, y, x)$ and $h(x) \rightarrow_\mathcal{R} x$, then the term $f(h(g(x, y, z)), w)$ is a peak, because
-
-$$g(w, w, h(g(x, y, z))) \leftarrow_\mathcal{R} f(h(g(x, y, z)), w) \rightarrow_\mathcal{R} f(g(x, y, z), w)$$
-
-Now, as we have seen, E-graphs take a set of equations $E$ and build a rewrite system $\rightarrow_E$ such that $s =_E t$ iff there is a $c$ such that $s \rightarrow_E^* c \leftarrow_E^* t$. If we have a rewriting system with a peak $s_1 \leftarrow_\mathcal{R} t \rightarrow_\mathcal{R} s_2$ and we want to make $\mathcal{R}$ be able to describe a theory of equality, we need to find some way to enforce \emph{confluence}: because $s_1$ and $s_2$ ought to be equal if $\mathcal{R}$ is taken to be axiomatizing equalities, we need to ensure there is a term $c$ such that $s_1 \rightarrow_\mathcal{R}^* c \leftarrow_\mathcal{R}^* s_2$. Ground Knuth-Bendix completion \fxerror{cite} is one method to do this, based on adding a new rewrite $s_1 \rightarrow_\mathcal{R} s_2$ to `orient' each critical pair.
-
-\fxerror{Equality saturation is somewhat like non-ground Knuth-Bendix, but only with ground critical pairs, and over an extended signature. Point this out, maybe?}
-
-E-graphs take another approach: a nonconfluent critical pair $s_1 \leftarrow t \rightarrow s_2$ can only arise if there are rewrite rules that \emph{overlap}, which we can put into two categories: if $f(\ldots) \rightarrow s_1$ and $f(\ldots) \rightarrow s_2$ can both apply to the same ground term, this will manifest in an E-graph as an E-node that is part of two E-classes, which will be merged on rebuilding. If $f(\ldots, g, \ldots) \rightarrow s_1$ and $g \rightarrow s_2$, then note that we will not actually represent the term $f(\ldots, g, \ldots)$ directly: rather, we will introduce a new name $e_1$ and write it as $f(\ldots, e_1, \ldots) \rightarrow s_1$. In this case, after taking into account the rewrite applied to $g$, the critical pair is resolved automatically, as if $g = s_2 = e_1$ then $f(\ldots, g, \ldots) = f(\ldots, s_2, \ldots) = f(\ldots, e_1, \ldots) = s_1$ will all follow from the presented equational theory.
-
-So, the flattening that happens when building E-graphs can be seen as a process of introducing new names for every subterm, since every subterm is a \emph{potential} critical pair. By introducing these names, we restrict the need to scan for critical pairs to the case of complete overlap: two equal terms in different E-classes.
-
-\fxerror{This section in general includes bits and pieces that I now think have been explained well earlier. E.g.:}
-
-Based on this, we can diagnose the problems of E-graphs on AC as the E-graph speculatively adding all `AC-subterms' to the E-graph as any one of them could part of some critical pair, up to AC. For instance, if we have the terms $a + b + c + d$ and $c + e + b$, they have an overlap in the AC-subterm $b + c$, and if these terms were assigned to different E-classes, we would have the AC-critical pair $e_1 + e \leftarrow a + b + c + d + e \rightarrow a + d + e_2$.
-
-So, while E-graphs are built around presenting a confluent ground rewriting system, the notion of EMT over a theory $T$ suggests moving to the notion of confluent ground $T$-rewriting system in the natural way, in which case we need to pay special attention to critical pairs, which need to be resolved to maintain confluence.
+Resolving $T$-critical pairs is a natural way to integrate such a solver. Since E-graphs are built around creating a confluent ground rewriting system that resolves all ordinary critical pairs, we can build EMTs for a theory $T$ using an algorithm that resolves $T$-critical pairs to create a confluent ground rewriting system on terms modulo $T$.
 
 \chapter{Prior work} \label{litreview}
 \section{EMTs: prior attempts}
-That \emph{some} notion of EMT ought to exist has been stated multiple times before (\citep{zucker_omelets_2025}, \citep{panchekha_lin-graphs_2025}, \citep{shanabrook_custom_2026}). The hope is to be able to use theory-specific knowledge to integrate certain identities directly into the procedures, rather than having to time-consumingly match, seed, and merge as directed by the identities. We will briefly go over the key intutition behind these proposals, and show that they fail to take into account the $T$-critical pair idea we outlined above.
+That \emph{some} notion of EMT ought to exist has been suggested multiple times before \cite{zucker_omelets_2025, panchekha_lin-graphs_2025, shanabrook_custom_2026}. The hope is to be able to use theory-specific knowledge to integrate certain identities directly into the procedures, rather than having to time-consumingly match, seed, and merge as directed by the identities. We will briefly go over the key intutition behind these proposals, and show that they fail to take into account the $T$-critical pair idea we outlined above.
 
 \subsection{Intuition 1: Canonizers}
 \citet{zucker_omelets_2025} notes that we have \emph{canonizers} for many theories, which provide a way to solve the problem of ground equality modulo theories. A canonizer for a theory $T$ is just some function on terms $c$ such that, if $t_1 =_T t_2$, then $c(t_1) = c(t_2)$: that is, it shifts the problem from equality modulo $T$ to just ordinary term equality.
 
 \subsection{Intutition 2: Containers}
-The signature for an E-graph, $\Sigma$, is equivalent to a certain kind of \emph{container}: one that has a number of `shapes' (corresponding to the function symbols) and each shape has an ordered collection of slots (with length given by the arity of the shape). Thus, it is natural to consider generalizing this to containers of more general varieties. If one assigns to a single symbol one shape of every arity , with ordered slots, this gives the theory of AU: terms like $+()$, $+(a, b)$, $+(a, b, c)$ are all covered by this notion, and one doesn't need to arbitrarily split a given list into binary uses of $+(-,-)$ and nilary uses of $e$. If the ordering constraint is dropped on the collections of slots, we get multiset containers, suitable for ACU, and moving to set containers gives something akin to ACIU -- ACU with idempotence.
+The signature for an E-graph, $\Sigma$, is equivalent to a certain kind of \emph{container}: one that has a number of `shapes' (corresponding to the function symbols) and each shape has an ordered collection of slots (with length given by the arity of the shape). Thus, it is natural to consider generalizing this to containers of more general varieties. If one assigns to a single symbol one shape of every arity , with ordered slots, this gives the theory of AU: terms like $+()$, $+(a, b)$, $+(a, b, c)$ are all covered by this notion, and one doesn't need to arbitrarily split a given list into binary uses of $+(-,-)$ and nilary uses of $e$. If the ordering constraint is dropped on the collections of slots, we get multiset containers, suitable for ACU, and moving to set containers gives something suitable for ACIU -- ACU with idempotence.
 
 The second intuition also arises naturally out of concrete implementation work on E-graphs. Given a signature with an ACU binary operator $f$ with unit $e$, and some other operators $g, h$, we can imagine building a parameterized data structure for term-fragments along the lines of the following pseudo-Haskell:
 
@@ -3984,7 +3828,7 @@ data TermF a
 
 for an appropriate type constructor of multisets.
 
-\fxerror{Cite literature on polynomial functors/containers?}
+%\fxerror{Cite literature on polynomial functors/containers?}
 
 \subsection{Canonizers and containers and the problem of flattening}
 The first intuition naturally connects to the second intuition if we consider the generalized idea of `container' as representing some canonical form. Both approaches at first glance seem to take care of a lot of potential fiddling with identities in such theories. However, there is one issue: while we manage to remove the some part of the theory with this approach, there is still one derived identity which we need to handle.
@@ -4012,11 +3856,9 @@ These identities are not entirely automatic just by switching to lists: we need 
 	[[a_1, \ldots, a_n], [b_1, \ldots, b_m], \ldots] &= [a_1, \ldots, a_n, b_1, \ldots, b_m, \ldots] \label{spectflat}
 \end{align}
 
-Or in other words, every term can be embedded in a list of just that term, and a list of lists can be flattened by concatenating all of its elements.
+Or in other words, every term can be embedded in a list of just that term, and a list of lists can be flattened by concatenating all of its elements.\footnote{Readers inclined to abstract nonsense may recognize these equations as defining a monad for the algebraic theory of associativity \cite{voutas_basic_2012})}
 
 Eq \ref{spectemb} and eq \ref{spectflat} together with the basic rules of lists are what is required to prove eq \ref{spectassocl}, eq \ref{spectrul}, and eq \ref{spectlul}.
-
-\fxerror{Cite literature on unbiased presentations? This is a monad law...}
 
 It is the need to handle embedding and flattening that gives rise to problems with an approach based on just canonizers or containers. We will then also see that embedding and flattening are the two rules that govern the formation of $T$-critical pairs.
 
@@ -4046,9 +3888,12 @@ For the canonizer approach, we can easily canonize the input equations: indeed, 
 
 We conclude that canonizers and containers are not enough: they can rewrite terms that might appear in equations to a canonical form, but this is not enough to make the equations $s_i = t_i$ when flattened and oriented into the form $s_i \rightarrow^* e_j \leftarrow^* t_i$ to naturally form a $T$-confluent system rewrite.
 
+\subsection{When canonizers and containers are enough}
 There are some cases where canonizers or containers avoid this problem: for instance, consider the theory C. A critical pair mod C can only be of the form $e_1 \leftarrow a + b =_C b + a \rightarrow e_2$. If we always canonize (mod C) both sides of equations when we orient them (say, by sorting according to some stable order), then we will have a confluent system mod C. (This requires some care to maintain the ordering given that $a$ and $b$ might be E-class ids and subject to change via union-find and rebuilding).
 
-\fxerror{Backward ref to minimally expansive theories, to be renamed to weak acyclicity or whatever. Actually, conjecture: all minimally expansive/weakly acyclicity theories can be done with just a canonizer/container}
+We have seen that C is a case of a theory that is \emph{weakly term acyclic} (section \ref{weaktermacyclicity}).
+
+\textbf{Conjecture:} all weakly term acyclic theories can be solved by a canonizer/container-style approach.
 
 \section{Congruence closure modulo theories} \label{ccmodx}
 There has been work on congruence closure modulo various theories:
@@ -4062,20 +3907,29 @@ There has been work on congruence closure modulo various theories:
 \chapter{Conclusion and future work} \label{conclu}
 EMTs provide a good basis for integrating certain common well-behaved theories more tightly into the core of E-graphs, rather than allowing the potentially explosive equality saturation to handle them. However, there are still fundamental limitations to how `nice' EMTs can be: they expand the E-graph during the resolution of critical pairs, unlike congruence-closure which can only shrink it, and the possible performance gains are bounded tightly by the complexity of solving the word problems for the relevant theories.
 
-\section{Future work: EMTs for other theories}
+\section{Future work}
+\subsection{EMTs for other theories}
 Given that there are already several variants of congruence-closure modulo theories (Section \ref{ccmodx}), it would be useful to evaluate EMTs on these theories, including with E-matching modulo these theories. Many of them require Buchberger-like algorithms similar to the one we have presented for AC. Variations of this algorithm for certain theories (Section \ref{hrmite}) can be polynomial-time rather than \textsc{ESpace}.
 
-\section{Future work: improving AC-closure}
+\subsection{E-matching and EMTs} \label{ematchtheories}
+Our reduction of E-matching to a kind of E-analysis in \ref{ematchred} doesn't take into account the literature on relational E-matching \cite{zhang_relational_2022}. Whether the variety of strategies for relational E-matching can be reduced in a similar way remains to be seen.
+
+\subsection{The three Es seen through rewriting} \label{acmatch2}
+Our brief sketch in section \ref{matchcyc} of an E-matching system presented as a critical-pair-based procedure still lacks some details, and it remains to be proven that it can always generate the a terminating set of rewrites for the potentially infinite sets that can occur in AC-matches.
+
+\subsection{Improving AC-closure}
 Buchberger's algorithm has the $F_4$ and $F_5$ variants and an extensive literature on optimizing it. Importing these variants into an EMT implementation could provide significant speedup. Also, as discussed in Section \ref{nonincac}, there is the potential to make the AC-closure more incremental and reduce the cost associated with computing it.
 
 Given that E-graphs work over an extended signature, is it worthwhile to compress the AC-rules by shrinking the signature? For instance, if we have AC-rules $e_1 + e_2 \rightarrow e_3$ and $e_3 + e_4 \rightarrow e_5$, and $e_3$ doesn't appear among the ordinary E-node rules, then we could shrink the system to just $e_1 + e_2 + e_4 \rightarrow e_5$ and delete $e_3$.
 
-\section{Future work: constrained matching}
-\fxerror{I can probably find a precedent for this}
+\subsection{Constrained matching}
+%\fxerror{I can probably find a precedent for this}
 
 As mentioned in Section \ref{panacea}, adding constraints to patterns for matching could significantly cut down the search space for matching modulo theories when the full space of matches, which includes a lot of redundant symmetries, is not needed.
 
-\section{Future work: realistic applications}
+Similar ideas to prune large search spaces are common in automatic theorem proving. See, for instance, \cite[Chapter~7, Section~5]{robinson_handbook_2001}.
+
+\subsection{Realistic applications}
 While EMT(AC)s may be fast\emph{er} than E-graphs, it remains to be seen if they are fast \emph{enough} to make significant progress in various application domains that have struggled with the explosive nature of AC-saturation. 
 
 
