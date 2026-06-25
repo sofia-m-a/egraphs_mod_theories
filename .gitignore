@@ -1,3 +1,7 @@
 .direnv/*
 bin/*
 dist-newstyle/*
+explorations.txt
+syntax.txt
+EMTspec.md
+graphex.dot
