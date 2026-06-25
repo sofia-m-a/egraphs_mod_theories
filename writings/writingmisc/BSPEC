@@ -43,5 +43,5 @@ union a b
             delete {e, f → c}
             {e, f → r}
     
-        r
+        r<
 

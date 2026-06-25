@@ -18,677 +18,50 @@
 
 
 \refsection{0}
-  \datalist[entry]{none/global//global/global/global}
-    \entry{willsey_egg_2021}{article}{}{}
-      \name{author}{6}{}{%
-        {{hash=a97eaeaf2d069eed65af195031ac4f61}{%
-           family={Willsey},
-           familyi={W\bibinitperiod},
-           given={Max},
-           giveni={M\bibinitperiod}}}%
-        {{hash=9bd7a05a366fdf632d698ff940593243}{%
-           family={Nandi},
-           familyi={N\bibinitperiod},
-           given={Chandrakana},
-           giveni={C\bibinitperiod}}}%
-        {{hash=cf03d27f5054d00e304e8ab0690c6471}{%
-           family={Wang},
-           familyi={W\bibinitperiod},
-           given={Yisu\bibnamedelima Remy},
-           giveni={Y\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
-        {{hash=0276bf52b0720751b3e28c9d06821ba3}{%
-           family={Flatt},
-           familyi={F\bibinitperiod},
-           given={Oliver},
-           giveni={O\bibinitperiod}}}%
-        {{hash=a69fd5ea4c78e4b10502a7611d5a8dc0}{%
-           family={Tatlock},
-           familyi={T\bibinitperiod},
-           given={Zachary},
-           giveni={Z\bibinitperiod}}}%
-        {{hash=7929fea15fadf227450de2b313089cc0}{%
-           family={Panchekha},
-           familyi={P\bibinitperiod},
-           given={Pavel},
-           giveni={P\bibinitperiod}}}%
-      }
-      \strng{namehash}{6b08c053cda2edfa6417d6fa1714e268}
-      \strng{fullhash}{d7e422a6327246dcf2046c8a923e120f}
-      \strng{fullhashraw}{d7e422a6327246dcf2046c8a923e120f}
-      \strng{bibnamehash}{d7e422a6327246dcf2046c8a923e120f}
-      \strng{authorbibnamehash}{d7e422a6327246dcf2046c8a923e120f}
-      \strng{authornamehash}{6b08c053cda2edfa6417d6fa1714e268}
-      \strng{authorfullhash}{d7e422a6327246dcf2046c8a923e120f}
-      \strng{authorfullhashraw}{d7e422a6327246dcf2046c8a923e120f}
-      \field{sortinit}{1}
-      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{shorttitle}
-      \field{abstract}{An e-graph efficiently represents a congruence relation over many expressions. Although they were originally developed in the late 1970s for use in automated theorem provers, a more recent technique known as equality saturation repurposes e-graphs to implement state-of-the-art, rewrite-driven compiler optimizations and program synthesizers. However, e-graphs remain unspecialized for this newer use case. Equality saturation workloads exhibit distinct characteristics and often require ad-hoc e-graph extensions to incorporate transformations beyond purely syntactic rewrites. This work contributes two techniques that make e-graphs fast and extensible, specializing them to equality saturation. A new amortized invariant restoration technique called rebuilding takes advantage of equality saturation's distinct workload, providing asymptotic speedups over current techniques in practice. A general mechanism called e-class analyses integrates domain-specific analyses into the e-graph, reducing the need for ad hoc manipulation. We implemented these techniques in a new open-source library called egg. Our case studies on three previously published applications of equality saturation highlight how egg's performance and flexibility enable state-of-the-art results across diverse domains.}
-      \field{day}{4}
-      \field{issn}{2475-1421}
-      \field{issue}{{POPL}}
-      \field{journaltitle}{Proceedings of the {ACM} on Programming Languages}
-      \field{langid}{english}
-      \field{month}{1}
-      \field{shortjournal}{Proc. {ACM} Program. Lang.}
-      \field{shorttitle}{egg}
-      \field{title}{egg: Fast and extensible equality saturation}
-      \field{urlday}{8}
-      \field{urlmonth}{2}
-      \field{urlyear}{2026}
-      \field{volume}{5}
-      \field{year}{2021}
-      \field{dateera}{ce}
-      \field{urldateera}{ce}
-      \field{pages}{1\bibrangedash 29}
-      \range{pages}{29}
-      \verb{doi}
-      \verb 10.1145/3434304
-      \endverb
-      \verb{file}
-      \verb Available Version (via Google Scholar):/home/pree/Zotero/storage/KHVE76F9/Willsey et al. - 2021 - egg Fast and extensible equality saturation.pdf:application/pdf
-      \endverb
-      \verb{urlraw}
-      \verb https://dl.acm.org/doi/10.1145/3434304
-      \endverb
-      \verb{url}
-      \verb https://dl.acm.org/doi/10.1145/3434304
-      \endverb
-    \endentry
-    \entry{zucker_omelets_2025}{misc}{}{}
-      \name{author}{1}{}{%
-        {{hash=33b15f6af71ae8346aad37f39dccbe0f}{%
-           family={Zucker},
-           familyi={Z\bibinitperiod},
-           given={Philip},
-           giveni={P\bibinitperiod}}}%
-      }
-      \list{publisher}{1}{%
-        {arXiv}%
-      }
-      \strng{namehash}{33b15f6af71ae8346aad37f39dccbe0f}
-      \strng{fullhash}{33b15f6af71ae8346aad37f39dccbe0f}
-      \strng{fullhashraw}{33b15f6af71ae8346aad37f39dccbe0f}
-      \strng{bibnamehash}{33b15f6af71ae8346aad37f39dccbe0f}
-      \strng{authorbibnamehash}{33b15f6af71ae8346aad37f39dccbe0f}
-      \strng{authornamehash}{33b15f6af71ae8346aad37f39dccbe0f}
-      \strng{authorfullhash}{33b15f6af71ae8346aad37f39dccbe0f}
-      \strng{authorfullhashraw}{33b15f6af71ae8346aad37f39dccbe0f}
-      \field{sortinit}{2}
-      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{shorttitle}
-      \field{abstract}{E-graphs[25] are a data structure for equational reasoning and optimization over ground terms. One of the beneﬁts of e-graph rewriting is that it can declaratively handle useful but diﬃcult to orient identities like associativity and commutativity ({AC}) in a generic way. However, using these generic mechanisms is more computationally expensive than using bespoke routines on terms containing sets, multi-sets, linear expressions, polynomials, and binders. A natural question arises: How can one combine the generic capabilities of e-graph rewriting with these specialized theories? This paper discusses a pragmatic approach to this e-graphs modulo theories ({EMT}) question using two key ideas: bottom-up e-matching and semantic e-ids.}
-      \field{day}{19}
-      \field{eprinttype}{arxiv}
-      \field{langid}{english}
-      \field{month}{4}
-      \field{number}{{arXiv}:2504.14340}
-      \field{shorttitle}{Omelets Need Onions}
-      \field{title}{Omelets Need Onions: E-graphs Modulo Theories via Bottom-up E-matching}
-      \field{urlday}{20}
-      \field{urlmonth}{1}
-      \field{urlyear}{2026}
-      \field{year}{2025}
-      \field{dateera}{ce}
-      \field{urldateera}{ce}
-      \verb{doi}
-      \verb 10.48550/arXiv.2504.14340
-      \endverb
-      \verb{eprint}
-      \verb 2504.14340 [cs]
-      \endverb
-      \verb{file}
-      \verb PDF:/home/pree/Zotero/storage/6L8VQ2DR/Zucker - 2025 - Omelets Need Onions E-graphs Modulo Theories via Bottom-up E-matching.pdf:application/pdf
-      \endverb
-      \verb{urlraw}
-      \verb http://arxiv.org/abs/2504.14340
-      \endverb
-      \verb{url}
-      \verb http://arxiv.org/abs/2504.14340
-      \endverb
-      \keyw{Computer Science - Programming Languages}
-    \endentry
-    \entry{panchekha_lin-graphs_2025}{online}{}{}
-      \name{author}{1}{}{%
-        {{hash=7929fea15fadf227450de2b313089cc0}{%
-           family={Panchekha},
-           familyi={P\bibinitperiod},
-           given={Pavel},
-           giveni={P\bibinitperiod}}}%
-      }
-      \strng{namehash}{7929fea15fadf227450de2b313089cc0}
-      \strng{fullhash}{7929fea15fadf227450de2b313089cc0}
-      \strng{fullhashraw}{7929fea15fadf227450de2b313089cc0}
-      \strng{bibnamehash}{7929fea15fadf227450de2b313089cc0}
-      \strng{authorbibnamehash}{7929fea15fadf227450de2b313089cc0}
-      \strng{authornamehash}{7929fea15fadf227450de2b313089cc0}
-      \strng{authorfullhash}{7929fea15fadf227450de2b313089cc0}
-      \strng{authorfullhashraw}{7929fea15fadf227450de2b313089cc0}
-      \field{sortinit}{3}
-      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{day}{23}
-      \field{langid}{english}
-      \field{month}{5}
-      \field{title}{{LIN}-graphs, an Egraph modulo T}
-      \field{titleaddon}{Pavel's Blog}
-      \field{year}{2025}
-      \field{dateera}{ce}
-      \verb{urlraw}
-      \verb https://pavpanchekha.com/blog/lin-graphs.html
-      \endverb
-      \verb{url}
-      \verb https://pavpanchekha.com/blog/lin-graphs.html
-      \endverb
-    \endentry
-    \entry{shanabrook_custom_2026}{online}{}{}
-      \name{author}{1}{}{%
-        {{hash=6ab7e6e1d7f608b1726c2e4e884a6419}{%
-           family={Shanabrook},
-           familyi={S\bibinitperiod},
-           given={Saul},
-           giveni={S\bibinitperiod}}}%
-      }
-      \strng{namehash}{6ab7e6e1d7f608b1726c2e4e884a6419}
-      \strng{fullhash}{6ab7e6e1d7f608b1726c2e4e884a6419}
-      \strng{fullhashraw}{6ab7e6e1d7f608b1726c2e4e884a6419}
-      \strng{bibnamehash}{6ab7e6e1d7f608b1726c2e4e884a6419}
-      \strng{authorbibnamehash}{6ab7e6e1d7f608b1726c2e4e884a6419}
-      \strng{authornamehash}{6ab7e6e1d7f608b1726c2e4e884a6419}
-      \strng{authorfullhash}{6ab7e6e1d7f608b1726c2e4e884a6419}
-      \strng{authorfullhashraw}{6ab7e6e1d7f608b1726c2e4e884a6419}
-      \field{sortinit}{4}
-      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{day}{24}
-      \field{langid}{english}
-      \field{month}{2}
-      \field{title}{Custom Data Structures in E-Graphs}
-      \field{titleaddon}{{PLSE} Blog}
-      \field{year}{2026}
-      \field{dateera}{ce}
-      \verb{urlraw}
-      \verb https://uwplse.org/2026/02/24/egglog-containers.html
-      \endverb
-      \verb{url}
-      \verb https://uwplse.org/2026/02/24/egglog-containers.html
-      \endverb
-    \endentry
-    \entry{goos_little_2002}{incollection}{}{}
-      \name{author}{1}{}{%
-        {{hash=5553cb073d2f3ac295ec4dec8ea41dfc}{%
-           family={Shankar},
-           familyi={S\bibinitperiod},
-           given={Natarajan},
-           giveni={N\bibinitperiod}}}%
-      }
-      \name{editor}{2}{}{%
-        {{hash=87e5b9ee45e035e17054c38ef0de4285}{%
-           family={Eriksson},
-           familyi={E\bibinitperiod},
-           given={Lars-Henrik},
-           giveni={L\bibinithyphendelim H\bibinitperiod}}}%
-        {{hash=e10844dc21d3c8e2c59ac7491394da30}{%
-           family={Lindsay},
-           familyi={L\bibinitperiod},
-           given={Peter\bibnamedelima Alexander},
-           giveni={P\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
-      }
-      \name{editorb}{3}{}{%
-        {{hash=97b8779c08da200ee2eb194bdc10ae4f}{%
-           family={Goos},
-           familyi={G\bibinitperiod},
-           given={Gerhard},
-           giveni={G\bibinitperiod}}}%
-        {{hash=84d4ea2bd3ec736effccd97ee64d09ef}{%
-           family={Hartmanis},
-           familyi={H\bibinitperiod},
-           given={Juris},
-           giveni={J\bibinitperiod}}}%
-        {{hash=4e6d4340bf56539a33dcad95ee6e8fc5}{%
-           family={Van\bibnamedelima Leeuwen},
-           familyi={V\bibinitperiod\bibinitdelim L\bibinitperiod},
-           given={Jan},
-           giveni={J\bibinitperiod}}}%
-      }
-      \list{location}{1}{%
-        {Berlin, Heidelberg}%
-      }
-      \list{publisher}{1}{%
-        {Springer Berlin Heidelberg}%
-      }
-      \strng{namehash}{5553cb073d2f3ac295ec4dec8ea41dfc}
-      \strng{fullhash}{5553cb073d2f3ac295ec4dec8ea41dfc}
-      \strng{fullhashraw}{5553cb073d2f3ac295ec4dec8ea41dfc}
-      \strng{bibnamehash}{5553cb073d2f3ac295ec4dec8ea41dfc}
-      \strng{authorbibnamehash}{5553cb073d2f3ac295ec4dec8ea41dfc}
-      \strng{authornamehash}{5553cb073d2f3ac295ec4dec8ea41dfc}
-      \strng{authorfullhash}{5553cb073d2f3ac295ec4dec8ea41dfc}
-      \strng{authorfullhashraw}{5553cb073d2f3ac295ec4dec8ea41dfc}
-      \strng{editorbibnamehash}{6acce0ad20c143cbb9cd5bb699aac427}
-      \strng{editornamehash}{6acce0ad20c143cbb9cd5bb699aac427}
-      \strng{editorfullhash}{6acce0ad20c143cbb9cd5bb699aac427}
-      \strng{editorfullhashraw}{6acce0ad20c143cbb9cd5bb699aac427}
-      \strng{editorbbibnamehash}{3dfcf72b5841d3fc75d0df4fe9034b68}
-      \strng{editorbnamehash}{522af9cbd4958b79cc9ddb9b46943274}
-      \strng{editorbfullhash}{3dfcf72b5841d3fc75d0df4fe9034b68}
-      \strng{editorbfullhashraw}{3dfcf72b5841d3fc75d0df4fe9034b68}
-      \field{sortinit}{5}
-      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{booktitle}{{FME} 2002:Formal Methods—Getting {IT} Right}
-      \field{editorbtype}{redactor}
-      \field{isbn}{978-3-540-43928-8 978-3-540-45614-8}
-      \field{note}{Series Title: Lecture Notes in Computer Science}
-      \field{title}{Little Engines of Proof}
-      \field{urlday}{17}
-      \field{urlmonth}{3}
-      \field{urlyear}{2026}
-      \field{volume}{2391}
-      \field{year}{2002}
-      \field{dateera}{ce}
-      \field{urldateera}{ce}
-      \field{pages}{1\bibrangedash 20}
-      \range{pages}{20}
-      \verb{doi}
-      \verb 10.1007/3-540-45614-7_1
-      \endverb
-      \verb{file}
-      \verb Available Version (via Google Scholar):/home/pree/Zotero/storage/29IPX8H3/Shankar - 2002 - Little Engines of Proof.pdf:application/pdf;floc02.pdf:/home/pree/Zotero/storage/87BLR5CI/floc02.pdf:application/pdf
-      \endverb
-      \verb{urlraw}
-      \verb http://link.springer.com/10.1007/3-540-45614-7_1
-      \endverb
-      \verb{url}
-      \verb http://link.springer.com/10.1007/3-540-45614-7_1
-      \endverb
-    \endentry
-    \entry{suciu_semantic_2025}{misc}{}{}
-      \name{author}{3}{}{%
-        {{hash=dad05536948804793c3e454acd5ecb8f}{%
-           family={Suciu},
-           familyi={S\bibinitperiod},
-           given={Dan},
-           giveni={D\bibinitperiod}}}%
-        {{hash=cf03d27f5054d00e304e8ab0690c6471}{%
-           family={Wang},
-           familyi={W\bibinitperiod},
-           given={Yisu\bibnamedelima Remy},
-           giveni={Y\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
-        {{hash=21bcec28b2c8de5bcb840a009c60b0a0}{%
-           family={Zhang},
-           familyi={Z\bibinitperiod},
-           given={Yihong},
-           giveni={Y\bibinitperiod}}}%
-      }
-      \list{publisher}{1}{%
-        {arXiv}%
-      }
-      \strng{namehash}{925289cc9c98bfb0302e1333b034d2d1}
-      \strng{fullhash}{294ad86fd1d033e967c2edde31aaee47}
-      \strng{fullhashraw}{294ad86fd1d033e967c2edde31aaee47}
-      \strng{bibnamehash}{294ad86fd1d033e967c2edde31aaee47}
-      \strng{authorbibnamehash}{294ad86fd1d033e967c2edde31aaee47}
-      \strng{authornamehash}{925289cc9c98bfb0302e1333b034d2d1}
-      \strng{authorfullhash}{294ad86fd1d033e967c2edde31aaee47}
-      \strng{authorfullhashraw}{294ad86fd1d033e967c2edde31aaee47}
-      \field{sortinit}{7}
-      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{abstract}{Equality saturation is an emerging technique for program and query optimization developed in the programming language community. It performs term rewriting over an E-graph, a data structure that compactly represents a program space. Despite its popularity, the theory of equality saturation lags behind the practice. In this paper, we define a fixpoint semantics of equality saturation based on tree automata and uncover deep connections between equality saturation and the chase. We characterize the class of chase sequences that correspond to equality saturation. We study the complexities of terminations of equality saturation in three cases: single-instance, all-term-instance, and all-E-graph-instance. Finally, we define a syntactic criterion based on acyclicity that implies equality saturation termination.}
-      \field{day}{5}
-      \field{eprinttype}{arxiv}
-      \field{langid}{english}
-      \field{month}{1}
-      \field{number}{{arXiv}:2501.02413}
-      \field{title}{Semantic foundations of equality saturation}
-      \field{urlday}{4}
-      \field{urlmonth}{2}
-      \field{urlyear}{2026}
-      \field{year}{2025}
-      \field{dateera}{ce}
-      \field{urldateera}{ce}
-      \verb{doi}
-      \verb 10.48550/arXiv.2501.02413
-      \endverb
-      \verb{eprint}
-      \verb 2501.02413 [cs]
-      \endverb
-      \verb{file}
-      \verb PDF:/home/pree/Zotero/storage/EAMEA573/Suciu et al. - 2025 - Semantic foundations of equality saturation.pdf:application/pdf
-      \endverb
-      \verb{urlraw}
-      \verb http://arxiv.org/abs/2501.02413
-      \endverb
-      \verb{url}
-      \verb http://arxiv.org/abs/2501.02413
-      \endverb
-      \keyw{Computer Science - Databases,Computer Science - Programming Languages}
-    \endentry
-    \entry{bachmair_abstract_2000}{inproceedings}{}{}
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{baader_term_1998}{book}{}{}
       \name{author}{2}{}{%
-        {{hash=3774293b060a55daa4e4db1f71df13f8}{%
-           family={Bachmair},
+        {{hash=099ae1911eaaba9fbc167fa92195392a}{%
+           family={Baader},
            familyi={B\bibinitperiod},
-           given={Leo},
-           giveni={L\bibinitperiod}}}%
-        {{hash=c280b85bda019adea24be030ef9c1e3d}{%
-           family={Tiwari},
-           familyi={T\bibinitperiod},
-           given={Ashish},
-           giveni={A\bibinitperiod}}}%
-      }
-      \name{editor}{1}{}{%
-        {{hash=09a4af5c985fc9a46727803f19cd8272}{%
-           family={{McAllester}},
-           familyi={M\bibinitperiod},
-           given={David},
-           giveni={D\bibinitperiod}}}%
-      }
-      \list{location}{1}{%
-        {Berlin, Heidelberg}%
-      }
-      \list{publisher}{1}{%
-        {Springer}%
-      }
-      \strng{namehash}{f074cac101886ec3b48d3d2fd4d5aa5c}
-      \strng{fullhash}{f074cac101886ec3b48d3d2fd4d5aa5c}
-      \strng{fullhashraw}{f074cac101886ec3b48d3d2fd4d5aa5c}
-      \strng{bibnamehash}{f074cac101886ec3b48d3d2fd4d5aa5c}
-      \strng{authorbibnamehash}{f074cac101886ec3b48d3d2fd4d5aa5c}
-      \strng{authornamehash}{f074cac101886ec3b48d3d2fd4d5aa5c}
-      \strng{authorfullhash}{f074cac101886ec3b48d3d2fd4d5aa5c}
-      \strng{authorfullhashraw}{f074cac101886ec3b48d3d2fd4d5aa5c}
-      \strng{editorbibnamehash}{09a4af5c985fc9a46727803f19cd8272}
-      \strng{editornamehash}{09a4af5c985fc9a46727803f19cd8272}
-      \strng{editorfullhash}{09a4af5c985fc9a46727803f19cd8272}
-      \strng{editorfullhashraw}{09a4af5c985fc9a46727803f19cd8272}
-      \field{sortinit}{1}
-      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{abstract}{We use the uniform framework of abstract congruence closure to study the congruence closure algorithms described by Nelson and Oppen [9], Downey, Sethi and Tarjan [7], and Shostak [11]. The descriptions thus obtained abstract from certain implementation details while still allowing for comparison between these different algorithms. Experimental results are presented to illustrate the relative efficiency and explain differences in performance of these three algorithms. The transition rules for computation of abstract congruence closure are obtained from rules for standard completion enhanced with an extension rule that enlarges a given signature by new constants.}
-      \field{booktitle}{Automated Deduction - {CADE}-17}
-      \field{isbn}{978-3-540-45101-3}
-      \field{langid}{english}
-      \field{title}{Abstract Congruence Closure and Specializations}
-      \field{year}{2000}
-      \field{dateera}{ce}
-      \field{pages}{64\bibrangedash 78}
-      \range{pages}{15}
-      \verb{doi}
-      \verb 10.1007/10721959_5
-      \endverb
-      \verb{file}
-      \verb Full Text PDF:/home/pree/Zotero/storage/C6A8T2J7/Bachmair and Tiwari - 2000 - Abstract Congruence Closure and Specializations.pdf:application/pdf
-      \endverb
-    \endentry
-    \entry{tiwari_decision_2000}{book}{}{}
-      \name{author}{1}{}{%
-        {{hash=c280b85bda019adea24be030ef9c1e3d}{%
-           family={Tiwari},
-           familyi={T\bibinitperiod},
-           given={Ashish},
-           giveni={A\bibinitperiod}}}%
-      }
-      \list{publisher}{1}{%
-        {State University of New York at Stony Brook}%
-      }
-      \strng{namehash}{c280b85bda019adea24be030ef9c1e3d}
-      \strng{fullhash}{c280b85bda019adea24be030ef9c1e3d}
-      \strng{fullhashraw}{c280b85bda019adea24be030ef9c1e3d}
-      \strng{bibnamehash}{c280b85bda019adea24be030ef9c1e3d}
-      \strng{authorbibnamehash}{c280b85bda019adea24be030ef9c1e3d}
-      \strng{authornamehash}{c280b85bda019adea24be030ef9c1e3d}
-      \strng{authorfullhash}{c280b85bda019adea24be030ef9c1e3d}
-      \strng{authorfullhashraw}{c280b85bda019adea24be030ef9c1e3d}
-      \field{sortinit}{1}
-      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{title}{Decision procedures in automated deduction}
-      \field{urlday}{18}
-      \field{urlmonth}{3}
-      \field{urlyear}{2026}
-      \field{year}{2000}
-      \field{dateera}{ce}
-      \field{urldateera}{ce}
-      \verb{file}
-      \verb Available Version (via Google Scholar):/home/pree/Zotero/storage/8JMX8M3N/Tiwari - 2000 - Decision procedures in automated deduction.pdf:application/pdf;thesis.pdf:/home/pree/Zotero/storage/YCJKRAZS/thesis.pdf:application/pdf
-      \endverb
-      \verb{urlraw}
-      \verb https://search.proquest.com/openview/30046982652b13cadc7b85d653cdf547/1?pq-origsite=gscholar&cbl=18750&diss=y
-      \endverb
-      \verb{url}
-      \verb https://search.proquest.com/openview/30046982652b13cadc7b85d653cdf547/1?pq-origsite=gscholar&cbl=18750&diss=y
-      \endverb
-    \endentry
-    \entry{downey_variations_1980}{article}{}{}
-      \name{author}{3}{}{%
-        {{hash=671e5ede727e653069c62a55e3a7aacc}{%
-           family={Downey},
-           familyi={D\bibinitperiod},
-           given={Peter\bibnamedelima J.},
-           giveni={P\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
-        {{hash=b0e677112f976b0ff780553fcb888351}{%
-           family={Sethi},
-           familyi={S\bibinitperiod},
-           given={Ravi},
-           giveni={R\bibinitperiod}}}%
-        {{hash=09f1ee63063ed5ad11c3baa87f800eb7}{%
-           family={Tarjan},
-           familyi={T\bibinitperiod},
-           given={Robert\bibnamedelima Endre},
-           giveni={R\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
-      }
-      \strng{namehash}{8f5eea2111ee3208f6ce177edc065817}
-      \strng{fullhash}{118bfb49815105ec8f59dd16c3147536}
-      \strng{fullhashraw}{118bfb49815105ec8f59dd16c3147536}
-      \strng{bibnamehash}{118bfb49815105ec8f59dd16c3147536}
-      \strng{authorbibnamehash}{118bfb49815105ec8f59dd16c3147536}
-      \strng{authornamehash}{8f5eea2111ee3208f6ce177edc065817}
-      \strng{authorfullhash}{118bfb49815105ec8f59dd16c3147536}
-      \strng{authorfullhashraw}{118bfb49815105ec8f59dd16c3147536}
-      \field{sortinit}{1}
-      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{issn}{0004-5411, 1557-735X}
-      \field{journaltitle}{Journal of the {ACM}}
-      \field{langid}{english}
-      \field{month}{10}
-      \field{number}{4}
-      \field{shortjournal}{J. {ACM}}
-      \field{title}{Variations on the Common Subexpression Problem}
-      \field{urlday}{8}
-      \field{urlmonth}{2}
-      \field{urlyear}{2026}
-      \field{volume}{27}
-      \field{year}{1980}
-      \field{dateera}{ce}
-      \field{urldateera}{ce}
-      \field{pages}{758\bibrangedash 771}
-      \range{pages}{14}
-      \verb{doi}
-      \verb 10.1145/322217.322228
-      \endverb
-      \verb{file}
-      \verb Full Text:/home/pree/Zotero/storage/NZ3BLIRS/Downey et al. - 1980 - Variations on the Common Subexpression Problem.pdf:application/pdf
-      \endverb
-      \verb{urlraw}
-      \verb https://dl.acm.org/doi/10.1145/322217.322228
-      \endverb
-      \verb{url}
-      \verb https://dl.acm.org/doi/10.1145/322217.322228
-      \endverb
-    \endentry
-    \entry{nelson_fast_1980}{article}{}{}
-      \name{author}{2}{}{%
-        {{hash=bfef9452b99ce3105cda6ab534f7efd3}{%
-           family={Nelson},
+           given={Franz},
+           giveni={F\bibinitperiod}}}%
+        {{hash=a41b38c2580f5bb8c574d84f66e0856a}{%
+           family={Nipkow},
            familyi={N\bibinitperiod},
-           given={Greg},
-           giveni={G\bibinitperiod}}}%
-        {{hash=9516bfae80f7ff2eabe7e28d5148f4ab}{%
-           family={Oppen},
-           familyi={O\bibinitperiod},
-           given={Derek\bibnamedelima C.},
-           giveni={D\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
-      }
-      \strng{namehash}{43aab228a70bb149f983e5382bf69bf1}
-      \strng{fullhash}{43aab228a70bb149f983e5382bf69bf1}
-      \strng{fullhashraw}{43aab228a70bb149f983e5382bf69bf1}
-      \strng{bibnamehash}{43aab228a70bb149f983e5382bf69bf1}
-      \strng{authorbibnamehash}{43aab228a70bb149f983e5382bf69bf1}
-      \strng{authornamehash}{43aab228a70bb149f983e5382bf69bf1}
-      \strng{authorfullhash}{43aab228a70bb149f983e5382bf69bf1}
-      \strng{authorfullhashraw}{43aab228a70bb149f983e5382bf69bf1}
-      \field{sortinit}{1}
-      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{abstract}{The notion of the congruence closure of a relation on a graph is defined and several algorithms for computing it are surveyed. A simple proof is given that the congruence closure algorithm provides a decision procedure for the quantifier-free theory of equality. A decision procedure is then given for the quantifier-free theory of {LISP} list structure based on the congruence closure algorithm. Both decision procedures determine the satisfiability of a conjunction of literals of length n in average time O ( n log n ) using the fastest known congruence closure algorithm. It is also shown that if the axiomatization of the theory of list structure is changed slightly, the problem of determining the satisfiability of a conjunction of literals becomes {NP}-complete. The decision procedures have been implemented in the authors' simplifier for the Stanford Pascal Verifier.}
-      \field{issn}{0004-5411, 1557-735X}
-      \field{journaltitle}{Journal of the {ACM}}
-      \field{langid}{english}
-      \field{month}{4}
-      \field{number}{2}
-      \field{shortjournal}{J. {ACM}}
-      \field{title}{Fast Decision Procedures Based on Congruence Closure}
-      \field{urlday}{8}
-      \field{urlmonth}{2}
-      \field{urlyear}{2026}
-      \field{volume}{27}
-      \field{year}{1980}
-      \field{dateera}{ce}
-      \field{urldateera}{ce}
-      \field{pages}{356\bibrangedash 364}
-      \range{pages}{9}
-      \verb{doi}
-      \verb 10.1145/322186.322198
-      \endverb
-      \verb{file}
-      \verb Available Version (via Google Scholar):/home/pree/Zotero/storage/VH6T7XIY/Nelson and Oppen - 1980 - Fast Decision Procedures Based on Congruence Closure.pdf:application/pdf
-      \endverb
-      \verb{urlraw}
-      \verb https://dl.acm.org/doi/10.1145/322186.322198
-      \endverb
-      \verb{url}
-      \verb https://dl.acm.org/doi/10.1145/322186.322198
-      \endverb
-    \endentry
-    \entry{nyberg-brodda_g_2024}{misc}{}{}
-      \name{author}{1}{}{%
-        {{hash=fc8bec012f201886a113f1b43728aca6}{%
-           family={Nyberg-Brodda},
-           familyi={N\bibinithyphendelim B\bibinitperiod},
-           given={Carl-Fredrik},
-           giveni={C\bibinithyphendelim F\bibinitperiod}}}%
+           given={Tobias},
+           giveni={T\bibinitperiod}}}%
       }
       \list{publisher}{1}{%
-        {arXiv}%
+        {Cambridge university press}%
       }
-      \strng{namehash}{fc8bec012f201886a113f1b43728aca6}
-      \strng{fullhash}{fc8bec012f201886a113f1b43728aca6}
-      \strng{fullhashraw}{fc8bec012f201886a113f1b43728aca6}
-      \strng{bibnamehash}{fc8bec012f201886a113f1b43728aca6}
-      \strng{authorbibnamehash}{fc8bec012f201886a113f1b43728aca6}
-      \strng{authornamehash}{fc8bec012f201886a113f1b43728aca6}
-      \strng{authorfullhash}{fc8bec012f201886a113f1b43728aca6}
-      \strng{authorfullhashraw}{fc8bec012f201886a113f1b43728aca6}
-      \field{sortinit}{2}
-      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \strng{namehash}{7c162a27477975bdbd4d5a893377eb14}
+      \strng{fullhash}{7c162a27477975bdbd4d5a893377eb14}
+      \strng{fullhashraw}{7c162a27477975bdbd4d5a893377eb14}
+      \strng{bibnamehash}{7c162a27477975bdbd4d5a893377eb14}
+      \strng{authorbibnamehash}{7c162a27477975bdbd4d5a893377eb14}
+      \strng{authornamehash}{7c162a27477975bdbd4d5a893377eb14}
+      \strng{authorfullhash}{7c162a27477975bdbd4d5a893377eb14}
+      \strng{authorfullhashraw}{7c162a27477975bdbd4d5a893377eb14}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{abstract}{We give an introduction to the ideas behind G. S. Tseytin’s 1958 construction of a seven-relation semigroup with undecidable word problem. We give a history of the ideas leading up to its construction, some intuition for the proof, and provide an overview of some subsequent results and developments which stem from this remarkable semigroup. An English translation of Tseytin’s article [73] by the author of the present article is supplemented at the end of the article (the Russian original was published in Trudy Mat. Inst. Steklov 52 (1958), pp. 172–189).}
-      \field{day}{22}
-      \field{eprinttype}{arxiv}
-      \field{langid}{english}
-      \field{month}{1}
-      \field{number}{{arXiv}:2401.11757}
-      \field{title}{G. S. Tseytin's seven-relation semigroup with undecidable word problem}
-      \field{urlday}{27}
-      \field{urlmonth}{2}
-      \field{urlyear}{2026}
-      \field{year}{2024}
+      \field{title}{Term rewriting and all that}
+      \field{urlday}{4}
+      \field{urlmonth}{8}
+      \field{urlyear}{2025}
+      \field{year}{1998}
       \field{dateera}{ce}
       \field{urldateera}{ce}
-      \verb{doi}
-      \verb 10.48550/arXiv.2401.11757
-      \endverb
-      \verb{eprint}
-      \verb 2401.11757 [math]
-      \endverb
       \verb{file}
-      \verb PDF:/home/pree/Zotero/storage/QKWGFQLX/Nyberg-Brodda - 2024 - G. S. Tseytin's seven-relation semigroup with undecidable word problem.pdf:application/pdf
+      \verb Available Version (via Google Scholar):/home/pree/Zotero/storage/MDBIXXPZ/Baader and Nipkow - 1998 - Term rewriting and all that.pdf:application/pdf;Franz Baader, Tobias Nipkow - Term Rewriting and All That-Cambridge University Press (1998):/home/pree/Zotero/storage/D7B6TUIQ/Franz Baader, Tobias Nipkow - Term Rewriting and All That-Cambridge University Press (1998).djvu:image/vnd.djvu
       \endverb
       \verb{urlraw}
-      \verb http://arxiv.org/abs/2401.11757
+      \verb https://books.google.com/books?hl=sv&lr=&id=N7BvXVUCQk8C&oi=fnd&pg=PR9&dq=baader+nipkow&ots=cQ-4LiZxZh&sig=3IGr91DGoASOjhIJpb_mHnwqtnY
       \endverb
       \verb{url}
-      \verb http://arxiv.org/abs/2401.11757
-      \endverb
-      \keyw{Mathematics - History and Overview,Mathematics - Group Theory}
-    \endentry
-    \entry{mayr_complexity_1982}{article}{}{}
-      \name{author}{2}{}{%
-        {{hash=6191001c704a15f11454348698fc2663}{%
-           family={Mayr},
-           familyi={M\bibinitperiod},
-           given={Ernst\bibnamedelima W},
-           giveni={E\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
-        {{hash=1cab43312faf7ffbcde3ae18c5834d1e}{%
-           family={Meyer},
-           familyi={M\bibinitperiod},
-           given={Albert\bibnamedelima R},
-           giveni={A\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
-      }
-      \strng{namehash}{bfbf464a9c5b279a40e8661b5b8c6f62}
-      \strng{fullhash}{bfbf464a9c5b279a40e8661b5b8c6f62}
-      \strng{fullhashraw}{bfbf464a9c5b279a40e8661b5b8c6f62}
-      \strng{bibnamehash}{bfbf464a9c5b279a40e8661b5b8c6f62}
-      \strng{authorbibnamehash}{bfbf464a9c5b279a40e8661b5b8c6f62}
-      \strng{authornamehash}{bfbf464a9c5b279a40e8661b5b8c6f62}
-      \strng{authorfullhash}{bfbf464a9c5b279a40e8661b5b8c6f62}
-      \strng{authorfullhashraw}{bfbf464a9c5b279a40e8661b5b8c6f62}
-      \field{sortinit}{2}
-      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{abstract}{Any decision procedure for the word problems for commutative semigroups and polynomial deals inherently requires computational storage space growing exponentially with the size of the problem instance to which the procedure is applied. This bound is achieved by a simple procedure for the semigroup problem.}
-      \field{day}{1}
-      \field{issn}{0001-8708}
-      \field{journaltitle}{Advances in Mathematics}
-      \field{month}{12}
-      \field{number}{3}
-      \field{shortjournal}{Advances in Mathematics}
-      \field{title}{The complexity of the word problems for commutative semigroups and polynomial ideals}
-      \field{urlday}{11}
-      \field{urlmonth}{3}
-      \field{urlyear}{2026}
-      \field{volume}{46}
-      \field{year}{1982}
-      \field{dateera}{ce}
-      \field{urldateera}{ce}
-      \field{pages}{305\bibrangedash 329}
-      \range{pages}{25}
-      \verb{doi}
-      \verb 10.1016/0001-8708(82)90048-2
-      \endverb
-      \verb{file}
-      \verb ScienceDirect Full Text PDF:/home/pree/Zotero/storage/JLRK8V38/Mayr and Meyer - 1982 - The complexity of the word problems for commutative semigroups and polynomial ideals.pdf:application/pdf;ScienceDirect Snapshot:/home/pree/Zotero/storage/5D7NSPHR/0001870882900482.html:text/html
-      \endverb
-      \verb{urlraw}
-      \verb https://www.sciencedirect.com/science/article/pii/0001870882900482
-      \endverb
-      \verb{url}
-      \verb https://www.sciencedirect.com/science/article/pii/0001870882900482
+      \verb https://books.google.com/books?hl=sv&lr=&id=N7BvXVUCQk8C&oi=fnd&pg=PR9&dq=baader+nipkow&ots=cQ-4LiZxZh&sig=3IGr91DGoASOjhIJpb_mHnwqtnY
       \endverb
     \endentry
     \entry{goos_congruence_2000}{incollection}{}{}
@@ -752,8 +125,8 @@
       \strng{namehash}{2447d7830878a59a2c68e8b7c54e967a}
       \strng{fullhash}{01096c7e1d9efe661d3a081cb9b24146}
       \strng{fullhashraw}{01096c7e1d9efe661d3a081cb9b24146}
-      \strng{bibnamehash}{01096c7e1d9efe661d3a081cb9b24146}
-      \strng{authorbibnamehash}{01096c7e1d9efe661d3a081cb9b24146}
+      \strng{bibnamehash}{2447d7830878a59a2c68e8b7c54e967a}
+      \strng{authorbibnamehash}{2447d7830878a59a2c68e8b7c54e967a}
       \strng{authornamehash}{2447d7830878a59a2c68e8b7c54e967a}
       \strng{authorfullhash}{01096c7e1d9efe661d3a081cb9b24146}
       \strng{authorfullhashraw}{01096c7e1d9efe661d3a081cb9b24146}
@@ -762,11 +135,11 @@
       \strng{editorfullhash}{9b25c13c3e788f175f8ad15f7d64ce7d}
       \strng{editorfullhashraw}{9b25c13c3e788f175f8ad15f7d64ce7d}
       \strng{editorbbibnamehash}{3dfcf72b5841d3fc75d0df4fe9034b68}
-      \strng{editorbnamehash}{522af9cbd4958b79cc9ddb9b46943274}
+      \strng{editorbnamehash}{3dfcf72b5841d3fc75d0df4fe9034b68}
       \strng{editorbfullhash}{3dfcf72b5841d3fc75d0df4fe9034b68}
       \strng{editorbfullhashraw}{3dfcf72b5841d3fc75d0df4fe9034b68}
-      \field{sortinit}{2}
-      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{Frontiers of Combining Systems}
@@ -795,6 +168,369 @@
       \verb{url}
       \verb http://link.springer.com/10.1007/10720084_16
       \endverb
+    \endentry
+    \entry{bachmair_abstract_2000}{inproceedings}{}{}
+      \name{author}{2}{}{%
+        {{hash=3774293b060a55daa4e4db1f71df13f8}{%
+           family={Bachmair},
+           familyi={B\bibinitperiod},
+           given={Leo},
+           giveni={L\bibinitperiod}}}%
+        {{hash=c280b85bda019adea24be030ef9c1e3d}{%
+           family={Tiwari},
+           familyi={T\bibinitperiod},
+           given={Ashish},
+           giveni={A\bibinitperiod}}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=09a4af5c985fc9a46727803f19cd8272}{%
+           family={{McAllester}},
+           familyi={M\bibinitperiod},
+           given={David},
+           giveni={D\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Berlin, Heidelberg}%
+      }
+      \list{publisher}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{f074cac101886ec3b48d3d2fd4d5aa5c}
+      \strng{fullhash}{f074cac101886ec3b48d3d2fd4d5aa5c}
+      \strng{fullhashraw}{f074cac101886ec3b48d3d2fd4d5aa5c}
+      \strng{bibnamehash}{f074cac101886ec3b48d3d2fd4d5aa5c}
+      \strng{authorbibnamehash}{f074cac101886ec3b48d3d2fd4d5aa5c}
+      \strng{authornamehash}{f074cac101886ec3b48d3d2fd4d5aa5c}
+      \strng{authorfullhash}{f074cac101886ec3b48d3d2fd4d5aa5c}
+      \strng{authorfullhashraw}{f074cac101886ec3b48d3d2fd4d5aa5c}
+      \strng{editorbibnamehash}{09a4af5c985fc9a46727803f19cd8272}
+      \strng{editornamehash}{09a4af5c985fc9a46727803f19cd8272}
+      \strng{editorfullhash}{09a4af5c985fc9a46727803f19cd8272}
+      \strng{editorfullhashraw}{09a4af5c985fc9a46727803f19cd8272}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{We use the uniform framework of abstract congruence closure to study the congruence closure algorithms described by Nelson and Oppen [9], Downey, Sethi and Tarjan [7], and Shostak [11]. The descriptions thus obtained abstract from certain implementation details while still allowing for comparison between these different algorithms. Experimental results are presented to illustrate the relative efficiency and explain differences in performance of these three algorithms. The transition rules for computation of abstract congruence closure are obtained from rules for standard completion enhanced with an extension rule that enlarges a given signature by new constants.}
+      \field{booktitle}{Automated Deduction - {CADE}-17}
+      \field{isbn}{978-3-540-45101-3}
+      \field{langid}{english}
+      \field{title}{Abstract Congruence Closure and Specializations}
+      \field{year}{2000}
+      \field{dateera}{ce}
+      \field{pages}{64\bibrangedash 78}
+      \range{pages}{15}
+      \verb{doi}
+      \verb 10.1007/10721959_5
+      \endverb
+      \verb{file}
+      \verb Full Text PDF:/home/pree/Zotero/storage/C6A8T2J7/Bachmair and Tiwari - 2000 - Abstract Congruence Closure and Specializations.pdf:application/pdf
+      \endverb
+    \endentry
+    \entry{conchon_ccx_2008}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=03404ca4745770d1ff700eb97ff6dda1}{%
+           family={Conchon},
+           familyi={C\bibinitperiod},
+           given={Sylvain},
+           giveni={S\bibinitperiod}}}%
+        {{hash=dda3f50595ad924aedff6d6f1b51f27e}{%
+           family={Contejean},
+           familyi={C\bibinitperiod},
+           given={Evelyne},
+           giveni={E\bibinitperiod}}}%
+        {{hash=f38030100155acfe28c10e4a1d6be69b}{%
+           family={Kanig},
+           familyi={K\bibinitperiod},
+           given={Johannes},
+           giveni={J\bibinitperiod}}}%
+        {{hash=14630f2aacb0f3588349e84692f925b3}{%
+           family={Lescuyer},
+           familyi={L\bibinitperiod},
+           given={Stéphane},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{444cf7356b9b81271d219d7610d49583}
+      \strng{fullhash}{59530dd1175201cb103dbf98b7cfecab}
+      \strng{fullhashraw}{59530dd1175201cb103dbf98b7cfecab}
+      \strng{bibnamehash}{444cf7356b9b81271d219d7610d49583}
+      \strng{authorbibnamehash}{444cf7356b9b81271d219d7610d49583}
+      \strng{authornamehash}{444cf7356b9b81271d219d7610d49583}
+      \strng{authorfullhash}{59530dd1175201cb103dbf98b7cfecab}
+      \strng{authorfullhashraw}{59530dd1175201cb103dbf98b7cfecab}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{We present a generic congruence closure algorithm for deciding ground formulas in the combination of the theory of equality with uninterpreted symbols and an arbitrary built-in solvable theory X. Our algorithm {CC}(X) is reminiscent of Shostak combination: it maintains a union-find data-structure modulo X from which maximal information about implied equalities can be directly used for congruence closure. {CC}(X) diverges from Shostak's approach by the use of semantic values for class representatives instead of canonized terms. Using semantic values truly reflects the actual implementation of the decision procedure for X. It also enforces to entirely rebuild the algorithm since global canonization, which is at the heart of Shostak combination, is no longer feasible with semantic values. {CC}(X) has been implemented in Ocaml and is at the core of Ergo, a new automated theorem prover dedicated to program verification.}
+      \field{day}{6}
+      \field{issn}{1571-0661}
+      \field{journaltitle}{Electronic Notes in Theoretical Computer Science}
+      \field{month}{5}
+      \field{number}{2}
+      \field{series}{Proceedings of the 5th International Workshop on Satisfiability Modulo Theories ({SMT} 2007)}
+      \field{shortjournal}{Electronic Notes in Theoretical Computer Science}
+      \field{shorttitle}{{CC}(X)}
+      \field{title}{{CC}(X): Semantic Combination of Congruence Closure with Solvable Theories}
+      \field{urlday}{8}
+      \field{urlmonth}{2}
+      \field{urlyear}{2026}
+      \field{volume}{198}
+      \field{year}{2008}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{51\bibrangedash 69}
+      \range{pages}{19}
+      \verb{doi}
+      \verb 10.1016/j.entcs.2008.04.080
+      \endverb
+      \verb{file}
+      \verb ScienceDirect Full Text PDF:/home/pree/Zotero/storage/TRVIC9NN/Conchon et al. - 2008 - CC(X) Semantic Combination of Congruence Closure with Solvable Theories.pdf:application/pdf;ScienceDirect Snapshot:/home/pree/Zotero/storage/BME44ZP9/S1571066108002958.html:text/html
+      \endverb
+      \verb{urlraw}
+      \verb https://www.sciencedirect.com/science/article/pii/S1571066108002958
+      \endverb
+      \verb{url}
+      \verb https://www.sciencedirect.com/science/article/pii/S1571066108002958
+      \endverb
+      \keyw{congruence closure,decision procedures,equality theory,verification}
+    \endentry
+    \entry{cox_ideals_2015}{book}{}{}
+      \name{author}{3}{}{%
+        {{hash=f491ad1431e56daa11842f8c7ad8aa73}{%
+           family={Cox},
+           familyi={C\bibinitperiod},
+           given={David\bibnamedelima A.},
+           giveni={D\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=8a72cf3903e931ba6c47c32f8d97825d}{%
+           family={Little},
+           familyi={L\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod}}}%
+        {{hash=08ab5e59ecaefe80c4a3ee6e092fb827}{%
+           family={O’Shea},
+           familyi={O\bibinitperiod},
+           given={Donal},
+           giveni={D\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Cham}%
+      }
+      \list{publisher}{1}{%
+        {Springer International Publishing}%
+      }
+      \strng{namehash}{5fbd241ff65328c71133c9336c294f1e}
+      \strng{fullhash}{5fbd241ff65328c71133c9336c294f1e}
+      \strng{fullhashraw}{5fbd241ff65328c71133c9336c294f1e}
+      \strng{bibnamehash}{5fbd241ff65328c71133c9336c294f1e}
+      \strng{authorbibnamehash}{5fbd241ff65328c71133c9336c294f1e}
+      \strng{authornamehash}{5fbd241ff65328c71133c9336c294f1e}
+      \strng{authorfullhash}{5fbd241ff65328c71133c9336c294f1e}
+      \strng{authorfullhashraw}{5fbd241ff65328c71133c9336c294f1e}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{isbn}{978-3-319-16720-6 978-3-319-16721-3}
+      \field{langid}{english}
+      \field{series}{Undergraduate Texts in Mathematics}
+      \field{shorttitle}{Ideals, Varieties, and Algorithms}
+      \field{title}{Ideals, Varieties, and Algorithms: An Introduction to Computational Algebraic Geometry and Commutative Algebra}
+      \field{urlday}{17}
+      \field{urlmonth}{3}
+      \field{urlyear}{2026}
+      \field{year}{2015}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \verb{doi}
+      \verb 10.1007/978-3-319-16721-3
+      \endverb
+      \verb{file}
+      \verb Available Version (via Google Scholar):/home/pree/Zotero/storage/PBQPGEPU/Cox et al. - 2015 - Ideals, Varieties, and Algorithms An Introduction to Computational Algebraic Geometry and Commutati.pdf:application/pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://link.springer.com/10.1007/978-3-319-16721-3
+      \endverb
+      \verb{url}
+      \verb https://link.springer.com/10.1007/978-3-319-16721-3
+      \endverb
+    \endentry
+    \entry{downey_variations_1980}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=671e5ede727e653069c62a55e3a7aacc}{%
+           family={Downey},
+           familyi={D\bibinitperiod},
+           given={Peter\bibnamedelima J.},
+           giveni={P\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=b0e677112f976b0ff780553fcb888351}{%
+           family={Sethi},
+           familyi={S\bibinitperiod},
+           given={Ravi},
+           giveni={R\bibinitperiod}}}%
+        {{hash=09f1ee63063ed5ad11c3baa87f800eb7}{%
+           family={Tarjan},
+           familyi={T\bibinitperiod},
+           given={Robert\bibnamedelima Endre},
+           giveni={R\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+      }
+      \strng{namehash}{118bfb49815105ec8f59dd16c3147536}
+      \strng{fullhash}{118bfb49815105ec8f59dd16c3147536}
+      \strng{fullhashraw}{118bfb49815105ec8f59dd16c3147536}
+      \strng{bibnamehash}{118bfb49815105ec8f59dd16c3147536}
+      \strng{authorbibnamehash}{118bfb49815105ec8f59dd16c3147536}
+      \strng{authornamehash}{118bfb49815105ec8f59dd16c3147536}
+      \strng{authorfullhash}{118bfb49815105ec8f59dd16c3147536}
+      \strng{authorfullhashraw}{118bfb49815105ec8f59dd16c3147536}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0004-5411, 1557-735X}
+      \field{journaltitle}{Journal of the {ACM}}
+      \field{langid}{english}
+      \field{month}{10}
+      \field{number}{4}
+      \field{shortjournal}{J. {ACM}}
+      \field{title}{Variations on the Common Subexpression Problem}
+      \field{urlday}{8}
+      \field{urlmonth}{2}
+      \field{urlyear}{2026}
+      \field{volume}{27}
+      \field{year}{1980}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{758\bibrangedash 771}
+      \range{pages}{14}
+      \verb{doi}
+      \verb 10.1145/322217.322228
+      \endverb
+      \verb{file}
+      \verb Full Text:/home/pree/Zotero/storage/NZ3BLIRS/Downey et al. - 1980 - Variations on the Common Subexpression Problem.pdf:application/pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://dl.acm.org/doi/10.1145/322217.322228
+      \endverb
+      \verb{url}
+      \verb https://dl.acm.org/doi/10.1145/322217.322228
+      \endverb
+    \endentry
+    \entry{frankel_syntax-guided_2025}{inproceedings}{}{}
+      \name{author}{4}{}{%
+        {{hash=c3ceae6cd138033f76c08ebb29ad5c6a}{%
+           family={Frankel},
+           familyi={F\bibinitperiod},
+           given={Guy},
+           giveni={G\bibinitperiod}}}%
+        {{hash=d7e178ecdd7b516498477c12dabfd507}{%
+           family={Schneider},
+           familyi={S\bibinitperiod},
+           given={Rudi},
+           giveni={R\bibinitperiod}}}%
+        {{hash=187269ddb4a287b49f62f0c4a3c57bd0}{%
+           family={Steuwer},
+           familyi={S\bibinitperiod},
+           given={Michel},
+           giveni={M\bibinitperiod}}}%
+        {{hash=567c532b6d4f0dab804cfa043115e199}{%
+           family={Polgreen},
+           familyi={P\bibinitperiod},
+           given={Elizabeth},
+           giveni={E\bibinitperiod}}}%
+      }
+      \strng{namehash}{7999e69d03a06c6f32eca673660fd586}
+      \strng{fullhash}{f393e833b9e47cc05a13c6d8e0ed0c56}
+      \strng{fullhashraw}{f393e833b9e47cc05a13c6d8e0ed0c56}
+      \strng{bibnamehash}{7999e69d03a06c6f32eca673660fd586}
+      \strng{authorbibnamehash}{7999e69d03a06c6f32eca673660fd586}
+      \strng{authornamehash}{7999e69d03a06c6f32eca673660fd586}
+      \strng{authorfullhash}{f393e833b9e47cc05a13c6d8e0ed0c56}
+      \strng{authorfullhashraw}{f393e833b9e47cc05a13c6d8e0ed0c56}
+      \field{sortinit}{F}
+      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{booktitle}{The 23rd International Workshop on Satisfiability Modulo Theories}
+      \field{shorttitle}{Syntax-guided synthesis with counterexample-guided E-graphs}
+      \field{title}{Syntax-guided synthesis with counterexample-guided E-graphs: A work-in-progress report}
+      \field{urlday}{20}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{year}{2025}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb Available Version (via Google Scholar):/home/pree/Zotero/storage/PQTVQE9Q/Frankel et al. - 2025 - Syntax-guided synthesis with counterexample-guided E-graphs A work-in-progress report.pdf:application/pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://www.research.ed.ac.uk/en/publications/syntax-guided-synthesis-with-counterexample-guided-e-graphs-a-wor/
+      \endverb
+      \verb{url}
+      \verb https://www.research.ed.ac.uk/en/publications/syntax-guided-synthesis-with-counterexample-guided-e-graphs-a-wor/
+      \endverb
+    \endentry
+    \entry{kandri-rody_ideal-theoretic_1985}{inproceedings}{}{}
+      \name{author}{3}{}{%
+        {{hash=124f990d8e2075dfac114d4d35775a86}{%
+           family={Kandri-Rody},
+           familyi={K\bibinithyphendelim R\bibinitperiod},
+           given={Abdelilah},
+           giveni={A\bibinitperiod}}}%
+        {{hash=79ae193c185dc98fb2b7f4ece0ec1fb4}{%
+           family={Kapur},
+           familyi={K\bibinitperiod},
+           given={Deepak},
+           giveni={D\bibinitperiod}}}%
+        {{hash=81dcc0c5259e079c769d7eddfed3cd44}{%
+           family={Narendran},
+           familyi={N\bibinitperiod},
+           given={Paliath},
+           giveni={P\bibinitperiod}}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=6eeba4a38cd4dba9ec491e9d7e87b452}{%
+           family={Jouannaud},
+           familyi={J\bibinitperiod},
+           given={Jean-Pierre},
+           giveni={J\bibinithyphendelim P\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Berlin, Heidelberg}%
+      }
+      \list{publisher}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{8858d504e2167b3c9097364acb3e256b}
+      \strng{fullhash}{8858d504e2167b3c9097364acb3e256b}
+      \strng{fullhashraw}{8858d504e2167b3c9097364acb3e256b}
+      \strng{bibnamehash}{8858d504e2167b3c9097364acb3e256b}
+      \strng{authorbibnamehash}{8858d504e2167b3c9097364acb3e256b}
+      \strng{authornamehash}{8858d504e2167b3c9097364acb3e256b}
+      \strng{authorfullhash}{8858d504e2167b3c9097364acb3e256b}
+      \strng{authorfullhashraw}{8858d504e2167b3c9097364acb3e256b}
+      \strng{editorbibnamehash}{6eeba4a38cd4dba9ec491e9d7e87b452}
+      \strng{editornamehash}{6eeba4a38cd4dba9ec491e9d7e87b452}
+      \strng{editorfullhash}{6eeba4a38cd4dba9ec491e9d7e87b452}
+      \strng{editorfullhashraw}{6eeba4a38cd4dba9ec491e9d7e87b452}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{A new approach based on computing the Gröbner basis of polynomial ideals is developed for solving word problems and unification problems for finitely presented commutative algebras. This approach is simpler and more efficient than the approaches based on generalizations of the Knuth-Bendix completion procedure to handle associative and commutative operators. It is shown that (i) the word problem over a finitely presented commutative ring with unity is equivalent to the polynomial equivalence problem modulo a polynomial ideal over the integers, (ii) the unification problem for linear forms is decidable for finitely presented commutative rings with unity, (iii) the word problem and unification problem for finitely presented boolean polynomial rings are co-{NP}-complete and co-{NP}-hard respectively, and (iv) the set of all unifiers of two forms over a finitely presented abelian group can be computed in polynomial time. Examples and results of algorithms based on the Gröbner basis computation are also reported.}
+      \field{booktitle}{Rewriting Techniques and Applications}
+      \field{isbn}{978-3-540-39679-6}
+      \field{langid}{english}
+      \field{title}{An ideal-theoretic approach to word problems and unification problems over finitely presented commutative algebras}
+      \field{year}{1985}
+      \field{dateera}{ce}
+      \field{pages}{345\bibrangedash 364}
+      \range{pages}{20}
+      \verb{doi}
+      \verb 10.1007/3-540-15976-2_17
+      \endverb
+      \verb{file}
+      \verb Full Text PDF:/home/pree/Zotero/storage/QX5ED6M3/Kandri-Rody et al. - 1985 - An ideal-theoretic approach to word problems and unification problems over finitely presented commut.pdf:application/pdf
+      \endverb
+      \keyw{Commutative Algebras,Finitely Presented Algebras,Gröbner Basis,Knuth-Bendix Completion Procedure,Polynomial Ideals,Term Rewriting,Unification Problem,Word Problem}
     \endentry
     \entry{kapur_modular_2021}{article}{}{}
       \name{author}{1}{}{%
@@ -827,8 +563,8 @@
       \strng{editorfullhash}{f22f6e9ad2379a5e5de8a329e3c0e010}
       \strng{editorfullhashraw}{f22f6e9ad2379a5e5de8a329e3c0e010}
       \field{extraname}{1}
-      \field{sortinit}{2}
-      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{abstract}{Algorithms for computing congruence closure of ground equations over uninterpreted symbols and interpreted symbols satisfying associativity and commutativity ({AC}) properties are proposed. The algorithms are based on a framework for computing the congruence closure by abstracting nonflat terms by constants as proposed first in Kapur’s congruence closure algorithm ({RTA}97). The framework is general, flexible, and has been extended also to develop congruence closure algorithms for the cases when associative-commutative function symbols can have additional properties including idempotency, nilpotency and/or have identities, as well as their various combinations. The algorithms are modular; their correctness and termination proofs are simple, exploiting modularity. Unlike earlier algorithms, the proposed algorithms neither rely on complex {AC} compatible well-founded orderings on nonvariable terms nor need to use the associative-commutative unification and extension rules in completion for generating canonical rewrite systems for congruence closures. They are particularly suited for integrating into Satisfiability modulo Theories ({SMT}) solvers.}
@@ -877,8 +613,8 @@
       \strng{authorfullhash}{79ae193c185dc98fb2b7f4ece0ec1fb4}
       \strng{authorfullhashraw}{79ae193c185dc98fb2b7f4ece0ec1fb4}
       \field{extraname}{2}
-      \field{sortinit}{2}
-      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{abstract}{Algorithms for computing congruence closure of ground equations over uninterpreted symbols and interpreted symbols satisfying associativity and commutativity ({AC}) properties are proposed. The algorithms are based on a framework for computing a congruence closure as a canonical ground rewrite system in which nonﬂat terms are abstracted by new constants as proposed ﬁrst in Kapur’s congruence closure algorithm ({RTA}97). The framework is general, ﬂexible, and has been extended also to develop congruence closure algorithms for the cases when associative-commutative function symbols can have additional properties including idempotency, nilpotency, identities, cancelativity and group properties as well as their various combinations. Algorithms are modular; their correctness and termination proofs are simple, exploiting modularity. Unlike earlier algorithms, the proposed algorithms neither rely on complex {AC} compatible well-founded orderings on nonvariable terms nor need to use the associative-commutative uniﬁcation and extension rules in completion for generating canonical rewrite systems for congruence closures. They are particularly suited for integrating into the Satisﬁability modulo Theories ({SMT}) solvers. It is shown that a Gr¨obner basis algorithm for polynomial ideals with integer coeﬃcients can be formulated as a combination algorithm for the congruence closure over an Abelian group with + and the congruence closure over the {AC} symbol ∗ with the identity 1, linked using the distributivity property of ∗ over +.}
@@ -910,73 +646,849 @@
       \verb https://lmcs.episciences.org/8693
       \endverb
     \endentry
-    \entry{conchon_ccx_2008}{article}{}{}
-      \name{author}{4}{}{%
-        {{hash=03404ca4745770d1ff700eb97ff6dda1}{%
-           family={Conchon},
-           familyi={C\bibinitperiod},
-           given={Sylvain},
-           giveni={S\bibinitperiod}}}%
-        {{hash=dda3f50595ad924aedff6d6f1b51f27e}{%
-           family={Contejean},
-           familyi={C\bibinitperiod},
-           given={Evelyne},
-           giveni={E\bibinitperiod}}}%
-        {{hash=f38030100155acfe28c10e4a1d6be69b}{%
-           family={Kanig},
-           familyi={K\bibinitperiod},
-           given={Johannes},
-           giveni={J\bibinitperiod}}}%
-        {{hash=14630f2aacb0f3588349e84692f925b3}{%
-           family={Lescuyer},
-           familyi={L\bibinitperiod},
-           given={Stéphane},
-           giveni={S\bibinitperiod}}}%
+    \entry{mayr_complexity_1982}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=6191001c704a15f11454348698fc2663}{%
+           family={Mayr},
+           familyi={M\bibinitperiod},
+           given={Ernst\bibnamedelima W},
+           giveni={E\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+        {{hash=1cab43312faf7ffbcde3ae18c5834d1e}{%
+           family={Meyer},
+           familyi={M\bibinitperiod},
+           given={Albert\bibnamedelima R},
+           giveni={A\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
       }
-      \strng{namehash}{444cf7356b9b81271d219d7610d49583}
-      \strng{fullhash}{59530dd1175201cb103dbf98b7cfecab}
-      \strng{fullhashraw}{59530dd1175201cb103dbf98b7cfecab}
-      \strng{bibnamehash}{59530dd1175201cb103dbf98b7cfecab}
-      \strng{authorbibnamehash}{59530dd1175201cb103dbf98b7cfecab}
-      \strng{authornamehash}{444cf7356b9b81271d219d7610d49583}
-      \strng{authorfullhash}{59530dd1175201cb103dbf98b7cfecab}
-      \strng{authorfullhashraw}{59530dd1175201cb103dbf98b7cfecab}
-      \field{sortinit}{3}
-      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \strng{namehash}{bfbf464a9c5b279a40e8661b5b8c6f62}
+      \strng{fullhash}{bfbf464a9c5b279a40e8661b5b8c6f62}
+      \strng{fullhashraw}{bfbf464a9c5b279a40e8661b5b8c6f62}
+      \strng{bibnamehash}{bfbf464a9c5b279a40e8661b5b8c6f62}
+      \strng{authorbibnamehash}{bfbf464a9c5b279a40e8661b5b8c6f62}
+      \strng{authornamehash}{bfbf464a9c5b279a40e8661b5b8c6f62}
+      \strng{authorfullhash}{bfbf464a9c5b279a40e8661b5b8c6f62}
+      \strng{authorfullhashraw}{bfbf464a9c5b279a40e8661b5b8c6f62}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
       \field{labelnamesource}{author}
-      \field{labeltitlesource}{shorttitle}
-      \field{abstract}{We present a generic congruence closure algorithm for deciding ground formulas in the combination of the theory of equality with uninterpreted symbols and an arbitrary built-in solvable theory X. Our algorithm {CC}(X) is reminiscent of Shostak combination: it maintains a union-find data-structure modulo X from which maximal information about implied equalities can be directly used for congruence closure. {CC}(X) diverges from Shostak's approach by the use of semantic values for class representatives instead of canonized terms. Using semantic values truly reflects the actual implementation of the decision procedure for X. It also enforces to entirely rebuild the algorithm since global canonization, which is at the heart of Shostak combination, is no longer feasible with semantic values. {CC}(X) has been implemented in Ocaml and is at the core of Ergo, a new automated theorem prover dedicated to program verification.}
-      \field{day}{6}
-      \field{issn}{1571-0661}
-      \field{journaltitle}{Electronic Notes in Theoretical Computer Science}
-      \field{month}{5}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Any decision procedure for the word problems for commutative semigroups and polynomial deals inherently requires computational storage space growing exponentially with the size of the problem instance to which the procedure is applied. This bound is achieved by a simple procedure for the semigroup problem.}
+      \field{day}{1}
+      \field{issn}{0001-8708}
+      \field{journaltitle}{Advances in Mathematics}
+      \field{month}{12}
+      \field{number}{3}
+      \field{shortjournal}{Advances in Mathematics}
+      \field{title}{The complexity of the word problems for commutative semigroups and polynomial ideals}
+      \field{urlday}{11}
+      \field{urlmonth}{3}
+      \field{urlyear}{2026}
+      \field{volume}{46}
+      \field{year}{1982}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{305\bibrangedash 329}
+      \range{pages}{25}
+      \verb{doi}
+      \verb 10.1016/0001-8708(82)90048-2
+      \endverb
+      \verb{file}
+      \verb ScienceDirect Full Text PDF:/home/pree/Zotero/storage/JLRK8V38/Mayr and Meyer - 1982 - The complexity of the word problems for commutative semigroups and polynomial ideals.pdf:application/pdf;ScienceDirect Snapshot:/home/pree/Zotero/storage/5D7NSPHR/0001870882900482.html:text/html
+      \endverb
+      \verb{urlraw}
+      \verb https://www.sciencedirect.com/science/article/pii/0001870882900482
+      \endverb
+      \verb{url}
+      \verb https://www.sciencedirect.com/science/article/pii/0001870882900482
+      \endverb
+    \endentry
+    \entry{nelson_fast_1980}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=bfef9452b99ce3105cda6ab534f7efd3}{%
+           family={Nelson},
+           familyi={N\bibinitperiod},
+           given={Greg},
+           giveni={G\bibinitperiod}}}%
+        {{hash=9516bfae80f7ff2eabe7e28d5148f4ab}{%
+           family={Oppen},
+           familyi={O\bibinitperiod},
+           given={Derek\bibnamedelima C.},
+           giveni={D\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+      }
+      \strng{namehash}{43aab228a70bb149f983e5382bf69bf1}
+      \strng{fullhash}{43aab228a70bb149f983e5382bf69bf1}
+      \strng{fullhashraw}{43aab228a70bb149f983e5382bf69bf1}
+      \strng{bibnamehash}{43aab228a70bb149f983e5382bf69bf1}
+      \strng{authorbibnamehash}{43aab228a70bb149f983e5382bf69bf1}
+      \strng{authornamehash}{43aab228a70bb149f983e5382bf69bf1}
+      \strng{authorfullhash}{43aab228a70bb149f983e5382bf69bf1}
+      \strng{authorfullhashraw}{43aab228a70bb149f983e5382bf69bf1}
+      \field{sortinit}{N}
+      \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{The notion of the congruence closure of a relation on a graph is defined and several algorithms for computing it are surveyed. A simple proof is given that the congruence closure algorithm provides a decision procedure for the quantifier-free theory of equality. A decision procedure is then given for the quantifier-free theory of {LISP} list structure based on the congruence closure algorithm. Both decision procedures determine the satisfiability of a conjunction of literals of length n in average time O ( n log n ) using the fastest known congruence closure algorithm. It is also shown that if the axiomatization of the theory of list structure is changed slightly, the problem of determining the satisfiability of a conjunction of literals becomes {NP}-complete. The decision procedures have been implemented in the authors' simplifier for the Stanford Pascal Verifier.}
+      \field{issn}{0004-5411, 1557-735X}
+      \field{journaltitle}{Journal of the {ACM}}
+      \field{langid}{english}
+      \field{month}{4}
       \field{number}{2}
-      \field{series}{Proceedings of the 5th International Workshop on Satisfiability Modulo Theories ({SMT} 2007)}
-      \field{shortjournal}{Electronic Notes in Theoretical Computer Science}
-      \field{shorttitle}{{CC}(X)}
-      \field{title}{{CC}(X): Semantic Combination of Congruence Closure with Solvable Theories}
+      \field{shortjournal}{J. {ACM}}
+      \field{title}{Fast Decision Procedures Based on Congruence Closure}
       \field{urlday}{8}
       \field{urlmonth}{2}
       \field{urlyear}{2026}
-      \field{volume}{198}
-      \field{year}{2008}
+      \field{volume}{27}
+      \field{year}{1980}
       \field{dateera}{ce}
       \field{urldateera}{ce}
-      \field{pages}{51\bibrangedash 69}
-      \range{pages}{19}
+      \field{pages}{356\bibrangedash 364}
+      \range{pages}{9}
       \verb{doi}
-      \verb 10.1016/j.entcs.2008.04.080
+      \verb 10.1145/322186.322198
       \endverb
       \verb{file}
-      \verb ScienceDirect Full Text PDF:/home/pree/Zotero/storage/TRVIC9NN/Conchon et al. - 2008 - CC(X) Semantic Combination of Congruence Closure with Solvable Theories.pdf:application/pdf;ScienceDirect Snapshot:/home/pree/Zotero/storage/BME44ZP9/S1571066108002958.html:text/html
+      \verb Available Version (via Google Scholar):/home/pree/Zotero/storage/VH6T7XIY/Nelson and Oppen - 1980 - Fast Decision Procedures Based on Congruence Closure.pdf:application/pdf
       \endverb
       \verb{urlraw}
-      \verb https://www.sciencedirect.com/science/article/pii/S1571066108002958
+      \verb https://dl.acm.org/doi/10.1145/322186.322198
       \endverb
       \verb{url}
-      \verb https://www.sciencedirect.com/science/article/pii/S1571066108002958
+      \verb https://dl.acm.org/doi/10.1145/322186.322198
       \endverb
-      \keyw{congruence closure,decision procedures,equality theory,verification}
+    \endentry
+    \entry{nyberg-brodda_g_2024}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=fc8bec012f201886a113f1b43728aca6}{%
+           family={Nyberg-Brodda},
+           familyi={N\bibinithyphendelim B\bibinitperiod},
+           given={Carl-Fredrik},
+           giveni={C\bibinithyphendelim F\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {arXiv}%
+      }
+      \strng{namehash}{fc8bec012f201886a113f1b43728aca6}
+      \strng{fullhash}{fc8bec012f201886a113f1b43728aca6}
+      \strng{fullhashraw}{fc8bec012f201886a113f1b43728aca6}
+      \strng{bibnamehash}{fc8bec012f201886a113f1b43728aca6}
+      \strng{authorbibnamehash}{fc8bec012f201886a113f1b43728aca6}
+      \strng{authornamehash}{fc8bec012f201886a113f1b43728aca6}
+      \strng{authorfullhash}{fc8bec012f201886a113f1b43728aca6}
+      \strng{authorfullhashraw}{fc8bec012f201886a113f1b43728aca6}
+      \field{sortinit}{N}
+      \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{We give an introduction to the ideas behind G. S. Tseytin’s 1958 construction of a seven-relation semigroup with undecidable word problem. We give a history of the ideas leading up to its construction, some intuition for the proof, and provide an overview of some subsequent results and developments which stem from this remarkable semigroup. An English translation of Tseytin’s article [73] by the author of the present article is supplemented at the end of the article (the Russian original was published in Trudy Mat. Inst. Steklov 52 (1958), pp. 172–189).}
+      \field{day}{22}
+      \field{eprinttype}{arxiv}
+      \field{langid}{english}
+      \field{month}{1}
+      \field{number}{{arXiv}:2401.11757}
+      \field{title}{G. S. Tseytin's seven-relation semigroup with undecidable word problem}
+      \field{urlday}{27}
+      \field{urlmonth}{2}
+      \field{urlyear}{2026}
+      \field{year}{2024}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \verb{doi}
+      \verb 10.48550/arXiv.2401.11757
+      \endverb
+      \verb{eprint}
+      \verb 2401.11757 [math]
+      \endverb
+      \verb{file}
+      \verb PDF:/home/pree/Zotero/storage/QKWGFQLX/Nyberg-Brodda - 2024 - G. S. Tseytin's seven-relation semigroup with undecidable word problem.pdf:application/pdf
+      \endverb
+      \verb{urlraw}
+      \verb http://arxiv.org/abs/2401.11757
+      \endverb
+      \verb{url}
+      \verb http://arxiv.org/abs/2401.11757
+      \endverb
+      \keyw{Mathematics - History and Overview,Mathematics - Group Theory}
+    \endentry
+    \entry{panchekha_lin-graphs_2025}{online}{}{}
+      \name{author}{1}{}{%
+        {{hash=7929fea15fadf227450de2b313089cc0}{%
+           family={Panchekha},
+           familyi={P\bibinitperiod},
+           given={Pavel},
+           giveni={P\bibinitperiod}}}%
+      }
+      \strng{namehash}{7929fea15fadf227450de2b313089cc0}
+      \strng{fullhash}{7929fea15fadf227450de2b313089cc0}
+      \strng{fullhashraw}{7929fea15fadf227450de2b313089cc0}
+      \strng{bibnamehash}{7929fea15fadf227450de2b313089cc0}
+      \strng{authorbibnamehash}{7929fea15fadf227450de2b313089cc0}
+      \strng{authornamehash}{7929fea15fadf227450de2b313089cc0}
+      \strng{authorfullhash}{7929fea15fadf227450de2b313089cc0}
+      \strng{authorfullhashraw}{7929fea15fadf227450de2b313089cc0}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{23}
+      \field{langid}{english}
+      \field{month}{5}
+      \field{title}{{LIN}-graphs, an Egraph modulo T}
+      \field{titleaddon}{Pavel's Blog}
+      \field{year}{2025}
+      \field{dateera}{ce}
+      \verb{urlraw}
+      \verb https://pavpanchekha.com/blog/lin-graphs.html
+      \endverb
+      \verb{url}
+      \verb https://pavpanchekha.com/blog/lin-graphs.html
+      \endverb
+    \endentry
+    \entry{robinson_handbook_2001}{book}{}{}
+      \name{author}{2}{}{%
+        {{hash=12f9772ad9ccf13fa1f30231bd443886}{%
+           family={Robinson},
+           familyi={R\bibinitperiod},
+           given={Alan\bibnamedelima {JA}},
+           giveni={A\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=e50601e4532a3894411413925585a523}{%
+           family={Voronkov},
+           familyi={V\bibinitperiod},
+           given={Andrei},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Elsevier}%
+      }
+      \strng{namehash}{01fb7bce122f4a45d7137a79a5844efa}
+      \strng{fullhash}{01fb7bce122f4a45d7137a79a5844efa}
+      \strng{fullhashraw}{01fb7bce122f4a45d7137a79a5844efa}
+      \strng{bibnamehash}{01fb7bce122f4a45d7137a79a5844efa}
+      \strng{authorbibnamehash}{01fb7bce122f4a45d7137a79a5844efa}
+      \strng{authornamehash}{01fb7bce122f4a45d7137a79a5844efa}
+      \strng{authorfullhash}{01fb7bce122f4a45d7137a79a5844efa}
+      \strng{authorfullhashraw}{01fb7bce122f4a45d7137a79a5844efa}
+      \field{sortinit}{R}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Handbook of automated reasoning}
+      \field{urlday}{4}
+      \field{urlmonth}{2}
+      \field{urlyear}{2026}
+      \field{volume}{1}
+      \field{year}{2001}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb Handbook of Automated Reasoning, Vol_ 1 (Volume 1) -- Robinson A_, Voronkov A_ (eds_) -- Amsterdam \; New York Cambridge Mass, ©2001 -- Amsterdam [u_a] -- 9780080532790 -- ccda634170125010dd147ca77ca05cda -- An:/home/pree/Zotero/storage/87PCGQUT/Handbook of Automated Reasoning, Vol_ 1 (Volume 1) -- Robinson A_, Voronkov A_ (eds_) -- Amsterdam \; New York Cambridge Mass, ©2001 -- Amsterdam [u_a] -- 9780080532790 -- ccda634170125010dd147ca77ca05cda -- An.djvu:image/vnd.djvu;Handbook of automated reasoning, vol_2 -- Robinson A_, Voronkov A_ (eds_) -- Elsevier Ltd_, Amsterdam, 2001 -- North Holland\; Elsevier\; MIT Press -- 9780080532790 -- 7cd8980a7a3762b4488961f7a2d930b0 -- Anna’s:/home/pree/Zotero/storage/5RFCB63Y/Handbook of automated reasoning, vol_2 -- Robinson A_, Voronkov A_ (eds_) -- Elsevier Ltd_, Amsterdam, 2001 -- North Holland\; Elsevier\; MIT Press -- 9780080532790 -- 7cd8980a7a3762b4488961f7a2d930b0 -- Anna’s.djvu:image/vnd.djvu
+      \endverb
+      \verb{urlraw}
+      \verb https://books.google.com/books?hl=sv&lr=&id=HxaWA4lep_kC&oi=fnd&pg=PP1&dq=handbook+of+automated+reasoning&ots=SOYBCqhWIi&sig=VvmK6rsed81TCue3S0zpLynCG7o
+      \endverb
+      \verb{url}
+      \verb https://books.google.com/books?hl=sv&lr=&id=HxaWA4lep_kC&oi=fnd&pg=PP1&dq=handbook+of+automated+reasoning&ots=SOYBCqhWIi&sig=VvmK6rsed81TCue3S0zpLynCG7o
+      \endverb
+    \endentry
+    \entry{rosin_associativity_2026}{misc}{}{}
+      \name{author}{3}{}{%
+        {{hash=4af550a68239d28626b09d01deabc0f6}{%
+           family={Rosin},
+           familyi={R\bibinitperiod},
+           given={Tarik},
+           giveni={T\bibinitperiod}}}%
+        {{hash=37baa49b396dbeb40f52e205097bb398}{%
+           family={Ullrich},
+           familyi={U\bibinitperiod},
+           given={Marcel},
+           giveni={M\bibinitperiod}}}%
+        {{hash=85e9d96d1ffe41db3be597255f5e060a}{%
+           family={Hack},
+           familyi={H\bibinitperiod},
+           given={Sebastian},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{b03b45ff626da165f99f2c8395c3b5a9}
+      \strng{fullhash}{b03b45ff626da165f99f2c8395c3b5a9}
+      \strng{fullhashraw}{b03b45ff626da165f99f2c8395c3b5a9}
+      \strng{bibnamehash}{b03b45ff626da165f99f2c8395c3b5a9}
+      \strng{authorbibnamehash}{b03b45ff626da165f99f2c8395c3b5a9}
+      \strng{authornamehash}{b03b45ff626da165f99f2c8395c3b5a9}
+      \strng{authorfullhash}{b03b45ff626da165f99f2c8395c3b5a9}
+      \strng{authorfullhashraw}{b03b45ff626da165f99f2c8395c3b5a9}
+      \field{sortinit}{R}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Associativity and Commutativity in Equality Saturation}
+      \field{urlday}{19}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{year}{2026}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb Available Version (via Google Scholar):/home/pree/Zotero/storage/PHUIMQM5/ROSIN et al. - 2026 - Associativity and Commutativity in Equality Saturation.pdf:application/pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://compilers.cs.uni-saarland.de/papers/ullrich_egraphs2026-paper17.pdf
+      \endverb
+      \verb{url}
+      \verb https://compilers.cs.uni-saarland.de/papers/ullrich_egraphs2026-paper17.pdf
+      \endverb
+    \endentry
+    \entry{shanabrook_custom_2026}{online}{}{}
+      \name{author}{1}{}{%
+        {{hash=6ab7e6e1d7f608b1726c2e4e884a6419}{%
+           family={Shanabrook},
+           familyi={S\bibinitperiod},
+           given={Saul},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{6ab7e6e1d7f608b1726c2e4e884a6419}
+      \strng{fullhash}{6ab7e6e1d7f608b1726c2e4e884a6419}
+      \strng{fullhashraw}{6ab7e6e1d7f608b1726c2e4e884a6419}
+      \strng{bibnamehash}{6ab7e6e1d7f608b1726c2e4e884a6419}
+      \strng{authorbibnamehash}{6ab7e6e1d7f608b1726c2e4e884a6419}
+      \strng{authornamehash}{6ab7e6e1d7f608b1726c2e4e884a6419}
+      \strng{authorfullhash}{6ab7e6e1d7f608b1726c2e4e884a6419}
+      \strng{authorfullhashraw}{6ab7e6e1d7f608b1726c2e4e884a6419}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{24}
+      \field{langid}{english}
+      \field{month}{2}
+      \field{title}{Custom Data Structures in E-Graphs}
+      \field{titleaddon}{{PLSE} Blog}
+      \field{year}{2026}
+      \field{dateera}{ce}
+      \verb{urlraw}
+      \verb https://uwplse.org/2026/02/24/egglog-containers.html
+      \endverb
+      \verb{url}
+      \verb https://uwplse.org/2026/02/24/egglog-containers.html
+      \endverb
+    \endentry
+    \entry{suciu_semantic_2025}{misc}{}{}
+      \name{author}{3}{}{%
+        {{hash=dad05536948804793c3e454acd5ecb8f}{%
+           family={Suciu},
+           familyi={S\bibinitperiod},
+           given={Dan},
+           giveni={D\bibinitperiod}}}%
+        {{hash=cf03d27f5054d00e304e8ab0690c6471}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Yisu\bibnamedelima Remy},
+           giveni={Y\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+        {{hash=21bcec28b2c8de5bcb840a009c60b0a0}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Yihong},
+           giveni={Y\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {arXiv}%
+      }
+      \strng{namehash}{294ad86fd1d033e967c2edde31aaee47}
+      \strng{fullhash}{294ad86fd1d033e967c2edde31aaee47}
+      \strng{fullhashraw}{294ad86fd1d033e967c2edde31aaee47}
+      \strng{bibnamehash}{294ad86fd1d033e967c2edde31aaee47}
+      \strng{authorbibnamehash}{294ad86fd1d033e967c2edde31aaee47}
+      \strng{authornamehash}{294ad86fd1d033e967c2edde31aaee47}
+      \strng{authorfullhash}{294ad86fd1d033e967c2edde31aaee47}
+      \strng{authorfullhashraw}{294ad86fd1d033e967c2edde31aaee47}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Equality saturation is an emerging technique for program and query optimization developed in the programming language community. It performs term rewriting over an E-graph, a data structure that compactly represents a program space. Despite its popularity, the theory of equality saturation lags behind the practice. In this paper, we define a fixpoint semantics of equality saturation based on tree automata and uncover deep connections between equality saturation and the chase. We characterize the class of chase sequences that correspond to equality saturation. We study the complexities of terminations of equality saturation in three cases: single-instance, all-term-instance, and all-E-graph-instance. Finally, we define a syntactic criterion based on acyclicity that implies equality saturation termination.}
+      \field{day}{5}
+      \field{eprinttype}{arxiv}
+      \field{langid}{english}
+      \field{month}{1}
+      \field{number}{{arXiv}:2501.02413}
+      \field{title}{Semantic foundations of equality saturation}
+      \field{urlday}{4}
+      \field{urlmonth}{2}
+      \field{urlyear}{2026}
+      \field{year}{2025}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \verb{doi}
+      \verb 10.48550/arXiv.2501.02413
+      \endverb
+      \verb{eprint}
+      \verb 2501.02413 [cs]
+      \endverb
+      \verb{file}
+      \verb PDF:/home/pree/Zotero/storage/EAMEA573/Suciu et al. - 2025 - Semantic foundations of equality saturation.pdf:application/pdf
+      \endverb
+      \verb{urlraw}
+      \verb http://arxiv.org/abs/2501.02413
+      \endverb
+      \verb{url}
+      \verb http://arxiv.org/abs/2501.02413
+      \endverb
+      \keyw{Computer Science - Databases,Computer Science - Programming Languages}
+    \endentry
+    \entry{tiwari_decision_2000}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=c280b85bda019adea24be030ef9c1e3d}{%
+           family={Tiwari},
+           familyi={T\bibinitperiod},
+           given={Ashish},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {State University of New York at Stony Brook}%
+      }
+      \strng{namehash}{c280b85bda019adea24be030ef9c1e3d}
+      \strng{fullhash}{c280b85bda019adea24be030ef9c1e3d}
+      \strng{fullhashraw}{c280b85bda019adea24be030ef9c1e3d}
+      \strng{bibnamehash}{c280b85bda019adea24be030ef9c1e3d}
+      \strng{authorbibnamehash}{c280b85bda019adea24be030ef9c1e3d}
+      \strng{authornamehash}{c280b85bda019adea24be030ef9c1e3d}
+      \strng{authorfullhash}{c280b85bda019adea24be030ef9c1e3d}
+      \strng{authorfullhashraw}{c280b85bda019adea24be030ef9c1e3d}
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Decision procedures in automated deduction}
+      \field{urlday}{18}
+      \field{urlmonth}{3}
+      \field{urlyear}{2026}
+      \field{year}{2000}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb Available Version (via Google Scholar):/home/pree/Zotero/storage/8JMX8M3N/Tiwari - 2000 - Decision procedures in automated deduction.pdf:application/pdf;thesis.pdf:/home/pree/Zotero/storage/YCJKRAZS/thesis.pdf:application/pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://search.proquest.com/openview/30046982652b13cadc7b85d653cdf547/1?pq-origsite=gscholar&cbl=18750&diss=y
+      \endverb
+      \verb{url}
+      \verb https://search.proquest.com/openview/30046982652b13cadc7b85d653cdf547/1?pq-origsite=gscholar&cbl=18750&diss=y
+      \endverb
+    \endentry
+    \entry{voutas_basic_2012}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=543c0aefd31a0d476bb5d1538081bed2}{%
+           family={Voutas},
+           familyi={V\bibinitperiod},
+           given={Anthony},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{543c0aefd31a0d476bb5d1538081bed2}
+      \strng{fullhash}{543c0aefd31a0d476bb5d1538081bed2}
+      \strng{fullhashraw}{543c0aefd31a0d476bb5d1538081bed2}
+      \strng{bibnamehash}{543c0aefd31a0d476bb5d1538081bed2}
+      \strng{authorbibnamehash}{543c0aefd31a0d476bb5d1538081bed2}
+      \strng{authornamehash}{543c0aefd31a0d476bb5d1538081bed2}
+      \strng{authorfullhash}{543c0aefd31a0d476bb5d1538081bed2}
+      \strng{authorfullhashraw}{543c0aefd31a0d476bb5d1538081bed2}
+      \field{sortinit}{V}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{The basic theory of monads and their connection to universal algebra}
+      \field{urlday}{25}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{year}{2012}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb Available Version (via Google Scholar):/home/pree/Zotero/storage/7L8ZWAHE/Voutas - 2012 - The basic theory of monads and their connection to universal algebra.pdf:application/pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://ncatlab.org/nlab/files/Voutas-Monads.pdf
+      \endverb
+      \verb{url}
+      \verb https://ncatlab.org/nlab/files/Voutas-Monads.pdf
+      \endverb
+    \endentry
+    \entry{wang_free_2023}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=cf03d27f5054d00e304e8ab0690c6471}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Yisu\bibnamedelima Remy},
+           giveni={Y\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+        {{hash=a97eaeaf2d069eed65af195031ac4f61}{%
+           family={Willsey},
+           familyi={W\bibinitperiod},
+           given={Max},
+           giveni={M\bibinitperiod}}}%
+        {{hash=dad05536948804793c3e454acd5ecb8f}{%
+           family={Suciu},
+           familyi={S\bibinitperiod},
+           given={Dan},
+           giveni={D\bibinitperiod}}}%
+      }
+      \strng{namehash}{33ff4e515c1779670372d7de8373d6f8}
+      \strng{fullhash}{33ff4e515c1779670372d7de8373d6f8}
+      \strng{fullhashraw}{33ff4e515c1779670372d7de8373d6f8}
+      \strng{bibnamehash}{33ff4e515c1779670372d7de8373d6f8}
+      \strng{authorbibnamehash}{33ff4e515c1779670372d7de8373d6f8}
+      \strng{authornamehash}{33ff4e515c1779670372d7de8373d6f8}
+      \strng{authorfullhash}{33ff4e515c1779670372d7de8373d6f8}
+      \strng{authorfullhashraw}{33ff4e515c1779670372d7de8373d6f8}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{Over the last decade, worst-case optimal join ({WCOJ}) algorithms have emerged as a new paradigm for one of the most fundamental challenges in query processing: computing joins efficiently. Such an algorithm can be asymptotically faster than traditional binary joins, all the while remaining simple to understand and implement. However, they have been found to be less efficient than the old paradigm, traditional binary join plans, on the typical acyclic queries found in practice. Some database systems that support {WCOJ} use a hybrid approach: use {WCOJ} to process the cyclic subparts of the query (if any), and rely on traditional binary joins otherwise. In this paper we propose a new framework, called Free Join, that unifies the two paradigms. We describe a new type of plan, a new data structure (which unifies the hash tables and tries used by the two paradigms), and a suite of optimization techniques. Our system, implemented in Rust, matches or outperforms both traditional binary joins and {WCOJ} on standard query benchmarks.}
+      \field{day}{13}
+      \field{issn}{2836-6573}
+      \field{journaltitle}{Proceedings of the {ACM} on Management of Data}
+      \field{langid}{english}
+      \field{month}{6}
+      \field{number}{2}
+      \field{shortjournal}{Proc. {ACM} Manag. Data}
+      \field{shorttitle}{Free Join}
+      \field{title}{Free Join: Unifying Worst-Case Optimal and Traditional Joins}
+      \field{urlday}{14}
+      \field{urlmonth}{4}
+      \field{urlyear}{2025}
+      \field{volume}{1}
+      \field{year}{2023}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{1\bibrangedash 23}
+      \range{pages}{23}
+      \verb{doi}
+      \verb 10.1145/3589295
+      \endverb
+      \verb{file}
+      \verb PDF:/home/pree/Zotero/storage/RUPJDS43/Wang et al. - 2023 - Free Join Unifying Worst-Case Optimal and Traditional Joins.pdf:application/pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://dl.acm.org/doi/10.1145/3589295
+      \endverb
+      \verb{url}
+      \verb https://dl.acm.org/doi/10.1145/3589295
+      \endverb
+    \endentry
+    \entry{willsey_egg_2026}{software}{}{}
+      \name{author}{6}{}{%
+        {{hash=a97eaeaf2d069eed65af195031ac4f61}{%
+           family={Willsey},
+           familyi={W\bibinitperiod},
+           given={Max},
+           giveni={M\bibinitperiod}}}%
+        {{hash=9bd7a05a366fdf632d698ff940593243}{%
+           family={Nandi},
+           familyi={N\bibinitperiod},
+           given={Chandrakana},
+           giveni={C\bibinitperiod}}}%
+        {{hash=cf03d27f5054d00e304e8ab0690c6471}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Yisu\bibnamedelima Remy},
+           giveni={Y\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+        {{hash=0276bf52b0720751b3e28c9d06821ba3}{%
+           family={Flatt},
+           familyi={F\bibinitperiod},
+           given={Oliver},
+           giveni={O\bibinitperiod}}}%
+        {{hash=a69fd5ea4c78e4b10502a7611d5a8dc0}{%
+           family={Tatlock},
+           familyi={T\bibinitperiod},
+           given={Zachary},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=7929fea15fadf227450de2b313089cc0}{%
+           family={Panchekha},
+           familyi={P\bibinitperiod},
+           given={Pavel},
+           giveni={P\bibinitperiod}}}%
+      }
+      \strng{namehash}{6b08c053cda2edfa6417d6fa1714e268}
+      \strng{fullhash}{d7e422a6327246dcf2046c8a923e120f}
+      \strng{fullhashraw}{d7e422a6327246dcf2046c8a923e120f}
+      \strng{bibnamehash}{6b08c053cda2edfa6417d6fa1714e268}
+      \strng{authorbibnamehash}{6b08c053cda2edfa6417d6fa1714e268}
+      \strng{authornamehash}{6b08c053cda2edfa6417d6fa1714e268}
+      \strng{authorfullhash}{d7e422a6327246dcf2046c8a923e120f}
+      \strng{authorfullhashraw}{d7e422a6327246dcf2046c8a923e120f}
+      \field{extraname}{1}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Egg {>} {BackoffScheduler}}
+      \field{version}{0.11.0}
+      \field{year}{2026}
+      \field{dateera}{ce}
+      \verb{urlraw}
+      \verb https://github.com/egraphs-good/egg/blob/v0.11.0/src/run.rs#L816
+      \endverb
+      \verb{url}
+      \verb https://github.com/egraphs-good/egg/blob/v0.11.0/src/run.rs#L816
+      \endverb
+    \endentry
+    \entry{willsey_egg_2021}{article}{}{}
+      \name{author}{6}{}{%
+        {{hash=a97eaeaf2d069eed65af195031ac4f61}{%
+           family={Willsey},
+           familyi={W\bibinitperiod},
+           given={Max},
+           giveni={M\bibinitperiod}}}%
+        {{hash=9bd7a05a366fdf632d698ff940593243}{%
+           family={Nandi},
+           familyi={N\bibinitperiod},
+           given={Chandrakana},
+           giveni={C\bibinitperiod}}}%
+        {{hash=cf03d27f5054d00e304e8ab0690c6471}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Yisu\bibnamedelima Remy},
+           giveni={Y\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+        {{hash=0276bf52b0720751b3e28c9d06821ba3}{%
+           family={Flatt},
+           familyi={F\bibinitperiod},
+           given={Oliver},
+           giveni={O\bibinitperiod}}}%
+        {{hash=a69fd5ea4c78e4b10502a7611d5a8dc0}{%
+           family={Tatlock},
+           familyi={T\bibinitperiod},
+           given={Zachary},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=7929fea15fadf227450de2b313089cc0}{%
+           family={Panchekha},
+           familyi={P\bibinitperiod},
+           given={Pavel},
+           giveni={P\bibinitperiod}}}%
+      }
+      \strng{namehash}{6b08c053cda2edfa6417d6fa1714e268}
+      \strng{fullhash}{d7e422a6327246dcf2046c8a923e120f}
+      \strng{fullhashraw}{d7e422a6327246dcf2046c8a923e120f}
+      \strng{bibnamehash}{6b08c053cda2edfa6417d6fa1714e268}
+      \strng{authorbibnamehash}{6b08c053cda2edfa6417d6fa1714e268}
+      \strng{authornamehash}{6b08c053cda2edfa6417d6fa1714e268}
+      \strng{authorfullhash}{d7e422a6327246dcf2046c8a923e120f}
+      \strng{authorfullhashraw}{d7e422a6327246dcf2046c8a923e120f}
+      \field{extraname}{2}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{An e-graph efficiently represents a congruence relation over many expressions. Although they were originally developed in the late 1970s for use in automated theorem provers, a more recent technique known as equality saturation repurposes e-graphs to implement state-of-the-art, rewrite-driven compiler optimizations and program synthesizers. However, e-graphs remain unspecialized for this newer use case. Equality saturation workloads exhibit distinct characteristics and often require ad-hoc e-graph extensions to incorporate transformations beyond purely syntactic rewrites. This work contributes two techniques that make e-graphs fast and extensible, specializing them to equality saturation. A new amortized invariant restoration technique called rebuilding takes advantage of equality saturation's distinct workload, providing asymptotic speedups over current techniques in practice. A general mechanism called e-class analyses integrates domain-specific analyses into the e-graph, reducing the need for ad hoc manipulation. We implemented these techniques in a new open-source library called egg. Our case studies on three previously published applications of equality saturation highlight how egg's performance and flexibility enable state-of-the-art results across diverse domains.}
+      \field{day}{4}
+      \field{issn}{2475-1421}
+      \field{issue}{{POPL}}
+      \field{journaltitle}{Proceedings of the {ACM} on Programming Languages}
+      \field{langid}{english}
+      \field{month}{1}
+      \field{shortjournal}{Proc. {ACM} Program. Lang.}
+      \field{shorttitle}{egg}
+      \field{title}{egg: Fast and extensible equality saturation}
+      \field{urlday}{8}
+      \field{urlmonth}{2}
+      \field{urlyear}{2026}
+      \field{volume}{5}
+      \field{year}{2021}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{1\bibrangedash 29}
+      \range{pages}{29}
+      \verb{doi}
+      \verb 10.1145/3434304
+      \endverb
+      \verb{file}
+      \verb Available Version (via Google Scholar):/home/pree/Zotero/storage/KHVE76F9/Willsey et al. - 2021 - egg Fast and extensible equality saturation.pdf:application/pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://dl.acm.org/doi/10.1145/3434304
+      \endverb
+      \verb{url}
+      \verb https://dl.acm.org/doi/10.1145/3434304
+      \endverb
+    \endentry
+    \entry{xiao_skyegg_2025}{misc}{}{}
+      \name{author}{3}{}{%
+        {{hash=545b302645b6d7d8821978ad60b235f3}{%
+           family={Xiao},
+           familyi={X\bibinitperiod},
+           given={Youwei},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=0851ff9e983c5d81b64f367f3d198e3f}{%
+           family={Zou},
+           familyi={Z\bibinitperiod},
+           given={Yuyang},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=1ea94fe6d1330f634324b0a2d2927d9a}{%
+           family={Liang},
+           familyi={L\bibinitperiod},
+           given={Yun},
+           giveni={Y\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {arXiv}%
+      }
+      \strng{namehash}{00a95bc063d622f3137b33c537b565f0}
+      \strng{fullhash}{00a95bc063d622f3137b33c537b565f0}
+      \strng{fullhashraw}{00a95bc063d622f3137b33c537b565f0}
+      \strng{bibnamehash}{00a95bc063d622f3137b33c537b565f0}
+      \strng{authorbibnamehash}{00a95bc063d622f3137b33c537b565f0}
+      \strng{authornamehash}{00a95bc063d622f3137b33c537b565f0}
+      \strng{authorfullhash}{00a95bc063d622f3137b33c537b565f0}
+      \strng{authorfullhashraw}{00a95bc063d622f3137b33c537b565f0}
+      \field{sortinit}{X}
+      \field{sortinithash}{1965c258adceecf23ce3d67b05113442}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{Hardware synthesis from high-level descriptions remains fundamentally limited by the sequential optimization of interdependent design decisions. Current methodologies, including state-of-the-art high-level synthesis ({HLS}) tools, artificially separate implementation selection from scheduling, leading to suboptimal designs that cannot fully exploit modern {FPGA} heterogeneous architectures. Implementation selection is typically performed by ad-hoc pattern matching on operations, a process that does not consider the impact on scheduling. Subsequently, scheduling algorithms operate on fixed selection solutions with inaccurate delay estimates, which misses critical optimization opportunities from appropriately configured {FPGA} blocks like {DSP} slices. We present {SkyEgg}, a novel hardware synthesis framework that jointly optimizes implementation selection and scheduling using the e-graph data structure. Our key insight is that both algebraic transformations and hardware implementation choices can be uniformly represented as rewrite rules within an e-graph, modeling the complete design space of implementation candidates to be selected and scheduled together. First, {SkyEgg} constructs an e-graph from the input program. It then applies both algebraic and implementation rewrites through equality saturation. Finally, it formulates the joint optimization as a mixed-integer linear programming ({MILP}) problem on the saturated e-graph. We provide both exact {MILP} solving and an efficient {ASAP} heuristic for scalable synthesis. Our evaluation on benchmarks from diverse applications targeting Xilinx Kintex {UltraScale}+ {FPGAs} demonstrates that {SkyEgg} achieves an average speedup of 3.01x over Vitis {HLS}, with improvements up to 5.22x for complex expressions.}
+      \field{day}{19}
+      \field{eprinttype}{arxiv}
+      \field{month}{11}
+      \field{number}{{arXiv}:2511.15323}
+      \field{shorttitle}{{SkyEgg}}
+      \field{title}{{SkyEgg}: Joint Implementation Selection and Scheduling for Hardware Synthesis using E-graphs}
+      \field{urlday}{20}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{year}{2025}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \verb{doi}
+      \verb 10.48550/arXiv.2511.15323
+      \endverb
+      \verb{eprint}
+      \verb 2511.15323 [cs.PL]
+      \endverb
+      \verb{file}
+      \verb Preprint PDF:/home/pree/Zotero/storage/ZHQXNLU5/Xiao et al. - 2025 - SkyEgg Joint Implementation Selection and Scheduling for Hardware Synthesis using E-graphs.pdf:application/pdf
+      \endverb
+      \verb{urlraw}
+      \verb http://arxiv.org/abs/2511.15323
+      \endverb
+      \verb{url}
+      \verb http://arxiv.org/abs/2511.15323
+      \endverb
+      \keyw{Computer Science - Computation and Language,Computer Science - Programming Languages}
+    \endentry
+    \entry{zhang_relational_2022}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=21bcec28b2c8de5bcb840a009c60b0a0}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Yihong},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=cf03d27f5054d00e304e8ab0690c6471}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Yisu\bibnamedelima Remy},
+           giveni={Y\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+        {{hash=a97eaeaf2d069eed65af195031ac4f61}{%
+           family={Willsey},
+           familyi={W\bibinitperiod},
+           given={Max},
+           giveni={M\bibinitperiod}}}%
+        {{hash=a69fd5ea4c78e4b10502a7611d5a8dc0}{%
+           family={Tatlock},
+           familyi={T\bibinitperiod},
+           given={Zachary},
+           giveni={Z\bibinitperiod}}}%
+      }
+      \strng{namehash}{dd10397410d9c25c5ac77987b487ae94}
+      \strng{fullhash}{ee98af9e19ba2647d16db252791259aa}
+      \strng{fullhashraw}{ee98af9e19ba2647d16db252791259aa}
+      \strng{bibnamehash}{dd10397410d9c25c5ac77987b487ae94}
+      \strng{authorbibnamehash}{dd10397410d9c25c5ac77987b487ae94}
+      \strng{authornamehash}{dd10397410d9c25c5ac77987b487ae94}
+      \strng{authorfullhash}{ee98af9e19ba2647d16db252791259aa}
+      \strng{authorfullhashraw}{ee98af9e19ba2647d16db252791259aa}
+      \field{sortinit}{Z}
+      \field{sortinithash}{96892c0b0a36bb8557c40c49813d48b3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{We present a new approach to e-matching based on relational join; in particular, we apply recent database query execution techniques to guarantee worst-case optimal run time. Compared to the conventional backtracking approach that always searches the e-graph "top down", our new relational e-matching approach can better exploit pattern structure by searching the e-graph according to an optimized query plan. We also establish the first data complexity result for e-matching, bounding run time as a function of the e-graph size and output size. We prototyped and evaluated our technique in the state-of-the-art egg e-graph framework. Compared to a conventional baseline, relational e-matching is simpler to implement and orders of magnitude faster in practice.}
+      \field{day}{16}
+      \field{issn}{2475-1421}
+      \field{issue}{{POPL}}
+      \field{journaltitle}{Proceedings of the {ACM} on Programming Languages}
+      \field{langid}{english}
+      \field{month}{1}
+      \field{shortjournal}{Proc. {ACM} Program. Lang.}
+      \field{title}{Relational e-matching}
+      \field{urlday}{14}
+      \field{urlmonth}{4}
+      \field{urlyear}{2025}
+      \field{volume}{6}
+      \field{year}{2022}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{1\bibrangedash 22}
+      \range{pages}{22}
+      \verb{doi}
+      \verb 10.1145/3498696
+      \endverb
+      \verb{file}
+      \verb PDF:/home/pree/Zotero/storage/MUAHQZW5/Zhang et al. - 2022 - Relational e-matching.pdf:application/pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://dl.acm.org/doi/10.1145/3498696
+      \endverb
+      \verb{url}
+      \verb https://dl.acm.org/doi/10.1145/3498696
+      \endverb
+    \endentry
+    \entry{zucker_omelets_2025}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=33b15f6af71ae8346aad37f39dccbe0f}{%
+           family={Zucker},
+           familyi={Z\bibinitperiod},
+           given={Philip},
+           giveni={P\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {arXiv}%
+      }
+      \strng{namehash}{33b15f6af71ae8346aad37f39dccbe0f}
+      \strng{fullhash}{33b15f6af71ae8346aad37f39dccbe0f}
+      \strng{fullhashraw}{33b15f6af71ae8346aad37f39dccbe0f}
+      \strng{bibnamehash}{33b15f6af71ae8346aad37f39dccbe0f}
+      \strng{authorbibnamehash}{33b15f6af71ae8346aad37f39dccbe0f}
+      \strng{authornamehash}{33b15f6af71ae8346aad37f39dccbe0f}
+      \strng{authorfullhash}{33b15f6af71ae8346aad37f39dccbe0f}
+      \strng{authorfullhashraw}{33b15f6af71ae8346aad37f39dccbe0f}
+      \field{sortinit}{Z}
+      \field{sortinithash}{96892c0b0a36bb8557c40c49813d48b3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{E-graphs[25] are a data structure for equational reasoning and optimization over ground terms. One of the beneﬁts of e-graph rewriting is that it can declaratively handle useful but diﬃcult to orient identities like associativity and commutativity ({AC}) in a generic way. However, using these generic mechanisms is more computationally expensive than using bespoke routines on terms containing sets, multi-sets, linear expressions, polynomials, and binders. A natural question arises: How can one combine the generic capabilities of e-graph rewriting with these specialized theories? This paper discusses a pragmatic approach to this e-graphs modulo theories ({EMT}) question using two key ideas: bottom-up e-matching and semantic e-ids.}
+      \field{day}{19}
+      \field{eprinttype}{arxiv}
+      \field{langid}{english}
+      \field{month}{4}
+      \field{number}{{arXiv}:2504.14340}
+      \field{shorttitle}{Omelets Need Onions}
+      \field{title}{Omelets Need Onions: E-graphs Modulo Theories via Bottom-up E-matching}
+      \field{urlday}{20}
+      \field{urlmonth}{1}
+      \field{urlyear}{2026}
+      \field{year}{2025}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \verb{doi}
+      \verb 10.48550/arXiv.2504.14340
+      \endverb
+      \verb{eprint}
+      \verb 2504.14340 [cs]
+      \endverb
+      \verb{file}
+      \verb PDF:/home/pree/Zotero/storage/6L8VQ2DR/Zucker - 2025 - Omelets Need Onions E-graphs Modulo Theories via Bottom-up E-matching.pdf:application/pdf
+      \endverb
+      \verb{urlraw}
+      \verb http://arxiv.org/abs/2504.14340
+      \endverb
+      \verb{url}
+      \verb http://arxiv.org/abs/2504.14340
+      \endverb
+      \keyw{Computer Science - Programming Languages}
     \endentry
   \enddatalist
 \endrefsection

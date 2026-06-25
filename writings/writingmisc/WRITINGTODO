@@ -9,9 +9,9 @@ WRITINGTODO
 [x] The Two Methods of Theory Integration (integrated vs side-table)
 [x] Section: implementation
 [x] Section: matching
-[] Section: evaluation
-[] Section: prior & future work
-[] Section: conclusion
+[x] Section: evaluation
+[x] Section: prior & future work
+[x] Section: conclusion
 [] Re-analyze references
 [x] Nick 1
     "Start gentle. Chapter 1 (which should be called Introduction rather than Overview) should present through examples the problem and how you are solving it. Imagine a reader who does not know anything about theory reasoning, congruence closure etc., and maybe has heard of E-graphs but could do with a reminder. Aim to show how E-graphs modulo AC work, including the idea of resolving AC-overlaps. I think you can do this mostly graphically without much formalism."
