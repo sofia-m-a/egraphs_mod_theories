@@ -23,10 +23,11 @@
               pkgs.haskell.lib.addBuildTools drv
                 (with pkgs.haskell.packages.ghc912; [
                   # Specify your build/dev dependencies here.
-                  # cabal-fmt
                   cabal-install
-                  # ghcid
                   haskell-language-server
+                  pkgs.just
+                  # cabal-fmt
+                  # ghcid
                   # ormolu
                   # pkgs.nixpkgs-fmt
                 ]);

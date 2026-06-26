@@ -462,7 +462,6 @@ To handle non-atomic terms, we build a congruence-closure structure on top of a 
 This motivates the E-graph data structure, and the congruence closure algorithm that restores the congruence invariant. Computing the congruence closure is also known as `rebuilding' the E-graph.
 
 \section{E-graphs for congruence-closure} \label{egraphs}
-\fxerror{The following is artificial but didactic. Finding a non-artificial \emph{and} didactic example would be nice, but is hard. But fix if I have some insight}
 
 As an example, we will compute the congruence closure of the following set of equations:
 \begin{align}
@@ -2061,7 +2060,7 @@ The final EMT (Figure \ref{emte3}) is saturated, and has `discovered' our desire
   \label{emte3}
 \end{center}
 
-\section{Challenges for EMT(AC)}
+\section{Challenges for EMT(AC)} \label{challenge}
 We have seen the promising aspects of EMTs for AC, but there is a significant gap in the description given so far, and we need something extra. Consider the equations
 \begin{align}
 	a + b &= b \\
@@ -2152,7 +2151,7 @@ However, $e_b$ and $e_d$ are two distinct E-classes in the E-graph! Why?
 
 The central step in the deduction relies on two different associations of the term $a + a + b$. The association $(a + a) + b$ is correctly assigned to class $e_d$, while the association $a + (a + b)$ is correctly assigned to the class $e_b$. However, given that we want to work modulo theories, we need to discover the fact that $e_b = e_d$, or we are throwing out some of the consequences derivable from the theory.
 
-\section{Filling the gap}
+\section{Filling the gap} \label{gapfill}
 To fill the gap, we need to reason about when such an `overlapping' term could occur, while not generating all AC-subterms like equality saturation would.
 
 Our criteria is this: if the EMT contains two terms $t_1 = r + s$ and $t_2 = u + s$, with a non-trivial \emph{overlap} $s$, then we need to insert the equation $t_1 + u = t_2 + r$.
@@ -2274,8 +2273,6 @@ AC-closure does not have this problem: there is an overlap between $a$ and $a + 
 Of course, this example may be a little artificial as, in typical domains of interest, $a + b = a$ means that $b = 0$, so that $b + b = b$\footnote{Or, for the second-most famous AC operator $\times$, if $a \times b = a$, $b = 1$}. Once the E-graph has added the equation $b + b = b$, this will collapse any further term built only of $b$s down to just $b$. Or, in other words, any new equation $a + (b + \ldots (b + b))$ will already be implicitly represented in the E-graph.
 
 Still, this illustrates one more advantage of AC-closure over AC-saturation, and is an example that illustrates some of the subtlety of cycles in E-graphs.
-
-\fxerror{I cut the section `AC-closure in slightly more detail'. Rewrite this, maybe?}
 
 \section{Prospects for EMT(AC)}
 EMT(AC) avoids the need for equality saturation on the A and C identities by integrating these rules into the underlying E-graph. However, this has a cost: congruence closure normally is polynomial time\footnote{indeed, at best slightly superlinear} while the AC-closure step outlined above is at worst \textsc{ESpace}\footnote{space proportional to $2^{O(n)}$, where $n$ is the size of the E-graph} as will be discussed in section \ref{hrmite}.
@@ -2529,7 +2526,7 @@ After having turned our identities into rewrite rules (containing variables), we
 
 This amounts to saying that every critical pair $\sigma(t_2) \leftarrow_R \sigma(t_1) \rightarrow^* e_1$ is resolved by $\sigma(t_2) \rightarrow^* e_1$.
 
-\section{AC-critical pairs}
+\section{AC-critical pairs} \label{accrit}
 When we want to reason about AC, we need the notion of AC-critical pair.
 
 \begin{ex}
@@ -3771,7 +3768,7 @@ Restricting the set of identities, we get the word problem for commutative semig
 \subsection{E-graphs, EMTs, and the word problem}
 %\fxerror{This can be a lot nicer if I had formalities previously. Then it is an actual theorem!}
 
-We can reduce the word problem to equality saturation. If we have some input equations, we can add them to an E-graph, saturate under the identities in $T$, and then check if $t_1$ and $t_2$ are represented in the E-graph by the same E-class. Therefore, equality saturation is at least as hard as the word-problem.
+We can reduce the word problem to equality saturation. If we have some input equations, we can add them to an E-graph, saturate under the identities in $T$, and then check if $t_1$ and $t_2$ are represented in the E-graph by the same E-class. Therefore, equality saturation is at least as hard as the word problem.
 
 Since EMTs are trying to solve the same problem as E-graphs with equality saturation, just in a more efficient way, any good notion of EM($T$) for a theory $T$ essentially includes a solver for the word problem over $T$.
 
@@ -3792,14 +3789,14 @@ For distributivity, as long as the multiplication operator is itself commutative
 
 Introducing negation, giving us the theory ACUN of Abelian groups, moves the bound from \textsc{ESpace} to polynomial-time: Buchberger's algorithm reduces to finding the Hermite normal form of an integer matrix \cite{kandri-rody_ideal-theoretic_1985}. For the theory of vector spaces, Gaussian elimination can solve the word problem in (sub)cubic time. 
 
-\subsection{EMTs and the word problem via critical pairs}
+\subsection{EMTs and the word problem via critical pairs} \label{gencritpairs}
 So, for a theory $T$, we need to build in to our E-graph a system equivalent in strength to a word problem solver (even if, as for $T$ = A, that system is partial, i.e. only a semidecision procedure).
 
 Resolving $T$-critical pairs is a natural way to integrate such a solver. Since E-graphs are built around creating a confluent ground rewriting system that resolves all ordinary critical pairs, we can build EMTs for a theory $T$ using an algorithm that resolves $T$-critical pairs to create a confluent ground rewriting system on terms modulo $T$.
 
 \chapter{Prior work} \label{litreview}
 \section{EMTs: prior attempts}
-That \emph{some} notion of EMT ought to exist has been suggested multiple times before \cite{zucker_omelets_2025, panchekha_lin-graphs_2025, shanabrook_custom_2026}. The hope is to be able to use theory-specific knowledge to integrate certain identities directly into the procedures, rather than having to time-consumingly match, seed, and merge as directed by the identities. We will briefly go over the key intutition behind these proposals, and show that they fail to take into account the $T$-critical pair idea we outlined above.
+That \emph{some} notion of EMT ought to exist has been suggested multiple times before \cite{zucker_omelets_2025, panchekha_lin-graphs_2025, shanabrook_custom_2026}. The hope is to be able to use theory-specific knowledge to integrate certain identities directly into the procedures, rather than having to time-consumingly match, seed, and merge as directed by the identities. We will briefly go over the key intutition behind these proposals, and show that they fail to take into account the $T$-critical pair idea we have outlined previously (informally for AC in section \ref{gapfill}, formally for AC in section \ref{accrit}, and for general $T$ in section \ref{gencritpairs}).
 
 \subsection{Intuition 1: Canonizers}
 \citet{zucker_omelets_2025} notes that we have \emph{canonizers} for many theories, which provide a way to solve the problem of ground equality modulo theories. A canonizer for a theory $T$ is just some function on terms $c$ such that, if $t_1 =_T t_2$, then $c(t_1) = c(t_2)$: that is, it shifts the problem from equality modulo $T$ to just ordinary term equality.
@@ -3831,57 +3828,43 @@ for an appropriate type constructor of multisets.
 %\fxerror{Cite literature on polynomial functors/containers?}
 
 \subsection{Canonizers and containers and the problem of flattening}
-The first intuition naturally connects to the second intuition if we consider the generalized idea of `container' as representing some canonical form. Both approaches at first glance seem to take care of a lot of potential fiddling with identities in such theories. However, there is one issue: while we manage to remove the some part of the theory with this approach, there is still one derived identity which we need to handle.
+The first intuition naturally connects to the second intuition if we consider the generalized idea of `container' as representing some canonical form. Both approaches at first glance seem to take care of a lot of potential fiddling with identities in such theories. However, there is one issue: while we manage to handle some part of the theory with this approach, there are still two derived identities we need to handle.
 
 For instance, consider an AU pair of operators $+, 0$. The identities are
-
 \begin{align}
 	a + (b + c) &= (a + b) + c \label{spectassoc}\\
 	a + 0 &= a \label{spectru} \\
 	0 + a &= a \label{spectlu}
 \end{align}
-
 Using a list representation, these become
-
 \begin{align}
 	[a, [b, c]] &= [[a, b], c] \label{spectassocl}\\
 	[a, []] &= a \label{spectrul}\\
 	[[], a] &= a \label{spectlul}
 \end{align}
-
 These identities are not entirely automatic just by switching to lists: we need the additional embedding and and flattening laws
-
 \begin{align}
 	a &= [a] \label{spectemb} \\
 	[[a_1, \ldots, a_n], [b_1, \ldots, b_m], \ldots] &= [a_1, \ldots, a_n, b_1, \ldots, b_m, \ldots] \label{spectflat}
 \end{align}
-
 Or in other words, every term can be embedded in a list of just that term, and a list of lists can be flattened by concatenating all of its elements.\footnote{Readers inclined to abstract nonsense may recognize these equations as defining a monad for the algebraic theory of associativity \cite{voutas_basic_2012})}
 
 Eq \ref{spectemb} and eq \ref{spectflat} together with the basic rules of lists are what is required to prove eq \ref{spectassocl}, eq \ref{spectrul}, and eq \ref{spectlul}.
 
 It is the need to handle embedding and flattening that gives rise to problems with an approach based on just canonizers or containers. We will then also see that embedding and flattening are the two rules that govern the formation of $T$-critical pairs.
 
-A typical example of where these approaches break down is given by
-
+A typical example of where these approaches break down is given by our example from section \ref{challenge}:
 \begin{align}
 	a + b &= b \\
 	a + a &= c \\
 	c + b &= d
 \end{align}
-
-taken modulo associativity of $+$.
-
 The goal is to prove simply that $b = d$, which follows from the simple deduction
-
 \begin{align*}
 	b \\ &= a + b \\&= a + (a + b) \\&= (a + a) + b \\&= c + b \\&= d
 \end{align*}
-
 If we try the containers approach, we start by building up an E-graph with the following E-classes:
-
 $e_1 = \{b, [a, b]\}, e_2 = \{c, [a, a]\}, e_3 = \{d, [c, b]\}$.
-
 However, this is by itself, entirely inert. We need to use flattening to reason that, since $b = [a, b]$, that $[a, b] = [a, [a, b]] = [a, a, b]$. Then we need to use the converse of flattening to notice that $[a, a, b] = [[a, a], b] = [c, b] = d$.
 
 For the canonizer approach, we can easily canonize the input equations: indeed, all of them have both sides in canonical form already. What is missing, then? Well, if we view the E-graph as a rewrite system, there is of course an A-critical pair between the rewrite $a + b \rightarrow e_1$ and $a + a \rightarrow e_2$. The critical pair is $a + a + b$, which can be rewritten as either $a + e_1$ or $e_2 + b$. 
@@ -3909,7 +3892,7 @@ EMTs provide a good basis for integrating certain common well-behaved theories m
 
 \section{Future work}
 \subsection{EMTs for other theories}
-Given that there are already several variants of congruence-closure modulo theories (Section \ref{ccmodx}), it would be useful to evaluate EMTs on these theories, including with E-matching modulo these theories. Many of them require Buchberger-like algorithms similar to the one we have presented for AC. Variations of this algorithm for certain theories (Section \ref{hrmite}) can be polynomial-time rather than \textsc{ESpace}.
+Given that there are already several variants of congruence-closure modulo theories (Section \ref{ccmodx}), it would be useful to evaluate EMTs on these theories, including implementing and evaluating E-matching modulo them. Many of them require Buchberger-like algorithms similar to the one we have presented for AC. Variations of this algorithm for certain theories (Section \ref{hrmite}) can be polynomial-time rather than \textsc{ESpace}.
 
 \subsection{E-matching and EMTs} \label{ematchtheories}
 Our reduction of E-matching to a kind of E-analysis in \ref{ematchred} doesn't take into account the literature on relational E-matching \cite{zhang_relational_2022}. Whether the variety of strategies for relational E-matching can be reduced in a similar way remains to be seen.
