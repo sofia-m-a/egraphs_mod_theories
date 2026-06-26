@@ -6,6 +6,5 @@ syntax.txt
 EMTspec.md
 graphex.dot
 writings/build/**
-!writings/build/*.pdf
-scraps/**
 writings/_minted
+scraps/**

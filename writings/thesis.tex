@@ -1,51 +1,68 @@
 \documentclass[12pt,a4paper,twoside,openright]{report}
 
-\usepackage{moreverb}							% List settings
-\usepackage{textcomp}							% Fonts, symbols etc.
-\usepackage{lmodern}								% Latin modern font
-\usepackage{helvet}								% Enables font switching
-\usepackage[T1]{fontenc}						% Output settings
-\usepackage[english]{babel}				% Language settings
-\usepackage[utf8]{inputenc}				% Input settings
-\usepackage{amsmath}								% Mathematical expressions (American mathematical society)
-\usepackage{amssymb}								% Mathematical symbols (American mathematical society)
-\usepackage{graphicx}							% Figures
-\usepackage{subfig}								% Enables subfigures
-\numberwithin{equation}{chapter}		% Numbering order for equations
-\numberwithin{figure}{chapter}			% Numbering order for figures
-\numberwithin{table}{chapter}			% Numbering order for tables
-\usepackage{minted}						    % Enables source code listings
+% seemingly unneeded packages
+%\usepackage{moreverb}									% List settings
+%\usepackage{textcomp}									% Fonts, symbols etc.
+%\usepackage[pdf]{graphviz}
+%\usepackage[pdf]{graphviz}
+%\usepackage{etoolbox}
+%\usepackage{chngcntr}
+%\usepackage[normalem]{ulem}
+%\usepackage{listings}
+%\usepackage{comment}
+%\usepackage{tabularx}
+
+
+\usepackage{lmodern}										% Latin modern font
+\usepackage{helvet}										% Enables font switching
+\usepackage[T1]{fontenc}								% Output settings
+\usepackage[english]{babel}						% Language settings
+\usepackage[utf8]{inputenc}						% Input settings
+\usepackage{amsmath}										% Mathematical expressions (American mathematical society)
+\usepackage{amssymb}										% Mathematical symbols (American mathematical society)
+\usepackage{amsthm}
+\usepackage{graphicx}									% Figures
+\usepackage{subfig}										% Enables subfigures
+\usepackage{minted}						    			% Enables source code listings
 \usepackage[top=3cm, bottom=3cm,
-			inner=3cm, outer=3cm]{geometry}			% Page margin lengths			
-\usepackage{eso-pic}								% Create cover page background
+			inner=3cm, outer=3cm]{geometry} 	% Page margin lengths			
+\usepackage{eso-pic}										% Create cover page background
 \newcommand{\backgroundpic}[3]{
 	\put(#1,#2){
 	\parbox[b][\paperheight]{\paperwidth}{
 	\centering
 	\includegraphics[width=\paperwidth,height=\paperheight,keepaspectratio]{#3}}}}
-\usepackage{float} 									% Enables object position enforcement using [H]
-\usepackage{parskip}								% Enables vertical spaces correctly 
-\usepackage{datetime2} % date formatting tools - ISO-date YYYY-MM-DD
-\usepackage{microtype} % Microtypography - improves readability and appearance of text.
-
-% Allows clickable links for references, in table of content, autoref, etc.  	
-\usepackage{hyperref}								
+\usepackage{float} 										% Enables object position enforcement using [H]
+\usepackage{parskip}										% Enables vertical spaces correctly 
+\usepackage{datetime2} 								% date formatting tools - ISO-date YYYY-MM-DD
+\usepackage{microtype} 								% Microtypography - improves readability and appearance of text.
+\usepackage{hyperref}									% Allows clickable links for references, in table of content, autoref, etc.  			
 \hypersetup{colorlinks, citecolor=black,
    		 	filecolor=black, linkcolor=black,
     		urlcolor=black}
-
 %% Bibliography https://www.overleaf.com/learn/latex/Bibliography_management_with_biblatex
 \usepackage[style=numeric,
     backend=biber,
     natbib=true]{biblatex} % style=apa also possible
 \addbibresource{thesis.bib}
+\usepackage[x11names, svgnames, rgb]{xcolor}
+\usepackage[status=draft,layout=inline]{fixme}
+\fxusetheme{color}
+\usepackage{csquotes}
+\usepackage{tikz}
+\usepackage{freetikz}
+\usetikzlibrary{shapes.geometric, calc, fit, 
+	arrows, decorations.markings, shapes, positioning}
+\usepackage{makecell}
+\usepackage{changepage}
+\usepackage{stmaryrd}
+
+\numberwithin{equation}{chapter}		% Numbering order for equations
+\numberwithin{figure}{chapter}			% Numbering order for figures
+\numberwithin{table}{chapter}			% Numbering order for tables
 
 
 % OPTIONAL SETTINGS (DELETE OR COMMENT TO SUPRESS)
-
-
-		 
-
 % Define the number of section levels to be included in the t.o.c. and numbered	(3 is default)	
 \setcounter{tocdepth}{5}							
 \setcounter{secnumdepth}{5}	
@@ -90,43 +107,8 @@
 % Supress warning from Texmaker about headheight
 \setlength{\headheight}{15pt}		
 
-
-
-
-
-
-
-
-
-
-
-
-%\usepackage[pdf]{graphviz}
-\usepackage{amsthm}
-\usepackage[x11names, svgnames, rgb]{xcolor}
-\usepackage{comment}
-\usepackage{tabularx}
-\usepackage[status=draft,layout=inline]{fixme}
-\fxusetheme{color}
-\usepackage{csquotes}
-
-\usepackage{tikz}
-\usepackage{freetikz}
-\usetikzlibrary{shapes.geometric, calc, fit, 
-	arrows, decorations.markings, shapes, positioning}
-\usepackage{makecell}
-\usepackage{changepage}
-\usepackage{stmaryrd}
-\usepackage{bussproofs}
-
-% Old header stuff, seems unneeded?
-%\usepackage{etoolbox}
-%\setlength{\parskip}{10pt} 
-%\usepackage{chngcntr}
+%\setlength{\parskip}{10pt}
 %\counterwithout{figure}{section}
-%\usepackage[normalem]{ulem}
-%\usepackage{listings}
-
 
 \theoremstyle{definition}
 \newtheorem*{ex}{Example}
@@ -142,8 +124,8 @@
 \def \globalscale {1.000000}
 
 
-\newcommand{\oneLineTitle}{E-graphs modulo theories (Draft)}
-\newcommand{\multiLineTitle}[1]{E-graphs modulo theories (Draft)}
+\newcommand{\oneLineTitle}{E-graphs modulo theories}
+\newcommand{\multiLineTitle}[1]{E-graphs modulo theories}
 % The term [#1] indicates that there will be 1 rowbreak to split the title into two pieces, first part before \\[#1] and second part after. If you have a very long title and need to split it up into 3 rows, just use \\[#1] multiple times.
 
 \newcommand{\oneLineSubtitle}{with applications to associative-commutative operators}
@@ -178,7 +160,6 @@
 		]
 		\input{figures/emtfinal.tex}
 	\end{tikzpicture}
-%\includegraphics[width=0.9\linewidth]{figure/somepicture}
 \end{figure}
 
 % Cover text
@@ -227,7 +208,7 @@ Gothenburg, Sweden \the\year
 	\begin{figure}[H]
 	\centering
 	% Remove the following line to remove the titlepage logotype
-	\includegraphics[width=0.25\pdfpagewidth]{ChGULogoHog.pdf}
+	\includegraphics[width=0.25\pdfpagewidth]{figures/ChGULogoHog.pdf}
 	\end{figure}	\vspace{5mm}	
 	
 	Department of Computer Science and Engineering\\
@@ -290,17 +271,13 @@ However, E-graphs struggle with a combinatorial explosion when reasoning about c
 
 Can equality saturation for AC theories be done in a more efficient way? There have been several proposals for extending E-graphs to \emph{E-graphs modulo theories} (EMTs) \cite{zucker_omelets_2025, panchekha_lin-graphs_2025, shanabrook_custom_2026}.  These proposals suggest integrating a \emph{theory-specific} reasoning method for AC together with the general mechanisms of E-graphs and equality saturation in order to efficiently deal with AC theories. The hope is that specific methods for AC theories can avoid the inefficiencies in using the general equality saturation mechanism for the AC identities.
 
-%EMTs are inspired by the success of theory-specific methods in other automated reasoning tasks, such as in \emph{Satisfiability Modulo Theories} solvers (SMT solvers), and the merits of a theory-specific approach in automated reasoning are advocated for in \citet{goos_little_2002}
-
 However, there is a limitation in previous proposals for EMTs for AC, which cause the resulting notion of EMT to be unable to determine straightforward consequences of the AC identities. This thesis develops a notion of EMT that addresses this issue and shows that it \emph{is} possible to reason with AC theories and a variety of closely related theories in a way that avoids the worst inefficiencies of plain E-graphs. It also provides a formal definition of EMTs that we hope can provide the basis for future work on integrating other theories in a similar manner. Finally, we discuss an implementation of EMTs and benchmark it against pure E-graph reasoning on a variety of equational reasoning tasks (\ref{evalresults}), showing significant space savings compared to ordinary E-graphs.
 
 Central to our notion of a `good' theory for an EMT is the necessity of a solver for the word problem over the theory. This gives us a lower bound on EMTs for AC: the word problem for AC requires in the worst case exponential space and doubly-exponential time. This is an improvement over the space upper bound for ordinary E-graphs, but highlights that concrete efficiency gains derive from the potential for typical problems to be solvable efficiently. Our solver for AC and polynomials builds upon Buchberger's algorithm, on which significant work has been done to achieve good common-case performance. Theories similar to AC, such as those with identities for units, negation, or scalar multiplication, have word problems solvable via Buchberger-like algorithms, and in certain cases, AC-like theories can be solved significantly more than AC by itself. Thus our work provides a foundation for future generalization to a this large family of AC-like theories.
 
-% On the other hand, for the theory ACUN (AC with unit and negation, aka the theory of Abelian groups) or the theory of vector spaces, we have polynomial time bounds: we can use algorithms for Hermite normal form (for Abelian groups) and Gaussian elimination (for vector spaces).
-
 % KEYWORDS (MAXIMUM 10 WORDS)
 \vfill
-Keywords: E-graphs, AC, associativity, commutativity, Buchberger's algorithm, rewriting.
+Keywords: E-graphs, equality saturation, AC, associativity, commutativity, Buchberger's algorithm, rewriting.
 
 \newpage				% Create empty back of side
 \thispagestyle{empty}
@@ -407,52 +384,6 @@ Applications of equality saturation include optimization in compilers, decompila
 
 Describing E-graphs can be done in 3 layers. First, there is the union-find structure, which is a simple solver for the theory of atomic equations: given a set of \emph{atoms} $e_1, e_2, \ldots$, we can union two of them to set them equal, and we can find a representative of any particular atom. The representative is unique, so we can simply compare representatives for equality to determine if the atoms they represent are equivalent.
 
-%\fxerror{The resulting rewrite system is basically how UF is actually implemented in many cases (think \texttt{while e.next != e}) but as a rewrite system is not actually terminating: it is $\rightarrow \setminus 1$ that is terminating. Fix or explain}
-
-%\fxerror{Besides, why not pictures here? UF is not actually that important to understand as a rw system until (maybe) later}
-
-%The data structure for this can be thought of as presenting a rewriting system among atoms: for instance,
-
-%\begin{align*}
-%	e_1 &\rightarrow e_1 \\
-%	e_2 &\rightarrow e_2 \\
-%	e_3 &\rightarrow e_3 \\
-%	e_4 &\rightarrow e_4 \\
-%\end{align*}
-
-%is the trivial equivalence relation on 4 atoms. Unioning $e_1$ and $e_2$ gives
-
-%\begin{align*}
-%	e_1 &\rightarrow \underline{e_2} \\
-%	e_2 &\rightarrow e_2 \\
-%	e_3 &\rightarrow e_3 \\
-%	e_4 &\rightarrow e_4 \\
-%\end{align*}
-
-%where we have (arbitrarily) chosen $e_2$ as the new representative.
-
-%If we union $e_3$ with $e_4$, we get
-
-%\begin{align*}
-%	e_1 &\rightarrow e_2 \\
-%	e_2 &\rightarrow e_2 \\
-%	e_3 &\rightarrow \underline{e_4} \\
-%	e_4 &\rightarrow e_4 \\
-%\end{align*}
-
-%Now, if we union $e_3$ and $e_2$, we could get
-
-%\begin{align*}
-%	e_1 &\rightarrow e_2 \\
-%	e_2 &\rightarrow \underline{e_4} \\
-%	e_3 &\rightarrow e_4 \\
-%	e_4 &\rightarrow e_4 \\
-%\end{align*}
-
-%Note that we do a lookup before performing the union, so that we union the two \emph{representatives} ($e_4$ of $e_3$ and $e_2$ of $e_2$) together.
-
-%Now it takes two steps to rewrite $e_1$ to $e_4$. It is possible to either eagerly canonize the rewrite system on update, setting $e_1$ to rewrite to $e_4$, or do it lazily (compressing such multi-step rewrites on lookup), which is asymptotically more efficient in general. However, these efficiency gains are hard to realize given the congruence closure structure we will build on top of the union-find structure.
-
 Union-find alone cannot handle equations between non-atomic terms, like $h(a) = f(g(c))$. In particular, terms cannot be treated as atomic, since there is the rule of \emph{congruence}: if $s_i = t_i$, then we must conclude $f(s_1, \ldots) = f(t_1, \ldots)$. 
 
 To handle non-atomic terms, we build a congruence-closure structure on top of a union-find structure. The congruence-closure structure works by breaking terms down into \emph{layers}. For instance, to represent $f(g(e_1), e_2)$ we will assign a new constant $e_3$ for $g(e_1)$, and then assign a constant $e_4$ for $f(e_3, e_2)$. This way, all congruence checks only need to apply to `flat' terms: if $e_i = d_i$ then we conclude $f(e_1, \ldots) = f(d_1, \ldots)$.
@@ -470,590 +401,34 @@ As an example, we will compute the congruence closure of the following set of eq
 \end{align}
 As a first step, we represent the term $h(a, g(b))$ from equation \ref{examplecc1}:
 \begin{center}
-    \begin{tikzpicture}[y=1cm, x=1cm, yscale=\globalscale,xscale=\globalscale, every node/.append style={scale=\globalscale}, inner sep=0pt, outer sep=0pt]
-  \begin{scope}[shift={(0.1411, -8.3256)}]
-    \path[fill=white] (-0.1411, 8.3256) -- (-0.1411, 16.7922) -- (5.9267, 16.7922) -- (5.9267, 8.3256) -- (-0.1411, 8.3256) -- (-0.1411, 8.3256)-- cycle;;
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (0.7056, 11.6064).. controls (0.7056, 11.6064) and (2.3283, 11.6064) .. (2.3283, 11.6064).. controls (2.54, 11.6064) and (2.7517, 11.8181) .. (2.7517, 12.0297).. controls (2.7517, 12.0297) and (2.7517, 13.0881) .. (2.7517, 13.0881).. controls (2.7517, 13.2997) and (2.54, 13.5114) .. (2.3283, 13.5114).. controls (2.3283, 13.5114) and (0.7056, 13.5114) .. (0.7056, 13.5114).. controls (0.4939, 13.5114) and (0.2822, 13.2997) .. (0.2822, 13.0881).. controls (0.2822, 13.0881) and (0.2822, 12.0297) .. (0.2822, 12.0297).. controls (0.2822, 11.8181) and (0.4939, 11.6064) .. (0.7056, 11.6064);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (3.4572, 8.7489).. controls (3.4572, 8.7489) and (5.08, 8.7489) .. (5.08, 8.7489).. controls (5.2917, 8.7489) and (5.5033, 8.9606) .. (5.5033, 9.1722).. controls (5.5033, 9.1722) and (5.5033, 10.2306) .. (5.5033, 10.2306).. controls (5.5033, 10.4422) and (5.2917, 10.6539) .. (5.08, 10.6539).. controls (5.08, 10.6539) and (3.4572, 10.6539) .. (3.4572, 10.6539).. controls (3.2456, 10.6539) and (3.0339, 10.4422) .. (3.0339, 10.2306).. controls (3.0339, 10.2306) and (3.0339, 9.1722) .. (3.0339, 9.1722).. controls (3.0339, 8.9606) and (3.2456, 8.7489) .. (3.4572, 8.7489);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (3.4572, 11.6064).. controls (3.4572, 11.6064) and (5.08, 11.6064) .. (5.08, 11.6064).. controls (5.2917, 11.6064) and (5.5033, 11.8181) .. (5.5033, 12.0297).. controls (5.5033, 12.0297) and (5.5033, 13.0881) .. (5.5033, 13.0881).. controls (5.5033, 13.2997) and (5.2917, 13.5114) .. (5.08, 13.5114).. controls (5.08, 13.5114) and (3.4572, 13.5114) .. (3.4572, 13.5114).. controls (3.2456, 13.5114) and (3.0339, 13.2997) .. (3.0339, 13.0881).. controls (3.0339, 13.0881) and (3.0339, 12.0297) .. (3.0339, 12.0297).. controls (3.0339, 11.8181) and (3.2456, 11.6064) .. (3.4572, 11.6064);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (2.0814, 14.4639).. controls (2.0814, 14.4639) and (3.7042, 14.4639) .. (3.7042, 14.4639).. controls (3.9158, 14.4639) and (4.1275, 14.6756) .. (4.1275, 14.8872).. controls (4.1275, 14.8872) and (4.1275, 15.9456) .. (4.1275, 15.9456).. controls (4.1275, 16.1572) and (3.9158, 16.3689) .. (3.7042, 16.3689).. controls (3.7042, 16.3689) and (2.0814, 16.3689) .. (2.0814, 16.3689).. controls (1.8697, 16.3689) and (1.6581, 16.1572) .. (1.6581, 15.9456).. controls (1.6581, 15.9456) and (1.6581, 14.8872) .. (1.6581, 14.8872).. controls (1.6581, 14.6756) and (1.8697, 14.4639) .. (2.0814, 14.4639);
-
-
-
-    \path[draw=black] (4.2686, 11.9944).. controls (4.2686, 11.6325) and (4.2686, 11.2384) .. (4.2686, 10.8818);
-
-
-
-    \path[draw=black,fill=black] (4.3303, 10.8835) -- (4.2686, 10.7072) -- (4.2069, 10.8835) -- (4.3303, 10.8835) -- (4.3303, 10.8835)-- cycle;;
-
-
-
-    \path[draw=black] (2.6282, 14.8519).. controls (2.6282, 14.4572) and (2.4899, 14.0596) .. (2.3107, 13.7107);
-
-
-
-    \path[draw=black,fill=black] (2.3657, 13.6832) -- (2.2267, 13.558) -- (2.2574, 13.7425) -- (2.3657, 13.6832) -- (2.3657, 13.6832)-- cycle;;
-
-
-
-    \path[draw=black] (3.1574, 14.8519).. controls (3.1574, 14.4572) and (3.2957, 14.0596) .. (3.4749, 13.7107);
-
-
-
-    \path[draw=black,fill=black] (3.5281, 13.7425) -- (3.5588, 13.558) -- (3.4198, 13.6832) -- (3.5281, 13.7425) -- (3.5281, 13.7425)-- cycle;;
-
-
-
-    \path[draw=black,fill=white] (2.0461, 13.2292).. controls (2.0461, 13.2292) and (0.9878, 13.2292) .. (0.9878, 13.2292).. controls (0.7761, 13.2292) and (0.5644, 13.0175) .. (0.5644, 12.8058).. controls (0.5644, 12.8058) and (0.5644, 12.3119) .. (0.5644, 12.3119).. controls (0.5644, 12.1003) and (0.7761, 11.8886) .. (0.9878, 11.8886).. controls (0.9878, 11.8886) and (2.0461, 11.8886) .. (2.0461, 11.8886).. controls (2.2578, 11.8886) and (2.4694, 12.1003) .. (2.4694, 12.3119).. controls (2.4694, 12.3119) and (2.4694, 12.8058) .. (2.4694, 12.8058).. controls (2.4694, 13.0175) and (2.2578, 13.2292) .. (2.0461, 13.2292);
-
-
-
-    \node[anchor=south west] (text3495) at (1.3716, 12.3941){a};
-
-
-
-    \path[draw=black,fill=white] (4.7978, 10.3717).. controls (4.7978, 10.3717) and (3.7394, 10.3717) .. (3.7394, 10.3717).. controls (3.5278, 10.3717) and (3.3161, 10.16) .. (3.3161, 9.9483).. controls (3.3161, 9.9483) and (3.3161, 9.4544) .. (3.3161, 9.4544).. controls (3.3161, 9.2428) and (3.5278, 9.0311) .. (3.7394, 9.0311).. controls (3.7394, 9.0311) and (4.7978, 9.0311) .. (4.7978, 9.0311).. controls (5.0094, 9.0311) and (5.2211, 9.2428) .. (5.2211, 9.4544).. controls (5.2211, 9.4544) and (5.2211, 9.9483) .. (5.2211, 9.9483).. controls (5.2211, 10.16) and (5.0094, 10.3717) .. (4.7978, 10.3717);
-
-
-
-    \node[anchor=south west] (text4176) at (4.1099, 9.5363){b};
-
-
-
-    \path[draw=black,fill=white] (4.7978, 13.2292).. controls (4.7978, 13.2292) and (3.7394, 13.2292) .. (3.7394, 13.2292).. controls (3.5278, 13.2292) and (3.3161, 13.0175) .. (3.3161, 12.8058).. controls (3.3161, 12.8058) and (3.3161, 12.3119) .. (3.3161, 12.3119).. controls (3.3161, 12.1003) and (3.5278, 11.8886) .. (3.7394, 11.8886).. controls (3.7394, 11.8886) and (4.7978, 11.8886) .. (4.7978, 11.8886).. controls (5.0094, 11.8886) and (5.2211, 12.1003) .. (5.2211, 12.3119).. controls (5.2211, 12.3119) and (5.2211, 12.8058) .. (5.2211, 12.8058).. controls (5.2211, 13.0175) and (5.0094, 13.2292) .. (4.7978, 13.2292);
-
-
-
-    \node[anchor=south west] (text9304) at (4.1099, 12.3941){g};
-
-
-
-    \path[draw=black,fill=white] (3.4219, 16.0867).. controls (3.4219, 16.0867) and (2.3636, 16.0867) .. (2.3636, 16.0867).. controls (2.1519, 16.0867) and (1.9403, 15.875) .. (1.9403, 15.6633).. controls (1.9403, 15.6633) and (1.9403, 15.1694) .. (1.9403, 15.1694).. controls (1.9403, 14.9578) and (2.1519, 14.7461) .. (2.3636, 14.7461).. controls (2.3636, 14.7461) and (3.4219, 14.7461) .. (3.4219, 14.7461).. controls (3.6336, 14.7461) and (3.8453, 14.9578) .. (3.8453, 15.1694).. controls (3.8453, 15.1694) and (3.8453, 15.6633) .. (3.8453, 15.6633).. controls (3.8453, 15.875) and (3.6336, 16.0867) .. (3.4219, 16.0867);
-
-
-
-    \node[anchor=south west] (text8938) at (2.734, 15.2513){h};
-
-
-
-  \end{scope}
-
-\end{tikzpicture}
+	\begin{tikzpicture}[y=1cm, x=1cm, yscale=\globalscale,xscale=\globalscale, every node/.append style={scale=\globalscale}, inner sep=0pt, outer sep=0pt]
+		\input{figures/exampleBasic1.tex}
+	\end{tikzpicture}
     \label{exampleBasic1}
 \end{center}
 Notice how we have flattened the term: the three levels of nesting become edges or pointers between the three layers of our graph. In particular, we think of the edges from $h$ as being numbered: the left-most edge corresponds to the first argument $h(a, -)$, while the rightmost is the second argument $h(-, g(b))$. 
 
 Then we will add the other term $f(g(a), c)$ from equation \ref{examplecc1}:
 \begin{center}
-\begin{tikzpicture}[y=1cm, x=1cm, yscale=\globalscale,xscale=\globalscale, every node/.append style={scale=\globalscale}, inner sep=0pt, outer sep=0pt]
-  \begin{scope}[shift={(0.1411, -11.1831)}]
-    \path[fill=white] (-0.1411, 11.1831) -- (-0.1411, 22.5072) -- (8.9253, 22.5072) -- (8.9253, 11.1831) -- (-0.1411, 11.1831) -- (-0.1411, 11.1831)-- cycle;;
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (2.2225, 14.4639).. controls (2.2225, 14.4639) and (3.8453, 14.4639) .. (3.8453, 14.4639).. controls (4.0569, 14.4639) and (4.2686, 14.6756) .. (4.2686, 14.8872).. controls (4.2686, 14.8872) and (4.2686, 15.9456) .. (4.2686, 15.9456).. controls (4.2686, 16.1572) and (4.0569, 16.3689) .. (3.8453, 16.3689).. controls (3.8453, 16.3689) and (2.2225, 16.3689) .. (2.2225, 16.3689).. controls (2.0108, 16.3689) and (1.7992, 16.1572) .. (1.7992, 15.9456).. controls (1.7992, 15.9456) and (1.7992, 14.8872) .. (1.7992, 14.8872).. controls (1.7992, 14.6756) and (2.0108, 14.4639) .. (2.2225, 14.4639);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (0.7056, 17.3214).. controls (0.7056, 17.3214) and (2.3283, 17.3214) .. (2.3283, 17.3214).. controls (2.54, 17.3214) and (2.7517, 17.5331) .. (2.7517, 17.7447).. controls (2.7517, 17.7447) and (2.7517, 18.8031) .. (2.7517, 18.8031).. controls (2.7517, 19.0147) and (2.54, 19.2264) .. (2.3283, 19.2264).. controls (2.3283, 19.2264) and (0.7056, 19.2264) .. (0.7056, 19.2264).. controls (0.4939, 19.2264) and (0.2822, 19.0147) .. (0.2822, 18.8031).. controls (0.2822, 18.8031) and (0.2822, 17.7447) .. (0.2822, 17.7447).. controls (0.2822, 17.5331) and (0.4939, 17.3214) .. (0.7056, 17.3214);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (3.4572, 17.3214).. controls (3.4572, 17.3214) and (5.08, 17.3214) .. (5.08, 17.3214).. controls (5.2917, 17.3214) and (5.5033, 17.5331) .. (5.5033, 17.7447).. controls (5.5033, 17.7447) and (5.5033, 18.8031) .. (5.5033, 18.8031).. controls (5.5033, 19.0147) and (5.2917, 19.2264) .. (5.08, 19.2264).. controls (5.08, 19.2264) and (3.4572, 19.2264) .. (3.4572, 19.2264).. controls (3.2456, 19.2264) and (3.0339, 19.0147) .. (3.0339, 18.8031).. controls (3.0339, 18.8031) and (3.0339, 17.7447) .. (3.0339, 17.7447).. controls (3.0339, 17.5331) and (3.2456, 17.3214) .. (3.4572, 17.3214);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (2.0814, 20.1789).. controls (2.0814, 20.1789) and (3.7042, 20.1789) .. (3.7042, 20.1789).. controls (3.9158, 20.1789) and (4.1275, 20.3906) .. (4.1275, 20.6022).. controls (4.1275, 20.6022) and (4.1275, 21.6606) .. (4.1275, 21.6606).. controls (4.1275, 21.8722) and (3.9158, 22.0839) .. (3.7042, 22.0839).. controls (3.7042, 22.0839) and (2.0814, 22.0839) .. (2.0814, 22.0839).. controls (1.8697, 22.0839) and (1.6581, 21.8722) .. (1.6581, 21.6606).. controls (1.6581, 21.6606) and (1.6581, 20.6022) .. (1.6581, 20.6022).. controls (1.6581, 20.3906) and (1.8697, 20.1789) .. (2.0814, 20.1789);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (6.4558, 11.6064).. controls (6.4558, 11.6064) and (8.0786, 11.6064) .. (8.0786, 11.6064).. controls (8.2903, 11.6064) and (8.5019, 11.8181) .. (8.5019, 12.0297).. controls (8.5019, 12.0297) and (8.5019, 13.0881) .. (8.5019, 13.0881).. controls (8.5019, 13.2997) and (8.2903, 13.5114) .. (8.0786, 13.5114).. controls (8.0786, 13.5114) and (6.4558, 13.5114) .. (6.4558, 13.5114).. controls (6.2442, 13.5114) and (6.0325, 13.2997) .. (6.0325, 13.0881).. controls (6.0325, 13.0881) and (6.0325, 12.0297) .. (6.0325, 12.0297).. controls (6.0325, 11.8181) and (6.2442, 11.6064) .. (6.4558, 11.6064);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (6.4558, 14.4639).. controls (6.4558, 14.4639) and (8.0786, 14.4639) .. (8.0786, 14.4639).. controls (8.2903, 14.4639) and (8.5019, 14.6756) .. (8.5019, 14.8872).. controls (8.5019, 14.8872) and (8.5019, 15.9456) .. (8.5019, 15.9456).. controls (8.5019, 16.1572) and (8.2903, 16.3689) .. (8.0786, 16.3689).. controls (8.0786, 16.3689) and (6.4558, 16.3689) .. (6.4558, 16.3689).. controls (6.2442, 16.3689) and (6.0325, 16.1572) .. (6.0325, 15.9456).. controls (6.0325, 15.9456) and (6.0325, 14.8872) .. (6.0325, 14.8872).. controls (6.0325, 14.6756) and (6.2442, 14.4639) .. (6.4558, 14.4639);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (6.2089, 17.3214).. controls (6.2089, 17.3214) and (7.8317, 17.3214) .. (7.8317, 17.3214).. controls (8.0433, 17.3214) and (8.255, 17.5331) .. (8.255, 17.7447).. controls (8.255, 17.7447) and (8.255, 18.8031) .. (8.255, 18.8031).. controls (8.255, 19.0147) and (8.0433, 19.2264) .. (7.8317, 19.2264).. controls (7.8317, 19.2264) and (6.2089, 19.2264) .. (6.2089, 19.2264).. controls (5.9972, 19.2264) and (5.7856, 19.0147) .. (5.7856, 18.8031).. controls (5.7856, 18.8031) and (5.7856, 17.7447) .. (5.7856, 17.7447).. controls (5.7856, 17.5331) and (5.9972, 17.3214) .. (6.2089, 17.3214);
-
-
-
-    \path[draw=black] (1.5169, 17.7094).. controls (1.5169, 17.2928) and (1.6972, 16.8952) .. (1.9332, 16.553);
-
-
-
-    \path[draw=black,fill=black] (1.9826, 16.5901) -- (2.0376, 16.4116) -- (1.8831, 16.5167) -- (1.9826, 16.5901) -- (1.9826, 16.5901)-- cycle;;
-
-
-
-    \path[draw=black] (2.6282, 20.5669).. controls (2.6282, 20.1722) and (2.4899, 19.7746) .. (2.3107, 19.4257);
-
-
-
-    \path[draw=black,fill=black] (2.3657, 19.3982) -- (2.2267, 19.273) -- (2.2574, 19.4575) -- (2.3657, 19.3982) -- (2.3657, 19.3982)-- cycle;;
-
-
-
-    \path[draw=black] (3.1574, 20.5669).. controls (3.1574, 20.1722) and (3.2957, 19.7746) .. (3.4749, 19.4257);
-
-
-
-    \path[draw=black,fill=black] (3.5281, 19.4575) -- (3.5588, 19.273) -- (3.4198, 19.3982) -- (3.5281, 19.4575) -- (3.5281, 19.4575)-- cycle;;
-
-
-
-    \path[draw=black] (7.2672, 14.8519).. controls (7.2672, 14.49) and (7.2672, 14.0959) .. (7.2672, 13.7393);
-
-
-
-    \path[draw=black,fill=black] (7.329, 13.741) -- (7.2672, 13.5647) -- (7.2055, 13.741) -- (7.329, 13.741) -- (7.329, 13.741)-- cycle;;
-
-
-
-    \path[draw=black] (6.7557, 17.7094).. controls (6.7557, 16.6) and (5.5319, 16.0207) .. (4.488, 15.7282);
-
-
-
-    \path[draw=black,fill=black] (4.5064, 15.669) -- (4.3201, 15.6838) -- (4.4746, 15.7886) -- (4.5064, 15.669) -- (4.5064, 15.669)-- cycle;;
-
-
-
-    \path[draw=black] (7.2849, 17.7094).. controls (7.2849, 17.3475) and (7.2827, 16.9531) .. (7.2796, 16.5968);
-
-
-
-    \path[draw=black,fill=black] (7.3413, 16.5978) -- (7.2782, 16.4222) -- (7.2178, 16.5989) -- (7.3413, 16.5978) -- (7.3413, 16.5978)-- cycle;;
-
-
-
-    \path[draw=black,fill=white] (3.5631, 16.0867).. controls (3.5631, 16.0867) and (2.5047, 16.0867) .. (2.5047, 16.0867).. controls (2.2931, 16.0867) and (2.0814, 15.875) .. (2.0814, 15.6633).. controls (2.0814, 15.6633) and (2.0814, 15.1694) .. (2.0814, 15.1694).. controls (2.0814, 14.9578) and (2.2931, 14.7461) .. (2.5047, 14.7461).. controls (2.5047, 14.7461) and (3.5631, 14.7461) .. (3.5631, 14.7461).. controls (3.7747, 14.7461) and (3.9864, 14.9578) .. (3.9864, 15.1694).. controls (3.9864, 15.1694) and (3.9864, 15.6633) .. (3.9864, 15.6633).. controls (3.9864, 15.875) and (3.7747, 16.0867) .. (3.5631, 16.0867);
-
-
-
-    \node[anchor=south west] (text4956) at (2.8885, 15.2516){a};
-
-
-
-    \path[draw=black,fill=white] (2.0461, 18.9442).. controls (2.0461, 18.9442) and (0.9878, 18.9442) .. (0.9878, 18.9442).. controls (0.7761, 18.9442) and (0.5644, 18.7325) .. (0.5644, 18.5208).. controls (0.5644, 18.5208) and (0.5644, 18.0269) .. (0.5644, 18.0269).. controls (0.5644, 17.8153) and (0.7761, 17.6036) .. (0.9878, 17.6036).. controls (0.9878, 17.6036) and (2.0461, 17.6036) .. (2.0461, 17.6036).. controls (2.2578, 17.6036) and (2.4694, 17.8153) .. (2.4694, 18.0269).. controls (2.4694, 18.0269) and (2.4694, 18.5208) .. (2.4694, 18.5208).. controls (2.4694, 18.7325) and (2.2578, 18.9442) .. (2.0461, 18.9442);
-
-
-
-    \node[anchor=south west] (text6317) at (1.3582, 18.1088){g};
-
-
-
-    \path[draw=black,fill=white] (4.7978, 18.9442).. controls (4.7978, 18.9442) and (3.7394, 18.9442) .. (3.7394, 18.9442).. controls (3.5278, 18.9442) and (3.3161, 18.7325) .. (3.3161, 18.5208).. controls (3.3161, 18.5208) and (3.3161, 18.0269) .. (3.3161, 18.0269).. controls (3.3161, 17.8153) and (3.5278, 17.6036) .. (3.7394, 17.6036).. controls (3.7394, 17.6036) and (4.7978, 17.6036) .. (4.7978, 17.6036).. controls (5.0094, 17.6036) and (5.2211, 17.8153) .. (5.2211, 18.0269).. controls (5.2211, 18.0269) and (5.2211, 18.5208) .. (5.2211, 18.5208).. controls (5.2211, 18.7325) and (5.0094, 18.9442) .. (4.7978, 18.9442);
-
-
-
-    \node[anchor=south west] (text9774) at (4.1363, 18.1088){c};
-
-
-
-    \path[draw=black,fill=white] (3.4219, 21.8017).. controls (3.4219, 21.8017) and (2.3636, 21.8017) .. (2.3636, 21.8017).. controls (2.1519, 21.8017) and (1.9403, 21.59) .. (1.9403, 21.3783).. controls (1.9403, 21.3783) and (1.9403, 20.8844) .. (1.9403, 20.8844).. controls (1.9403, 20.6728) and (2.1519, 20.4611) .. (2.3636, 20.4611).. controls (2.3636, 20.4611) and (3.4219, 20.4611) .. (3.4219, 20.4611).. controls (3.6336, 20.4611) and (3.8453, 20.6728) .. (3.8453, 20.8844).. controls (3.8453, 20.8844) and (3.8453, 21.3783) .. (3.8453, 21.3783).. controls (3.8453, 21.59) and (3.6336, 21.8017) .. (3.4219, 21.8017);
-
-
-
-    \node[anchor=south west] (text345) at (2.8003, 20.9663){f};
-
-
-
-    \path[draw=black,fill=white] (7.7964, 13.2292).. controls (7.7964, 13.2292) and (6.7381, 13.2292) .. (6.7381, 13.2292).. controls (6.5264, 13.2292) and (6.3147, 13.0175) .. (6.3147, 12.8058).. controls (6.3147, 12.8058) and (6.3147, 12.3119) .. (6.3147, 12.3119).. controls (6.3147, 12.1003) and (6.5264, 11.8886) .. (6.7381, 11.8886).. controls (6.7381, 11.8886) and (7.7964, 11.8886) .. (7.7964, 11.8886).. controls (8.0081, 11.8886) and (8.2197, 12.1003) .. (8.2197, 12.3119).. controls (8.2197, 12.3119) and (8.2197, 12.8058) .. (8.2197, 12.8058).. controls (8.2197, 13.0175) and (8.0081, 13.2292) .. (7.7964, 13.2292);
-
-
-
-    \node[anchor=south west] (text2776) at (7.1085, 12.3938){b};
-
-
-
-    \path[draw=black,fill=white] (7.7964, 16.0867).. controls (7.7964, 16.0867) and (6.7381, 16.0867) .. (6.7381, 16.0867).. controls (6.5264, 16.0867) and (6.3147, 15.875) .. (6.3147, 15.6633).. controls (6.3147, 15.6633) and (6.3147, 15.1694) .. (6.3147, 15.1694).. controls (6.3147, 14.9578) and (6.5264, 14.7461) .. (6.7381, 14.7461).. controls (6.7381, 14.7461) and (7.7964, 14.7461) .. (7.7964, 14.7461).. controls (8.0081, 14.7461) and (8.2197, 14.9578) .. (8.2197, 15.1694).. controls (8.2197, 15.1694) and (8.2197, 15.6633) .. (8.2197, 15.6633).. controls (8.2197, 15.875) and (8.0081, 16.0867) .. (7.7964, 16.0867);
-
-
-
-    \node[anchor=south west] (text1316) at (7.1085, 15.2516){g};
-
-
-
-    \path[draw=black,fill=white] (7.5494, 18.9442).. controls (7.5494, 18.9442) and (6.4911, 18.9442) .. (6.4911, 18.9442).. controls (6.2794, 18.9442) and (6.0678, 18.7325) .. (6.0678, 18.5208).. controls (6.0678, 18.5208) and (6.0678, 18.0269) .. (6.0678, 18.0269).. controls (6.0678, 17.8153) and (6.2794, 17.6036) .. (6.4911, 17.6036).. controls (6.4911, 17.6036) and (7.5494, 17.6036) .. (7.5494, 17.6036).. controls (7.7611, 17.6036) and (7.9728, 17.8153) .. (7.9728, 18.0269).. controls (7.9728, 18.0269) and (7.9728, 18.5208) .. (7.9728, 18.5208).. controls (7.9728, 18.7325) and (7.7611, 18.9442) .. (7.5494, 18.9442);
-
-
-
-    \node[anchor=south west] (text4476) at (6.8615, 18.1088){h};
-
-
-
-  \end{scope}
-
-\end{tikzpicture}
+	\begin{tikzpicture}[y=1cm, x=1cm, yscale=\globalscale,xscale=\globalscale, every node/.append style={scale=\globalscale}, inner sep=0pt, outer sep=0pt]
+		\input{figures/exampleBasic2.tex}
+	\end{tikzpicture}
     \label{exampleBasic2}
 \end{center}
 
 Now, as a final step, we need to \emph{union} the two top nodes of both sides of the equation:
 \begin{center}
-\begin{tikzpicture}[y=1cm, x=1cm, yscale=\globalscale,xscale=\globalscale, every node/.append style={scale=\globalscale}, inner sep=0pt, outer sep=0pt]
-  \begin{scope}[shift={(0.1411, -8.3256)}]
-    \path[fill=white] (-0.1411, 8.3256) -- (-0.1411, 16.7922) -- (9.1722, 16.7922) -- (9.1722, 8.3256) -- (-0.1411, 8.3256) -- (-0.1411, 8.3256)-- cycle;;
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (2.3283, 8.7489).. controls (2.3283, 8.7489) and (3.9511, 8.7489) .. (3.9511, 8.7489).. controls (4.1628, 8.7489) and (4.3744, 8.9606) .. (4.3744, 9.1722).. controls (4.3744, 9.1722) and (4.3744, 10.2306) .. (4.3744, 10.2306).. controls (4.3744, 10.4422) and (4.1628, 10.6539) .. (3.9511, 10.6539).. controls (3.9511, 10.6539) and (2.3283, 10.6539) .. (2.3283, 10.6539).. controls (2.1167, 10.6539) and (1.905, 10.4422) .. (1.905, 10.2306).. controls (1.905, 10.2306) and (1.905, 9.1722) .. (1.905, 9.1722).. controls (1.905, 8.9606) and (2.1167, 8.7489) .. (2.3283, 8.7489);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (0.7056, 11.6064).. controls (0.7056, 11.6064) and (2.3283, 11.6064) .. (2.3283, 11.6064).. controls (2.54, 11.6064) and (2.7517, 11.8181) .. (2.7517, 12.0297).. controls (2.7517, 12.0297) and (2.7517, 13.0881) .. (2.7517, 13.0881).. controls (2.7517, 13.2997) and (2.54, 13.5114) .. (2.3283, 13.5114).. controls (2.3283, 13.5114) and (0.7056, 13.5114) .. (0.7056, 13.5114).. controls (0.4939, 13.5114) and (0.2822, 13.2997) .. (0.2822, 13.0881).. controls (0.2822, 13.0881) and (0.2822, 12.0297) .. (0.2822, 12.0297).. controls (0.2822, 11.8181) and (0.4939, 11.6064) .. (0.7056, 11.6064);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (3.4572, 11.6064).. controls (3.4572, 11.6064) and (5.08, 11.6064) .. (5.08, 11.6064).. controls (5.2917, 11.6064) and (5.5033, 11.8181) .. (5.5033, 12.0297).. controls (5.5033, 12.0297) and (5.5033, 13.0881) .. (5.5033, 13.0881).. controls (5.5033, 13.2997) and (5.2917, 13.5114) .. (5.08, 13.5114).. controls (5.08, 13.5114) and (3.4572, 13.5114) .. (3.4572, 13.5114).. controls (3.2456, 13.5114) and (3.0339, 13.2997) .. (3.0339, 13.0881).. controls (3.0339, 13.0881) and (3.0339, 12.0297) .. (3.0339, 12.0297).. controls (3.0339, 11.8181) and (3.2456, 11.6064) .. (3.4572, 11.6064);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (3.2456, 14.4639).. controls (3.2456, 14.4639) and (6.9144, 14.4639) .. (6.9144, 14.4639).. controls (7.1261, 14.4639) and (7.3378, 14.6756) .. (7.3378, 14.8872).. controls (7.3378, 14.8872) and (7.3378, 15.9456) .. (7.3378, 15.9456).. controls (7.3378, 16.1572) and (7.1261, 16.3689) .. (6.9144, 16.3689).. controls (6.9144, 16.3689) and (3.2456, 16.3689) .. (3.2456, 16.3689).. controls (3.0339, 16.3689) and (2.8222, 16.1572) .. (2.8222, 15.9456).. controls (2.8222, 15.9456) and (2.8222, 14.8872) .. (2.8222, 14.8872).. controls (2.8222, 14.6756) and (3.0339, 14.4639) .. (3.2456, 14.4639);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (6.7028, 8.7489).. controls (6.7028, 8.7489) and (8.3256, 8.7489) .. (8.3256, 8.7489).. controls (8.5372, 8.7489) and (8.7489, 8.9606) .. (8.7489, 9.1722).. controls (8.7489, 9.1722) and (8.7489, 10.2306) .. (8.7489, 10.2306).. controls (8.7489, 10.4422) and (8.5372, 10.6539) .. (8.3256, 10.6539).. controls (8.3256, 10.6539) and (6.7028, 10.6539) .. (6.7028, 10.6539).. controls (6.4911, 10.6539) and (6.2794, 10.4422) .. (6.2794, 10.2306).. controls (6.2794, 10.2306) and (6.2794, 9.1722) .. (6.2794, 9.1722).. controls (6.2794, 8.9606) and (6.4911, 8.7489) .. (6.7028, 8.7489);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (6.7028, 11.6064).. controls (6.7028, 11.6064) and (8.3256, 11.6064) .. (8.3256, 11.6064).. controls (8.5372, 11.6064) and (8.7489, 11.8181) .. (8.7489, 12.0297).. controls (8.7489, 12.0297) and (8.7489, 13.0881) .. (8.7489, 13.0881).. controls (8.7489, 13.2997) and (8.5372, 13.5114) .. (8.3256, 13.5114).. controls (8.3256, 13.5114) and (6.7028, 13.5114) .. (6.7028, 13.5114).. controls (6.4911, 13.5114) and (6.2794, 13.2997) .. (6.2794, 13.0881).. controls (6.2794, 13.0881) and (6.2794, 12.0297) .. (6.2794, 12.0297).. controls (6.2794, 11.8181) and (6.4911, 11.6064) .. (6.7028, 11.6064);
-
-
-
-    \path[draw=black] (1.5169, 11.9944).. controls (1.5169, 11.569) and (1.7092, 11.1689) .. (1.9614, 10.8271);
-
-
-
-    \path[draw=black,fill=black] (2.0045, 10.8726) -- (2.0652, 10.6959) -- (1.9075, 10.7961) -- (2.0045, 10.8726) -- (2.0045, 10.8726)-- cycle;;
-
-
-
-    \path[draw=black] (3.7924, 14.8519).. controls (3.7924, 14.5443) and (3.368, 14.0811) .. (2.8857, 13.6543);
-
-
-
-    \path[draw=black,fill=black] (2.9348, 13.6151) -- (2.7608, 13.5463) -- (2.8536, 13.7086) -- (2.9348, 13.6151) -- (2.9348, 13.6151)-- cycle;;
-
-
-
-    \path[draw=black] (4.3215, 14.8519).. controls (4.3215, 14.49) and (4.3148, 14.0956) .. (4.306, 13.7393);
-
-
-
-    \path[draw=black,fill=black] (4.3677, 13.7393) -- (4.3014, 13.5647) -- (4.2443, 13.7428) -- (4.3677, 13.7393) -- (4.3677, 13.7393)-- cycle;;
-
-
-
-    \path[draw=black] (5.8385, 14.8519).. controls (5.8385, 13.4034) and (6.2336, 12.8774) .. (5.5386, 11.6064).. controls (5.3068, 11.1823) and (4.934, 10.8225) .. (4.5508, 10.5354);
-
-
-
-    \path[draw=black,fill=black] (4.597, 10.4923) -- (4.4178, 10.4394) -- (4.5247, 10.5925) -- (4.597, 10.4923) -- (4.597, 10.4923)-- cycle;;
-
-
-
-    \path[draw=black] (6.3676, 14.8519).. controls (6.3676, 14.4558) and (6.5098, 14.0585) .. (6.694, 13.7104);
-
-
-
-    \path[draw=black,fill=black] (6.7472, 13.7418) -- (6.7804, 13.5576) -- (6.6396, 13.6807) -- (6.7472, 13.7418) -- (6.7472, 13.7418)-- cycle;;
-
-
-
-    \path[draw=black] (7.5142, 11.9944).. controls (7.5142, 11.6325) and (7.5142, 11.2384) .. (7.5142, 10.8818);
-
-
-
-    \path[draw=black,fill=black] (7.5759, 10.8835) -- (7.5142, 10.7072) -- (7.4524, 10.8835) -- (7.5759, 10.8835) -- (7.5759, 10.8835)-- cycle;;
-
-
-
-    \path[draw=black,fill=white] (3.6689, 10.3717).. controls (3.6689, 10.3717) and (2.6106, 10.3717) .. (2.6106, 10.3717).. controls (2.3989, 10.3717) and (2.1872, 10.16) .. (2.1872, 9.9483).. controls (2.1872, 9.9483) and (2.1872, 9.4544) .. (2.1872, 9.4544).. controls (2.1872, 9.2428) and (2.3989, 9.0311) .. (2.6106, 9.0311).. controls (2.6106, 9.0311) and (3.6689, 9.0311) .. (3.6689, 9.0311).. controls (3.8806, 9.0311) and (4.0922, 9.2428) .. (4.0922, 9.4544).. controls (4.0922, 9.4544) and (4.0922, 9.9483) .. (4.0922, 9.9483).. controls (4.0922, 10.16) and (3.8806, 10.3717) .. (3.6689, 10.3717);
-
-
-
-    \node[anchor=south west] (text2534) at (2.9944, 9.5363){a};
-
-
-
-    \path[draw=black,fill=white] (2.0461, 13.2292).. controls (2.0461, 13.2292) and (0.9878, 13.2292) .. (0.9878, 13.2292).. controls (0.7761, 13.2292) and (0.5644, 13.0175) .. (0.5644, 12.8058).. controls (0.5644, 12.8058) and (0.5644, 12.3119) .. (0.5644, 12.3119).. controls (0.5644, 12.1003) and (0.7761, 11.8886) .. (0.9878, 11.8886).. controls (0.9878, 11.8886) and (2.0461, 11.8886) .. (2.0461, 11.8886).. controls (2.2578, 11.8886) and (2.4694, 12.1003) .. (2.4694, 12.3119).. controls (2.4694, 12.3119) and (2.4694, 12.8058) .. (2.4694, 12.8058).. controls (2.4694, 13.0175) and (2.2578, 13.2292) .. (2.0461, 13.2292);
-
-
-
-    \node[anchor=south west] (text1917) at (1.3582, 12.3941){g};
-
-
-
-    \path[draw=black,fill=white] (4.7978, 13.2292).. controls (4.7978, 13.2292) and (3.7394, 13.2292) .. (3.7394, 13.2292).. controls (3.5278, 13.2292) and (3.3161, 13.0175) .. (3.3161, 12.8058).. controls (3.3161, 12.8058) and (3.3161, 12.3119) .. (3.3161, 12.3119).. controls (3.3161, 12.1003) and (3.5278, 11.8886) .. (3.7394, 11.8886).. controls (3.7394, 11.8886) and (4.7978, 11.8886) .. (4.7978, 11.8886).. controls (5.0094, 11.8886) and (5.2211, 12.1003) .. (5.2211, 12.3119).. controls (5.2211, 12.3119) and (5.2211, 12.8058) .. (5.2211, 12.8058).. controls (5.2211, 13.0175) and (5.0094, 13.2292) .. (4.7978, 13.2292);
-
-
-
-    \node[anchor=south west] (text9645) at (4.1363, 12.3941){c};
-
-
-
-    \path[draw=black,fill=white] (4.5861, 16.0867).. controls (4.5861, 16.0867) and (3.5278, 16.0867) .. (3.5278, 16.0867).. controls (3.3161, 16.0867) and (3.1044, 15.875) .. (3.1044, 15.6633).. controls (3.1044, 15.6633) and (3.1044, 15.1694) .. (3.1044, 15.1694).. controls (3.1044, 14.9578) and (3.3161, 14.7461) .. (3.5278, 14.7461).. controls (3.5278, 14.7461) and (4.5861, 14.7461) .. (4.5861, 14.7461).. controls (4.7978, 14.7461) and (5.0094, 14.9578) .. (5.0094, 15.1694).. controls (5.0094, 15.1694) and (5.0094, 15.6633) .. (5.0094, 15.6633).. controls (5.0094, 15.875) and (4.7978, 16.0867) .. (4.5861, 16.0867);
-
-
-
-    \node[anchor=south west] (text9315) at (3.9645, 15.2513){f};
-
-
-
-    \path[draw=black,fill=white] (6.6322, 16.0867).. controls (6.6322, 16.0867) and (5.5739, 16.0867) .. (5.5739, 16.0867).. controls (5.3622, 16.0867) and (5.1506, 15.875) .. (5.1506, 15.6633).. controls (5.1506, 15.6633) and (5.1506, 15.1694) .. (5.1506, 15.1694).. controls (5.1506, 14.9578) and (5.3622, 14.7461) .. (5.5739, 14.7461).. controls (5.5739, 14.7461) and (6.6322, 14.7461) .. (6.6322, 14.7461).. controls (6.8439, 14.7461) and (7.0556, 14.9578) .. (7.0556, 15.1694).. controls (7.0556, 15.1694) and (7.0556, 15.6633) .. (7.0556, 15.6633).. controls (7.0556, 15.875) and (6.8439, 16.0867) .. (6.6322, 16.0867);
-
-
-
-    \node[anchor=south west] (text9153) at (5.9443, 15.2513){h};
-
-
-
-    \path[draw=black,fill=white] (8.0433, 13.2292).. controls (8.0433, 13.2292) and (6.985, 13.2292) .. (6.985, 13.2292).. controls (6.7733, 13.2292) and (6.5617, 13.0175) .. (6.5617, 12.8058).. controls (6.5617, 12.8058) and (6.5617, 12.3119) .. (6.5617, 12.3119).. controls (6.5617, 12.1003) and (6.7733, 11.8886) .. (6.985, 11.8886).. controls (6.985, 11.8886) and (8.0433, 11.8886) .. (8.0433, 11.8886).. controls (8.255, 11.8886) and (8.4667, 12.1003) .. (8.4667, 12.3119).. controls (8.4667, 12.3119) and (8.4667, 12.8058) .. (8.4667, 12.8058).. controls (8.4667, 13.0175) and (8.255, 13.2292) .. (8.0433, 13.2292);
-
-
-
-    \node[anchor=south west] (text6846) at (7.3554, 12.3941){g};
-
-
-
-    \path[draw=black,fill=white] (8.0433, 10.3717).. controls (8.0433, 10.3717) and (6.985, 10.3717) .. (6.985, 10.3717).. controls (6.7733, 10.3717) and (6.5617, 10.16) .. (6.5617, 9.9483).. controls (6.5617, 9.9483) and (6.5617, 9.4544) .. (6.5617, 9.4544).. controls (6.5617, 9.2428) and (6.7733, 9.0311) .. (6.985, 9.0311).. controls (6.985, 9.0311) and (8.0433, 9.0311) .. (8.0433, 9.0311).. controls (8.255, 9.0311) and (8.4667, 9.2428) .. (8.4667, 9.4544).. controls (8.4667, 9.4544) and (8.4667, 9.9483) .. (8.4667, 9.9483).. controls (8.4667, 10.16) and (8.255, 10.3717) .. (8.0433, 10.3717);
-
-
-
-    \node[anchor=south west] (text3608) at (7.3554, 9.5363){b};
-
-
-
-  \end{scope}
-
-\end{tikzpicture}
-\label{exampleBasic3}
+	\begin{tikzpicture}[y=1cm, x=1cm, yscale=\globalscale,xscale=\globalscale, every node/.append style={scale=\globalscale}, inner sep=0pt, outer sep=0pt]
+		\input{figures/exampleBasic3.tex}
+	\end{tikzpicture}
+	\label{exampleBasic3}
 \end{center}
 We call the outer nodes \emph{E-classes} (equivalence classes), while the inner nodes are \emph{E-nodes}. E-classes can contain multiple E-nodes, and two E-nodes are in the same E-class iff they represent equivalent (sets of) terms. The arrows point from E-nodes to E-classes. So, for instance, there are two E-nodes each with the symbol $g$, each as the only item in their respective E-classes. The only non-trivial E-class so far is the top E-class, with two E-nodes labelled with $f$ and $h$.
 
 Next we move on to equation \ref{examplecc2} ($h(g(c), b) = h(a, g(c))$). This time, notice that the subterm $g(c)$ is used twice, and we \emph{share} this in the E-graph, indicated by two arrows pointing to the E-class for $g(c)$:
 \begin{center}
 \begin{tikzpicture}[y=1cm, x=1cm, yscale=\globalscale,xscale=\globalscale, every node/.append style={scale=\globalscale}, inner sep=0pt, outer sep=0pt]
-  \begin{scope}[shift={(0.1411, -11.1831)}]
-    \path[fill=white] (-0.1411, 11.1831) -- (-0.1411, 22.5072) -- (11.2536, 22.5072) -- (11.2536, 11.1831) -- (-0.1411, 11.1831) -- (-0.1411, 11.1831)-- cycle;;
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (1.905, 14.4639).. controls (1.905, 14.4639) and (3.5278, 14.4639) .. (3.5278, 14.4639).. controls (3.7394, 14.4639) and (3.9511, 14.6756) .. (3.9511, 14.8872).. controls (3.9511, 14.8872) and (3.9511, 15.9456) .. (3.9511, 15.9456).. controls (3.9511, 16.1572) and (3.7394, 16.3689) .. (3.5278, 16.3689).. controls (3.5278, 16.3689) and (1.905, 16.3689) .. (1.905, 16.3689).. controls (1.6933, 16.3689) and (1.4817, 16.1572) .. (1.4817, 15.9456).. controls (1.4817, 15.9456) and (1.4817, 14.8872) .. (1.4817, 14.8872).. controls (1.4817, 14.6756) and (1.6933, 14.4639) .. (1.905, 14.4639);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (0.7408, 17.3214).. controls (0.7408, 17.3214) and (2.3636, 17.3214) .. (2.3636, 17.3214).. controls (2.5753, 17.3214) and (2.7869, 17.5331) .. (2.7869, 17.7447).. controls (2.7869, 17.7447) and (2.7869, 18.8031) .. (2.7869, 18.8031).. controls (2.7869, 19.0147) and (2.5753, 19.2264) .. (2.3636, 19.2264).. controls (2.3636, 19.2264) and (0.7408, 19.2264) .. (0.7408, 19.2264).. controls (0.5292, 19.2264) and (0.3175, 19.0147) .. (0.3175, 18.8031).. controls (0.3175, 18.8031) and (0.3175, 17.7447) .. (0.3175, 17.7447).. controls (0.3175, 17.5331) and (0.5292, 17.3214) .. (0.7408, 17.3214);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (2.3283, 11.6064).. controls (2.3283, 11.6064) and (3.9511, 11.6064) .. (3.9511, 11.6064).. controls (4.1628, 11.6064) and (4.3744, 11.8181) .. (4.3744, 12.0297).. controls (4.3744, 12.0297) and (4.3744, 13.0881) .. (4.3744, 13.0881).. controls (4.3744, 13.2997) and (4.1628, 13.5114) .. (3.9511, 13.5114).. controls (3.9511, 13.5114) and (2.3283, 13.5114) .. (2.3283, 13.5114).. controls (2.1167, 13.5114) and (1.905, 13.2997) .. (1.905, 13.0881).. controls (1.905, 13.0881) and (1.905, 12.0297) .. (1.905, 12.0297).. controls (1.905, 11.8181) and (2.1167, 11.6064) .. (2.3283, 11.6064);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (0.7056, 20.1789).. controls (0.7056, 20.1789) and (4.3744, 20.1789) .. (4.3744, 20.1789).. controls (4.5861, 20.1789) and (4.7978, 20.3906) .. (4.7978, 20.6022).. controls (4.7978, 20.6022) and (4.7978, 21.6606) .. (4.7978, 21.6606).. controls (4.7978, 21.8722) and (4.5861, 22.0839) .. (4.3744, 22.0839).. controls (4.3744, 22.0839) and (0.7056, 22.0839) .. (0.7056, 22.0839).. controls (0.4939, 22.0839) and (0.2822, 21.8722) .. (0.2822, 21.6606).. controls (0.2822, 21.6606) and (0.2822, 20.6022) .. (0.2822, 20.6022).. controls (0.2822, 20.3906) and (0.4939, 20.1789) .. (0.7056, 20.1789);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (8.2903, 14.4639).. controls (8.2903, 14.4639) and (9.9131, 14.4639) .. (9.9131, 14.4639).. controls (10.1247, 14.4639) and (10.3364, 14.6756) .. (10.3364, 14.8872).. controls (10.3364, 14.8872) and (10.3364, 15.9456) .. (10.3364, 15.9456).. controls (10.3364, 16.1572) and (10.1247, 16.3689) .. (9.9131, 16.3689).. controls (9.9131, 16.3689) and (8.2903, 16.3689) .. (8.2903, 16.3689).. controls (8.0786, 16.3689) and (7.8669, 16.1572) .. (7.8669, 15.9456).. controls (7.8669, 15.9456) and (7.8669, 14.8872) .. (7.8669, 14.8872).. controls (7.8669, 14.6756) and (8.0786, 14.4639) .. (8.2903, 14.4639);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (8.7842, 17.3214).. controls (8.7842, 17.3214) and (10.4069, 17.3214) .. (10.4069, 17.3214).. controls (10.6186, 17.3214) and (10.8303, 17.5331) .. (10.8303, 17.7447).. controls (10.8303, 17.7447) and (10.8303, 18.8031) .. (10.8303, 18.8031).. controls (10.8303, 19.0147) and (10.6186, 19.2264) .. (10.4069, 19.2264).. controls (10.4069, 19.2264) and (8.7842, 19.2264) .. (8.7842, 19.2264).. controls (8.5725, 19.2264) and (8.3608, 19.0147) .. (8.3608, 18.8031).. controls (8.3608, 18.8031) and (8.3608, 17.7447) .. (8.3608, 17.7447).. controls (8.3608, 17.5331) and (8.5725, 17.3214) .. (8.7842, 17.3214);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (4.6567, 14.4639).. controls (4.6567, 14.4639) and (6.2794, 14.4639) .. (6.2794, 14.4639).. controls (6.4911, 14.4639) and (6.7028, 14.6756) .. (6.7028, 14.8872).. controls (6.7028, 14.8872) and (6.7028, 15.9456) .. (6.7028, 15.9456).. controls (6.7028, 16.1572) and (6.4911, 16.3689) .. (6.2794, 16.3689).. controls (6.2794, 16.3689) and (4.6567, 16.3689) .. (4.6567, 16.3689).. controls (4.445, 16.3689) and (4.2333, 16.1572) .. (4.2333, 15.9456).. controls (4.2333, 15.9456) and (4.2333, 14.8872) .. (4.2333, 14.8872).. controls (4.2333, 14.6756) and (4.445, 14.4639) .. (4.6567, 14.4639);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (3.9864, 17.3214).. controls (3.9864, 17.3214) and (7.6553, 17.3214) .. (7.6553, 17.3214).. controls (7.8669, 17.3214) and (8.0786, 17.5331) .. (8.0786, 17.7447).. controls (8.0786, 17.7447) and (8.0786, 18.8031) .. (8.0786, 18.8031).. controls (8.0786, 19.0147) and (7.8669, 19.2264) .. (7.6553, 19.2264).. controls (7.6553, 19.2264) and (3.9864, 19.2264) .. (3.9864, 19.2264).. controls (3.7747, 19.2264) and (3.5631, 19.0147) .. (3.5631, 18.8031).. controls (3.5631, 18.8031) and (3.5631, 17.7447) .. (3.5631, 17.7447).. controls (3.5631, 17.5331) and (3.7747, 17.3214) .. (3.9864, 17.3214);
-
-
-
-    \path[draw=black] (1.5522, 17.7094).. controls (1.5522, 17.3126) and (1.6962, 16.9153) .. (1.8828, 16.5675);
-
-
-
-    \path[draw=black,fill=black] (1.936, 16.5989) -- (1.9703, 16.4151) -- (1.8292, 16.5372) -- (1.936, 16.5989) -- (1.936, 16.5989)-- cycle;;
-
-
-
-    \path[draw=black] (1.2524, 20.5669).. controls (1.2524, 20.1997) and (1.2919, 19.8018) .. (1.3423, 19.4433);
-
-
-
-    \path[draw=black,fill=black] (1.4016, 19.4627) -- (1.3667, 19.2793) -- (1.2795, 19.4444) -- (1.4016, 19.4627) -- (1.4016, 19.4627)-- cycle;;
-
-
-
-    \path[draw=black] (1.7815, 20.5669).. controls (1.7815, 19.673) and (0.6473, 20.0424) .. (0.2822, 19.2264).. controls (-0.0635, 18.4535) and (0.1196, 18.1522) .. (0.2822, 17.3214).. controls (0.5457, 15.9755) and (0.7161, 15.6249) .. (1.4464, 14.4639).. controls (1.6171, 14.1926) and (1.8284, 13.9234) .. (2.0436, 13.6775);
-
-
-
-    \path[draw=black,fill=black] (2.0853, 13.7238) -- (2.1569, 13.5513) -- (1.9932, 13.6412) -- (2.0853, 13.7238) -- (2.0853, 13.7238)-- cycle;;
-
-
-
-    \path[draw=black] (3.2985, 20.5669).. controls (3.2985, 19.1943) and (3.0889, 17.628) .. (2.9214, 16.594);
-
-
-
-    \path[draw=black,fill=black] (2.9827, 16.5855) -- (2.8928, 16.4215) -- (2.8607, 16.6056) -- (2.9827, 16.5855) -- (2.9827, 16.5855)-- cycle;;
-
-
-
-    \path[draw=black] (3.8276, 20.5669).. controls (3.8276, 18.5709) and (6.2985, 20.0561) .. (8.1139, 19.2264).. controls (8.1291, 19.2193) and (8.1446, 19.2123) .. (8.1601, 19.2049);
-
-
-
-    \path[draw=black,fill=black] (8.183, 19.2624) -- (8.3132, 19.1283) -- (8.1276, 19.152) -- (8.183, 19.2624) -- (8.183, 19.2624)-- cycle;;
-
-
-
-    \path[draw=black] (9.5956, 17.7094).. controls (9.5956, 17.3387) and (9.5314, 16.9411) .. (9.4488, 16.5848);
-
-
-
-    \path[draw=black,fill=black] (9.5105, 16.5774) -- (9.4086, 16.4207) -- (9.3906, 16.6067) -- (9.5105, 16.5774) -- (9.5105, 16.5774)-- cycle;;
-
-
-
-    \path[draw=black] (5.4681, 14.8519).. controls (5.4681, 14.236) and (5.043, 13.734) .. (4.5558, 13.3615);
-
-
-
-    \path[draw=black,fill=black] (4.5967, 13.3149) -- (4.4175, 13.2613) -- (4.5244, 13.4147) -- (4.5967, 13.3149) -- (4.5967, 13.3149)-- cycle;;
-
-
-
-    \path[draw=black] (4.5332, 17.7094).. controls (4.5332, 17.2748) and (4.3265, 16.8765) .. (4.0524, 16.5393);
-
-
-
-    \path[draw=black,fill=black] (4.101, 16.5015) -- (3.9384, 16.4091) -- (4.0079, 16.5827) -- (4.101, 16.5015) -- (4.101, 16.5015)-- cycle;;
-
-
-
-    \path[draw=black] (5.0624, 17.7094).. controls (5.0624, 17.3404) and (5.1156, 16.9425) .. (5.1834, 16.5855);
-
-
-
-    \path[draw=black,fill=black] (5.2423, 16.6063) -- (5.2165, 16.4211) -- (5.1213, 16.5816) -- (5.2423, 16.6063) -- (5.2423, 16.6063)-- cycle;;
-
-
-
-    \path[draw=black] (7.1085, 17.7094).. controls (7.1085, 17.2223) and (7.3723, 16.7908) .. (7.7082, 16.4387);
-
-
-
-    \path[draw=black,fill=black] (7.7466, 16.4878) -- (7.8288, 16.3202) -- (7.6599, 16.3996) -- (7.7466, 16.4878) -- (7.7466, 16.4878)-- cycle;;
-
-
-
-    \path[draw=black] (6.5793, 17.7094).. controls (6.5793, 17.3147) and (6.441, 16.9171) .. (6.2618, 16.5682);
-
-
-
-    \path[draw=black,fill=black] (6.3168, 16.5407) -- (6.1778, 16.4155) -- (6.2085, 16.6) -- (6.3168, 16.5407) -- (6.3168, 16.5407)-- cycle;;
-
-
-
-    \path[draw=black,fill=white] (3.2456, 16.0867).. controls (3.2456, 16.0867) and (2.1872, 16.0867) .. (2.1872, 16.0867).. controls (1.9756, 16.0867) and (1.7639, 15.875) .. (1.7639, 15.6633).. controls (1.7639, 15.6633) and (1.7639, 15.1694) .. (1.7639, 15.1694).. controls (1.7639, 14.9578) and (1.9756, 14.7461) .. (2.1872, 14.7461).. controls (2.1872, 14.7461) and (3.2456, 14.7461) .. (3.2456, 14.7461).. controls (3.4572, 14.7461) and (3.6689, 14.9578) .. (3.6689, 15.1694).. controls (3.6689, 15.1694) and (3.6689, 15.6633) .. (3.6689, 15.6633).. controls (3.6689, 15.875) and (3.4572, 16.0867) .. (3.2456, 16.0867);
-
-
-
-    \node[anchor=south west] (text8469) at (2.571, 15.2516){a};
-
-
-
-    \path[draw=black,fill=white] (2.0814, 18.9442).. controls (2.0814, 18.9442) and (1.0231, 18.9442) .. (1.0231, 18.9442).. controls (0.8114, 18.9442) and (0.5997, 18.7325) .. (0.5997, 18.5208).. controls (0.5997, 18.5208) and (0.5997, 18.0269) .. (0.5997, 18.0269).. controls (0.5997, 17.8153) and (0.8114, 17.6036) .. (1.0231, 17.6036).. controls (1.0231, 17.6036) and (2.0814, 17.6036) .. (2.0814, 17.6036).. controls (2.2931, 17.6036) and (2.5047, 17.8153) .. (2.5047, 18.0269).. controls (2.5047, 18.0269) and (2.5047, 18.5208) .. (2.5047, 18.5208).. controls (2.5047, 18.7325) and (2.2931, 18.9442) .. (2.0814, 18.9442);
-
-
-
-    \node[anchor=south west] (text2456) at (1.3935, 18.1088){g};
-
-
-
-    \path[draw=black,fill=white] (3.6689, 13.2292).. controls (3.6689, 13.2292) and (2.6106, 13.2292) .. (2.6106, 13.2292).. controls (2.3989, 13.2292) and (2.1872, 13.0175) .. (2.1872, 12.8058).. controls (2.1872, 12.8058) and (2.1872, 12.3119) .. (2.1872, 12.3119).. controls (2.1872, 12.1003) and (2.3989, 11.8886) .. (2.6106, 11.8886).. controls (2.6106, 11.8886) and (3.6689, 11.8886) .. (3.6689, 11.8886).. controls (3.8806, 11.8886) and (4.0922, 12.1003) .. (4.0922, 12.3119).. controls (4.0922, 12.3119) and (4.0922, 12.8058) .. (4.0922, 12.8058).. controls (4.0922, 13.0175) and (3.8806, 13.2292) .. (3.6689, 13.2292);
-
-
-
-    \node[anchor=south west] (text463) at (3.0074, 12.3938){c};
-
-
-
-    \path[draw=black,fill=white] (2.0461, 21.8017).. controls (2.0461, 21.8017) and (0.9878, 21.8017) .. (0.9878, 21.8017).. controls (0.7761, 21.8017) and (0.5644, 21.59) .. (0.5644, 21.3783).. controls (0.5644, 21.3783) and (0.5644, 20.8844) .. (0.5644, 20.8844).. controls (0.5644, 20.6728) and (0.7761, 20.4611) .. (0.9878, 20.4611).. controls (0.9878, 20.4611) and (2.0461, 20.4611) .. (2.0461, 20.4611).. controls (2.2578, 20.4611) and (2.4694, 20.6728) .. (2.4694, 20.8844).. controls (2.4694, 20.8844) and (2.4694, 21.3783) .. (2.4694, 21.3783).. controls (2.4694, 21.59) and (2.2578, 21.8017) .. (2.0461, 21.8017);
-
-
-
-    \node[anchor=south west] (text7246) at (1.4245, 20.9663){f};
-
-
-
-    \path[draw=black,fill=white] (4.0922, 21.8017).. controls (4.0922, 21.8017) and (3.0339, 21.8017) .. (3.0339, 21.8017).. controls (2.8222, 21.8017) and (2.6106, 21.59) .. (2.6106, 21.3783).. controls (2.6106, 21.3783) and (2.6106, 20.8844) .. (2.6106, 20.8844).. controls (2.6106, 20.6728) and (2.8222, 20.4611) .. (3.0339, 20.4611).. controls (3.0339, 20.4611) and (4.0922, 20.4611) .. (4.0922, 20.4611).. controls (4.3039, 20.4611) and (4.5156, 20.6728) .. (4.5156, 20.8844).. controls (4.5156, 20.8844) and (4.5156, 21.3783) .. (4.5156, 21.3783).. controls (4.5156, 21.59) and (4.3039, 21.8017) .. (4.0922, 21.8017);
-
-
-
-    \node[anchor=south west] (text7118) at (3.4043, 20.9663){h};
-
-
-
-    \path[draw=black,fill=white] (10.1247, 18.9442).. controls (10.1247, 18.9442) and (9.0664, 18.9442) .. (9.0664, 18.9442).. controls (8.8547, 18.9442) and (8.6431, 18.7325) .. (8.6431, 18.5208).. controls (8.6431, 18.5208) and (8.6431, 18.0269) .. (8.6431, 18.0269).. controls (8.6431, 17.8153) and (8.8547, 17.6036) .. (9.0664, 17.6036).. controls (9.0664, 17.6036) and (10.1247, 17.6036) .. (10.1247, 17.6036).. controls (10.3364, 17.6036) and (10.5481, 17.8153) .. (10.5481, 18.0269).. controls (10.5481, 18.0269) and (10.5481, 18.5208) .. (10.5481, 18.5208).. controls (10.5481, 18.7325) and (10.3364, 18.9442) .. (10.1247, 18.9442);
-
-
-
-    \node[anchor=south west] (text3420) at (9.4368, 18.1088){g};
-
-
-
-    \path[draw=black,fill=white] (9.6308, 16.0867).. controls (9.6308, 16.0867) and (8.5725, 16.0867) .. (8.5725, 16.0867).. controls (8.3608, 16.0867) and (8.1492, 15.875) .. (8.1492, 15.6633).. controls (8.1492, 15.6633) and (8.1492, 15.1694) .. (8.1492, 15.1694).. controls (8.1492, 14.9578) and (8.3608, 14.7461) .. (8.5725, 14.7461).. controls (8.5725, 14.7461) and (9.6308, 14.7461) .. (9.6308, 14.7461).. controls (9.8425, 14.7461) and (10.0542, 14.9578) .. (10.0542, 15.1694).. controls (10.0542, 15.1694) and (10.0542, 15.6633) .. (10.0542, 15.6633).. controls (10.0542, 15.875) and (9.8425, 16.0867) .. (9.6308, 16.0867);
-
-
-
-    \node[anchor=south west] (text6905) at (8.9429, 15.2516){b};
-
-
-
-    \path[draw=black,fill=white] (5.9972, 16.0867).. controls (5.9972, 16.0867) and (4.9389, 16.0867) .. (4.9389, 16.0867).. controls (4.7272, 16.0867) and (4.5156, 15.875) .. (4.5156, 15.6633).. controls (4.5156, 15.6633) and (4.5156, 15.1694) .. (4.5156, 15.1694).. controls (4.5156, 14.9578) and (4.7272, 14.7461) .. (4.9389, 14.7461).. controls (4.9389, 14.7461) and (5.9972, 14.7461) .. (5.9972, 14.7461).. controls (6.2089, 14.7461) and (6.4206, 14.9578) .. (6.4206, 15.1694).. controls (6.4206, 15.1694) and (6.4206, 15.6633) .. (6.4206, 15.6633).. controls (6.4206, 15.875) and (6.2089, 16.0867) .. (5.9972, 16.0867);
-
-
-
-    \node[anchor=south west] (text4845) at (5.3093, 15.2516){g};
-
-
-
-    \path[draw=black,fill=white] (5.3269, 18.9442).. controls (5.3269, 18.9442) and (4.2686, 18.9442) .. (4.2686, 18.9442).. controls (4.0569, 18.9442) and (3.8453, 18.7325) .. (3.8453, 18.5208).. controls (3.8453, 18.5208) and (3.8453, 18.0269) .. (3.8453, 18.0269).. controls (3.8453, 17.8153) and (4.0569, 17.6036) .. (4.2686, 17.6036).. controls (4.2686, 17.6036) and (5.3269, 17.6036) .. (5.3269, 17.6036).. controls (5.5386, 17.6036) and (5.7503, 17.8153) .. (5.7503, 18.0269).. controls (5.7503, 18.0269) and (5.7503, 18.5208) .. (5.7503, 18.5208).. controls (5.7503, 18.7325) and (5.5386, 18.9442) .. (5.3269, 18.9442);
-
-
-
-    \node[anchor=south west] (text8176) at (4.639, 18.1088){h};
-
-
-
-    \path[draw=black,fill=white] (7.3731, 18.9442).. controls (7.3731, 18.9442) and (6.3147, 18.9442) .. (6.3147, 18.9442).. controls (6.1031, 18.9442) and (5.8914, 18.7325) .. (5.8914, 18.5208).. controls (5.8914, 18.5208) and (5.8914, 18.0269) .. (5.8914, 18.0269).. controls (5.8914, 17.8153) and (6.1031, 17.6036) .. (6.3147, 17.6036).. controls (6.3147, 17.6036) and (7.3731, 17.6036) .. (7.3731, 17.6036).. controls (7.5847, 17.6036) and (7.7964, 17.8153) .. (7.7964, 18.0269).. controls (7.7964, 18.0269) and (7.7964, 18.5208) .. (7.7964, 18.5208).. controls (7.7964, 18.7325) and (7.5847, 18.9442) .. (7.3731, 18.9442);
-
-
-
-    \node[anchor=south west] (text4894) at (6.6851, 18.1088){h};
-
-
-
-  \end{scope}
-
+  \input{figures/exampleBasic4.tex}
 \end{tikzpicture}
 \label{exampleBasic4}
 \end{center}
@@ -1061,575 +436,29 @@ Next we move on to equation \ref{examplecc2} ($h(g(c), b) = h(a, g(c))$). This t
 Now we handle equation \ref{examplecc3} ($g(b) = g(c)$), which does not add any new E-nodes in the graph. Instead, it merges the separate E-classes representing $g(b)$ and $g(c)$ into a single E-node:
 
 \begin{center}
-\begin{tikzpicture}[y=1cm, x=1cm, yscale=\globalscale,xscale=\globalscale, every node/.append style={scale=\globalscale}, inner sep=0pt, outer sep=0pt]
-  \begin{scope}[shift={(0.1411, -8.3256)}]
-    \path[fill=white] (-0.1411, 8.3256) -- (-0.1411, 16.7922) -- (10.0542, 16.7922) -- (10.0542, 8.3256) -- (-0.1411, 8.3256) -- (-0.1411, 8.3256)-- cycle;;
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (1.9403, 8.7489).. controls (1.9403, 8.7489) and (3.5631, 8.7489) .. (3.5631, 8.7489).. controls (3.7747, 8.7489) and (3.9864, 8.9606) .. (3.9864, 9.1722).. controls (3.9864, 9.1722) and (3.9864, 10.2306) .. (3.9864, 10.2306).. controls (3.9864, 10.4422) and (3.7747, 10.6539) .. (3.5631, 10.6539).. controls (3.5631, 10.6539) and (1.9403, 10.6539) .. (1.9403, 10.6539).. controls (1.7286, 10.6539) and (1.5169, 10.4422) .. (1.5169, 10.2306).. controls (1.5169, 10.2306) and (1.5169, 9.1722) .. (1.5169, 9.1722).. controls (1.5169, 8.9606) and (1.7286, 8.7489) .. (1.9403, 8.7489);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (0.7056, 11.6064).. controls (0.7056, 11.6064) and (2.3283, 11.6064) .. (2.3283, 11.6064).. controls (2.54, 11.6064) and (2.7517, 11.8181) .. (2.7517, 12.0297).. controls (2.7517, 12.0297) and (2.7517, 13.0881) .. (2.7517, 13.0881).. controls (2.7517, 13.2997) and (2.54, 13.5114) .. (2.3283, 13.5114).. controls (2.3283, 13.5114) and (0.7056, 13.5114) .. (0.7056, 13.5114).. controls (0.4939, 13.5114) and (0.2822, 13.2997) .. (0.2822, 13.0881).. controls (0.2822, 13.0881) and (0.2822, 12.0297) .. (0.2822, 12.0297).. controls (0.2822, 11.8181) and (0.4939, 11.6064) .. (0.7056, 11.6064);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (4.6919, 8.7489).. controls (4.6919, 8.7489) and (6.3147, 8.7489) .. (6.3147, 8.7489).. controls (6.5264, 8.7489) and (6.7381, 8.9606) .. (6.7381, 9.1722).. controls (6.7381, 9.1722) and (6.7381, 10.2306) .. (6.7381, 10.2306).. controls (6.7381, 10.4422) and (6.5264, 10.6539) .. (6.3147, 10.6539).. controls (6.3147, 10.6539) and (4.6919, 10.6539) .. (4.6919, 10.6539).. controls (4.4803, 10.6539) and (4.2686, 10.4422) .. (4.2686, 10.2306).. controls (4.2686, 10.2306) and (4.2686, 9.1722) .. (4.2686, 9.1722).. controls (4.2686, 8.9606) and (4.4803, 8.7489) .. (4.6919, 8.7489);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (0.7408, 14.4639).. controls (0.7408, 14.4639) and (4.4097, 14.4639) .. (4.4097, 14.4639).. controls (4.6214, 14.4639) and (4.8331, 14.6756) .. (4.8331, 14.8872).. controls (4.8331, 14.8872) and (4.8331, 15.9456) .. (4.8331, 15.9456).. controls (4.8331, 16.1572) and (4.6214, 16.3689) .. (4.4097, 16.3689).. controls (4.4097, 16.3689) and (0.7408, 16.3689) .. (0.7408, 16.3689).. controls (0.5292, 16.3689) and (0.3175, 16.1572) .. (0.3175, 15.9456).. controls (0.3175, 15.9456) and (0.3175, 14.8872) .. (0.3175, 14.8872).. controls (0.3175, 14.6756) and (0.5292, 14.4639) .. (0.7408, 14.4639);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (7.5494, 8.7489).. controls (7.5494, 8.7489) and (9.1722, 8.7489) .. (9.1722, 8.7489).. controls (9.3839, 8.7489) and (9.5956, 8.9606) .. (9.5956, 9.1722).. controls (9.5956, 9.1722) and (9.5956, 10.2306) .. (9.5956, 10.2306).. controls (9.5956, 10.4422) and (9.3839, 10.6539) .. (9.1722, 10.6539).. controls (9.1722, 10.6539) and (7.5494, 10.6539) .. (7.5494, 10.6539).. controls (7.3378, 10.6539) and (7.1261, 10.4422) .. (7.1261, 10.2306).. controls (7.1261, 10.2306) and (7.1261, 9.1722) .. (7.1261, 9.1722).. controls (7.1261, 8.9606) and (7.3378, 8.7489) .. (7.5494, 8.7489);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (4.6919, 11.6064).. controls (4.6919, 11.6064) and (8.3608, 11.6064) .. (8.3608, 11.6064).. controls (8.5725, 11.6064) and (8.7842, 11.8181) .. (8.7842, 12.0297).. controls (8.7842, 12.0297) and (8.7842, 13.0881) .. (8.7842, 13.0881).. controls (8.7842, 13.2997) and (8.5725, 13.5114) .. (8.3608, 13.5114).. controls (8.3608, 13.5114) and (4.6919, 13.5114) .. (4.6919, 13.5114).. controls (4.4803, 13.5114) and (4.2686, 13.2997) .. (4.2686, 13.0881).. controls (4.2686, 13.0881) and (4.2686, 12.0297) .. (4.2686, 12.0297).. controls (4.2686, 11.8181) and (4.4803, 11.6064) .. (4.6919, 11.6064);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (5.5386, 14.4639).. controls (5.5386, 14.4639) and (9.2075, 14.4639) .. (9.2075, 14.4639).. controls (9.4192, 14.4639) and (9.6308, 14.6756) .. (9.6308, 14.8872).. controls (9.6308, 14.8872) and (9.6308, 15.9456) .. (9.6308, 15.9456).. controls (9.6308, 16.1572) and (9.4192, 16.3689) .. (9.2075, 16.3689).. controls (9.2075, 16.3689) and (5.5386, 16.3689) .. (5.5386, 16.3689).. controls (5.3269, 16.3689) and (5.1153, 16.1572) .. (5.1153, 15.9456).. controls (5.1153, 15.9456) and (5.1153, 14.8872) .. (5.1153, 14.8872).. controls (5.1153, 14.6756) and (5.3269, 14.4639) .. (5.5386, 14.4639);
-
-
-
-    \path[draw=black] (1.5169, 11.9944).. controls (1.5169, 11.5905) and (1.6708, 11.1905) .. (1.8701, 10.8419);
-
-
-
-    \path[draw=black,fill=black] (1.9177, 10.8821) -- (1.9569, 10.6994) -- (1.8122, 10.8179) -- (1.9177, 10.8821) -- (1.9177, 10.8821)-- cycle;;
-
-
-
-    \path[draw=black] (1.2876, 14.8519).. controls (1.2876, 14.4889) and (1.3173, 14.0949) .. (1.3554, 13.7389);
-
-
-
-    \path[draw=black,fill=black] (1.4168, 13.7467) -- (1.3751, 13.5643) -- (1.294, 13.7326) -- (1.4168, 13.7467) -- (1.4168, 13.7467)-- cycle;;
-
-
-
-    \path[draw=black] (1.8168, 14.8519).. controls (1.8168, 14.1164) and (2.3566, 14.1079) .. (2.7869, 13.5114).. controls (3.4357, 12.6125) and (4.1695, 11.5923) .. (4.711, 10.8395);
-
-
-
-    \path[draw=black,fill=black] (4.7604, 10.8765) -- (4.8133, 10.6973) -- (4.6602, 10.8045) -- (4.7604, 10.8765) -- (4.7604, 10.8765)-- cycle;;
-
-
-
-    \path[draw=black] (3.3338, 14.8519).. controls (3.3338, 13.4793) and (3.1242, 11.913) .. (2.9566, 10.879);
-
-
-
-    \path[draw=black,fill=black] (3.018, 10.8705) -- (2.9281, 10.7065) -- (2.896, 10.8906) -- (3.018, 10.8705) -- (3.018, 10.8705)-- cycle;;
-
-
-
-    \path[draw=black] (3.8629, 14.8519).. controls (3.8629, 14.4258) and (4.0566, 14.0257) .. (4.3109, 13.6843);
-
-
-
-    \path[draw=black,fill=black] (4.354, 13.7294) -- (4.4157, 13.553) -- (4.2573, 13.6525) -- (4.354, 13.7294) -- (4.354, 13.7294)-- cycle;;
-
-
-
-    \path[draw=black] (5.5033, 11.9944).. controls (5.5033, 11.6325) and (5.5033, 11.2384) .. (5.5033, 10.8818);
-
-
-
-    \path[draw=black,fill=black] (5.5651, 10.8835) -- (5.5033, 10.7072) -- (5.4416, 10.8835) -- (5.5651, 10.8835) -- (5.5651, 10.8835)-- cycle;;
-
-
-
-    \path[draw=black] (7.5494, 11.9944).. controls (7.5494, 11.6145) and (7.6525, 11.219) .. (7.7851, 10.867);
-
-
-
-    \path[draw=black,fill=black] (7.8422, 10.8899) -- (7.8507, 10.7033) -- (7.7276, 10.844) -- (7.8422, 10.8899) -- (7.8422, 10.8899)-- cycle;;
-
-
-
-    \path[draw=black] (6.0854, 14.8519).. controls (6.0854, 13.8359) and (4.8556, 14.3147) .. (4.2333, 13.5114).. controls (3.9024, 13.0845) and (3.4361, 11.8135) .. (3.1154, 10.8634);
-
-
-
-    \path[draw=black,fill=black] (3.1768, 10.8521) -- (3.0621, 10.7043) -- (3.0596, 10.8913) -- (3.1768, 10.8521) -- (3.1768, 10.8521)-- cycle;;
-
-
-
-    \path[draw=black] (6.6146, 14.8519).. controls (6.6146, 14.4572) and (6.4763, 14.0596) .. (6.2971, 13.7107);
-
-
-
-    \path[draw=black,fill=black] (6.3521, 13.6832) -- (6.2131, 13.558) -- (6.2438, 13.7425) -- (6.3521, 13.6832) -- (6.3521, 13.6832)-- cycle;;
-
-
-
-    \path[draw=black] (8.1315, 14.8519).. controls (8.1315, 14.8273) and (7.4358, 14.23) .. (6.7603, 13.6564);
-
-
-
-    \path[draw=black,fill=black] (6.8044, 13.613) -- (6.6301, 13.546) -- (6.7247, 13.7072) -- (6.8044, 13.613) -- (6.8044, 13.613)-- cycle;;
-
-
-
-    \path[draw=black] (8.6607, 14.8519).. controls (8.6607, 14.2519) and (8.7842, 14.1104) .. (8.8194, 13.5114).. controls (8.8692, 12.6661) and (8.921, 12.4471) .. (8.8194, 11.6064).. controls (8.7905, 11.3658) and (8.7411, 11.1114) .. (8.685, 10.8705);
-
-
-
-    \path[draw=black,fill=black] (8.7468, 10.8624) -- (8.6448, 10.7057) -- (8.6268, 10.8917) -- (8.7468, 10.8624) -- (8.7468, 10.8624)-- cycle;;
-
-
-
-    \path[draw=black,fill=white] (3.2808, 10.3717).. controls (3.2808, 10.3717) and (2.2225, 10.3717) .. (2.2225, 10.3717).. controls (2.0108, 10.3717) and (1.7992, 10.16) .. (1.7992, 9.9483).. controls (1.7992, 9.9483) and (1.7992, 9.4544) .. (1.7992, 9.4544).. controls (1.7992, 9.2428) and (2.0108, 9.0311) .. (2.2225, 9.0311).. controls (2.2225, 9.0311) and (3.2808, 9.0311) .. (3.2808, 9.0311).. controls (3.4925, 9.0311) and (3.7042, 9.2428) .. (3.7042, 9.4544).. controls (3.7042, 9.4544) and (3.7042, 9.9483) .. (3.7042, 9.9483).. controls (3.7042, 10.16) and (3.4925, 10.3717) .. (3.2808, 10.3717);
-
-
-
-    \node[anchor=south west] (text6692) at (2.6063, 9.5363){a};
-
-
-
-    \path[draw=black,fill=white] (2.0461, 13.2292).. controls (2.0461, 13.2292) and (0.9878, 13.2292) .. (0.9878, 13.2292).. controls (0.7761, 13.2292) and (0.5644, 13.0175) .. (0.5644, 12.8058).. controls (0.5644, 12.8058) and (0.5644, 12.3119) .. (0.5644, 12.3119).. controls (0.5644, 12.1003) and (0.7761, 11.8886) .. (0.9878, 11.8886).. controls (0.9878, 11.8886) and (2.0461, 11.8886) .. (2.0461, 11.8886).. controls (2.2578, 11.8886) and (2.4694, 12.1003) .. (2.4694, 12.3119).. controls (2.4694, 12.3119) and (2.4694, 12.8058) .. (2.4694, 12.8058).. controls (2.4694, 13.0175) and (2.2578, 13.2292) .. (2.0461, 13.2292);
-
-
-
-    \node[anchor=south west] (text4814) at (1.3582, 12.3941){g};
-
-
-
-    \path[draw=black,fill=white] (6.0325, 10.3717).. controls (6.0325, 10.3717) and (4.9742, 10.3717) .. (4.9742, 10.3717).. controls (4.7625, 10.3717) and (4.5508, 10.16) .. (4.5508, 9.9483).. controls (4.5508, 9.9483) and (4.5508, 9.4544) .. (4.5508, 9.4544).. controls (4.5508, 9.2428) and (4.7625, 9.0311) .. (4.9742, 9.0311).. controls (4.9742, 9.0311) and (6.0325, 9.0311) .. (6.0325, 9.0311).. controls (6.2442, 9.0311) and (6.4558, 9.2428) .. (6.4558, 9.4544).. controls (6.4558, 9.4544) and (6.4558, 9.9483) .. (6.4558, 9.9483).. controls (6.4558, 10.16) and (6.2442, 10.3717) .. (6.0325, 10.3717);
-
-
-
-    \node[anchor=south west] (text4236) at (5.371, 9.5363){c};
-
-
-
-    \path[draw=black,fill=white] (2.0814, 16.0867).. controls (2.0814, 16.0867) and (1.0231, 16.0867) .. (1.0231, 16.0867).. controls (0.8114, 16.0867) and (0.5997, 15.875) .. (0.5997, 15.6633).. controls (0.5997, 15.6633) and (0.5997, 15.1694) .. (0.5997, 15.1694).. controls (0.5997, 14.9578) and (0.8114, 14.7461) .. (1.0231, 14.7461).. controls (1.0231, 14.7461) and (2.0814, 14.7461) .. (2.0814, 14.7461).. controls (2.2931, 14.7461) and (2.5047, 14.9578) .. (2.5047, 15.1694).. controls (2.5047, 15.1694) and (2.5047, 15.6633) .. (2.5047, 15.6633).. controls (2.5047, 15.875) and (2.2931, 16.0867) .. (2.0814, 16.0867);
-
-
-
-    \node[anchor=south west] (text3516) at (1.4598, 15.2513){f};
-
-
-
-    \path[draw=black,fill=white] (4.1275, 16.0867).. controls (4.1275, 16.0867) and (3.0692, 16.0867) .. (3.0692, 16.0867).. controls (2.8575, 16.0867) and (2.6458, 15.875) .. (2.6458, 15.6633).. controls (2.6458, 15.6633) and (2.6458, 15.1694) .. (2.6458, 15.1694).. controls (2.6458, 14.9578) and (2.8575, 14.7461) .. (3.0692, 14.7461).. controls (3.0692, 14.7461) and (4.1275, 14.7461) .. (4.1275, 14.7461).. controls (4.3392, 14.7461) and (4.5508, 14.9578) .. (4.5508, 15.1694).. controls (4.5508, 15.1694) and (4.5508, 15.6633) .. (4.5508, 15.6633).. controls (4.5508, 15.875) and (4.3392, 16.0867) .. (4.1275, 16.0867);
-
-
-
-    \node[anchor=south west] (text6697) at (3.4396, 15.2513){h};
-
-
-
-    \path[draw=black,fill=white] (6.0325, 13.2292).. controls (6.0325, 13.2292) and (4.9742, 13.2292) .. (4.9742, 13.2292).. controls (4.7625, 13.2292) and (4.5508, 13.0175) .. (4.5508, 12.8058).. controls (4.5508, 12.8058) and (4.5508, 12.3119) .. (4.5508, 12.3119).. controls (4.5508, 12.1003) and (4.7625, 11.8886) .. (4.9742, 11.8886).. controls (4.9742, 11.8886) and (6.0325, 11.8886) .. (6.0325, 11.8886).. controls (6.2442, 11.8886) and (6.4558, 12.1003) .. (6.4558, 12.3119).. controls (6.4558, 12.3119) and (6.4558, 12.8058) .. (6.4558, 12.8058).. controls (6.4558, 13.0175) and (6.2442, 13.2292) .. (6.0325, 13.2292);
-
-
-
-    \node[anchor=south west] (text264) at (5.3446, 12.3941){g};
-
-
-
-    \path[draw=black,fill=white] (8.89, 10.3717).. controls (8.89, 10.3717) and (7.8317, 10.3717) .. (7.8317, 10.3717).. controls (7.62, 10.3717) and (7.4083, 10.16) .. (7.4083, 9.9483).. controls (7.4083, 9.9483) and (7.4083, 9.4544) .. (7.4083, 9.4544).. controls (7.4083, 9.2428) and (7.62, 9.0311) .. (7.8317, 9.0311).. controls (7.8317, 9.0311) and (8.89, 9.0311) .. (8.89, 9.0311).. controls (9.1017, 9.0311) and (9.3133, 9.2428) .. (9.3133, 9.4544).. controls (9.3133, 9.4544) and (9.3133, 9.9483) .. (9.3133, 9.9483).. controls (9.3133, 10.16) and (9.1017, 10.3717) .. (8.89, 10.3717);
-
-
-
-    \node[anchor=south west] (text1129) at (8.2021, 9.5363){b};
-
-
-
-    \path[draw=black,fill=white] (8.0786, 13.2292).. controls (8.0786, 13.2292) and (7.0203, 13.2292) .. (7.0203, 13.2292).. controls (6.8086, 13.2292) and (6.5969, 13.0175) .. (6.5969, 12.8058).. controls (6.5969, 12.8058) and (6.5969, 12.3119) .. (6.5969, 12.3119).. controls (6.5969, 12.1003) and (6.8086, 11.8886) .. (7.0203, 11.8886).. controls (7.0203, 11.8886) and (8.0786, 11.8886) .. (8.0786, 11.8886).. controls (8.2903, 11.8886) and (8.5019, 12.1003) .. (8.5019, 12.3119).. controls (8.5019, 12.3119) and (8.5019, 12.8058) .. (8.5019, 12.8058).. controls (8.5019, 13.0175) and (8.2903, 13.2292) .. (8.0786, 13.2292);
-
-
-
-    \node[anchor=south west] (text318) at (7.3907, 12.3941){g};
-
-
-
-    \path[draw=black,fill=white] (6.8792, 16.0867).. controls (6.8792, 16.0867) and (5.8208, 16.0867) .. (5.8208, 16.0867).. controls (5.6092, 16.0867) and (5.3975, 15.875) .. (5.3975, 15.6633).. controls (5.3975, 15.6633) and (5.3975, 15.1694) .. (5.3975, 15.1694).. controls (5.3975, 14.9578) and (5.6092, 14.7461) .. (5.8208, 14.7461).. controls (5.8208, 14.7461) and (6.8792, 14.7461) .. (6.8792, 14.7461).. controls (7.0908, 14.7461) and (7.3025, 14.9578) .. (7.3025, 15.1694).. controls (7.3025, 15.1694) and (7.3025, 15.6633) .. (7.3025, 15.6633).. controls (7.3025, 15.875) and (7.0908, 16.0867) .. (6.8792, 16.0867);
-
-
-
-    \node[anchor=south west] (text5846) at (6.1913, 15.2513){h};
-
-
-
-    \path[draw=black,fill=white] (8.9253, 16.0867).. controls (8.9253, 16.0867) and (7.8669, 16.0867) .. (7.8669, 16.0867).. controls (7.6553, 16.0867) and (7.4436, 15.875) .. (7.4436, 15.6633).. controls (7.4436, 15.6633) and (7.4436, 15.1694) .. (7.4436, 15.1694).. controls (7.4436, 14.9578) and (7.6553, 14.7461) .. (7.8669, 14.7461).. controls (7.8669, 14.7461) and (8.9253, 14.7461) .. (8.9253, 14.7461).. controls (9.1369, 14.7461) and (9.3486, 14.9578) .. (9.3486, 15.1694).. controls (9.3486, 15.1694) and (9.3486, 15.6633) .. (9.3486, 15.6633).. controls (9.3486, 15.875) and (9.1369, 16.0867) .. (8.9253, 16.0867);
-
-
-
-    \node[anchor=south west] (text8361) at (8.2374, 15.2513){h};
-
-
-
-  \end{scope}
-
-\end{tikzpicture}
-\label{exampleBasic5}
+	\begin{tikzpicture}[y=1cm, x=1cm, yscale=\globalscale,xscale=\globalscale, every node/.append style={scale=\globalscale}, inner sep=0pt, outer sep=0pt]
+		\input{figures/exampleBasic5.tex}
+	\end{tikzpicture}
+	\label{exampleBasic5}
 \end{center}
 
 Notice that we have two instances of an $h$ with the same arguments: $h(a, g(b))$ and $h(a, g(c))$ have become equal by congruence, but they are located in two different E-classes. So, after unioning, we need to \emph{propagate} by continuing to union E-classes that have become equal. This gives us the simpler E-graph:
 
 \begin{center}
-\begin{tikzpicture}[y=1cm, x=1cm, yscale=\globalscale,xscale=\globalscale, every node/.append style={scale=\globalscale}, inner sep=0pt, outer sep=0pt]
-  \begin{scope}[shift={(0.1411, -8.3256)}]
-    \path[fill=white] (-0.1411, 8.3256) -- (-0.1411, 16.7922) -- (9.1722, 16.7922) -- (9.1722, 8.3256) -- (-0.1411, 8.3256) -- (-0.1411, 8.3256)-- cycle;;
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (1.0936, 8.7489).. controls (1.0936, 8.7489) and (2.7164, 8.7489) .. (2.7164, 8.7489).. controls (2.9281, 8.7489) and (3.1397, 8.9606) .. (3.1397, 9.1722).. controls (3.1397, 9.1722) and (3.1397, 10.2306) .. (3.1397, 10.2306).. controls (3.1397, 10.4422) and (2.9281, 10.6539) .. (2.7164, 10.6539).. controls (2.7164, 10.6539) and (1.0936, 10.6539) .. (1.0936, 10.6539).. controls (0.8819, 10.6539) and (0.6703, 10.4422) .. (0.6703, 10.2306).. controls (0.6703, 10.2306) and (0.6703, 9.1722) .. (0.6703, 9.1722).. controls (0.6703, 8.9606) and (0.8819, 8.7489) .. (1.0936, 8.7489);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (0.7056, 11.6064).. controls (0.7056, 11.6064) and (2.3283, 11.6064) .. (2.3283, 11.6064).. controls (2.54, 11.6064) and (2.7517, 11.8181) .. (2.7517, 12.0297).. controls (2.7517, 12.0297) and (2.7517, 13.0881) .. (2.7517, 13.0881).. controls (2.7517, 13.2997) and (2.54, 13.5114) .. (2.3283, 13.5114).. controls (2.3283, 13.5114) and (0.7056, 13.5114) .. (0.7056, 13.5114).. controls (0.4939, 13.5114) and (0.2822, 13.2997) .. (0.2822, 13.0881).. controls (0.2822, 13.0881) and (0.2822, 12.0297) .. (0.2822, 12.0297).. controls (0.2822, 11.8181) and (0.4939, 11.6064) .. (0.7056, 11.6064);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (3.9158, 8.7489).. controls (3.9158, 8.7489) and (5.5386, 8.7489) .. (5.5386, 8.7489).. controls (5.7503, 8.7489) and (5.9619, 8.9606) .. (5.9619, 9.1722).. controls (5.9619, 9.1722) and (5.9619, 10.2306) .. (5.9619, 10.2306).. controls (5.9619, 10.4422) and (5.7503, 10.6539) .. (5.5386, 10.6539).. controls (5.5386, 10.6539) and (3.9158, 10.6539) .. (3.9158, 10.6539).. controls (3.7042, 10.6539) and (3.4925, 10.4422) .. (3.4925, 10.2306).. controls (3.4925, 10.2306) and (3.4925, 9.1722) .. (3.4925, 9.1722).. controls (3.4925, 8.9606) and (3.7042, 8.7489) .. (3.9158, 8.7489);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (1.4817, 14.4639).. controls (1.4817, 14.4639) and (7.1967, 14.4639) .. (7.1967, 14.4639).. controls (7.4083, 14.4639) and (7.62, 14.6756) .. (7.62, 14.8872).. controls (7.62, 14.8872) and (7.62, 15.9456) .. (7.62, 15.9456).. controls (7.62, 16.1572) and (7.4083, 16.3689) .. (7.1967, 16.3689).. controls (7.1967, 16.3689) and (1.4817, 16.3689) .. (1.4817, 16.3689).. controls (1.27, 16.3689) and (1.0583, 16.1572) .. (1.0583, 15.9456).. controls (1.0583, 15.9456) and (1.0583, 14.8872) .. (1.0583, 14.8872).. controls (1.0583, 14.6756) and (1.27, 14.4639) .. (1.4817, 14.4639);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (6.7028, 8.7489).. controls (6.7028, 8.7489) and (8.3256, 8.7489) .. (8.3256, 8.7489).. controls (8.5372, 8.7489) and (8.7489, 8.9606) .. (8.7489, 9.1722).. controls (8.7489, 9.1722) and (8.7489, 10.2306) .. (8.7489, 10.2306).. controls (8.7489, 10.4422) and (8.5372, 10.6539) .. (8.3256, 10.6539).. controls (8.3256, 10.6539) and (6.7028, 10.6539) .. (6.7028, 10.6539).. controls (6.4911, 10.6539) and (6.2794, 10.4422) .. (6.2794, 10.2306).. controls (6.2794, 10.2306) and (6.2794, 9.1722) .. (6.2794, 9.1722).. controls (6.2794, 8.9606) and (6.4911, 8.7489) .. (6.7028, 8.7489);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1764cm off 0.0706cm] (4.3039, 11.6064).. controls (4.3039, 11.6064) and (7.9728, 11.6064) .. (7.9728, 11.6064).. controls (8.1844, 11.6064) and (8.3961, 11.8181) .. (8.3961, 12.0297).. controls (8.3961, 12.0297) and (8.3961, 13.0881) .. (8.3961, 13.0881).. controls (8.3961, 13.2997) and (8.1844, 13.5114) .. (7.9728, 13.5114).. controls (7.9728, 13.5114) and (4.3039, 13.5114) .. (4.3039, 13.5114).. controls (4.0922, 13.5114) and (3.8806, 13.2997) .. (3.8806, 13.0881).. controls (3.8806, 13.0881) and (3.8806, 12.0297) .. (3.8806, 12.0297).. controls (3.8806, 11.8181) and (4.0922, 11.6064) .. (4.3039, 11.6064);
-
-
-
-    \path[draw=black] (1.5169, 11.9944).. controls (1.5169, 11.6258) and (1.5677, 11.2279) .. (1.6327, 10.8705);
-
-
-
-    \path[draw=black,fill=black] (1.6916, 10.8913) -- (1.6644, 10.7065) -- (1.5706, 10.8677) -- (1.6916, 10.8913) -- (1.6916, 10.8913)-- cycle;;
-
-
-
-    \path[draw=black] (2.0285, 14.8519).. controls (2.0285, 14.4808) and (1.9618, 14.0832) .. (1.8768, 13.7273);
-
-
-
-    \path[draw=black,fill=black] (1.9382, 13.7188) -- (1.8348, 13.5629) -- (1.8186, 13.7492) -- (1.9382, 13.7188) -- (1.9382, 13.7188)-- cycle;;
-
-
-
-    \path[draw=black] (2.5576, 14.8519).. controls (2.5576, 14.0416) and (3.4918, 12.0918) .. (4.1342, 10.8472);
-
-
-
-    \path[draw=black,fill=black] (4.1836, 10.8864) -- (4.2101, 10.7012) -- (4.0742, 10.8292) -- (4.1836, 10.8864) -- (4.1836, 10.8864)-- cycle;;
-
-
-
-    \path[draw=black] (4.0746, 14.8519).. controls (4.0746, 14.0416) and (3.1404, 12.0918) .. (2.498, 10.8472);
-
-
-
-    \path[draw=black,fill=black] (2.558, 10.8292) -- (2.4222, 10.7012) -- (2.4486, 10.8864) -- (2.558, 10.8292) -- (2.558, 10.8292)-- cycle;;
-
-
-
-    \path[draw=black] (4.6038, 14.8519).. controls (4.6038, 14.4808) and (4.6704, 14.0832) .. (4.7554, 13.7273);
-
-
-
-    \path[draw=black,fill=black] (4.8137, 13.7492) -- (4.7974, 13.5629) -- (4.6941, 13.7188) -- (4.8137, 13.7492) -- (4.8137, 13.7492)-- cycle;;
-
-
-
-    \path[draw=black] (5.1153, 11.9944).. controls (5.1153, 11.6258) and (5.0645, 11.2279) .. (4.9996, 10.8705);
-
-
-
-    \path[draw=black,fill=black] (5.0617, 10.8677) -- (4.9678, 10.7065) -- (4.9407, 10.8913) -- (5.0617, 10.8677) -- (5.0617, 10.8677)-- cycle;;
-
-
-
-    \path[draw=black] (6.1207, 14.8519).. controls (6.1207, 14.4614) and (5.9937, 14.0631) .. (5.8297, 13.7121);
-
-
-
-    \path[draw=black,fill=black] (5.8875, 13.6895) -- (5.7535, 13.559) -- (5.7771, 13.7446) -- (5.8875, 13.6895) -- (5.8875, 13.6895)-- cycle;;
-
-
-
-    \path[draw=black] (6.6499, 14.8519).. controls (6.6499, 13.861) and (7.989, 14.3979) .. (8.4314, 13.5114).. controls (8.8501, 12.6725) and (8.5436, 11.6314) .. (8.176, 10.8553);
-
-
-
-    \path[draw=black,fill=black] (8.2335, 10.8324) -- (8.0998, 10.7015) -- (8.1227, 10.8871) -- (8.2335, 10.8324) -- (8.2335, 10.8324)-- cycle;;
-
-
-
-    \path[draw=black] (7.1614, 11.9944).. controls (7.1614, 11.6265) and (7.2076, 11.2286) .. (7.2669, 10.8708);
-
-
-
-    \path[draw=black,fill=black] (7.3261, 10.891) -- (7.2958, 10.7065) -- (7.2044, 10.8694) -- (7.3261, 10.891) -- (7.3261, 10.891)-- cycle;;
-
-
-
-    \path[draw=black,fill=white] (2.4342, 10.3717).. controls (2.4342, 10.3717) and (1.3758, 10.3717) .. (1.3758, 10.3717).. controls (1.1642, 10.3717) and (0.9525, 10.16) .. (0.9525, 9.9483).. controls (0.9525, 9.9483) and (0.9525, 9.4544) .. (0.9525, 9.4544).. controls (0.9525, 9.2428) and (1.1642, 9.0311) .. (1.3758, 9.0311).. controls (1.3758, 9.0311) and (2.4342, 9.0311) .. (2.4342, 9.0311).. controls (2.6458, 9.0311) and (2.8575, 9.2428) .. (2.8575, 9.4544).. controls (2.8575, 9.4544) and (2.8575, 9.9483) .. (2.8575, 9.9483).. controls (2.8575, 10.16) and (2.6458, 10.3717) .. (2.4342, 10.3717);
-
-
-
-    \node[anchor=south west] (text5804) at (1.7597, 9.5363){a};
-
-
-
-    \path[draw=black,fill=white] (2.0461, 13.2292).. controls (2.0461, 13.2292) and (0.9878, 13.2292) .. (0.9878, 13.2292).. controls (0.7761, 13.2292) and (0.5644, 13.0175) .. (0.5644, 12.8058).. controls (0.5644, 12.8058) and (0.5644, 12.3119) .. (0.5644, 12.3119).. controls (0.5644, 12.1003) and (0.7761, 11.8886) .. (0.9878, 11.8886).. controls (0.9878, 11.8886) and (2.0461, 11.8886) .. (2.0461, 11.8886).. controls (2.2578, 11.8886) and (2.4694, 12.1003) .. (2.4694, 12.3119).. controls (2.4694, 12.3119) and (2.4694, 12.8058) .. (2.4694, 12.8058).. controls (2.4694, 13.0175) and (2.2578, 13.2292) .. (2.0461, 13.2292);
-
-
-
-    \node[anchor=south west] (text8496) at (1.3582, 12.3941){g};
-
-
-
-    \path[draw=black,fill=white] (5.2564, 10.3717).. controls (5.2564, 10.3717) and (4.1981, 10.3717) .. (4.1981, 10.3717).. controls (3.9864, 10.3717) and (3.7747, 10.16) .. (3.7747, 9.9483).. controls (3.7747, 9.9483) and (3.7747, 9.4544) .. (3.7747, 9.4544).. controls (3.7747, 9.2428) and (3.9864, 9.0311) .. (4.1981, 9.0311).. controls (4.1981, 9.0311) and (5.2564, 9.0311) .. (5.2564, 9.0311).. controls (5.4681, 9.0311) and (5.6797, 9.2428) .. (5.6797, 9.4544).. controls (5.6797, 9.4544) and (5.6797, 9.9483) .. (5.6797, 9.9483).. controls (5.6797, 10.16) and (5.4681, 10.3717) .. (5.2564, 10.3717);
-
-
-
-    \node[anchor=south west] (text3692) at (4.5949, 9.5363){c};
-
-
-
-    \path[draw=black,fill=white] (2.8222, 16.0867).. controls (2.8222, 16.0867) and (1.7639, 16.0867) .. (1.7639, 16.0867).. controls (1.5522, 16.0867) and (1.3406, 15.875) .. (1.3406, 15.6633).. controls (1.3406, 15.6633) and (1.3406, 15.1694) .. (1.3406, 15.1694).. controls (1.3406, 14.9578) and (1.5522, 14.7461) .. (1.7639, 14.7461).. controls (1.7639, 14.7461) and (2.8222, 14.7461) .. (2.8222, 14.7461).. controls (3.0339, 14.7461) and (3.2456, 14.9578) .. (3.2456, 15.1694).. controls (3.2456, 15.1694) and (3.2456, 15.6633) .. (3.2456, 15.6633).. controls (3.2456, 15.875) and (3.0339, 16.0867) .. (2.8222, 16.0867);
-
-
-
-    \node[anchor=south west] (text6569) at (2.2006, 15.2513){f};
-
-
-
-    \path[draw=black,fill=white] (4.8683, 16.0867).. controls (4.8683, 16.0867) and (3.81, 16.0867) .. (3.81, 16.0867).. controls (3.5983, 16.0867) and (3.3867, 15.875) .. (3.3867, 15.6633).. controls (3.3867, 15.6633) and (3.3867, 15.1694) .. (3.3867, 15.1694).. controls (3.3867, 14.9578) and (3.5983, 14.7461) .. (3.81, 14.7461).. controls (3.81, 14.7461) and (4.8683, 14.7461) .. (4.8683, 14.7461).. controls (5.08, 14.7461) and (5.2917, 14.9578) .. (5.2917, 15.1694).. controls (5.2917, 15.1694) and (5.2917, 15.6633) .. (5.2917, 15.6633).. controls (5.2917, 15.875) and (5.08, 16.0867) .. (4.8683, 16.0867);
-
-
-
-    \node[anchor=south west] (text3827) at (4.1804, 15.2513){h};
-
-
-
-    \path[draw=black,fill=white] (5.6444, 13.2292).. controls (5.6444, 13.2292) and (4.5861, 13.2292) .. (4.5861, 13.2292).. controls (4.3744, 13.2292) and (4.1628, 13.0175) .. (4.1628, 12.8058).. controls (4.1628, 12.8058) and (4.1628, 12.3119) .. (4.1628, 12.3119).. controls (4.1628, 12.1003) and (4.3744, 11.8886) .. (4.5861, 11.8886).. controls (4.5861, 11.8886) and (5.6444, 11.8886) .. (5.6444, 11.8886).. controls (5.8561, 11.8886) and (6.0678, 12.1003) .. (6.0678, 12.3119).. controls (6.0678, 12.3119) and (6.0678, 12.8058) .. (6.0678, 12.8058).. controls (6.0678, 13.0175) and (5.8561, 13.2292) .. (5.6444, 13.2292);
-
-
-
-    \node[anchor=south west] (text2337) at (4.9565, 12.3941){g};
-
-
-
-    \path[draw=black,fill=white] (6.9144, 16.0867).. controls (6.9144, 16.0867) and (5.8561, 16.0867) .. (5.8561, 16.0867).. controls (5.6444, 16.0867) and (5.4328, 15.875) .. (5.4328, 15.6633).. controls (5.4328, 15.6633) and (5.4328, 15.1694) .. (5.4328, 15.1694).. controls (5.4328, 14.9578) and (5.6444, 14.7461) .. (5.8561, 14.7461).. controls (5.8561, 14.7461) and (6.9144, 14.7461) .. (6.9144, 14.7461).. controls (7.1261, 14.7461) and (7.3378, 14.9578) .. (7.3378, 15.1694).. controls (7.3378, 15.1694) and (7.3378, 15.6633) .. (7.3378, 15.6633).. controls (7.3378, 15.875) and (7.1261, 16.0867) .. (6.9144, 16.0867);
-
-
-
-    \node[anchor=south west] (text1587) at (6.2265, 15.2513){h};
-
-
-
-    \path[draw=black,fill=white] (8.0433, 10.3717).. controls (8.0433, 10.3717) and (6.985, 10.3717) .. (6.985, 10.3717).. controls (6.7733, 10.3717) and (6.5617, 10.16) .. (6.5617, 9.9483).. controls (6.5617, 9.9483) and (6.5617, 9.4544) .. (6.5617, 9.4544).. controls (6.5617, 9.2428) and (6.7733, 9.0311) .. (6.985, 9.0311).. controls (6.985, 9.0311) and (8.0433, 9.0311) .. (8.0433, 9.0311).. controls (8.255, 9.0311) and (8.4667, 9.2428) .. (8.4667, 9.4544).. controls (8.4667, 9.4544) and (8.4667, 9.9483) .. (8.4667, 9.9483).. controls (8.4667, 10.16) and (8.255, 10.3717) .. (8.0433, 10.3717);
-
-
-
-    \node[anchor=south west] (text7616) at (7.3554, 9.5363){b};
-
-
-
-    \path[draw=black,fill=white] (7.6906, 13.2292).. controls (7.6906, 13.2292) and (6.6322, 13.2292) .. (6.6322, 13.2292).. controls (6.4206, 13.2292) and (6.2089, 13.0175) .. (6.2089, 12.8058).. controls (6.2089, 12.8058) and (6.2089, 12.3119) .. (6.2089, 12.3119).. controls (6.2089, 12.1003) and (6.4206, 11.8886) .. (6.6322, 11.8886).. controls (6.6322, 11.8886) and (7.6906, 11.8886) .. (7.6906, 11.8886).. controls (7.9022, 11.8886) and (8.1139, 12.1003) .. (8.1139, 12.3119).. controls (8.1139, 12.3119) and (8.1139, 12.8058) .. (8.1139, 12.8058).. controls (8.1139, 13.0175) and (7.9022, 13.2292) .. (7.6906, 13.2292);
-
-
-
-    \node[anchor=south west] (text4920) at (7.0026, 12.3941){g};
-
-
-
-  \end{scope}
-
-\end{tikzpicture}
-\label{exampleBasic6}
+	\begin{tikzpicture}[y=1cm, x=1cm, yscale=\globalscale,xscale=\globalscale, every node/.append style={scale=\globalscale}, inner sep=0pt, outer sep=0pt]
+		\input{figures/exampleBasic6.tex}
+	\end{tikzpicture}
+	\label{exampleBasic6}
 \end{center}
 
 Finally we handle equation \ref{examplecc4} ($f(g(a), c) = g(b)$). This time, it will create a \emph{cycle} in the E-graph: an E-node pointing to its own E-class.
 
 \begin{center}
-\begin{tikzpicture}[y=1cm, x=1cm, yscale=\globalscale,xscale=\globalscale, every node/.append style={scale=\globalscale}, inner sep=0pt, outer sep=0pt]
-  \begin{scope}[shift={(0.1413, -11.1958)}]
-    \path[fill=white] (-0.1413, 11.1958) -- (-0.1413, 22.5328) -- (12.2765, 22.5328) -- (12.2765, 11.1958) -- (-0.1413, 11.1958) -- (-0.1413, 11.1958)-- cycle;;
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1766cm off 0.0706cm] (7.4168, 11.6196).. controls (7.4168, 11.6196) and (9.0414, 11.6196) .. (9.0414, 11.6196).. controls (9.2533, 11.6196) and (9.4652, 11.8315) .. (9.4652, 12.0434).. controls (9.4652, 12.0434) and (9.4652, 13.1029) .. (9.4652, 13.1029).. controls (9.4652, 13.3149) and (9.2533, 13.5268) .. (9.0414, 13.5268).. controls (9.0414, 13.5268) and (7.4168, 13.5268) .. (7.4168, 13.5268).. controls (7.2049, 13.5268) and (6.9929, 13.3149) .. (6.9929, 13.1029).. controls (6.9929, 13.1029) and (6.9929, 12.0434) .. (6.9929, 12.0434).. controls (6.9929, 11.8315) and (7.2049, 11.6196) .. (7.4168, 11.6196);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1766cm off 0.0706cm] (3.7437, 14.4803).. controls (3.7437, 14.4803) and (5.3683, 14.4803) .. (5.3683, 14.4803).. controls (5.5802, 14.4803) and (5.7921, 14.6923) .. (5.7921, 14.9042).. controls (5.7921, 14.9042) and (5.7921, 15.9637) .. (5.7921, 15.9637).. controls (5.7921, 16.1756) and (5.5802, 16.3875) .. (5.3683, 16.3875).. controls (5.3683, 16.3875) and (3.7437, 16.3875) .. (3.7437, 16.3875).. controls (3.5318, 16.3875) and (3.3199, 16.1756) .. (3.3199, 15.9637).. controls (3.3199, 15.9637) and (3.3199, 14.9042) .. (3.3199, 14.9042).. controls (3.3199, 14.6923) and (3.5318, 14.4803) .. (3.7437, 14.4803);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1766cm off 0.0706cm] (6.4985, 14.4803).. controls (6.4985, 14.4803) and (8.1231, 14.4803) .. (8.1231, 14.4803).. controls (8.335, 14.4803) and (8.5469, 14.6923) .. (8.5469, 14.9042).. controls (8.5469, 14.9042) and (8.5469, 15.9637) .. (8.5469, 15.9637).. controls (8.5469, 16.1756) and (8.335, 16.3875) .. (8.1231, 16.3875).. controls (8.1231, 16.3875) and (6.4985, 16.3875) .. (6.4985, 16.3875).. controls (6.2866, 16.3875) and (6.0747, 16.1756) .. (6.0747, 15.9637).. controls (6.0747, 15.9637) and (6.0747, 14.9042) .. (6.0747, 14.9042).. controls (6.0747, 14.6923) and (6.2866, 14.4803) .. (6.4985, 14.4803);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1766cm off 0.0706cm] (9.6065, 17.3411).. controls (9.6065, 17.3411) and (11.2311, 17.3411) .. (11.2311, 17.3411).. controls (11.443, 17.3411) and (11.6549, 17.553) .. (11.6549, 17.7649).. controls (11.6549, 17.7649) and (11.6549, 18.8244) .. (11.6549, 18.8244).. controls (11.6549, 19.0364) and (11.443, 19.2483) .. (11.2311, 19.2483).. controls (11.2311, 19.2483) and (9.6065, 19.2483) .. (9.6065, 19.2483).. controls (9.3946, 19.2483) and (9.1827, 19.0364) .. (9.1827, 18.8244).. controls (9.1827, 18.8244) and (9.1827, 17.7649) .. (9.1827, 17.7649).. controls (9.1827, 17.553) and (9.3946, 17.3411) .. (9.6065, 17.3411);
-
-
-
-    \path[draw=black,fill=lightgrey,dash pattern=on 0.1766cm off 0.0706cm] (0.7064, 17.3411).. controls (0.7064, 17.3411) and (8.4763, 17.3411) .. (8.4763, 17.3411).. controls (8.6882, 17.3411) and (8.9001, 17.553) .. (8.9001, 17.7649).. controls (8.9001, 17.7649) and (8.9001, 21.6852) .. (8.9001, 21.6852).. controls (8.9001, 21.8971) and (8.6882, 22.109) .. (8.4763, 22.109).. controls (8.4763, 22.109) and (0.7064, 22.109) .. (0.7064, 22.109).. controls (0.4945, 22.109) and (0.2825, 21.8971) .. (0.2825, 21.6852).. controls (0.2825, 21.6852) and (0.2825, 17.7649) .. (0.2825, 17.7649).. controls (0.2825, 17.553) and (0.4945, 17.3411) .. (0.7064, 17.3411);
-
-
-
-    \path[draw=black] (4.556, 14.8688).. controls (4.556, 13.7758) and (5.7505, 13.1944) .. (6.7772, 12.8963);
-
-
-
-    \path[draw=black,fill=black] (6.7877, 12.9578) -- (6.9414, 12.8511) -- (6.7549, 12.8384) -- (6.7877, 12.9578) -- (6.7877, 12.9578)-- cycle;;
-
-
-
-    \path[draw=black] (4.8562, 17.7296).. controls (4.8562, 17.3619) and (4.8167, 16.9635) .. (4.7662, 16.6047);
-
-
-
-    \path[draw=black,fill=black] (4.829, 16.6058) -- (4.7418, 16.4405) -- (4.7068, 16.6241) -- (4.829, 16.6058) -- (4.829, 16.6058)-- cycle;;
-
-
-
-    \path[draw=black] (5.386, 17.7296).. controls (5.386, 17.2715) and (5.618, 16.859) .. (5.921, 16.5157);
-
-
-
-    \path[draw=black,fill=black] (5.962, 16.5623) -- (6.038, 16.3914) -- (5.872, 16.4776) -- (5.962, 16.5623) -- (5.962, 16.5623)-- cycle;;
-
-
-
-    \path[draw=black] (1.5187, 20.5903).. controls (1.5187, 18.4494) and (4.6185, 20.7493) .. (6.1453, 19.2483).. controls (6.8481, 18.5571) and (7.1293, 17.4527) .. (7.2405, 16.6157);
-
-
-
-    \path[draw=black,fill=black] (7.302, 16.6231) -- (7.2614, 16.4405) -- (7.1791, 16.6086) -- (7.302, 16.6231) -- (7.302, 16.6231)-- cycle;;
-
-
-
-    \path[draw=black] (5.6155, 20.5903).. controls (5.6155, 18.9989) and (7.516, 19.968) .. (8.9354, 19.2483).. controls (8.9506, 19.2405) and (8.9662, 19.2327) .. (8.9813, 19.2246);
-
-
-
-    \path[draw=black,fill=black] (9.0092, 19.2797) -- (9.1357, 19.142) -- (8.951, 19.1709) -- (9.0092, 19.2797) -- (9.0092, 19.2797)-- cycle;;
-
-
-
-    \path[draw=black] (7.3991, 20.5903).. controls (7.3991, 18.5921) and (10.5067, 20.8584) .. (11.6902, 19.2483).. controls (13.0217, 17.4368) and (10.9743, 15.0423) .. (9.5058, 13.6797);
-
-
-
-    \path[draw=black,fill=black] (9.5503, 13.6362) -- (9.3783, 13.5628) -- (9.467, 13.7277) -- (9.5503, 13.6362) -- (9.5503, 13.6362)-- cycle;;
-
-
-
-    \path[draw=black] (7.9289, 20.5903).. controls (11.5, 20) and (11.5, 23) .. (4.2908, 22.23);
-
-
-
-    \path[draw=black,fill=black] (4.323, 22.1913) -- (4.1361, 22.1765) -- (4.2728, 22.3043) -- (4.323, 22.1913) -- (4.323, 22.1913)-- cycle;;
-
-
-
-    \path[draw=black] (3.832, 20.5903).. controls (3.832, 18.2449) and (6.7807, 20.1739) .. (8.9354, 19.2483).. controls (8.951, 19.2416) and (8.9662, 19.2348) .. (8.9817, 19.2281);
-
-
-
-    \path[draw=black,fill=black] (9.0018, 19.2868) -- (9.1346, 19.1547) -- (8.9485, 19.1755) -- (9.0018, 19.2868) -- (9.0018, 19.2868)-- cycle;;
-
-
-
-    \path[draw=black] (3.3022, 20.5903).. controls (2, 19) and (1.9, 22) .. (4.05, 22.23);
-
-
-
-    \path[draw=black,fill=black] (4.0856, 22.2787) -- (4.1725, 22.113) -- (4.0012, 22.1883) -- (4.0856, 22.2787) -- (4.0856, 22.2787)-- cycle;;
-
-
-
-    \path[draw=black,fill=white] (8.7588, 13.2442).. controls (8.7588, 13.2442) and (7.6993, 13.2442) .. (7.6993, 13.2442).. controls (7.4874, 13.2442) and (7.2755, 13.0323) .. (7.2755, 12.8204).. controls (7.2755, 12.8204) and (7.2755, 12.326) .. (7.2755, 12.326).. controls (7.2755, 12.114) and (7.4874, 11.9021) .. (7.6993, 11.9021).. controls (7.6993, 11.9021) and (8.7588, 11.9021) .. (8.7588, 11.9021).. controls (8.9707, 11.9021) and (9.1827, 12.114) .. (9.1827, 12.326).. controls (9.1827, 12.326) and (9.1827, 12.8204) .. (9.1827, 12.8204).. controls (9.1827, 13.0323) and (8.9707, 13.2442) .. (8.7588, 13.2442);
-
-
-
-    \node[anchor=south west] (text857) at (8.0836, 12.4079){a};
-
-
-
-    \path[draw=black,fill=white] (5.0858, 16.105).. controls (5.0858, 16.105) and (4.0262, 16.105) .. (4.0262, 16.105).. controls (3.8143, 16.105) and (3.6024, 15.8931) .. (3.6024, 15.6812).. controls (3.6024, 15.6812) and (3.6024, 15.1867) .. (3.6024, 15.1867).. controls (3.6024, 14.9748) and (3.8143, 14.7629) .. (4.0262, 14.7629).. controls (4.0262, 14.7629) and (5.0858, 14.7629) .. (5.0858, 14.7629).. controls (5.2977, 14.7629) and (5.5096, 14.9748) .. (5.5096, 15.1867).. controls (5.5096, 15.1867) and (5.5096, 15.6812) .. (5.5096, 15.6812).. controls (5.5096, 15.8931) and (5.2977, 16.105) .. (5.0858, 16.105);
-
-
-
-    \node[anchor=south west] (text3101) at (4.3971, 15.269){g};
-
-
-
-    \path[draw=black,fill=white] (7.8406, 16.105).. controls (7.8406, 16.105) and (6.781, 16.105) .. (6.781, 16.105).. controls (6.5691, 16.105) and (6.3572, 15.8931) .. (6.3572, 15.6812).. controls (6.3572, 15.6812) and (6.3572, 15.1867) .. (6.3572, 15.1867).. controls (6.3572, 14.9748) and (6.5691, 14.7629) .. (6.781, 14.7629).. controls (6.781, 14.7629) and (7.8406, 14.7629) .. (7.8406, 14.7629).. controls (8.0525, 14.7629) and (8.2644, 14.9748) .. (8.2644, 15.1867).. controls (8.2644, 15.1867) and (8.2644, 15.6812) .. (8.2644, 15.6812).. controls (8.2644, 15.8931) and (8.0525, 16.105) .. (7.8406, 16.105);
-
-
-
-    \node[anchor=south west] (text3219) at (7.1784, 15.269){c};
-
-
-
-    \path[draw=black,fill=white] (10.9486, 18.9657).. controls (10.9486, 18.9657) and (9.889, 18.9657) .. (9.889, 18.9657).. controls (9.6771, 18.9657) and (9.4652, 18.7538) .. (9.4652, 18.5419).. controls (9.4652, 18.5419) and (9.4652, 18.0475) .. (9.4652, 18.0475).. controls (9.4652, 17.8355) and (9.6771, 17.6236) .. (9.889, 17.6236).. controls (9.889, 17.6236) and (10.9486, 17.6236) .. (10.9486, 17.6236).. controls (11.1605, 17.6236) and (11.3724, 17.8355) .. (11.3724, 18.0475).. controls (11.3724, 18.0475) and (11.3724, 18.5419) .. (11.3724, 18.5419).. controls (11.3724, 18.7538) and (11.1605, 18.9657) .. (10.9486, 18.9657);
-
-
-
-    \node[anchor=south west] (text7886) at (10.2599, 18.1294){b};
-
-
-
-    \path[draw=black,fill=white] (5.6509, 18.9657).. controls (5.6509, 18.9657) and (4.5913, 18.9657) .. (4.5913, 18.9657).. controls (4.3794, 18.9657) and (4.1675, 18.7538) .. (4.1675, 18.5419).. controls (4.1675, 18.5419) and (4.1675, 18.0475) .. (4.1675, 18.0475).. controls (4.1675, 17.8355) and (4.3794, 17.6236) .. (4.5913, 17.6236).. controls (4.5913, 17.6236) and (5.6509, 17.6236) .. (5.6509, 17.6236).. controls (5.8628, 17.6236) and (6.0747, 17.8355) .. (6.0747, 18.0475).. controls (6.0747, 18.0475) and (6.0747, 18.5419) .. (6.0747, 18.5419).. controls (6.0747, 18.7538) and (5.8628, 18.9657) .. (5.6509, 18.9657);
-
-
-
-    \node[anchor=south west] (text4244) at (5.0286, 18.1294){f};
-
-
-
-    \path[draw=black,fill=white] (2.0484, 21.8265).. controls (2.0484, 21.8265) and (0.9889, 21.8265) .. (0.9889, 21.8265).. controls (0.777, 21.8265) and (0.5651, 21.6146) .. (0.5651, 21.4027).. controls (0.5651, 21.4027) and (0.5651, 20.9082) .. (0.5651, 20.9082).. controls (0.5651, 20.6963) and (0.777, 20.4844) .. (0.9889, 20.4844).. controls (0.9889, 20.4844) and (2.0484, 20.4844) .. (2.0484, 20.4844).. controls (2.2603, 20.4844) and (2.4723, 20.6963) .. (2.4723, 20.9082).. controls (2.4723, 20.9082) and (2.4723, 21.4027) .. (2.4723, 21.4027).. controls (2.4723, 21.6146) and (2.2603, 21.8265) .. (2.0484, 21.8265);
-
-
-
-    \node[anchor=south west] (text214) at (1.3597, 20.9901){g};
-
-
-
-    \path[draw=black,fill=white] (6.1453, 21.8265).. controls (6.1453, 21.8265) and (5.0858, 21.8265) .. (5.0858, 21.8265).. controls (4.8739, 21.8265) and (4.662, 21.6146) .. (4.662, 21.4027).. controls (4.662, 21.4027) and (4.662, 20.9082) .. (4.662, 20.9082).. controls (4.662, 20.6963) and (4.8739, 20.4844) .. (5.0858, 20.4844).. controls (5.0858, 20.4844) and (6.1453, 20.4844) .. (6.1453, 20.4844).. controls (6.3572, 20.4844) and (6.5691, 20.6963) .. (6.5691, 20.9082).. controls (6.5691, 20.9082) and (6.5691, 21.4027) .. (6.5691, 21.4027).. controls (6.5691, 21.6146) and (6.3572, 21.8265) .. (6.1453, 21.8265);
-
-
-
-    \node[anchor=south west] (text1482) at (5.4566, 20.9901){g};
-
-
-
-    \path[draw=black,fill=white] (8.1938, 21.8265).. controls (8.1938, 21.8265) and (7.1342, 21.8265) .. (7.1342, 21.8265).. controls (6.9223, 21.8265) and (6.7104, 21.6146) .. (6.7104, 21.4027).. controls (6.7104, 21.4027) and (6.7104, 20.9082) .. (6.7104, 20.9082).. controls (6.7104, 20.6963) and (6.9223, 20.4844) .. (7.1342, 20.4844).. controls (7.1342, 20.4844) and (8.1938, 20.4844) .. (8.1938, 20.4844).. controls (8.4057, 20.4844) and (8.6176, 20.6963) .. (8.6176, 20.9082).. controls (8.6176, 20.9082) and (8.6176, 21.4027) .. (8.6176, 21.4027).. controls (8.6176, 21.6146) and (8.4057, 21.8265) .. (8.1938, 21.8265);
-
-
-
-    \node[anchor=south west] (text8602) at (7.5051, 20.9901){h};
-
-
-
-    \path[draw=black,fill=white] (4.0969, 21.8265).. controls (4.0969, 21.8265) and (3.0373, 21.8265) .. (3.0373, 21.8265).. controls (2.8254, 21.8265) and (2.6135, 21.6146) .. (2.6135, 21.4027).. controls (2.6135, 21.4027) and (2.6135, 20.9082) .. (2.6135, 20.9082).. controls (2.6135, 20.6963) and (2.8254, 20.4844) .. (3.0373, 20.4844).. controls (3.0373, 20.4844) and (4.0969, 20.4844) .. (4.0969, 20.4844).. controls (4.3088, 20.4844) and (4.5207, 20.6963) .. (4.5207, 20.9082).. controls (4.5207, 20.9082) and (4.5207, 21.4027) .. (4.5207, 21.4027).. controls (4.5207, 21.6146) and (4.3088, 21.8265) .. (4.0969, 21.8265);
-
-
-
-    \node[anchor=south west] (text4033) at (3.4082, 20.9901){h};
-
-
-
-  \end{scope}
-
-\end{tikzpicture}
-\label{exampleBasic7}
-%\caption{The E-graph representing equations \ref{examplecc1}--\ref{examplecc4} with congruence closure applied}
+	\begin{tikzpicture}[y=1cm, x=1cm, yscale=\globalscale,xscale=\globalscale, every node/.append style={scale=\globalscale}, inner sep=0pt, outer sep=0pt]
+		\input{figures/exampleBasic7.tex}
+	\end{tikzpicture}
+	\label{exampleBasic7}
+	%\caption{The E-graph representing equations \ref{examplecc1}--\ref{examplecc4} with congruence closure applied}
 \end{center}
 
 \subsection{Cyclic E-graphs} \label{accycles}
@@ -3674,7 +2503,7 @@ Running a number of random theories and random graphs, we obtain the following r
 
 \begin{figure}[htbp]
     \centering
-    \input{res2.tex}
+    \input{figures/res2.tex}
     \caption{Size comparison between EMTs and E-graphs for random E-graphs using AC-operators}
     \label{fig:good_bad_plot}
 \end{figure}

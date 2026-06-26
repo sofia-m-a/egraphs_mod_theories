@@ -84,7 +84,7 @@ presented by Sofia Brookie
 
 // ][
 // #figure(
-//   image("exampleBasic1.svg", width: 40%),
+//   image("figures/exampleBasic1.svg", width: 40%),
 // )
 // ]
 
@@ -94,7 +94,7 @@ presented by Sofia Brookie
 //   the term $f(g(a), c)$
 // ][
 //   #figure(
-//     image("exampleBasic2.svg", width: 47%),
+//     image("figures/exampleBasic2.svg", width: 47%),
 //   )
 // ]
 
@@ -105,7 +105,7 @@ presented by Sofia Brookie
 //   $h(a, g(b)) = f(g(a), c)$
 // ][
 //   #figure(
-//     image("exampleBasic3.svg", width: 71%),
+//     image("figures/exampleBasic3.svg", width: 71%),
 //   )
 // ]
 
@@ -116,7 +116,7 @@ presented by Sofia Brookie
 //   $h(g(c), b) = h(a, g(c))$
 // ][
 //   #figure(
-//     image("exampleBasic4.svg", width: 66%),
+//     image("figures/exampleBasic4.svg", width: 66%),
 //   )
 // ]
 
@@ -130,7 +130,7 @@ presented by Sofia Brookie
 //   are merged
 // ][
 //   #figure(
-//     image("exampleBasic5.svg", width: 71%),
+//     image("figures/exampleBasic5.svg", width: 71%),
 //   )
 // ]
 
@@ -146,7 +146,7 @@ presented by Sofia Brookie
 //   $g(b) = g(c)$
 // ][
 //   #figure(
-//     image("exampleBasic5.svg", width: 65%),
+//     image("figures/exampleBasic5.svg", width: 65%),
 //   )
 // ]
 
@@ -162,14 +162,14 @@ presented by Sofia Brookie
 //   the E-classes:
 // ][
 //   #figure(
-//     image("exampleBasic6.svg", width: 60%),
+//     image("figures/exampleBasic6.svg", width: 60%),
 //   )
 // ]
 
 // == E-graph refresher: congruence closure
 
 // #figure(
-//   image("slides1.png", width: 50%),
+//   image("figures/slides1.png", width: 50%),
 //   caption: [
 //     $
 //       f(a) = a \
@@ -287,7 +287,7 @@ We will use '+' as our example AC-operator.
 
 == E-graphs vs AC
 #figure(
-  image("blowup2.svg", width: 30%),
+  image("figures/blowup2.svg", width: 30%),
   caption: [
     Size 2
   ],
@@ -295,7 +295,7 @@ We will use '+' as our example AC-operator.
 
 == E-graphs vs AC
 #figure(
-  image("blowup3.svg", width: 50%),
+  image("figures/blowup3.svg", width: 50%),
   caption: [
     Size 3
   ],
@@ -303,7 +303,7 @@ We will use '+' as our example AC-operator.
 
 == E-graphs vs AC
 #figure(
-  image("blowup4.svg", width: 70%),
+  image("figures/blowup4.svg", width: 70%),
   caption: [
     Size 4
   ],
@@ -311,7 +311,7 @@ We will use '+' as our example AC-operator.
 
 == E-graphs vs AC
 #figure(
-  image("blowup5.svg", width: 110%),
+  image("figures/blowup5.svg", width: 110%),
   caption: [
     Size 5
   ],
@@ -319,7 +319,7 @@ We will use '+' as our example AC-operator.
 
 == E-graphs vs AC
 #figure(
-  image("blowup8subset.png", width: 110%),
+  image("figures/blowup8subset.png", width: 110%),
   caption: [
     Size 8 (a small window)
   ],
@@ -356,7 +356,7 @@ $f(a + b + c) + 2$
 Using the online Egglog demo:
 
 #figure(
-  image("addf1xyz.png", width: 60%),
+  image("figures/addf1xyz.png", width: 60%),
   caption: [
     E-graph at timeout
   ],
@@ -376,7 +376,7 @@ This is a natural idea, that has been thrown around for a while.
 
 == EMT example
 #figure(
-  image("slides3.png", width: 40%),
+  image("figures/slides3.png", width: 40%),
   caption: [
     EMTs to the rescue...
   ],
@@ -384,7 +384,7 @@ This is a natural idea, that has been thrown around for a while.
 
 == EMT example
 #figure(
-  image("slides4.png", width: 40%),
+  image("figures/slides4.png", width: 40%),
   caption: [
     EMTs to the rescue...
   ],
@@ -393,7 +393,7 @@ This is a natural idea, that has been thrown around for a while.
 == The solution??
 
 #figure(
-  image("slides2.png", width: 60%),
+  image("figures/slides2.png", width: 60%),
   caption: [
     EMTs to the rescue...
   ],
@@ -408,7 +408,7 @@ This is a natural idea, that has been thrown around for a while.
   $
 ][
   #figure(
-    image("exampleNonWord.svg", width: 65%),
+    image("figures/exampleNonWord.svg", width: 65%),
   )
 ]
 
@@ -427,7 +427,7 @@ This is a natural idea, that has been thrown around for a while.
   $
 ][
   #figure(
-    image("exampleNonWord.svg", width: 65%),
+    image("figures/exampleNonWord.svg", width: 65%),
   )
 ]
 
@@ -486,7 +486,7 @@ E-graphs are just certain kinds of rewrite systems
 == E-graphs as a rewrite system
 #slide(composer: (1fr, auto))[
   #figure(
-    image("exampleBasic5.svg", width: 65%),
+    image("figures/exampleBasic5.svg", width: 65%),
   )
 ][
   $
@@ -503,7 +503,7 @@ E-graphs are just certain kinds of rewrite systems
 == E-graphs as a rewrite system
 #slide(composer: (1fr, auto))[
   #figure(
-    image("exampleBasic5.svg", width: 65%),
+    image("figures/exampleBasic5.svg", width: 65%),
   )
 ][
   $
@@ -711,7 +711,7 @@ Measure the final size (size of everything, essentially)
 
 == Result
 #figure(
-  image("res2.svg", width: 75%),
+  image("figures/res2.svg", width: 75%),
 )
 
 == AC-closure and the wider world
@@ -1013,7 +1013,7 @@ See my upcoming thesis for more details, although the details of AC-matching for
 
 // == The AC word problem, brief example
 // #figure(
-//   image("buchexample.svg", width: 100%),
+//   image("figures/buchexample.svg", width: 100%),
 //   caption: [
 //     Starting graph
 //   ],
@@ -1021,7 +1021,7 @@ See my upcoming thesis for more details, although the details of AC-matching for
 
 // == The AC word problem, brief example
 // #figure(
-//   image("buchexamplecomplete.svg", width: 100%),
+//   image("figures/buchexamplecomplete.svg", width: 100%),
 //   caption: [
 //     AC-completed graph
 //   ],
