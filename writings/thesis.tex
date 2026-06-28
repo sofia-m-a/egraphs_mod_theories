@@ -702,7 +702,7 @@ We omit the labels of equivalence classes.
 
 Working up to AC in this way, we don't need to pick an association $f(a) + (f(b) + f(c))$ or $(f(a) + f(b)) + f(c)$ for the input, and all associations and all reorderings are considered to be represented by the top node in figure \ref{emte1}.
 
-Now, in order to \emph{match} the left-hand side of $f(x) + f(y) = f(x + y) + 1$, we need to do \emph{matching modulo theories}, which will tell us of six matches: $(x, y) \in \{(a, b), (a, c), (b, c), (b, a), (c, a), (c, b)\}$. Then we will add the six substituted forms of $f(x + y) = 1$. Here, we will want to \emph{insert modulo theories}, in a way that keeps the E-graph from representing multiple AC-equivalent terms. The arrows in Figure \ref{emte2} have become crowded, but top E-class now represents the original term, and $f(a + b) + f(c) + 1$ and its variants with $a,b,c$ permuted.
+Now, in order to \emph{match} the left-hand side of $f(x) + f(y) = f(x + y) + 1$, we need to do \emph{matching modulo theories}, which will tell us of six matches: $(x, y) \in \{(a, b), (a, c), (b, c), (b, a), (c, a), (c, b)\}$. Then we will add the six substituted forms of $f(x + y) + 1$. Here, we will want to \emph{insert modulo theories}, in a way that keeps the E-graph from representing multiple AC-equivalent terms. The arrows in Figure \ref{emte2} have become crowded, but top E-class now represents the original term, and $f(a + b) + f(c) + 1$ and its variants with $a,b,c$ permuted.
 
 \begin{center}
 	\begin{tikzpicture}[
@@ -1538,7 +1538,7 @@ Define the \emph{Dickson ordering}\footnote{the name `Dickson ordering' for this
 	At each iteration of algorithm \ref{acclosure}, there are no rules in $\rightarrow_{AC}$ with left-hand-sides that are related by $\ge$ in the Dickson ordering.
 \end{lemma}
 \begin{proof}
-	If $s \ge t$, then $s$ has $t$ as an AC-subterm. Before each iteration, this invariant holds for every pair of existing rules. When a new rule is added in step 4, any rule which would be greater than or equal to the new left-hand side is removed and added to $R$, so this invariant is restored. Conversely, both sides of the new rule are AC-canonized with respect to existing rules, so its left-hand side cannot be greater than or equal to the left hand side of any of them.
+	If $s \ge t$, then $s$ has $t$ as an AC-subterm. Before each iteration, this invariant holds for every pair of existing rules. When a new rule is added in step 5, any rule which would be greater than or equal to the new left-hand side is removed and added to $R$, so this invariant is restored. Conversely, both sides of the new rule are AC-canonized with respect to existing rules, so its left-hand side cannot be greater than or equal to the left hand side of any of them.
 \end{proof}
 
 \begin{lemma}
